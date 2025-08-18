@@ -1,13 +1,363 @@
 # Conditional nodes
 
-Use predicates or template expressions to branch.
+This guide explains how to use conditional nodes and edges to create dynamic, branching workflows in SemanticKernel.Graph. You'll learn how to implement decision logic, route execution flow, and create complex workflow patterns.
+
+## Overview
+
+Conditional nodes enable you to create dynamic workflows that can:
+- **Branch execution** based on state values or conditions
+- **Route data** to different processing paths
+- **Implement decision trees** for complex business logic
+- **Handle multiple scenarios** within a single graph
+
+## Basic Conditional Logic
+
+### Simple Predicate-Based Branching
+
+Use predicates to evaluate conditions and route execution:
 
 ```csharp
-.AddConditionalNode("branch", predicate: s => s.ContainsKey("ok") && (bool)s["ok"]) 
-  .Then("success")
-  .Else("fallback")
+using SemanticKernel.Graph.Core;
+using SemanticKernel.Graph.Nodes;
+
+// Create a conditional node with a predicate
+var conditionalNode = new ConditionalGraphNode(
+    predicate: state => state.ContainsKey("ok") && (bool)state["ok"],
+    nodeId: "decision_point"
+);
+
+// Add conditional edges based on the result
+graph.AddConditionalEdge("decision_point", "success_path", 
+    condition: state => state.ContainsKey("ok") && (bool)state["ok"])
+.AddConditionalEdge("decision_point", "fallback_path", 
+    condition: state => !state.ContainsKey("ok") || !(bool)state["ok"]);
 ```
 
-Tips:
-- Cache evaluations for performance
-- Add debug annotations to inspect decisions
+### Template-Based Conditions
+
+Use template expressions for more complex conditional logic:
+
+```csharp
+var templateCondition = new ConditionalGraphNode(
+    predicate: state => {
+        var score = state.GetInt("confidence_score", 0);
+        var threshold = state.GetInt("threshold", 50);
+        return score >= threshold;
+    },
+    nodeId: "confidence_check"
+);
+
+// Route based on confidence level
+graph.AddConditionalEdge("confidence_check", "high_confidence", 
+    condition: state => state.GetInt("confidence_score", 0) >= 80)
+.AddConditionalEdge("confidence_check", "medium_confidence", 
+    condition: state => {
+        var score = state.GetInt("confidence_score", 0);
+        return score >= 50 && score < 80;
+    })
+.AddConditionalEdge("confidence_check", "low_confidence", 
+    condition: state => state.GetInt("confidence_score", 0) < 50);
+```
+
+## Advanced Conditional Patterns
+
+### Multi-Way Branching
+
+Create complex decision trees with multiple paths:
+
+```csharp
+var priorityNode = new ConditionalGraphNode(
+    predicate: state => state.GetString("priority"),
+    nodeId: "priority_router"
+);
+
+// Route to different processing paths based on priority
+graph.AddConditionalEdge("priority_router", "urgent_processing", 
+    condition: state => state.GetString("priority") == "urgent")
+.AddConditionalEdge("priority_router", "normal_processing", 
+    condition: state => state.GetString("priority") == "normal")
+.AddConditionalEdge("priority_router", "low_priority_processing", 
+    condition: state => state.GetString("priority") == "low")
+.AddConditionalEdge("priority_router", "default_processing", 
+    condition: state => !new[] { "urgent", "normal", "low" }
+        .Contains(state.GetString("priority")));
+```
+
+### State-Dependent Routing
+
+Route execution based on multiple state conditions:
+
+```csharp
+var analysisNode = new ConditionalGraphNode(
+    predicate: state => {
+        var hasData = state.ContainsKey("input_data");
+        var dataSize = state.GetInt("data_size", 0);
+        var complexity = state.GetString("complexity", "simple");
+        
+        return hasData && dataSize > 0;
+    },
+    nodeId: "analysis_decision"
+);
+
+// Complex routing logic
+graph.AddConditionalEdge("analysis_decision", "deep_analysis", 
+    condition: state => {
+        var dataSize = state.GetInt("data_size", 0);
+        var complexity = state.GetString("complexity", "simple");
+        return dataSize > 1000 && complexity == "complex";
+    })
+.AddConditionalEdge("analysis_decision", "standard_analysis", 
+    condition: state => {
+        var dataSize = state.GetInt("data_size", 0);
+        var complexity = state.GetString("complexity", "simple");
+        return dataSize > 100 && complexity != "complex";
+    })
+.AddConditionalEdge("analysis_decision", "quick_analysis", 
+    condition: state => {
+        var dataSize = state.GetInt("data_size", 0);
+        return dataSize <= 100;
+    });
+```
+
+### Dynamic Thresholds
+
+Use state values to determine dynamic thresholds:
+
+```csharp
+var adaptiveNode = new ConditionalGraphNode(
+    predicate: state => {
+        var baseThreshold = state.GetInt("base_threshold", 50);
+        var multiplier = state.GetFloat("threshold_multiplier", 1.0f);
+        var dynamicThreshold = (int)(baseThreshold * multiplier);
+        
+        var currentValue = state.GetInt("current_value", 0);
+        return currentValue >= dynamicThreshold;
+    },
+    nodeId: "adaptive_threshold"
+);
+
+// Store the calculated threshold for later use
+graph.AddEdge("adaptive_threshold", "store_threshold");
+```
+
+## Conditional Edge Types
+
+### Boolean Conditions
+
+Simple true/false routing:
+
+```csharp
+graph.AddConditionalEdge("start", "success", 
+    condition: state => state.GetBool("is_valid", false))
+.AddConditionalEdge("start", "failure", 
+    condition: state => !state.GetBool("is_valid", true));
+```
+
+### Numeric Comparisons
+
+Route based on numeric values:
+
+```csharp
+graph.AddConditionalEdge("start", "high_priority", 
+    condition: state => state.GetInt("priority", 0) > 7)
+.AddConditionalEdge("start", "medium_priority", 
+    condition: state => {
+        var priority = state.GetInt("priority", 0);
+        return priority > 3 && priority <= 7;
+    })
+.AddConditionalEdge("start", "low_priority", 
+    condition: state => state.GetInt("priority", 0) <= 3);
+```
+
+### String Matching
+
+Route based on string values and patterns:
+
+```csharp
+graph.AddConditionalEdge("start", "email_processing", 
+    condition: state => state.GetString("input_type", "").Contains("email"))
+.AddConditionalEdge("start", "document_processing", 
+    condition: state => state.GetString("input_type", "").Contains("document"))
+.AddConditionalEdge("start", "image_processing", 
+    condition: state => state.GetString("input_type", "").Contains("image"));
+```
+
+### Complex Logical Expressions
+
+Combine multiple conditions with logical operators:
+
+```csharp
+graph.AddConditionalEdge("start", "premium_processing", 
+    condition: state => {
+        var isPremium = state.GetBool("is_premium_user", false);
+        var hasCredits = state.GetInt("credits", 0) > 0;
+        var isBusinessHours = IsBusinessHours(state.GetDateTime("timestamp"));
+        
+        return isPremium && hasCredits && isBusinessHours;
+    })
+.AddConditionalEdge("start", "standard_processing", 
+    condition: state => {
+        var isPremium = state.GetBool("is_premium_user", false);
+        var hasCredits = state.GetInt("credits", 0) > 0;
+        
+        return !isPremium || !hasCredits;
+    });
+```
+
+## Performance Optimization
+
+### Caching Evaluations
+
+Cache conditional evaluations for better performance:
+
+```csharp
+var cachedCondition = new ConditionalGraphNode(
+    predicate: state => {
+        // Cache the result to avoid repeated calculations
+        if (state.TryGetValue("cached_decision", out var cached))
+        {
+            return (bool)cached;
+        }
+        
+        var result = ExpensiveCalculation(state);
+        state["cached_decision"] = result;
+        return result;
+    },
+    nodeId: "cached_decision"
+);
+```
+
+### Lazy Evaluation
+
+Use lazy evaluation for expensive conditions:
+
+```csharp
+var lazyCondition = new ConditionalGraphNode(
+    predicate: state => {
+        // Only evaluate if we haven't already decided
+        if (state.ContainsKey("route_decided"))
+        {
+            return state.GetBool("route_decided");
+        }
+        
+        // Perform expensive evaluation
+        var result = EvaluateComplexCondition(state);
+        state["route_decided"] = result;
+        return result;
+    },
+    nodeId: "lazy_evaluation"
+);
+```
+
+## Debug and Inspection
+
+### Conditional Debugging
+
+Add debug information to conditional nodes:
+
+```csharp
+var debugCondition = new ConditionalGraphNode(
+    predicate: state => {
+        var condition = state.GetString("condition", "");
+        var value = state.GetInt("value", 0);
+        var threshold = state.GetInt("threshold", 50);
+        
+        var result = value >= threshold;
+        
+        // Log the decision for debugging
+        state["debug_info"] = new {
+            Condition = condition,
+            Value = value,
+            Threshold = threshold,
+            Result = result,
+            Timestamp = DateTimeOffset.UtcNow
+        };
+        
+        return result;
+    },
+    nodeId: "debug_condition"
+);
+```
+
+### Decision Tracing
+
+Track decision paths through your workflow:
+
+```csharp
+var traceCondition = new ConditionalGraphNode(
+    predicate: state => {
+        var decision = EvaluateCondition(state);
+        
+        // Add to decision history
+        var history = state.GetValue<List<string>>("decision_history") ?? new List<string>();
+        history.Add($"Node: {NodeId}, Decision: {decision}, Timestamp: {DateTimeOffset.UtcNow}");
+        state["decision_history"] = history;
+        
+        return decision;
+    },
+    nodeId: "trace_condition"
+);
+```
+
+## Best Practices
+
+### Condition Design
+
+1. **Keep conditions simple** - Complex logic should be in separate functions
+2. **Use meaningful names** - Name conditions to reflect their purpose
+3. **Handle edge cases** - Always provide fallback paths
+4. **Validate inputs** - Check for required state values before evaluation
+
+### Performance Considerations
+
+1. **Cache expensive evaluations** - Store results to avoid recalculation
+2. **Use lazy evaluation** - Only evaluate when necessary
+3. **Optimize state access** - Minimize state lookups in conditions
+4. **Batch decisions** - Group related conditions when possible
+
+### Error Handling
+
+1. **Provide fallbacks** - Always have a default path
+2. **Validate state** - Check for required values before evaluation
+3. **Log decisions** - Track decision paths for debugging
+4. **Handle exceptions** - Wrap conditions in try-catch blocks
+
+## Troubleshooting
+
+### Common Issues
+
+**Conditions not evaluating**: Check that state contains required values and types match
+
+**Unexpected routing**: Verify condition logic and add debug logging
+
+**Performance problems**: Cache expensive evaluations and optimize state access
+
+**Infinite loops**: Ensure conditions eventually resolve to a terminal state
+
+### Debugging Tips
+
+1. **Enable debug logging** to trace condition evaluation
+2. **Add decision tracing** to track execution paths
+3. **Use breakpoints** in conditional logic
+4. **Inspect state values** at decision points
+
+## Concepts and Techniques
+
+**ConditionalGraphNode**: A specialized graph node that evaluates predicates to determine execution flow. It enables dynamic routing based on the current state of the graph.
+
+**ConditionalEdge**: A connection between nodes that includes a condition for execution. It allows for complex branching logic and dynamic workflow paths based on state evaluation.
+
+**Predicate**: A function that evaluates the current graph state and returns a boolean value. Predicates determine which execution path to take in conditional routing.
+
+**Template Expression**: A more complex conditional expression that can evaluate multiple state values and perform calculations to determine routing decisions.
+
+**State-Dependent Routing**: A pattern where execution paths are determined dynamically based on the current values in the graph state, enabling adaptive workflows.
+
+## See Also
+
+- [Build a Graph](build-a-graph.md) - Learn the fundamentals of graph construction
+- [Loops](loops.md) - Implement iterative workflows with loop nodes
+- [Advanced Routing](advanced-routing.md) - Explore complex routing patterns and strategies
+- [State Management](../state-quickstart.md) - Understand how to manage data flow between nodes
+- [Debug and Inspection](debug-and-inspection.md) - Learn how to debug conditional logic
+- [Examples: Conditional Workflows](../examples/conditional-nodes-example.md) - Complete working examples of conditional routing
