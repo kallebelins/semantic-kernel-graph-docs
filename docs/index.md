@@ -94,36 +94,36 @@ dotnet run -- --example chatbot
 ## Documentation Structure
 
 ### 📚 **Get Started**
-- [Installation](../installation.md) - Setup and requirements
-- [First Graph](../first-graph-5-minutes.md) - Hello World in 5 minutes
-- [Quickstarts](../index.md#quickstarts) - Quick guides by functionality
+- [Installation](./installation.md) - Setup and requirements
+- [First Graph](./first-graph-5-minutes.md) - Hello World in 5 minutes
+- [Quickstarts](./index.md#quickstarts) - Quick guides by functionality
 
 ### 🧠 **Concepts**
-- [Graphs](../concepts/graphs.md) - Structure and components
-- [Nodes](../concepts/nodes.md) - Types and lifecycle
-- [Execution](../concepts/execution.md) - Modes and control
-- [Routing](../concepts/routing.md) - Strategies and conditions
-- [State](../concepts/state.md) - Management and persistence
+- [Graphs](./concepts/graphs.md) - Structure and components
+- [Nodes](./concepts/nodes.md) - Types and lifecycle
+- [Execution](./concepts/execution.md) - Modes and control
+- [Routing](./concepts/routing.md) - Strategies and conditions
+- [State](./concepts/state.md) - Management and persistence
 
 ### 🛠️ **How-To Guides**
-- [Building Graphs](../how-to/build-a-graph.md) - Creation and validation
-- [Conditional Nodes](../how-to/conditional-nodes.md) - Dynamic routing
-- [Checkpointing](../how-to/checkpointing.md) - Persistence and recovery
-- [Streaming](../how-to/streaming.md) - Real-time execution
-- [Metrics](../how-to/metrics-and-observability.md) - Monitoring
+- [Building Graphs](./how-to/build-a-graph.md) - Creation and validation
+- [Conditional Nodes](./how-to/conditional-nodes.md) - Dynamic routing
+- [Checkpointing](./how-to/checkpointing.md) - Persistence and recovery
+- [Streaming](./how-to/streaming.md) - Real-time execution
+- [Metrics](./how-to/metrics-and-observability.md) - Monitoring
 
 ### 📖 **Reference**
-- [APIs](../api/index.md) - Complete API documentation
-- [Configuration](../api/configuration.md) - Options and parameters
-- [Types](../api/types.md) - Data structures
-- [Extensions](../api/extensions.md) - Extension methods
+- [APIs](./api/index.md) - Complete API documentation
+- [Configuration](./api/configuration.md) - Options and parameters
+- [Types](./api/types.md) - Data structures
+- [Extensions](./api/extensions.md) - Extension methods
 
 ### 🎯 **Examples**
-- [Index](../examples/index.md) - All available examples
-- [Chatbot](../examples/chatbot.md) - Conversation with memory
-- [ReAct](../examples/react-agent.md) - Reasoning and action
-- [Multi-Agent](../examples/multi-agent.md) - Agent coordination
-- [Documents](../examples/document-analysis-pipeline.md) - Document analysis
+- [Index](./examples/index.md) - All available examples
+- [Chatbot](./examples/chatbot.md) - Conversation with memory
+- [ReAct](./examples/react-agent.md) - Reasoning and action
+- [Multi-Agent](./examples/multi-agent.md) - Agent coordination
+- [Documents](./examples/document-analysis-pipeline.md) - Document analysis
 
 ## Use Cases
 
@@ -174,31 +174,31 @@ dotnet run -- --example chatbot
 - [LinkedIn](https://www.linkedin.com/company/skgraph-dev)
 
 ### 🆘 **Need Help?**
-- [FAQ](../faq.md) - Frequently asked questions
-- [Troubleshooting](../troubleshooting.md) - Problem resolution
-- [Examples](../examples/index.md) - Practical examples
-- [API Reference](../api/index.md) - Technical documentation
+- [FAQ](./faq.md) - Frequently asked questions
+- [Troubleshooting](./troubleshooting.md) - Problem resolution
+- [Examples](./examples/index.md) - Practical examples
+- [API Reference](./api/index.md) - Technical documentation
 
 ## Quickstarts
 
 ### ⚡ **5 Minutes**
-- [First Graph](../first-graph-5-minutes.md) - Basic Hello World
-- [State](../state-quickstart.md) - Variable management
-- [Conditionals](../conditional-nodes-quickstart.md) - Simple routing
-- [Streaming](../streaming-quickstart.md) - Real-time events
+- [First Graph](./first-graph-5-minutes.md) - Basic Hello World
+- [State](./state-quickstart.md) - Variable management
+- [Conditionals](./conditional-nodes-quickstart.md) - Simple routing
+- [Streaming](./streaming-quickstart.md) - Real-time events
 
 ### 🚀 **15 Minutes**
-- [Checkpointing](../checkpointing-quickstart.md) - State persistence
-- [Metrics](../metrics-logging-quickstart.md) - Basic monitoring
-- [ReAct/CoT](../react-cot-quickstart.md) - Reasoning patterns
+- [Checkpointing](./checkpointing-quickstart.md) - State persistence
+- [Metrics](./metrics-logging-quickstart.md) - Basic monitoring
+- [ReAct/CoT](./react-cot-quickstart.md) - Reasoning patterns
 
 ### 🎯 **30 Minutes**
-- [Conditionals Tutorial](../conditional-nodes-tutorial.md) - Advanced routing
-- [State Tutorial](../state-tutorial.md) - Complex management
-- [Multi-Agent](../examples/multi-agent.md) - Agent coordination
+- [Conditionals Tutorial](./conditional-nodes-tutorial.md) - Advanced routing
+- [State Tutorial](./state-tutorial.md) - Complex management
+- [Multi-Agent](./examples/multi-agent.md) - Agent coordination
 
 ---
 
 > **💡 Tip**: This documentation uses Material for MkDocs. Use the left navigation and search bar to quickly find topics.
 
-> **🚀 Ready to get started?** Go to [Installation](../installation.md) or [First Graph](../first-graph-5-minutes.md) to begin in minutes!
+> **🚀 Ready to get started?** Go to [Installation](./installation.md) or [First Graph](./first-graph-5-minutes.md) to begin in minutes!
