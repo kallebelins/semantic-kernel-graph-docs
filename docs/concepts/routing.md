@@ -1,33 +1,33 @@
-# Roteamento
+# Routing
 
-O roteamento determina qual nó será executado em seguida usando arestas condicionais ou estratégias dinâmicas.
+Routing determines which node will be executed next using conditional edges or dynamic strategies.
 
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-**Roteamento**: Processo de determinar o próximo nó a ser executado baseado em condições, estado ou estratégias dinâmicas.
+**Routing**: Process of determining the next node to execute based on conditions, state or dynamic strategies.
 
-**Aresta Condicional**: Conexão entre nós que só permite a passagem quando uma condição específica é atendida.
+**Conditional Edge**: Connection between nodes that only allows passage when a specific condition is met.
 
-**Estratégia de Roteamento**: Algoritmo ou lógica que decide o caminho de execução baseado em critérios predefinidos.
+**Routing Strategy**: Algorithm or logic that decides the execution path based on predefined criteria.
 
-## Tipos de Roteamento
+## Routing Types
 
-### Roteamento Simples por Predicados
-- **Condições de Estado**: Avaliação direta de propriedades do `GraphState`
-- **Expressões Booleanas**: Condições simples como `state.Value > 10`
-- **Comparações**: Operadores de igualdade, desigualdade e range
+### Simple Predicate Routing
+- **State Conditions**: Direct evaluation of `GraphState` properties
+- **Boolean Expressions**: Simple conditions like `state.Value > 10`
+- **Comparisons**: Equality, inequality and range operators
 
-### Roteamento Baseado em Templates
-- **Avaliação com SK**: Uso de funções do Semantic Kernel para decisões complexas
-- **Prompt-based Routing**: Decisões baseadas em análise de texto ou contexto
-- **Semantic Matching**: Roteamento por similaridade semântica
+### Template-Based Routing
+- **SK Evaluation**: Use of Semantic Kernel functions for complex decisions
+- **Prompt-based Routing**: Decisions based on text or context analysis
+- **Semantic Matching**: Routing by semantic similarity
 
-### Roteamento Avançado
-- **Similaridade Semântica**: Uso de embeddings para encontrar o melhor caminho
-- **Roteamento Probabilístico**: Decisões com pesos e probabilidades
-- **Aprendizado por Feedback**: Adaptação baseada em resultados anteriores
+### Advanced Routing
+- **Semantic Similarity**: Use of embeddings to find the best path
+- **Probabilistic Routing**: Decisions with weights and probabilities
+- **Learning from Feedback**: Adaptation based on previous results
 
-## Componentes Principais
+## Main Components
 
 ### ConditionalEdge
 ```csharp
@@ -47,15 +47,15 @@ var routingEngine = new DynamicRoutingEngine(
 ```
 
 ### RoutingStrategies
-- **SemanticRoutingStrategy**: Roteamento por similaridade semântica
-- **ProbabilisticRoutingStrategy**: Roteamento com pesos probabilísticos
-- **ContextualRoutingStrategy**: Roteamento baseado no histórico de execução
+- **SemanticRoutingStrategy**: Routing by semantic similarity
+- **ProbabilisticRoutingStrategy**: Routing with probabilistic weights
+- **ContextualRoutingStrategy**: Routing based on execution history
 
-## Exemplos de Uso
+## Usage Examples
 
-### Roteamento Condicional Simples
+### Simple Conditional Routing
 ```csharp
-// Roteamento baseado em valor numérico
+// Routing based on numeric value
 var edge = new ConditionalEdge(
     sourceNode: processNode,
     targetNode: successNode,
@@ -69,9 +69,9 @@ var failureEdge = new ConditionalEdge(
 );
 ```
 
-### Roteamento por Template
+### Template-Based Routing
 ```csharp
-// Roteamento baseado em análise de texto
+// Routing based on text analysis
 var routingNode = new ConditionalGraphNode(
     condition: async (state) => {
         var text = state.GetValue<string>("input");
@@ -81,9 +81,9 @@ var routingNode = new ConditionalGraphNode(
 );
 ```
 
-### Roteamento Dinâmico
+### Dynamic Routing
 ```csharp
-// Roteamento adaptativo baseado em métricas
+// Adaptive routing based on metrics
 var dynamicRouter = new DynamicRoutingEngine(
     strategies: new[] {
         new PerformanceBasedRoutingStrategy(),
@@ -92,7 +92,7 @@ var dynamicRouter = new DynamicRoutingEngine(
 );
 ```
 
-## Configuração e Opções
+## Configuration and Options
 
 ### GraphRoutingOptions
 ```csharp
@@ -105,38 +105,38 @@ var options = new GraphRoutingOptions
 };
 ```
 
-### Políticas de Roteamento
-- **Retry Policy**: Tentativas múltiplas em caso de falha
-- **Circuit Breaker**: Interrupção temporária em caso de problemas
-- **Load Balancing**: Distribuição equilibrada de carga
+### Routing Policies
+- **Retry Policy**: Multiple retries in case of failure
+- **Circuit Breaker**: Temporary interruption in case of problems
+- **Load Balancing**: Balanced load distribution
 
-## Monitoramento e Debug
+## Monitoring and Debugging
 
-### Métricas de Roteamento
-- **Tempo de Decisão**: Latência para determinar o próximo nó
-- **Taxa de Sucesso**: Percentual de roteamentos bem-sucedidos
-- **Distribuição de Caminhos**: Frequência de uso de cada rota
+### Routing Metrics
+- **Decision Time**: Latency to determine the next node
+- **Success Rate**: Percentage of successful routings
+- **Path Distribution**: Frequency of use of each route
 
-### Debug de Roteamento
+### Routing Debugging
 ```csharp
 var debugger = new ConditionalDebugger();
 debugger.EnableRoutingLogging = true;
 debugger.LogRoutingDecisions = true;
 ```
 
-## Veja Também
+## See Also
 
-- [Nós Condicionais](../how-to/conditional-nodes.md)
-- [Roteamento Avançado](../how-to/advanced-routing.md)
-- [Exemplos de Roteamento](../examples/dynamic-routing.md)
-- [Exemplos de Roteamento Avançado](../examples/advanced-routing.md)
-- [Nós](../concepts/node-types.md)
-- [Execução](../concepts/execution-model.md)
+- [Conditional Nodes](../how-to/conditional-nodes.md)
+- [Advanced Routing](../how-to/advanced-routing.md)
+- [Routing Examples](../examples/dynamic-routing.md)
+- [Advanced Routing Examples](../examples/advanced-routing.md)
+- [Nodes](../concepts/node-types.md)
+- [Execution](../concepts/execution-model.md)
 
-## Referências
+## References
 
-- `ConditionalEdge`: Classe para criar arestas com condições
-- `DynamicRoutingEngine`: Motor de roteamento adaptativo
-- `RoutingStrategies`: Estratégias de roteamento predefinidas
-- `GraphRoutingOptions`: Configurações de roteamento
-- `ConditionalDebugger`: Ferramentas de debug para roteamento
+- `ConditionalEdge`: Class to create edges with conditions
+- `DynamicRoutingEngine`: Adaptive routing engine
+- `RoutingStrategies`: Predefined routing strategies
+- `GraphRoutingOptions`: Routing configurations
+- `ConditionalDebugger`: Debugging tools for routing

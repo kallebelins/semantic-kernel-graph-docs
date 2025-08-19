@@ -1,180 +1,180 @@
-# Nós
+# Nodes
 
-Os nós são os componentes fundamentais de um grafo, cada um encapsulando uma unidade específica de trabalho ou lógica de controle.
+Nodes are the fundamental components of a graph, each encapsulating a specific unit of work or control logic.
 
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-**Nó de Grafo**: Unidade fundamental de processamento que encapsula trabalho, lógica de controle ou operações específicas.
+**Graph Node**: Fundamental processing unit that encapsulates work, control logic or specific operations.
 
-**Ciclo de Vida do Nó**: Sequência de eventos que ocorre durante a execução: Before → Execute → After.
+**Node Lifecycle**: Sequence of events that occurs during execution: Before → Execute → After.
 
-**Interface IGraphNode**: Contrato base que todos os nós devem implementar para integração com o sistema.
+**IGraphNode Interface**: Base contract that all nodes must implement for system integration.
 
-## Tipos de Nós
+## Node Types
 
-### Nós de Função
+### Function Nodes
 ```csharp
-// Encapsula uma função do Semantic Kernel
+// Encapsulates a Semantic Kernel function
 var functionNode = new FunctionGraphNode(
     function: kernel.GetFunction("analyze_document"),
     name: "analyze_document",
-    description: "Analisa o conteúdo de um documento"
+    description: "Analyzes the content of a document"
 );
 ```
 
-**Características**:
-- **Encapsulamento**: Wraps de `KernelFunction`
-- **Execução Síncrona**: Processamento direto da função
-- **Estado Compartilhado**: Acesso ao `GraphState` global
-- **Métricas**: Coleta automática de performance
+**Characteristics**:
+- **Encapsulation**: Wraps `KernelFunction`
+- **Synchronous Execution**: Direct function processing
+- **Shared State**: Access to global `GraphState`
+- **Metrics**: Automatic performance collection
 
-### Nós Condicionais
+### Conditional Nodes
 ```csharp
-// Nó que toma decisões baseadas em condições
+// Node that makes decisions based on conditions
 var conditionalNode = new ConditionalGraphNode(
     condition: async (state) => {
         var score = state.GetValue<double>("confidence");
         return score > 0.8;
     },
     name: "confidence_gate",
-    description: "Filtra resultados por nível de confiança"
+    description: "Filters results by confidence level"
 );
 ```
 
-**Características**:
-- **Avaliação de Condições**: Expressões booleanas sobre o estado
-- **Roteamento Dinâmico**: Decisões em tempo de execução
-- **Templates SK**: Uso de funções do Semantic Kernel para decisões
-- **Fallbacks**: Estratégias de fallback para condições não atendidas
+**Characteristics**:
+- **Condition Evaluation**: Boolean expressions over state
+- **Dynamic Routing**: Runtime decisions
+- **SK Templates**: Use of Semantic Kernel functions for decisions
+- **Fallbacks**: Fallback strategies for unmet conditions
 
-### Nós de Raciocínio
+### Reasoning Nodes
 ```csharp
-// Nó que implementa padrões de raciocínio
+// Node that implements reasoning patterns
 var reasoningNode = new ReasoningGraphNode(
     kernel: kernel,
-    prompt: "Analise o problema e sugira uma solução",
+    prompt: "Analyze the problem and suggest a solution",
     maxSteps: 5,
     name: "problem_solver",
-    description: "Resolve problemas usando raciocínio passo a passo"
+    description: "Solves problems using step-by-step reasoning"
 );
 ```
 
-**Características**:
-- **Chain of Thought**: Raciocínio passo a passo
-- **Few-shot Learning**: Exemplos para guiar o raciocínio
-- **Validação de Resultados**: Verificação da qualidade das respostas
-- **Iteração Controlada**: Limites para evitar loops infinitos
+**Characteristics**:
+- **Chain of Thought**: Step-by-step reasoning
+- **Few-shot Learning**: Examples to guide reasoning
+- **Result Validation**: Quality verification of responses
+- **Controlled Iteration**: Limits to avoid infinite loops
 
-### Nós de Loop
+### Loop Nodes
 ```csharp
-// Nó que implementa iterações controladas
+// Node that implements controlled iterations
 var loopNode = new ReActLoopGraphNode(
     kernel: kernel,
-    objective: "Classificar todos os documentos",
+    objective: "Classify all documents",
     maxIterations: 10,
     name: "document_classifier",
-    description: "Classifica documentos iterativamente"
+    description: "Iteratively classifies documents"
 );
 ```
 
-**Características**:
-- **ReAct Pattern**: Observação → Pensamento → Ação
-- **Objetivos Claros**: Metas específicas para cada iteração
-- **Controle de Iteração**: Limites para evitar loops infinitos
-- **Estado Persistente**: Manutenção de contexto entre iterações
+**Characteristics**:
+- **ReAct Pattern**: Observation → Thinking → Action
+- **Clear Objectives**: Specific goals for each iteration
+- **Iteration Control**: Limits to avoid infinite loops
+- **Persistent State**: Context maintenance between iterations
 
-### Nós de Observação
+### Observation Nodes
 ```csharp
-// Nó que observa e registra informações
+// Node that observes and records information
 var observationNode = new ObservationGraphNode(
     observer: new ConsoleObserver(),
     name: "console_logger",
-    description: "Registra observações no console"
+    description: "Records observations in console"
 );
 ```
 
-**Características**:
-- **Observação Passiva**: Não modifica o estado
-- **Logging**: Registro de informações de execução
-- **Métricas**: Coleta de dados de performance
-- **Debug**: Suporte para troubleshooting
+**Characteristics**:
+- **Passive Observation**: Does not modify state
+- **Logging**: Recording of execution information
+- **Metrics**: Performance data collection
+- **Debug**: Troubleshooting support
 
-### Nós de Subgrafo
+### Subgraph Nodes
 ```csharp
-// Nó que encapsula outro grafo
+// Node that encapsulates another graph
 var subgraphNode = new SubgraphGraphNode(
     subgraph: documentAnalysisGraph,
     name: "document_analysis",
-    description: "Pipeline completo de análise de documentos"
+    description: "Complete document analysis pipeline"
 );
 ```
 
-**Características**:
-- **Composição**: Reutilização de grafos existentes
-- **Encapsulamento**: Interface limpa para grafos complexos
-- **Estado Isolado**: Controle de escopo de variáveis
-- **Reutilização**: Módulos reutilizáveis em diferentes contextos
+**Characteristics**:
+- **Composition**: Reuse of existing graphs
+- **Encapsulation**: Clean interface for complex graphs
+- **Isolated State**: Variable scope control
+- **Reusability**: Reusable modules in different contexts
 
-### Nós de Tratamento de Erro
+### Error Handler Nodes
 ```csharp
-// Nó que trata exceções e falhas
+// Node that handles exceptions and failures
 var errorHandlerNode = new ErrorHandlerGraphNode(
     errorPolicy: new RetryPolicy(maxRetries: 3),
     name: "error_handler",
-    description: "Trata erros e implementa políticas de retry"
+    description: "Handles errors and implements retry policies"
 );
 ```
 
-**Características**:
-- **Políticas de Erro**: Retry, backoff, circuit breaker
-- **Recuperação**: Estratégias para lidar com falhas
-- **Logging**: Registro detalhado de erros
-- **Fallbacks**: Alternativas quando a operação principal falha
+**Characteristics**:
+- **Error Policies**: Retry, backoff, circuit breaker
+- **Recovery**: Strategies for handling failures
+- **Logging**: Detailed error recording
+- **Fallbacks**: Alternatives when main operation fails
 
-### Nós de Aprovação Humana
+### Human Approval Nodes
 ```csharp
-// Nó que pausa para interação humana
+// Node that pauses for human interaction
 var approvalNode = new HumanApprovalGraphNode(
     channel: new ConsoleHumanInteractionChannel(),
     timeout: TimeSpan.FromMinutes(30),
     name: "human_approval",
-    description: "Aguarda aprovação humana para continuar"
+    description: "Waits for human approval to continue"
 );
 ```
 
-**Características**:
-- **Interação Humana**: Pausa para input humano
-- **Timeouts**: Limites de tempo para resposta
-- **Canais Múltiplos**: Console, web, email
-- **Auditoria**: Registro de decisões humanas
+**Characteristics**:
+- **Human Interaction**: Pause for human input
+- **Timeouts**: Time limits for response
+- **Multiple Channels**: Console, web, email
+- **Audit**: Recording of human decisions
 
-## Ciclo de Vida do Nó
+## Node Lifecycle
 
-### Fase Before
+### Before Phase
 ```csharp
 public override async Task BeforeExecutionAsync(GraphExecutionContext context)
 {
-    // Validação de entrada
+    // Input validation
     await ValidateInputAsync(context.State);
     
-    // Inicialização de recursos
+    // Resource initialization
     await InitializeResourcesAsync();
     
-    // Logging de início
+    // Start logging
     _logger.LogInformation($"Starting execution of node {Id}");
 }
 ```
 
-### Fase Execute
+### Execute Phase
 ```csharp
 public override async Task<GraphExecutionResult> ExecuteAsync(GraphExecutionContext context)
 {
     try
     {
-        // Execução principal
+        // Main execution
         var result = await ProcessAsync(context.State);
         
-        // Atualização do estado
+        // State update
         context.State.SetValue("output", result);
         
         return GraphExecutionResult.Success(result);
@@ -186,24 +186,24 @@ public override async Task<GraphExecutionResult> ExecuteAsync(GraphExecutionCont
 }
 ```
 
-### Fase After
+### After Phase
 ```csharp
 public override async Task AfterExecutionAsync(GraphExecutionContext context)
 {
-    // Limpeza de recursos
+    // Resource cleanup
     await CleanupResourcesAsync();
     
-    // Logging de métricas
+    // Performance logging
     _logger.LogInformation($"Node {Id} completed in {context.ExecutionTime}");
     
-    // Atualização de contadores
+    // Counter updates
     UpdateExecutionMetrics(context);
 }
 ```
 
-## Configuração e Opções
+## Configuration and Options
 
-### Opções de Nó
+### Node Options
 ```csharp
 var nodeOptions = new GraphNodeOptions
 {
@@ -219,7 +219,7 @@ var nodeOptions = new GraphNodeOptions
 };
 ```
 
-### Validação de Entrada/Saída
+### Input/Output Validation
 ```csharp
 var inputSchema = new GraphNodeInputSchema
 {
@@ -244,9 +244,9 @@ var outputSchema = new GraphNodeOutputSchema
 };
 ```
 
-## Monitoramento e Observabilidade
+## Monitoring and Observability
 
-### Métricas de Nó
+### Node Metrics
 ```csharp
 var nodeMetrics = new NodeExecutionMetrics
 {
@@ -259,7 +259,7 @@ var nodeMetrics = new NodeExecutionMetrics
 };
 ```
 
-### Logging Estruturado
+### Structured Logging
 ```csharp
 _logger.LogInformation("Node execution started", new
 {
@@ -271,23 +271,23 @@ _logger.LogInformation("Node execution started", new
 });
 ```
 
-## Veja Também
+## See Also
 
-- [Tipos de Nós](../concepts/node-types.md)
-- [Nós Condicionais](../how-to/conditional-nodes.md)
+- [Node Types](../concepts/node-types.md)
+- [Conditional Nodes](../how-to/conditional-nodes.md)
 - [Loops](../how-to/loops.md)
 - [Human-in-the-Loop](../how-to/hitl.md)
-- [Tratamento de Erros](../how-to/error-handling-and-resilience.md)
-- [Exemplos de Nós](../examples/conditional-nodes.md)
+- [Error Handling](../how-to/error-handling-and-resilience.md)
+- [Node Examples](../examples/conditional-nodes.md)
 
-## Referências
+## References
 
-- `IGraphNode`: Interface base para todos os nós
-- `FunctionGraphNode`: Nó que encapsula funções SK
-- `ConditionalGraphNode`: Nó para decisões condicionais
-- `ReasoningGraphNode`: Nó para raciocínio passo a passo
-- `ReActLoopGraphNode`: Nó para loops ReAct
-- `ObservationGraphNode`: Nó para observação e logging
-- `SubgraphGraphNode`: Nó que encapsula outros grafos
-- `ErrorHandlerGraphNode`: Nó para tratamento de erros
-- `HumanApprovalGraphNode`: Nó para interação humana
+- `IGraphNode`: Base interface for all nodes
+- `FunctionGraphNode`: Node that encapsulates SK functions
+- `ConditionalGraphNode`: Node for conditional decisions
+- `ReasoningGraphNode`: Node for step-by-step reasoning
+- `ReActLoopGraphNode`: Node for ReAct loops
+- `ObservationGraphNode`: Node for observation and logging
+- `SubgraphGraphNode`: Node that encapsulates other graphs
+- `ErrorHandlerGraphNode`: Node for error handling
+- `HumanApprovalGraphNode`: Node for human interaction

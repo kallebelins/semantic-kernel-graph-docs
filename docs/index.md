@@ -1,75 +1,75 @@
 # Semantic Kernel Graph
 
-Bem-vindo à documentação do SemanticKernel.Graph. Este site espelha a estrutura da documentação do LangGraph, focando em uma implementação .NET enxuta e pragmática, totalmente integrada com o Semantic Kernel.
+Welcome to the SemanticKernel.Graph documentation. This site mirrors the LangGraph documentation structure, focusing on a lean and pragmatic .NET implementation that's fully integrated with Semantic Kernel.
 
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-**SemanticKernel.Graph**: Extensão do Semantic Kernel que adiciona capacidades de execução de grafos computacionais, permitindo criar workflows complexos com orquestração inteligente.
+**SemanticKernel.Graph**: Extension of Semantic Kernel that adds computational graph execution capabilities, allowing you to create complex workflows with intelligent orchestration.
 
-**Grafos Computacionais**: Estruturas que representam fluxos de trabalho através de nós conectados por arestas, com execução controlada e roteamento condicional.
+**Computational Graphs**: Structures that represent workflows through nodes connected by edges, with controlled execution and conditional routing.
 
-**Integração Nativa**: Funciona como extensão do Semantic Kernel existente, mantendo total compatibilidade e aproveitando plugins e serviços existentes.
+**Native Integration**: Works as an extension of the existing Semantic Kernel, maintaining full compatibility and leveraging existing plugins and services.
 
-## O que o SemanticKernel.Graph Resolve
+## What SemanticKernel.Graph Solves
 
-### Problemas de Orquestração
-- **Workflows Complexos**: Criação de pipelines de IA com múltiplos passos
-- **Roteamento Inteligente**: Decisões baseadas em estado e contexto
-- **Controle de Fluxo**: Loops, condicionais e iterações controladas
-- **Composição**: Reutilização de componentes e subgrafos
+### Orchestration Problems
+- **Complex Workflows**: Creation of AI pipelines with multiple steps
+- **Intelligent Routing**: Decisions based on state and context
+- **Flow Control**: Loops, conditionals and controlled iterations
+- **Composition**: Reuse of components and subgraphs
 
-### Desafios de Produção
-- **Escalabilidade**: Execução paralela e distribuída
-- **Resiliência**: Checkpointing, retry e circuit breakers
-- **Observabilidade**: Métricas, logging e visualização em tempo real
-- **Manutenibilidade**: Debug, inspeção e documentação automática
+### Production Challenges
+- **Scalability**: Parallel and distributed execution
+- **Resilience**: Checkpointing, retry and circuit breakers
+- **Observability**: Metrics, logging and real-time visualization
+- **Maintainability**: Debug, inspection and automatic documentation
 
-## Funcionalidades Principais
+## Core Features
 
-### 🚀 **Execução de Grafos**
-- Nós de função, condicionais, raciocínio e loops
-- Arestas com condições e roteamento dinâmico
-- Execução sequencial, paralela e distribuída
-- Scheduler determinístico para reprodutibilidade
+### 🚀 **Graph Execution**
+- Function, conditional, reasoning and loop nodes
+- Edges with conditions and dynamic routing
+- Sequential, parallel and distributed execution
+- Deterministic scheduler for reproducibility
 
-### 🔄 **Streaming e Eventos**
-- Execução streaming com eventos em tempo real
-- Reconexão automática e controle de backpressure
-- Consumo assíncrono de eventos de execução
-- Integração com sistemas de mensageria
+### 🔄 **Streaming and Events**
+- Streaming execution with real-time events
+- Automatic reconnection and backpressure control
+- Asynchronous consumption of execution events
+- Integration with messaging systems
 
-### 💾 **Estado e Persistência**
-- Sistema de estado tipado e validado
-- Checkpointing automático e manual
-- Serialização e compressão de estado
-- Recuperação e replay de execuções
+### 💾 **State and Persistence**
+- Typed and validated state system
+- Automatic and manual checkpointing
+- State serialization and compression
+- Execution recovery and replay
 
-### 🎯 **Roteamento Inteligente**
-- Roteamento baseado em condições de estado
-- Estratégias dinâmicas e adaptativas
-- Similaridade semântica para decisões
-- Aprendizado por feedback
+### 🎯 **Intelligent Routing**
+- State-based conditional routing
+- Dynamic and adaptive strategies
+- Semantic similarity for decisions
+- Learning from feedback
 
 ### 👥 **Human-in-the-Loop**
-- Nós de aprovação humana
-- Canais múltiplos (console, web, email)
-- Timeouts e políticas de SLA
-- Auditoria e rastreamento de decisões
+- Human approval nodes
+- Multiple channels (console, web, email)
+- Timeouts and SLA policies
+- Audit and decision tracking
 
-### 🔧 **Integração e Extensibilidade**
-- Ferramentas REST integradas
-- Sistema de plugins extensível
-- Integração com serviços externos
-- Templates para workflows comuns
+### 🔧 **Integration and Extensibility**
+- Integrated REST tools
+- Extensible plugin system
+- Integration with external services
+- Templates for common workflows
 
-## Comece em Minutos
+## Get Started in Minutes
 
-### 1. **Instalação Rápida**
+### 1. **Quick Installation**
 ```bash
 dotnet add package SemanticKernel.Graph
 ```
 
-### 2. **Primeiro Grafo**
+### 2. **First Graph**
 ```csharp
 builder.AddGraphSupport();
 var kernel = builder.Build();
@@ -84,129 +84,121 @@ var result = await kernel.GetRequiredService<IGraphExecutor>()
     .ExecuteAsync(graph, arguments);
 ```
 
-### 3. **Explore Exemplos**
+### 3. **Explore Examples**
 ```bash
 cd examples
 dotnet run -- --list
 dotnet run -- --example chatbot
 ```
 
-## Estrutura da Documentação
+## Documentation Structure
 
 ### 📚 **Get Started**
-- [Instalação](../installation.md) - Configuração e requisitos
-- [Primeiro Grafo](../first-graph-5-minutes.md) - Hello World em 5 minutos
-- [Quickstarts](../index.md#quickstarts) - Guias rápidos por funcionalidade
+- [Installation](../installation.md) - Setup and requirements
+- [First Graph](../first-graph-5-minutes.md) - Hello World in 5 minutes
+- [Quickstarts](../index.md#quickstarts) - Quick guides by functionality
 
-### 🧠 **Conceitos**
-- [Grafos](../concepts/graphs.md) - Estrutura e componentes
-- [Nós](../concepts/nodes.md) - Tipos e ciclo de vida
-- [Execução](../concepts/execution.md) - Modos e controle
-- [Roteamento](../concepts/routing.md) - Estratégias e condições
-- [Estado](../concepts/state.md) - Gerenciamento e persistência
+### 🧠 **Concepts**
+- [Graphs](../concepts/graphs.md) - Structure and components
+- [Nodes](../concepts/nodes.md) - Types and lifecycle
+- [Execution](../concepts/execution.md) - Modes and control
+- [Routing](../concepts/routing.md) - Strategies and conditions
+- [State](../concepts/state.md) - Management and persistence
 
 ### 🛠️ **How-To Guides**
-- [Construindo Grafos](../how-to/build-a-graph.md) - Criação e validação
-- [Nós Condicionais](../how-to/conditional-nodes.md) - Roteamento dinâmico
-- [Checkpointing](../how-to/checkpointing.md) - Persistência e recuperação
-- [Streaming](../how-to/streaming.md) - Execução em tempo real
-- [Métricas](../how-to/metrics-and-observability.md) - Monitoramento
+- [Building Graphs](../how-to/build-a-graph.md) - Creation and validation
+- [Conditional Nodes](../how-to/conditional-nodes.md) - Dynamic routing
+- [Checkpointing](../how-to/checkpointing.md) - Persistence and recovery
+- [Streaming](../how-to/streaming.md) - Real-time execution
+- [Metrics](../how-to/metrics-and-observability.md) - Monitoring
 
 ### 📖 **Reference**
-- [APIs](../api/index.md) - Documentação completa das APIs
-- [Configurações](../api/configuration.md) - Opções e parâmetros
-- [Tipos](../api/types.md) - Estruturas de dados
-- [Extensões](../api/extensions.md) - Métodos de extensão
+- [APIs](../api/index.md) - Complete API documentation
+- [Configuration](../api/configuration.md) - Options and parameters
+- [Types](../api/types.md) - Data structures
+- [Extensions](../api/extensions.md) - Extension methods
 
 ### 🎯 **Examples**
-- [Índice](../examples/index.md) - Todos os exemplos disponíveis
-- [Chatbot](../examples/chatbot.md) - Conversação com memória
-- [ReAct](../examples/react-agent.md) - Raciocínio e ação
-- [Multi-Agente](../examples/multi-agent.md) - Coordenação de agentes
-- [Documentos](../examples/document-analysis-pipeline.md) - Análise de documentos
+- [Index](../examples/index.md) - All available examples
+- [Chatbot](../examples/chatbot.md) - Conversation with memory
+- [ReAct](../examples/react-agent.md) - Reasoning and action
+- [Multi-Agent](../examples/multi-agent.md) - Agent coordination
+- [Documents](../examples/document-analysis-pipeline.md) - Document analysis
 
-### 🏗️ **Architecture**
-- [ADRs](../architecture/index.md) - Decisões de arquitetura
-- [Roadmap](../architecture/implementation-roadmap.md) - Planejamento futuro
-- [Padrões](../patterns/index.md) - Padrões de design
+## Use Cases
 
-## Casos de Uso
+### 🤖 **AI Agents**
+- Chatbots with memory and context
+- Reasoning agents (ReAct, Chain of Thought)
+- Coordination of multiple agents
+- Automated decision workflows
 
-### 🤖 **Agentes de IA**
-- Chatbots com memória e contexto
-- Agentes de raciocínio (ReAct, Chain of Thought)
-- Coordenação de múltiplos agentes
-- Workflows de decisão automatizada
+### 📄 **Document Processing**
+- Automatic analysis and classification
+- Structured information extraction
+- Validation and approval pipelines
+- Batch processing with checkpoints
 
-### 📄 **Processamento de Documentos**
-- Análise e classificação automática
-- Extração de informações estruturadas
-- Pipelines de validação e aprovação
-- Processamento em lote com checkpoints
+### 🔍 **Recommendation Systems**
+- Similarity-based routing
+- Learning from user feedback
+- Conditional filters and personalization
+- Continuous result optimization
 
-### 🔍 **Sistemas de Recomendação**
-- Roteamento baseado em similaridade
-- Aprendizado por feedback do usuário
-- Filtros condicionais e personalização
-- Otimização contínua de resultados
+### 🚀 **Microservice Orchestration**
+- API call coordination
+- Circuit breakers and retry policies
+- Intelligent load balancing
+- Monitoring and observability
 
-### 🚀 **Orquestração de Microserviços**
-- Coordenação de chamadas de API
-- Circuit breakers e retry policies
-- Balanceamento de carga inteligente
-- Monitoramento e observabilidade
-
-## Comparação com Alternativas
+## Comparison with Alternatives
 
 | Feature | SemanticKernel.Graph | LangGraph | Temporal | Durable Functions |
 |---------|----------------------|-----------|----------|-------------------|
-| **Integração SK** | ✅ Nativa | ❌ Python | ❌ Java/Go | ❌ Azure |
-| **Performance** | ✅ .NET Nativo | ⚠️ Python | ✅ JVM | ✅ Azure Runtime |
-| **Checkpointing** | ✅ Avançado | ✅ Básico | ✅ Robusto | ✅ Nativo |
-| **Streaming** | ✅ Eventos | ✅ Streaming | ❌ | ⚠️ Limitado |
-| **Visualização** | ✅ Tempo Real | ✅ Estática | ❌ | ❌ |
-| **HITL** | ✅ Múltiplos Canais | ⚠️ Básico | ❌ | ❌ |
+| **SK Integration** | ✅ Native | ❌ Python | ❌ Java/Go | ❌ Azure |
+| **Performance** | ✅ Native .NET | ⚠️ Python | ✅ JVM | ✅ Azure Runtime |
+| **Checkpointing** | ✅ Advanced | ✅ Basic | ✅ Robust | ✅ Native |
+| **Streaming** | ✅ Events | ✅ Streaming | ❌ | ⚠️ Limited |
+| **Visualization** | ✅ Real Time | ✅ Static | ❌ | ❌ |
+| **HITL** | ✅ Multiple Channels | ⚠️ Basic | ❌ | ❌ |
 
-## Comunidade e Suporte
+## Community and Support
 
-### 🌟 **Contribuir**
-- [GitHub Repository](https://github.com/your-org/semantic-kernel-graph)
-- [Issues](https://github.com/your-org/semantic-kernel-graph/issues)
-- [Discussions](https://github.com/your-org/semantic-kernel-graph/discussions)
-- [Contributing Guide](https://github.com/your-org/semantic-kernel-graph/CONTRIBUTING.md)
+### 🌟 **Contribute**
+- [GitHub Repository](https://github.com/kallebelins/semantic-kernel-graph-docs)
+- [Issues](https://github.com/kallebelins/semantic-kernel-graph-docs/issues)
+- [Discussions](https://github.com/kallebelins/semantic-kernel-graph-docs/discussions)
+- [Contributing Guide](https://github.com/kallebelins/semantic-kernel-graph-docs/CONTRIBUTING.md)
 
-### 📚 **Recursos Adicionais**
-- [Blog](https://your-blog.com/semantic-kernel-graph)
-- [Videos](https://your-channel.com/semantic-kernel-graph)
-- [Workshops](https://your-events.com/semantic-kernel-graph)
-- [Slack](https://your-slack.com/semantic-kernel-graph)
+### 📚 **Additional Resources**
+- [LinkedIn](https://www.linkedin.com/company/skgraph-dev)
 
-### 🆘 **Precisa de Ajuda?**
-- [FAQ](../faq.md) - Perguntas frequentes
-- [Troubleshooting](../troubleshooting.md) - Resolução de problemas
-- [Examples](../examples/index.md) - Exemplos práticos
-- [API Reference](../api/index.md) - Documentação técnica
+### 🆘 **Need Help?**
+- [FAQ](../faq.md) - Frequently asked questions
+- [Troubleshooting](../troubleshooting.md) - Problem resolution
+- [Examples](../examples/index.md) - Practical examples
+- [API Reference](../api/index.md) - Technical documentation
 
 ## Quickstarts
 
-### ⚡ **5 Minutos**
-- [Primeiro Grafo](../first-graph-5-minutes.md) - Hello World básico
-- [Estado](../state-quickstart.md) - Gerenciamento de variáveis
-- [Condicionais](../conditional-nodes-quickstart.md) - Roteamento simples
-- [Streaming](../streaming-quickstart.md) - Eventos em tempo real
+### ⚡ **5 Minutes**
+- [First Graph](../first-graph-5-minutes.md) - Basic Hello World
+- [State](../state-quickstart.md) - Variable management
+- [Conditionals](../conditional-nodes-quickstart.md) - Simple routing
+- [Streaming](../streaming-quickstart.md) - Real-time events
 
-### 🚀 **15 Minutos**
-- [Checkpointing](../checkpointing-quickstart.md) - Persistência de estado
-- [Métricas](../metrics-logging-quickstart.md) - Monitoramento básico
-- [ReAct/CoT](../react-cot-quickstart.md) - Padrões de raciocínio
+### 🚀 **15 Minutes**
+- [Checkpointing](../checkpointing-quickstart.md) - State persistence
+- [Metrics](../metrics-logging-quickstart.md) - Basic monitoring
+- [ReAct/CoT](../react-cot-quickstart.md) - Reasoning patterns
 
-### 🎯 **30 Minutos**
-- [Tutorial de Condicionais](../conditional-nodes-tutorial.md) - Roteamento avançado
-- [Tutorial de Estado](../state-tutorial.md) - Gerenciamento complexo
-- [Multi-Agente](../examples/multi-agent.md) - Coordenação de agentes
+### 🎯 **30 Minutes**
+- [Conditionals Tutorial](../conditional-nodes-tutorial.md) - Advanced routing
+- [State Tutorial](../state-tutorial.md) - Complex management
+- [Multi-Agent](../examples/multi-agent.md) - Agent coordination
 
 ---
 
-> **💡 Dica**: Esta documentação usa Material for MkDocs. Use a navegação à esquerda e a barra de pesquisa para encontrar tópicos rapidamente.
+> **💡 Tip**: This documentation uses Material for MkDocs. Use the left navigation and search bar to quickly find topics.
 
-> **🚀 Pronto para começar?** Vá para [Instalação](../installation.md) ou [Primeiro Grafo](../first-graph-5-minutes.md) para começar em minutos!
+> **🚀 Ready to get started?** Go to [Installation](../installation.md) or [First Graph](../first-graph-5-minutes.md) to begin in minutes!

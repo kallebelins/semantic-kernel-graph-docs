@@ -1,36 +1,36 @@
-# Execução
+# Execution
 
-A execução define como os grafos são processados, incluindo modos sequenciais, paralelos e distribuídos.
+Execution defines how graphs are processed, including sequential, parallel and distributed modes.
 
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-**Execução de Grafo**: Processo de navegar pelos nós de um grafo seguindo as regras de roteamento e executando as operações definidas.
+**Graph Execution**: Process of navigating through graph nodes following routing rules and executing defined operations.
 
-**Ciclo de Execução**: Sequência de eventos que ocorre durante a execução: Before → Execute → After.
+**Execution Cycle**: Sequence of events that occurs during execution: Before → Execute → After.
 
-**Checkpointing**: Capacidade de salvar e restaurar o estado de execução para recuperação e análise.
+**Checkpointing**: Ability to save and restore execution state for recovery and analysis.
 
-## Modos de Execução
+## Execution Modes
 
-### Execução Sequencial
-- **Processamento Linear**: Nós executam um após o outro
-- **Dependências Respeitadas**: Ordem baseada na estrutura do grafo
-- **Estado Compartilhado**: Dados passam de um nó para o próximo
-- **Debug Simples**: Fácil rastreamento do fluxo de execução
+### Sequential Execution
+- **Linear Processing**: Nodes execute one after another
+- **Dependencies Respected**: Order based on graph structure
+- **Shared State**: Data passes from one node to the next
+- **Simple Debug**: Easy execution flow tracking
 
-### Execução Paralela (Fork/Join)
-- **Processamento Simultâneo**: Múltiplos nós executam ao mesmo tempo
-- **Scheduler Determinístico**: Garantia de reprodutibilidade
-- **Merge de Estado**: Combinação de resultados de execuções paralelas
-- **Controle de Concorrência**: Limites e políticas de recursos
+### Parallel Execution (Fork/Join)
+- **Simultaneous Processing**: Multiple nodes execute at the same time
+- **Deterministic Scheduler**: Guarantee of reproducibility
+- **State Merging**: Combination of parallel execution results
+- **Concurrency Control**: Resource limits and policies
 
-### Execução Distribuída
-- **Processamento Remoto**: Execução em processos ou máquinas separadas
-- **Comunicação Assíncrona**: Troca de mensagens entre componentes
-- **Tolerância a Falhas**: Recuperação de falhas de rede ou processo
-- **Balanceamento de Carga**: Distribuição equilibrada de trabalho
+### Distributed Execution
+- **Remote Processing**: Execution in separate processes or machines
+- **Asynchronous Communication**: Message exchange between components
+- **Fault Tolerance**: Recovery from network or process failures
+- **Load Balancing**: Balanced work distribution
 
-## Componentes Principais
+## Main Components
 
 ### GraphExecutor
 ```csharp
@@ -72,35 +72,35 @@ var checkpointManager = new CheckpointManager(
 );
 ```
 
-## Ciclo de Execução
+## Execution Cycle
 
-### Fase Before
+### Before Phase
 ```csharp
-// Validação de entrada e preparação
+// Input validation and preparation
 await node.BeforeExecutionAsync(context);
-// Verificação de pré-condições
-// Inicialização de recursos
+// Precondition verification
+// Resource initialization
 ```
 
-### Fase Execute
+### Execute Phase
 ```csharp
-// Execução principal do nó
+// Main node execution
 var result = await node.ExecuteAsync(context);
-// Processamento da lógica de negócio
-// Atualização do estado
+// Business logic processing
+// State update
 ```
 
-### Fase After
+### After Phase
 ```csharp
-// Limpeza e finalização
+// Cleanup and finalization
 await node.AfterExecutionAsync(context);
-// Liberação de recursos
-// Logging de métricas
+// Resource release
+// Metrics logging
 ```
 
-## Gerenciamento de Estado
+## State Management
 
-### Estado de Execução
+### Execution State
 ```csharp
 var executionState = new ExecutionState
 {
@@ -111,7 +111,7 @@ var executionState = new ExecutionState
 };
 ```
 
-### Histórico de Execução
+### Execution History
 ```csharp
 var executionHistory = new ExecutionHistory
 {
@@ -121,11 +121,11 @@ var executionHistory = new ExecutionHistory
 };
 ```
 
-## Recuperação e Checkpointing
+## Recovery and Checkpointing
 
-### Salvamento de Estado
+### Saving State
 ```csharp
-// Salvar estado atual
+// Save current state
 var checkpoint = await checkpointManager.CreateCheckpointAsync(
     graphId: graph.Id,
     executionId: context.ExecutionId,
@@ -133,9 +133,9 @@ var checkpoint = await checkpointManager.CreateCheckpointAsync(
 );
 ```
 
-### Restauração de Estado
+### Restoring State
 ```csharp
-// Restaurar execução de um checkpoint
+// Restore execution from a checkpoint
 var restoredContext = await checkpointManager.RestoreFromCheckpointAsync(
     checkpointId: checkpoint.Id
 );
@@ -143,9 +143,9 @@ var restoredContext = await checkpointManager.RestoreFromCheckpointAsync(
 var result = await executor.ExecuteAsync(graph, restoredContext);
 ```
 
-## Streaming e Eventos
+## Streaming and Events
 
-### Eventos de Execução
+### Execution Events
 ```csharp
 var events = new[]
 {
@@ -166,7 +166,7 @@ var events = new[]
 };
 ```
 
-### Consumo de Eventos
+### Consuming Events
 ```csharp
 await foreach (var evt in eventStream)
 {
@@ -182,7 +182,7 @@ await foreach (var evt in eventStream)
 }
 ```
 
-## Configuração e Opções
+## Configuration and Options
 
 ### GraphExecutionOptions
 ```csharp
@@ -209,15 +209,15 @@ var streamingOptions = new StreamingExecutionOptions
 };
 ```
 
-## Monitoramento e Métricas
+## Monitoring and Metrics
 
-### Métricas de Performance
-- **Tempo de Execução**: Latência total e por nó
-- **Throughput**: Número de nós executados por segundo
-- **Utilização de Recursos**: CPU, memória e I/O
-- **Taxa de Sucesso**: Percentual de execuções bem-sucedidas
+### Performance Metrics
+- **Execution Time**: Total latency and per node
+- **Throughput**: Number of nodes executed per second
+- **Resource Utilization**: CPU, memory, and I/O
+- **Success Rate**: Percentage of successful executions
 
-### Logging e Tracing
+### Logging and Tracing
 ```csharp
 var logger = new SemanticKernelGraphLogger();
 logger.LogExecutionStart(graph.Id, context.ExecutionId);
@@ -225,21 +225,21 @@ logger.LogNodeExecution(node.Id, context.ExecutionId, stopwatch.Elapsed);
 logger.LogExecutionComplete(graph.Id, context.ExecutionId, result);
 ```
 
-## Veja Também
+## See Also
 
-- [Modelo de Execução](../concepts/execution-model.md)
+- [Execution Model](../concepts/execution-model.md)
 - [Checkpointing](../concepts/checkpointing.md)
 - [Streaming](../concepts/streaming.md)
-- [Métricas e Logging](../how-to/metrics-and-observability.md)
-- [Exemplos de Execução](../examples/execution-guide.md)
-- [Exemplos de Streaming](../examples/streaming-execution.md)
+- [Metrics and Observability](../how-to/metrics-and-observability.md)
+- [Execution Examples](../examples/execution-guide.md)
+- [Streaming Execution Examples](../examples/streaming-execution.md)
 
-## Referências
+## References
 
-- `GraphExecutor`: Executor principal de grafos
-- `StreamingGraphExecutor`: Executor com streaming de eventos
-- `CheckpointManager`: Gerenciador de checkpoints
-- `GraphExecutionOptions`: Configurações de execução
-- `StreamingExecutionOptions`: Configurações de streaming
-- `ExecutionState`: Estado da execução
-- `GraphExecutionEvent`: Eventos de execução
+- `GraphExecutor`: Main graph executor
+- `StreamingGraphExecutor`: Executor with event streaming
+- `CheckpointManager`: Checkpoint manager
+- `GraphExecutionOptions`: Execution options
+- `StreamingExecutionOptions`: Streaming options
+- `ExecutionState`: Execution state
+- `GraphExecutionEvent`: Execution events

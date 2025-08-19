@@ -1,79 +1,79 @@
 # Changelog
 
-Este documento registra as principais mudanças e melhorias em cada versão do SemanticKernel.Graph.
+This document records the main changes and improvements in each version of SemanticKernel.Graph.
 
-## [Unreleased] - Em Desenvolvimento
+## [Unreleased] - In Development
 
-### Adicionado
-- Sistema de documentação completo com MkDocs
-- Páginas de conceitos para roteamento, visualização, execução, grafos e nós
-- Guias práticos para todas as funcionalidades principais
-- Exemplos abrangentes para todos os padrões e recursos
+### Added
+- Complete documentation system with MkDocs
+- Concept pages for routing, visualization, execution, graphs and nodes
+- Practical guides for all main features
+- Comprehensive examples for all patterns and resources
 
-### Alterado
-- Reestruturação completa da documentação
-- Padronização de todas as páginas com seções "Conceitos e Técnicas" e "Referências"
+### Changed
+- Complete documentation restructuring
+- Standardization of all pages with "Concepts and Techniques" and "References" sections
 
-## [0.1.0] - Versão Inicial
+## [0.1.0] - Initial Version
 
-### Adicionado
-- Estrutura base do projeto SemanticKernel.Graph
-- Sistema de execução de grafos com nós e arestas condicionais
-- Suporte a checkpointing e recuperação de estado
-- Execução streaming com eventos em tempo real
-- Sistema de métricas e observabilidade
-- Integração com Semantic Kernel existente
-- Suporte a múltiplos tipos de nós (função, condicional, raciocínio, loop)
-- Sistema de roteamento dinâmico e estratégias de roteamento
-- Visualização de grafos em múltiplos formatos (DOT, Mermaid, JSON)
-- Sistema de templates para workflows comuns
-- Suporte a multi-agente e coordenação
-- Sistema de Human-in-the-Loop (HITL)
-- Integração com ferramentas REST e APIs externas
-- Sistema de validação e compilação de grafos
-- Políticas de erro e resiliência
-- Sistema de governança de recursos e concorrência
+### Added
+- Base structure of SemanticKernel.Graph project
+- Graph execution system with nodes and conditional edges
+- Checkpointing and state recovery support
+- Streaming execution with real-time events
+- Metrics and observability system
+- Integration with existing Semantic Kernel
+- Support for multiple node types (function, conditional, reasoning, loop)
+- Dynamic routing system and routing strategies
+- Graph visualization in multiple formats (DOT, Mermaid, JSON)
+- Template system for common workflows
+- Multi-agent and coordination support
+- Human-in-the-Loop (HITL) system
+- Integration with REST tools and external APIs
+- Graph validation and compilation system
+- Error policies and resilience
+- Resource governance and concurrency system
 
-### Arquitetura
-- Design baseado em ADRs (Architecture Decision Records)
-- Separação clara entre Core, Execution, State, Streaming e Integration
-- Sistema de extensibilidade para plugins e customizações
-- Suporte a execução distribuída e paralela
+### Architecture
+- Design based on ADRs (Architecture Decision Records)
+- Clear separation between Core, Execution, State, Streaming and Integration
+- Extensibility system for plugins and customizations
+- Support for distributed and parallel execution
 
-## [0.0.1] - Scaffolding Inicial
+## [0.0.1] - Initial Scaffolding
 
-### Adicionado
-- Estrutura inicial do projeto
-- Configuração básica do MkDocs
-- Páginas de documentação básicas
-- Estrutura de diretórios para conceitos, guias e exemplos
+### Added
+- Initial project structure
+- Basic MkDocs configuration
+- Basic documentation pages
+- Directory structure for concepts, guides and examples
 
 ---
 
-## Como Contribuir
+## How to Contribute
 
-Para contribuir com o changelog:
+To contribute to the changelog:
 
-1. **Adicione entradas** para todas as mudanças significativas
-2. **Use categorias** claras: Adicionado, Alterado, Removido, Corrigido
-3. **Mantenha consistência** com o formato existente
-4. **Inclua detalhes** sobre breaking changes e migrações
+1. **Add entries** for all significant changes
+2. **Use clear categories**: Added, Changed, Removed, Fixed
+3. **Maintain consistency** with existing format
+4. **Include details** about breaking changes and migrations
 
-## Histórico de Commits
+## Commit History
 
-Para mudanças detalhadas, consulte:
+For detailed changes, see:
 - [Repository Releases](https://github.com/your-org/semantic-kernel-graph/releases)
 - [Commit History](https://github.com/your-org/semantic-kernel-graph/commits/main)
 
-## Notas de Versão
+## Release Notes
 
 ### Breaking Changes
-- **0.1.0**: Mudanças na API de execução para melhorar performance e usabilidade
-- **0.0.1**: Estrutura inicial sem breaking changes
+- **0.1.0**: Changes in execution API to improve performance and usability
+- **0.0.1**: Initial structure without breaking changes
 
-### Migrações
-- **0.1.0**: Guia de migração disponível em [Migrations Guide](../migrations/index.md)
+### Migrations
+- **0.1.0**: Migration guide available at [Migrations Guide](../migrations/index.md)
 
 ---
 
-*Este changelog segue o [Keep a Changelog](https://keepachangelog.com/) e [Semantic Versioning](https://semver.org/).*
+*This changelog follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).*

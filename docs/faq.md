@@ -1,130 +1,130 @@
-# FAQ - Perguntas Frequentes
+# FAQ - Frequently Asked Questions
 
-Perguntas e respostas comuns sobre o SemanticKernel.Graph.
+Common questions and answers about SemanticKernel.Graph.
 
-## Conceitos Básicos
+## Basic Concepts
 
-### O que é o SemanticKernel.Graph?
-**SemanticKernel.Graph** é uma extensão do Semantic Kernel que adiciona capacidades de execução de grafos computacionais, permitindo criar workflows complexos com nós, arestas condicionais e execução controlada.
+### What is SemanticKernel.Graph?
+**SemanticKernel.Graph** is an extension of Semantic Kernel that adds computational graph execution capabilities, allowing you to create complex workflows with nodes, conditional edges and controlled execution.
 
-### Como se relaciona com o Semantic Kernel?
-É uma extensão que mantém total compatibilidade com o Semantic Kernel existente, adicionando capacidades de orquestração de grafos sem alterar a funcionalidade base.
+### How does it relate to Semantic Kernel?
+It's an extension that maintains full compatibility with the existing Semantic Kernel, adding graph orchestration capabilities without changing the base functionality.
 
-### Qual a diferença para LangGraph?
-Oferece funcionalidades similares ao LangGraph, mas com foco em integração nativa com o ecossistema .NET e Semantic Kernel, otimizado para aplicações empresariais.
+### What's the difference from LangGraph?
+It offers similar functionality to LangGraph, but with a focus on native integration with the .NET ecosystem and Semantic Kernel, optimized for enterprise applications.
 
-## Requisitos e Compatibilidade
+## Requirements and Compatibility
 
-### Quais versões do .NET são suportadas?
-**NET 8+** é a versão mínima recomendada, com suporte completo a todas as funcionalidades modernas.
+### Which .NET versions are supported?
+**.NET 8+** is the minimum recommended version, with full support for all modern features.
 
-### Funciona com código SK existente?
-**Sim**, com mudanças mínimas. Aproveita plugins, serviços e conectores existentes, apenas adicionando capacidades de grafo.
+### Does it work with existing SK code?
+**Yes**, with minimal changes. It leverages existing plugins, services and connectors, only adding graph capabilities.
 
-### Precisa de serviços externos?
-**Não obrigatoriamente**. Funciona com configuração mínima, mas pode integrar com serviços de telemetria, memória e monitoramento quando disponíveis.
+### Does it need external services?
+**Not necessarily**. It works with minimal configuration, but can integrate with telemetry, memory and monitoring services when available.
 
-## Funcionalidades
+## Features
 
-### Streaming é suportado?
-**Sim**, com reconexão automática, buffering inteligente e controle de backpressure.
+### Is streaming supported?
+**Yes**, with automatic reconnection, intelligent buffering and backpressure control.
 
-### Checkpointing funciona em produção?
-**Sim**, com suporte a persistência, compressão, versionamento e recuperação robusta.
+### Does checkpointing work in production?
+**Yes**, with support for persistence, compression, versioning and robust recovery.
 
-### Suporta execução paralela?
-**Sim**, com scheduler determinístico, controle de concorrência e merge de estado.
+### Does it support parallel execution?
+**Yes**, with deterministic scheduler, concurrency control and state merging.
 
-### Visualização é interativa?
-**Sim**, com export para DOT, Mermaid, JSON e overlays de execução em tempo real.
+### Is visualization interactive?
+**Yes**, with export to DOT, Mermaid, JSON and real-time execution overlays.
 
-## Integração e Desenvolvimento
+## Integration and Development
 
-### Como integrar com aplicações existentes?
+### How to integrate with existing applications?
 ```csharp
-// Adicionar suporte a grafos
+// Add graph support
 builder.AddGraphSupport();
 
-// Usar normalmente
+// Use normally
 var executor = kernel.GetRequiredService<IGraphExecutor>();
 ```
 
-### Suporta plugins customizados?
-**Sim**, todos os plugins SK existentes funcionam como nós de grafo.
+### Does it support custom plugins?
+**Yes**, all existing SK plugins work as graph nodes.
 
-### Como debugar grafos complexos?
-- Sessões de debug interativas
-- Breakpoints em nós específicos
-- Visualização em tempo real
-- Métricas detalhadas por nó
+### How to debug complex graphs?
+- Interactive debug sessions
+- Breakpoints on specific nodes
+- Real-time visualization
+- Detailed metrics per node
 
-### Existe suporte a testes?
-**Sim**, com framework de testes integrado e mocks para desenvolvimento.
+### Is there testing support?
+**Yes**, with integrated testing framework and mocks for development.
 
-## Performance e Escalabilidade
+## Performance and Scalability
 
-### Qual o overhead de performance?
-**Mínimo** - apenas o necessário para orquestração, sem impacto na execução dos nós.
+### What's the performance overhead?
+**Minimal** - only what's necessary for orchestration, with no impact on node execution.
 
-### Suporta execução distribuída?
-**Sim**, com suporte a múltiplos processos e máquinas.
+### Does it support distributed execution?
+**Yes**, with support for multiple processes and machines.
 
-### Como lidar com falhas?
-- Políticas de retry configuráveis
+### How to handle failures?
+- Configurable retry policies
 - Circuit breakers
-- Fallbacks automáticos
-- Recuperação por checkpoint
+- Automatic fallbacks
+- Checkpoint recovery
 
-## Configuração e Deploy
+## Configuration and Deployment
 
-### Precisa de configuração especial?
-**Não**, funciona com configuração zero, mas oferece opções avançadas quando necessário.
+### Does it need special configuration?
+**No**, it works with zero configuration, but offers advanced options when needed.
 
-### Suporta containers Docker?
-**Sim**, com suporte completo a ambientes containerizados.
+### Does it support Docker containers?
+**Yes**, with full support for containerized environments.
 
-### Como monitorar em produção?
-- Métricas nativas (.NET Metrics)
-- Logging estruturado
-- Integração com Application Insights
-- Export para Prometheus/Grafana
+### How to monitor in production?
+- Native metrics (.NET Metrics)
+- Structured logging
+- Application Insights integration
+- Export to Prometheus/Grafana
 
-## Suporte e Comunidade
+## Support and Community
 
-### Onde encontrar ajuda?
-- [Documentação](../index.md)
-- [Exemplos](../examples/index.md)
+### Where to find help?
+- [Documentation](../index.md)
+- [Examples](../examples/index.md)
 - [GitHub Issues](https://github.com/your-org/semantic-kernel-graph/issues)
 - [Discussions](https://github.com/your-org/semantic-kernel-graph/discussions)
 
-### Como contribuir?
-- Reportar bugs
-- Sugerir melhorias
-- Contribuir com exemplos
-- Melhorar documentação
+### How to contribute?
+- Report bugs
+- Suggest improvements
+- Contribute examples
+- Improve documentation
 
-### Existe roadmap público?
-**Sim**, disponível em [Roadmap](../architecture/implementation-roadmap.md).
+### Is there a public roadmap?
+**Yes**, available at [Roadmap](../architecture/implementation-roadmap.md).
 
-## Casos de Uso
+## Use Cases
 
-### Para que tipos de aplicações é ideal?
-- Workflows de IA complexos
-- Pipelines de processamento de dados
-- Sistemas de decisão automatizada
-- Orquestração de microserviços
-- Aplicações de chatbot avançadas
+### What types of applications is it ideal for?
+- Complex AI workflows
+- Data processing pipelines
+- Automated decision systems
+- Microservice orchestration
+- Advanced chatbot applications
 
-### Exemplos de uso em produção?
-- Análise de documentos automatizada
-- Classificação de conteúdo em escala
-- Sistemas de recomendação
-- Workflows de aprovação
-- Processamento de formulários
+### Examples of production usage?
+- Automated document analysis
+- Content classification at scale
+- Recommendation systems
+- Approval workflows
+- Form processing
 
 ---
 
-## Veja Também
+## See Also
 
 - [Getting Started](../getting-started.md)
 - [Installation](../installation.md)
@@ -132,7 +132,7 @@ var executor = kernel.GetRequiredService<IGraphExecutor>();
 - [Architecture](../architecture/index.md)
 - [Troubleshooting](../troubleshooting.md)
 
-## Referências
+## References
 
 - [Semantic Kernel Documentation](https://learn.microsoft.com/en-us/semantic-kernel/)
 - [LangGraph Python](https://langchain-ai.github.io/langgraph/)

@@ -1,187 +1,184 @@
-# Template: Seções Padrão para Exemplos
+# Template: Standard Sections for Examples
 
-Este template define as seções padrão que devem ser incluídas em todos os exemplos do Semantic Kernel Graph, conforme especificado no item 4 do backlog de documentação.
+This template defines the standard sections that should be included in all Semantic Kernel Graph examples, as specified in item 4 of the documentation backlog.
 
-## Estrutura Padrão
+## Standard Structure
 
-### 1. Cabeçalho e Objetivo
+### 1. Header and Objective
 ```markdown
-# [Nome do Exemplo]
+# [Example Name]
 
-Este exemplo demonstra [descrição breve do que o exemplo faz].
+This example demonstrates [brief description of what the example does].
 
-## Objetivo
+## Objective
 
-Aprenda como implementar [funcionalidade] em workflows baseados em grafo para:
-- [Benefício 1]
-- [Benefício 2]
-- [Benefício 3]
-- [Benefício 4]
+Learn how to implement [functionality] in graph-based workflows for:
+- [Benefit 1]
+- [Benefit 2]
+- [Benefit 3]
+- [Benefit 4]
 ```
 
-### 2. Pré-requisitos
+### 2. Prerequisites
 ```markdown
-## Pré-requisitos
+## Prerequisites
 
-- **.NET 8.0** ou posterior
-- **OpenAI API Key** configurado em `appsettings.json`
-- **Pacote Semantic Kernel Graph** instalado
-- Compreensão básica de [Conceitos de Grafo](../concepts/graph-concepts.md) e [Modelo de Execução](../concepts/execution-model.md)
-- Familiaridade com [Guia relacionado](../how-to/guia-relacionado.md) (quando aplicável)
+- **.NET 8.0** or later
+- **OpenAI API Key** configured in `appsettings.json`
+- **Semantic Kernel Graph package** installed
+- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Execution Model](../concepts/execution-model.md)
+- Familiarity with [Related Guide](../how-to/related-guide.md) (when applicable)
 ```
 
-### 3. Conceitos e Técnicas
+### 3. Concepts and Techniques
 ```markdown
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-Esta seção define os componentes e padrões utilizados no exemplo, com links para a documentação de referência.
+This section defines the components and patterns used in the example, with links to reference documentation.
 
-### Definições dos Componentes
+### Component Definitions
 
-- **[Nome do Componente]**: [Definição clara e concisa]
-- **[Padrão/Conceito]**: [Explicação do padrão ou conceito utilizado]
-- **[Técnica]**: [Descrição da técnica implementada]
+- **[Component Name]**: [Clear and concise definition]
+- **[Pattern/Concept]**: [Explanation of the pattern or concept used]
+- **[Technique]**: [Description of the implemented technique]
 
-### Classes Principais
+### Main Classes
 
-- `[ClassePrincipal]`: [Descrição da funcionalidade principal]
-- `[ClasseSecundaria]`: [Descrição da funcionalidade secundária]
-- `[Interface]`: [Descrição da interface ou contrato]
+- `[MainClass]`: [Description of main functionality]
+- `[SecondaryClass]`: [Description of secondary functionality]
+- `[Interface]`: [Description of interface or contract]
 ```
 
-### 4. Executando o Exemplo
+### 4. Running the Example
 ```markdown
-## Executando o Exemplo
+## Running the Example
 
-### Como Usar
+### How to Use
 
-Este template fornece uma estrutura padrão para documentar exemplos. Use os códigos abaixo como referência para implementar os padrões em suas próprias aplicações.
+This template provides a standard structure for documenting examples. Use the codes below as reference to implement the patterns in your own applications.
 ```
 
-### 5. Implementação Passo a Passo
+### 5. Step-by-Step Implementation
 ```markdown
-## Implementação Passo a Passo
+## Step-by-Step Implementation
 
-### 1. [Primeiro Passo]
+### 1. [First Step]
 
-Este exemplo demonstra [descrição do primeiro passo].
+This example demonstrates [description of first step].
 
 ```csharp
-// Código do primeiro passo
-var exemplo = new ExemploClass();
-// ... mais código
+// Code for first step
+var example = new ExampleClass();
+// ... more code
 ```
 
-### 2. [Segundo Passo]
+### 2. [Second Step]
 
-[Descrição do segundo passo]
+[Description of second step]
 
 ```csharp
-// Código do segundo passo
-// ... código relevante
+// Code for second step
+// ... relevant code
 ```
 
-### 3. [Terceiro Passo]
+### 3. [Third Step]
 
-[Descrição do terceiro passo]
+[Description of third step]
 
 ```csharp
-// Código do terceiro passo
-// ... código relevante
+// Code for third step
+// ... relevant code
 ```
 ```
 
-### 6. Saída Esperada
+### 6. Expected Output
 ```markdown
-## Saída Esperada
+## Expected Output
 
-O exemplo produz uma saída mostrando:
+The example produces output showing:
 
-- ✅ [Resultado esperado 1]
-- 🎯 [Resultado esperado 2]
-- 📊 [Resultado esperado 3]
-- 🔍 [Resultado esperado 4]
+- ✅ [Expected result 1]
 ```
 
 ### 7. Troubleshooting
 ```markdown
 ## Troubleshooting
 
-### Problemas Comuns
+### Common Problems
 
-1. **[Problema 1]**: [Descrição do problema]
-   - **Sintoma**: [Como identificar o problema]
-   - **Causa**: [Causa provável]
-   - **Solução**: [Passos para resolver]
+1. **[Problem 1]**: [Description of problem]
+   - **Symptom**: [How to identify the problem]
+   - **Cause**: [Probable cause]
+   - **Solution**: [Steps to resolve]
 
-2. **[Problema 2]**: [Descrição do problema]
-   - **Sintoma**: [Como identificar o problema]
-   - **Causa**: [Causa provável]
-   - **Solução**: [Passos para resolver]
+2. **[Problem 2]**: [Description of problem]
+   - **Symptom**: [How to identify the problem]
+   - **Cause**: [Probable cause]
+   - **Solution**: [Steps to resolve]
 
-### Dicas de Debug
+### Debug Tips
 
-- [Dica 1 de debug]
-- [Dica 2 de debug]
-- [Dica 3 de debug]
+- [Debug tip 1]
+- [Debug tip 2]
+- [Debug tip 3]
 ```
 
-### 8. Padrões Avançados (quando aplicável)
+### 8. Advanced Patterns (when applicable)
 ```markdown
-## Padrões Avançados
+## Advanced Patterns
 
-### [Padrão Avançado 1]
+### [Advanced Pattern 1]
 
 ```csharp
-// Implementação do padrão avançado
-var padraoAvancado = new PadraoAvancado();
-// ... código do padrão
+// Implementation of advanced pattern
+var advancedPattern = new AdvancedPattern();
+// ... pattern code
 ```
 
-### [Padrão Avançado 2]
+### [Advanced Pattern 2]
 
 ```csharp
-// Implementação do segundo padrão
-// ... código relevante
+// Implementation of second pattern
+// ... relevant code
 ```
 ```
 
-### 9. Exemplos Relacionados
+### 9. Related Examples
 ```markdown
-## Exemplos Relacionados
+## Related Examples
 
-- [Exemplo Relacionado 1](./exemplo-relacionado-1.md): [Breve descrição]
-- [Exemplo Relacionado 2](./exemplo-relacionado-2.md): [Breve descrição]
-- [Exemplo Relacionado 3](./exemplo-relacionado-3.md): [Breve descrição]
+- [Related Example 1](./related-example-1.md): [Brief description]
+- [Related Example 2](./related-example-2.md): [Brief description]
+- [Related Example 3](./related-example-3.md): [Brief description]
 ```
 
-### 10. Veja Também (Links para Referência e Guias)
+### 10. See Also (Links for Reference and Guides)
 ```markdown
-## Veja Também
+## See Also
 
-- [Conceitos Relacionados](../concepts/conceito-relacionado.md): [Descrição do que encontrar]
-- [Guia de Implementação](../how-to/guia-relacionado.md): [Descrição do guia]
-- [Referência da API](../api/): [Descrição da documentação da API]
-- [Monitoramento de Performance](../how-to/metrics-and-observability.md): [Descrição das métricas]
+- [Related Concepts](../concepts/related-concept.md): [Description of what to find]
+- [Implementation Guide](../how-to/related-guide.md): [Description of guide]
+- [API Reference](../api/): [Description of API documentation]
+- [Performance Monitoring](../how-to/metrics-and-observability.md): [Description of metrics]
 ```
 
-## Checklist de Implementação
+## Implementation Checklist
 
-Para cada exemplo, verificar se contém:
+For each example, check if it contains:
 
-- [ ] **Conceitos e Técnicas**: Definição dos componentes e padrões usados (com links para Reference)
-- [ ] **Referências**: Links para APIs e Guides relacionados
-- [ ] **Pré-requisitos**: Requisitos técnicos e conhecimentos necessários
-- [ ] **Passos**: Implementação passo a passo com snippets principais
-- [ ] **Saída Esperada**: Resultados esperados do exemplo
-- [ ] **Troubleshooting**: Problemas comuns e soluções
-- [ ] **Variantes Sugeridas**: Padrões avançados quando aplicável
-- [ ] **Links Cruzados**: Seção "Veja Também" com links para Reference e Guides
+- [ ] **Concepts and Techniques**: Definition of components and patterns used (with links to Reference)
+- [ ] **References**: Links to related APIs and Guides
+- [ ] **Prerequisites**: Technical requirements and required knowledge
+- [ ] **Steps**: Step-by-step implementation with main snippets
+- [ ] **Expected Output**: Expected results of the example
+- [ ] **Troubleshooting**: Common problems and solutions
+- [ ] **Suggested Variants**: Advanced patterns when applicable
+- [ ] **Cross-linked Sections**: "See Also" section with links to Reference and Guides
 
-## Notas de Implementação
+## Implementation Notes
 
-1. **Consistência**: Manter o mesmo formato e estilo em todos os exemplos
-2. **Links Ativos**: Todos os links internos devem funcionar e apontar para páginas existentes
-3. **Código Executável**: Snippets de código devem compilar e refletir as APIs atuais
-4. **Navegação**: Facilitar a navegação entre exemplos, guias e referência da API
-5. **Busca**: Incluir termos relevantes para facilitar a busca na documentação
+1. **Consistency**: Maintain the same format and style across all examples
+2. **Active Links**: All internal links must work and point to existing pages
+3. **Executable Code**: Code snippets must compile and reflect current APIs
+4. **Navigation**: Facilitate navigation between examples, guides, and API reference
+5. **Search**: Include relevant terms to facilitate search in documentation

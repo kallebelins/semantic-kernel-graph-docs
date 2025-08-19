@@ -1,36 +1,36 @@
-# Visualização
+# Visualization
 
-A visualização permite gerar diagramas e exportar estruturas de grafos para documentação e ferramentas externas.
+Visualization allows you to generate diagrams and export graph structures for documentation and external tools.
 
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-**Visualização de Grafo**: Representação gráfica da estrutura e fluxo de execução de um grafo computacional.
+**Graph Visualization**: Graphical representation of the structure and execution flow of a computational graph.
 
-**Engine de Visualização**: Sistema responsável por converter a estrutura interna do grafo em formatos visuais.
+**Visualization Engine**: System responsible for converting the internal graph structure into visual formats.
 
-**Overlay de Execução**: Camada visual que mostra o estado atual e histórico de execução em tempo real.
+**Execution Overlay**: Visual layer that shows the current state and execution history in real time.
 
-## Formatos de Exportação
+## Export Formats
 
 ### DOT (Graphviz)
-- **Formato**: Linguagem de descrição de grafos para Graphviz
-- **Uso**: Geração de diagramas estáticos e interativos
-- **Vantagens**: Padrão da indústria, suporte a layouts automáticos
-- **Exemplo**: `digraph { A -> B [label="condition"]; }`
+- **Format**: Graph description language for Graphviz
+- **Usage**: Generation of static and interactive diagrams
+- **Advantages**: Industry standard, automatic layout support
+- **Example**: `digraph { A -> B [label="condition"]; }`
 
 ### Mermaid
-- **Formato**: Linguagem de diagramação baseada em texto
-- **Uso**: Integração com ferramentas como GitHub, GitLab, Notion
-- **Vantagens**: Sintaxe simples, renderização automática
-- **Exemplo**: `graph TD; A-->B; B-->C;`
+- **Format**: Text-based diagramming language
+- **Usage**: Integration with tools like GitHub, GitLab, Notion
+- **Advantages**: Simple syntax, automatic rendering
+- **Example**: `graph TD; A-->B; B-->C;`
 
 ### JSON
-- **Formato**: Representação estruturada dos dados do grafo
-- **Uso**: Integração com ferramentas externas e APIs
-- **Vantagens**: Estrutura hierárquica, fácil parsing
-- **Exemplo**: `{"nodes": [...], "edges": [...], "metadata": {...}}`
+- **Format**: Structured representation of graph data
+- **Usage**: Integration with external tools and APIs
+- **Advantages**: Hierarchical structure, easy parsing
+- **Example**: `{"nodes": [...], "edges": [...], "metadata": {...}}`
 
-## Componentes Principais
+## Main Components
 
 ### GraphVisualizationEngine
 ```csharp
@@ -64,24 +64,24 @@ var graphDef = new VisualGraphDefinition
 };
 ```
 
-## Funcionalidades de Visualização
+## Visualization Features
 
-### Visualização Estática
-- **Estrutura do Grafo**: Nós, arestas e hierarquia
-- **Metadados**: Informações sobre tipos, configurações e documentação
-- **Layouts Automáticos**: Organização automática de elementos
+### Static Visualization
+- **Graph Structure**: Nodes, edges and hierarchy
+- **Metadata**: Information about types, configurations and documentation
+- **Automatic Layouts**: Automatic organization of elements
 
-### Visualização em Tempo Real
-- **Estado de Execução**: Nó atual, histórico de execução
-- **Métricas**: Tempos de execução, contadores de uso
-- **Highlights**: Destaque visual para nós ativos e caminhos percorridos
+### Real-Time Visualization
+- **Execution State**: Current node, execution history
+- **Metrics**: Execution times, usage counters
+- **Highlights**: Visual emphasis for active nodes and traversed paths
 
-### Inspeção Interativa
-- **Zoom e Navegação**: Exploração detalhada de partes específicas
-- **Filtros**: Visualização seletiva por tipo de nó ou estado
-- **Tooltips**: Informações detalhadas ao passar o mouse
+### Interactive Inspection
+- **Zoom and Navigation**: Detailed exploration of specific parts
+- **Filters**: Selective visualization by node type or state
+- **Tooltips**: Detailed information on hover
 
-## Configuração e Opções
+## Configuration and Options
 
 ### GraphVisualizationOptions
 ```csharp
@@ -97,70 +97,70 @@ var options = new GraphVisualizationOptions
 };
 ```
 
-### Temas de Visualização
-- **Light**: Tema claro para documentação impressa
-- **Dark**: Tema escuro para apresentações e demos
-- **Custom**: Temas personalizados com cores específicas
+### Visualization Themes
+- **Light**: Light theme for printed documentation
+- **Dark**: Dark theme for presentations and demos
+- **Custom**: Custom themes with specific colors
 
-## Exemplos de Uso
+## Usage Examples
 
-### Exportação Básica
+### Basic Export
 ```csharp
-// Exportar para DOT
+// Export to DOT
 var dotContent = await visualizer.ExportAsync(graph, VisualizationFormat.DOT);
 
-// Exportar para Mermaid
+// Export to Mermaid
 var mermaidContent = await visualizer.ExportAsync(graph, VisualizationFormat.Mermaid);
 
-// Exportar para JSON
+// Export to JSON
 var jsonContent = await visualizer.ExportAsync(graph, VisualizationFormat.JSON);
 ```
 
-### Visualização com Estado
+### State Visualization
 ```csharp
-// Visualizar grafo com estado de execução
+// Visualize graph with execution state
 var executionState = await executor.GetExecutionStateAsync();
 var visualGraph = await visualizer.CreateExecutionVisualizationAsync(graph, executionState);
 
-// Exportar visualização completa
+// Export complete visualization
 var visualization = await visualizer.ExportAsync(visualGraph, VisualizationFormat.Mermaid);
 ```
 
-### Overlay de Execução
+### Execution Overlay
 ```csharp
-// Criar overlay em tempo real
+// Create real-time overlay
 var realtimeVisualizer = new GraphRealtimeHighlighter(graph);
 realtimeVisualizer.StartHighlighting();
 
-// Atualizar estado visual
+// Update visual state
 await realtimeVisualizer.UpdateExecutionStateAsync(executionState);
 ```
 
-## Integração com Ferramentas
+## Tool Integration
 
 ### GitHub/GitLab
-- **Mermaid**: Renderização automática em markdown
-- **PlantUML**: Integração via extensões
-- **Graphviz**: Renderização via GitHub Actions
+- **Mermaid**: Automatic rendering in markdown
+- **PlantUML**: Integration via extensions
+- **Graphviz**: Rendering via GitHub Actions
 
-### Ferramentas de Documentação
-- **DocFX**: Integração com documentação de API
-- **MkDocs**: Suporte nativo a Mermaid
-- **Sphinx**: Extensões para diagramas
+### Documentation Tools
+- **DocFX**: Integration with API documentation
+- **MkDocs**: Native Mermaid support
+- **Sphinx**: Extensions for diagrams
 
-### IDEs e Editores
-- **VS Code**: Extensões para visualização de grafos
-- **JetBrains**: Plugins para diagramação
-- **Vim/Emacs**: Modos para edição de grafos
+### IDEs and Editors
+- **VS Code**: Extensions for graph visualization
+- **JetBrains**: Plugins for diagramming
+- **Vim/Emacs**: Modes for graph editing
 
-## Monitoramento e Debug
+## Monitoring and Debugging
 
-### Métricas de Visualização
-- **Tempo de Renderização**: Latência para gerar visualizações
-- **Tamanho de Exportação**: Tamanho dos arquivos gerados
-- **Qualidade de Layout**: Métricas de organização visual
+### Visualization Metrics
+- **Render Time**: Latency to generate visualizations
+- **Export Size**: Size of generated files
+- **Layout Quality**: Visual organization metrics
 
-### Debug de Visualização
+### Visualization Debugging
 ```csharp
 var debugOptions = new GraphVisualizationOptions
 {
@@ -170,18 +170,18 @@ var debugOptions = new GraphVisualizationOptions
 };
 ```
 
-## Veja Também
+## See Also
 
-- [Visualização em Tempo Real](../how-to/real-time-visualization-and-highlights.md)
-- [Exemplos de Visualização](../examples/graph-visualization.md)
-- [Debug e Inspeção](../how-to/debug-and-inspection.md)
-- [Grafos](../concepts/graph-concepts.md)
-- [Execução](../concepts/execution-model.md)
+- [Real-Time Visualization](../how-to/real-time-visualization-and-highlights.md)
+- [Visualization Examples](../examples/graph-visualization.md)
+- [Debug and Inspection](../how-to/debug-and-inspection.md)
+- [Graphs](../concepts/graph-concepts.md)
+- [Execution](../concepts/execution-model.md)
 
-## Referências
+## References
 
-- `GraphVisualizationEngine`: Motor principal de visualização
-- `VisualGraphDefinition`: Estrutura de dados para visualização
-- `GraphVisualizationOptions`: Configurações de visualização
-- `GraphRealtimeHighlighter`: Destaque em tempo real
-- `VisualizationFormat`: Formatos de exportação suportados
+- `GraphVisualizationEngine`: Main visualization engine
+- `VisualGraphDefinition`: Data structure for visualization
+- `GraphVisualizationOptions`: Visualization configurations
+- `GraphRealtimeHighlighter`: Real-time highlighting
+- `VisualizationFormat`: Supported export formats

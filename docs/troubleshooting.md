@@ -4,34 +4,34 @@ title: Troubleshooting
 
 # Troubleshooting
 
-Guia para resolver problemas comuns e diagnosticar questões no SemanticKernel.Graph.
+Guide for resolving common problems and diagnosing issues in SemanticKernel.Graph.
 
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-**Troubleshooting**: Processo sistemático de identificar, diagnosticar e resolver problemas em sistemas de grafos computacionais.
+**Troubleshooting**: Systematic process of identifying, diagnosing and resolving problems in computational graph systems.
 
-**Diagnóstico**: Análise de sintomas, logs e métricas para determinar a causa raiz de um problema.
+**Diagnosis**: Analysis of symptoms, logs and metrics to determine the root cause of a problem.
 
-**Recuperação**: Estratégias para restaurar a funcionalidade normal após a resolução de um problema.
+**Recovery**: Strategies to restore normal functionality after problem resolution.
 
-## Problemas de Execução
+## Execution Problems
 
-### Execução Pausa ou é Lenta
+### Execution Pauses or is Slow
 
-**Sintomas**:
-- Grafo não progride após um nó específico
-- Tempo de execução muito maior que o esperado
-- Aplicação parece "travada"
+**Symptoms**:
+- Graph doesn't progress after a specific node
+- Execution time much longer than expected
+- Application seems "frozen"
 
-**Causas Prováveis**:
-- Loops infinitos ou muito longos
-- Nós com timeout muito alto
-- Bloqueios em recursos externos
-- Condições de roteamento que nunca são atendidas
+**Probable Causes**:
+- Infinite or very long loops
+- Nodes with very high timeout
+- Blocking on external resources
+- Routing conditions that are never met
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Habilitar métricas detalhadas
+// Enable detailed metrics
 var options = new GraphExecutionOptions
 {
     EnableMetrics = true,
@@ -39,46 +39,46 @@ var options = new GraphExecutionOptions
     MaxExecutionTime = TimeSpan.FromMinutes(5)
 };
 
-// Verificar logs de execução
+// Check execution logs
 var logger = kernel.GetRequiredService<ILogger<GraphExecutor>>();
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Definir limites de iteração
+// Set iteration limits
 var loopNode = new ReActLoopGraphNode(
-    maxIterations: 10,  // Limite explícito
+    maxIterations: 10,  // Explicit limit
     timeout: TimeSpan.FromMinutes(2)
 );
 
-// Adicionar timeouts aos nós
+// Add timeouts to nodes
 var nodeOptions = new GraphNodeOptions
 {
     MaxExecutionTime = TimeSpan.FromSeconds(30)
 };
 ```
 
-**Prevenção**:
-- Sempre definir `MaxIterations` para nós de loop
-- Configurar timeouts apropriados
-- Usar métricas para monitorar performance
-- Implementar circuit breakers para recursos externos
+**Prevention**:
+- Always set `MaxIterations` for loop nodes
+- Configure appropriate timeouts
+- Use metrics to monitor performance
+- Implement circuit breakers for external resources
 
-### Serviço Ausente ou Provider Nulo
+### Missing Service or Null Provider
 
-**Sintomas**:
-- `NullReferenceException` ao executar grafos
-- Erro "Service not registered" ou similar
-- Funcionalidades específicas não funcionam
+**Symptoms**:
+- `NullReferenceException` when executing graphs
+- "Service not registered" error or similar
+- Specific functionalities don't work
 
-**Causas Prováveis**:
-- `AddGraphSupport()` não foi chamado
-- Dependências não registradas no DI container
-- Ordem incorreta de registro de serviços
+**Probable Causes**:
+- `AddGraphSupport()` was not called
+- Dependencies not registered in DI container
+- Incorrect order of service registration
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Verificar se o suporte a grafos foi adicionado
+// Check if graph support was added
 var graphExecutor = kernel.GetService<IGraphExecutor>();
 if (graphExecutor == null)
 {
@@ -86,55 +86,52 @@ if (graphExecutor == null)
 }
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Configuração correta
+// Correct configuration
 var builder = Kernel.CreateBuilder();
 
-// Adicionar suporte a grafos ANTES de outros serviços
+// Add graph support BEFORE other services
 builder.AddGraphSupport(options => {
     options.EnableMetrics = true;
     options.EnableCheckpointing = true;
 });
 
-// Adicionar outros serviços
-builder.AddOpenAIChatCompletion(/* ... */);
-builder.AddMemory(/* ... */);
-
-var kernel = builder.Build();
+// Add other services
 ```
 
-**Prevenção**:
-- Sempre chamar `AddGraphSupport()` primeiro
-- Verificar ordem de registro de serviços
-- Usar testes de integração para validar configuração
+**Prevention**:
+- Always set `MaxIterations` for loop nodes
+- Configure appropriate timeouts
+- Use metrics to monitor performance
+- Implement circuit breakers for external resources
 
-### Falha em Ferramentas REST
+### Failed in REST Tools
 
-**Sintomas**:
-- Erros de timeout em chamadas HTTP
-- Falhas de autenticação
-- Respostas inesperadas de APIs externas
+**Symptoms**:
+- HTTP call timeouts
+- Authentication failures
+- Unexpected API responses
 
-**Causas Prováveis**:
-- Schemas de validação incorretos
-- Timeouts muito baixos
-- Problemas de autenticação
-- APIs externas indisponíveis
+**Probable Causes**:
+- Incorrect validation schemas
+- Very low timeouts
+- Authentication issues
+- External APIs unavailable
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Verificar telemetria de dependências
+// Check telemetry of dependencies
 var telemetry = kernel.GetRequiredService<ITelemetryService>();
 var httpMetrics = telemetry.GetHttpMetrics();
 
-// Verificar logs de erro
+// Check error logs
 var logger = kernel.GetRequiredService<ILogger<RestToolGraphNode>>();
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Configurar timeouts apropriados
+// Configure appropriate timeouts
 var restToolOptions = new RestToolOptions
 {
     Timeout = TimeSpan.FromSeconds(30),
@@ -146,7 +143,7 @@ var restToolOptions = new RestToolOptions
     }
 };
 
-// Validar schemas
+// Validate schemas
 var schema = new RestToolSchema
 {
     InputValidation = true,
@@ -154,48 +151,48 @@ var schema = new RestToolSchema
 };
 ```
 
-**Prevenção**:
-- Testar APIs externas antes de usar
-- Implementar circuit breakers
-- Configurar timeouts realistas
-- Validar schemas de entrada/saída
+**Prevention**:
+- Test external APIs before using
+- Implement circuit breakers
+- Configure realistic timeouts
+- Validate input/output schemas
 
-## Problemas de Estado e Checkpointing
+## State and Checkpoint Problems
 
-### Checkpoint Não Restaurado
+### Checkpoint Not Restored
 
-**Sintomas**:
-- Estado perdido entre execuções
-- Erro ao restaurar checkpoint
-- Dados inconsistentes após recuperação
+**Symptoms**:
+- Lost state between executions
+- Error restoring checkpoint
+- Inconsistent data after recovery
 
-**Causas Prováveis**:
-- Extensões de checkpointing não configuradas
-- Coleção de banco de dados não existe
-- Incompatibilidade de versão de estado
-- Problemas de serialização
+**Probable Causes**:
+- Checkpointing extensions not configured
+- Database collection does not exist
+- Version incompatibility of state
+- Serialization issues
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Verificar configuração de checkpointing
+// Check checkpointing configuration
 var checkpointManager = kernel.GetService<ICheckpointManager>();
 if (checkpointManager == null)
 {
     Console.WriteLine("Checkpointing not enabled!");
 }
 
-// Verificar conectividade com banco
+// Check database connectivity
 var connection = await checkpointManager.TestConnectionAsync();
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Configurar checkpointing corretamente
+// Configure checkpointing correctly
 builder.AddGraphSupport(options => {
     options.Checkpointing = new CheckpointingOptions
     {
         Enabled = true,
-        Provider = "MongoDB", // ou outro provider
+        Provider = "MongoDB", // or other provider
         ConnectionString = "mongodb://localhost:27017",
         DatabaseName = "semantic-kernel-graph",
         CollectionName = "checkpoints"
@@ -203,27 +200,27 @@ builder.AddGraphSupport(options => {
 });
 ```
 
-**Prevenção**:
-- Sempre testar conectividade com banco
-- Implementar validação de versão de estado
-- Usar serialização robusta
-- Monitorar espaço em disco
+**Prevention**:
+- Always test database connectivity
+- Implement version state validation
+- Use robust serialization
+- Monitor disk space
 
-### Problemas de Serialização
+### Serialization Problems
 
-**Sintomas**:
-- Erro "Cannot serialize type X"
-- Checkpoints corrompidos
-- Falhas ao salvar estado
+**Symptoms**:
+- "Cannot serialize type X" error
+- Corrupted checkpoints
+- Failed to save state
 
-**Causas Prováveis**:
-- Tipos não serializáveis
-- Referências circulares
-- Tipos complexos não suportados
+**Probable Causes**:
+- Non-serializable types
+- Circular references
+- Complex types not supported
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Verificar se o tipo é serializável
+// Check if type is serializable
 var state = new GraphState();
 try
 {
@@ -236,56 +233,56 @@ catch (Exception ex)
 }
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Implementar ISerializableState
+// Implement ISerializableState
 public class MyState : ISerializableState
 {
     public string Serialize() => JsonSerializer.Serialize(this);
     public static MyState Deserialize(string data) => JsonSerializer.Deserialize<MyState>(data);
 }
 
-// Ou usar tipos simples
+// Or use simple types
 state.SetValue("simple", "string value");
 state.SetValue("number", 42);
 state.SetValue("array", new[] { 1, 2, 3 });
 ```
 
-**Prevenção**:
-- Usar tipos primitivos quando possível
-- Implementar `ISerializableState` para tipos complexos
-- Evitar referências circulares
-- Testar serialização durante desenvolvimento
+**Prevention**:
+- Use primitive types when possible
+- Implement `ISerializableState` for complex types
+- Avoid circular references
+- Test serialization during development
 
-## Problemas de Nós Python
+## Python Node Problems
 
-### Erros de Execução Python
+### Python Execution Errors
 
-**Sintomas**:
-- Erro "python not found"
-- Timeouts em execução Python
-- Falhas de comunicação entre .NET e Python
+**Symptoms**:
+- "python not found" error
+- Python execution timeouts
+- Communication failures between .NET and Python
 
-**Causas Prováveis**:
-- Python não está no PATH
-- Versão incorreta do Python
-- Problemas de permissão
-- Dependências Python ausentes
+**Probable Causes**:
+- Python is not in PATH
+- Incorrect Python version
+- Permission issues
+- Missing Python dependencies
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Verificar se Python está disponível
+// Check if Python is available
 var pythonNode = new PythonGraphNode("python");
 var isAvailable = await pythonNode.CheckAvailabilityAsync();
 Console.WriteLine($"Python available: {isAvailable}");
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Configurar Python explicitamente
+// Explicitly configure Python
 var pythonOptions = new PythonNodeOptions
 {
-    PythonPath = @"C:\Python39\python.exe", // Caminho explícito
+    PythonPath = @"C:\Python39\python.exe", // Explicit path
     EnvironmentVariables = new Dictionary<string, string>
     {
         ["PYTHONPATH"] = @"C:\my-python-libs",
@@ -297,30 +294,30 @@ var pythonOptions = new PythonNodeOptions
 var pythonNode = new PythonGraphNode("python", pythonOptions);
 ```
 
-**Prevenção**:
-- Usar caminhos absolutos para Python
-- Verificar dependências Python
-- Configurar variáveis de ambiente
-- Implementar fallbacks para nós Python
+**Prevention**:
+- Use absolute paths for Python
+- Verify Python dependencies
+- Configure environment variables
+- Implement fallbacks for Python nodes
 
-## Problemas de Performance
+## Performance Problems
 
-### Execução Muito Lenta
+### Very Slow Execution
 
-**Sintomas**:
-- Tempo de execução muito maior que o esperado
-- Uso excessivo de CPU/memória
-- Grafos simples demoram muito
+**Symptoms**:
+- Execution time much longer than expected
+- Excessive CPU/memory usage
+- Simple graphs take a long time
 
-**Causas Prováveis**:
-- Nós ineficientes
-- Falta de paralelização
-- Bloqueios desnecessários
-- Configurações subótimas
+**Probable Causes**:
+- Inefficient nodes
+- Lack of parallelism
+- Unnecessary blockages
+- Suboptimal configurations
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Analisar métricas de performance
+// Analyze performance metrics
 var metrics = await executor.GetPerformanceMetricsAsync();
 foreach (var nodeMetric in metrics.NodeMetrics)
 {
@@ -328,16 +325,16 @@ foreach (var nodeMetric in metrics.NodeMetrics)
 }
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Habilitar execução paralela
+// Enable parallel execution
 var options = new GraphExecutionOptions
 {
     MaxParallelNodes = Environment.ProcessorCount,
     EnableOptimizations = true
 };
 
-// Usar nós otimizados
+// Use optimized nodes
 var optimizedNode = new OptimizedFunctionGraphNode(
     function: kernelFunction,
     options: new NodeOptimizationOptions
@@ -348,43 +345,43 @@ var optimizedNode = new OptimizedFunctionGraphNode(
 );
 ```
 
-**Prevenção**:
-- Monitorar métricas regularmente
-- Usar profiling para identificar gargalos
-- Implementar cache quando apropriado
-- Otimizar nós críticos
+**Prevention**:
+- Monitor metrics regularly
+- Use profiling to identify bottlenecks
+- Implement caching when appropriate
+- Optimize critical nodes
 
-## Problemas de Integração
+## Integration Problems
 
-### Falhas de Autenticação
+### Authentication Failures
 
-**Sintomas**:
-- Erros 401/403 em APIs externas
-- Falhas de autenticação com LLMs
-- Problemas de autorização
+**Symptoms**:
+- 401/403 errors on external APIs
+- LLM authentication failures
+- Authorization issues
 
-**Causas Prováveis**:
-- Chaves de API inválidas
-- Tokens expirados
-- Configuração incorreta de credenciais
-- Problemas de permissão
+**Probable Causes**:
+- Invalid API keys
+- Expired tokens
+- Incorrect credential configuration
+- Permission issues
 
-**Diagnóstico**:
+**Diagnosis**:
 ```csharp
-// Verificar configuração de autenticação
+// Check authentication configuration
 var authService = kernel.GetService<IAuthenticationService>();
 var isValid = await authService.ValidateCredentialsAsync();
 ```
 
-**Solução**:
+**Solution**:
 ```csharp
-// Configurar autenticação corretamente
+// Correctly configure authentication
 builder.AddOpenAIChatCompletion(
     modelId: "gpt-4",
     apiKey: Environment.GetEnvironmentVariable("OPENAI_API_KEY")
 );
 
-// Ou usar Azure AD
+// Or use Azure AD
 builder.AddAzureOpenAIChatCompletion(
     deploymentName: "gpt-4",
     endpoint: "https://your-endpoint.openai.azure.com/",
@@ -392,32 +389,32 @@ builder.AddAzureOpenAIChatCompletion(
 );
 ```
 
-**Prevenção**:
-- Usar variáveis de ambiente para credenciais
-- Implementar rotação automática de tokens
-- Monitorar expiração de credenciais
-- Usar gerenciadores de segredos
+**Prevention**:
+- Use environment variables for credentials
+- Implement automatic token rotation
+- Monitor credential expiration
+- Use secret managers
 
-## Estratégias de Recuperação
+## Recovery Strategies
 
-### Recuperação Automática
+### Automatic Recovery
 ```csharp
-// Configurar políticas de retry
+// Configure retry policies
 var retryPolicy = new ExponentialBackoffRetryPolicy(
     maxRetries: 3,
     initialDelay: TimeSpan.FromSeconds(1)
 );
 
-// Implementar circuit breaker
+// Implement circuit breaker
 var circuitBreaker = new CircuitBreaker(
     failureThreshold: 5,
     recoveryTimeout: TimeSpan.FromMinutes(1)
 );
 ```
 
-### Fallbacks e Alternativas
+### Fallbacks and Alternatives
 ```csharp
-// Implementar nós de fallback
+// Implement fallback nodes
 var fallbackNode = new FallbackGraphNode(
     primaryNode: primaryNode,
     fallbackNode: backupNode,
@@ -425,11 +422,11 @@ var fallbackNode = new FallbackGraphNode(
 );
 ```
 
-## Monitoramento e Alertas
+## Monitoring and Alerts
 
-### Configuração de Alertas
+### Alert Configuration
 ```csharp
-// Configurar alertas para problemas críticos
+// Configure alerts for critical issues
 var alertingService = new GraphAlertingService();
 alertingService.AddAlert(new AlertRule
 {
@@ -439,16 +436,16 @@ alertingService.AddAlert(new AlertRule
 });
 ```
 
-### Logging Estruturado
+### Structured Logging
 ```csharp
-// Configurar logging detalhado
+// Configure detailed logging
 var logger = new SemanticKernelGraphLogger();
 logger.LogExecutionStart(graphId, executionId);
 logger.LogNodeExecution(nodeId, executionId, duration);
 logger.LogExecutionComplete(graphId, executionId, result);
 ```
 
-## Veja Também
+## See Also
 
 - [Error Handling](../how-to/error-handling-and-resilience.md)
 - [Performance Tuning](../how-to/performance-tuning.md)
@@ -456,13 +453,13 @@ logger.LogExecutionComplete(graphId, executionId, result);
 - [Configuration](../how-to/configuration.md)
 - [Examples](../examples/index.md)
 
-## Referências
+## References
 
-- `GraphExecutionOptions`: Configurações de execução
-- `CheckpointingOptions`: Configurações de checkpointing
-- `PythonNodeOptions`: Configurações de nós Python
-- `RetryPolicy`: Políticas de retry
-- `CircuitBreaker`: Circuit breakers para resiliência
-- `GraphAlertingService`: Sistema de alertas
+- `GraphExecutionOptions`: Execution settings
+- `CheckpointingOptions`: Checkpointing settings
+- `PythonNodeOptions`: Python node settings
+- `RetryPolicy`: Retry policies
+- `CircuitBreaker`: Circuit breakers for resilience
+- `GraphAlertingService`: Alerting system
 
 

@@ -1,42 +1,42 @@
-# Grafos
+# Graphs
 
-Um grafo é uma rede direcionada de nós conectados por arestas. A execução começa em um nó de entrada e prossegue avaliando condições de roteamento.
+A graph is a directed network of nodes connected by edges. Execution starts at an entry node and proceeds by evaluating routing conditions.
 
-## Conceitos e Técnicas
+## Concepts and Techniques
 
-**Grafo Computacional**: Estrutura de dados que representa um fluxo de trabalho ou pipeline de processamento através de nós e conexões.
+**Computational Graph**: Data structure that represents a workflow or processing pipeline through nodes and connections.
 
-**Nó de Entrada**: Ponto de início da execução do grafo, definido como `StartNode`.
+**Entry Node**: Starting point of graph execution, defined as `StartNode`.
 
-**Aresta Direcionada**: Conexão entre dois nós que define a direção do fluxo de execução.
+**Directed Edge**: Connection between two nodes that defines the direction of execution flow.
 
-**Validação de Grafo**: Verificação de integridade antes da execução para garantir que o grafo é válido.
+**Graph Validation**: Integrity verification before execution to ensure the graph is valid.
 
-## Estrutura de um Grafo
+## Graph Structure
 
-### Componentes Básicos
+### Basic Components
 ```csharp
 var graph = new Graph
 {
     Id = "workflow-001",
-    Name = "Processamento de Documentos",
-    Description = "Pipeline para análise e classificação de documentos",
+    Name = "Document Processing",
+    Description = "Pipeline for document analysis and classification",
     StartNode = startNode,
     Nodes = new[] { startNode, processNode, classifyNode, endNode },
     Edges = new[] { edge1, edge2, edge3 }
 };
 ```
 
-### Nós e Arestas
-- **Nós**: Encapsulam trabalho (funções SK, loops, subgrafos, ferramentas)
-- **Arestas**: Carregam condições opcionais para controlar o fluxo
-- **Validação**: O engine garante a validade antes da execução
+### Nodes and Edges
+- **Nodes**: Encapsulate work (SK functions, loops, subgraphs, tools)
+- **Edges**: Carry optional conditions to control flow
+- **Validation**: The engine ensures validity before execution
 
-## Tipos de Grafos
+## Graph Types
 
-### Grafo Linear
+### Linear Graph
 ```csharp
-// Sequência simples: A → B → C
+// Simple sequence: A → B → C
 var linearGraph = new Graph
 {
     StartNode = nodeA,
@@ -49,9 +49,9 @@ var linearGraph = new Graph
 };
 ```
 
-### Grafo com Condições
+### Conditional Graph
 ```csharp
-// Grafo com ramificações condicionais
+// Graph with conditional branches
 var conditionalGraph = new Graph
 {
     StartNode = startNode,
@@ -67,9 +67,9 @@ var conditionalGraph = new Graph
 };
 ```
 
-### Grafo com Loops
+### Loop Graph
 ```csharp
-// Grafo com iteração controlada
+// Graph with controlled iteration
 var loopGraph = new Graph
 {
     StartNode = startNode,
@@ -85,9 +85,9 @@ var loopGraph = new Graph
 };
 ```
 
-## Validação e Integridade
+## Validation and Integrity
 
-### Verificações de Validação
+### Validation Checks
 ```csharp
 var validator = new WorkflowValidator();
 var validationResult = await validator.ValidateAsync(graph);
@@ -101,15 +101,15 @@ if (!validationResult.IsValid)
 }
 ```
 
-### Regras de Validação
-- **Conectividade**: Todos os nós devem ser alcançáveis
-- **Ciclos**: Detecção de loops infinitos
-- **Tipos**: Validação de tipos de entrada/saída
-- **Dependências**: Verificação de dependências circulares
+### Validation Rules
+- **Connectivity**: All nodes must be reachable
+- **Cycles**: Detection of infinite loops
+- **Types**: Validation of input/output types
+- **Dependencies**: Circular dependency checks
 
-## Construção de Grafos
+## Graph Construction
 
-### Construção Programática
+### Programmatic Construction
 ```csharp
 var graphBuilder = new GraphBuilder();
 
@@ -123,7 +123,7 @@ var graph = await graphBuilder
     .BuildAsync();
 ```
 
-### Construção por Template
+### Template Construction
 ```csharp
 var template = new ChainOfThoughtWorkflowTemplate();
 var graph = await template.CreateGraphAsync(
@@ -136,7 +136,7 @@ var graph = await template.CreateGraphAsync(
 );
 ```
 
-### Construção por DSL
+### DSL Construction
 ```csharp
 var dslParser = new GraphDslParser();
 var graphDefinition = @"
@@ -148,9 +148,9 @@ var graphDefinition = @"
 var graph = await dslParser.ParseAsync(dslDefinition);
 ```
 
-## Execução e Controle
+## Execution and Control
 
-### Execução Básica
+### Basic Execution
 ```csharp
 var executor = new GraphExecutor();
 var arguments = new KernelArguments
@@ -162,7 +162,7 @@ var arguments = new KernelArguments
 var result = await executor.ExecuteAsync(graph, arguments);
 ```
 
-### Execução com Streaming
+### Streaming Execution
 ```csharp
 var streamingExecutor = new StreamingGraphExecutor();
 var eventStream = await streamingExecutor.ExecuteStreamingAsync(graph, arguments);
@@ -173,28 +173,28 @@ await foreach (var evt in eventStream)
 }
 ```
 
-### Execução com Checkpointing
+### Checkpointing Execution
 ```csharp
 var checkpointingExecutor = new CheckpointingGraphExecutor();
 var result = await checkpointingExecutor.ExecuteAsync(graph, arguments);
 
-// Salvar checkpoint
+// Save checkpoint
 var checkpoint = await checkpointingExecutor.CreateCheckpointAsync();
 
-// Restaurar execução
+// Restore execution
 var restoredResult = await checkpointingExecutor.RestoreFromCheckpointAsync(checkpoint);
 ```
 
-## Metadados e Documentação
+## Metadata and Documentation
 
-### Informações do Grafo
+### Graph Information
 ```csharp
 var graphMetadata = new GraphMetadata
 {
     Version = "1.0.0",
-    Author = "Equipe de Desenvolvimento",
+    Author = "Development Team",
     CreatedAt = DateTime.UtcNow,
-    Tags = new[] { "documentos", "classificação", "IA" },
+    Tags = new[] { "documents", "classification", "AI" },
     EstimatedExecutionTime = TimeSpan.FromMinutes(5),
     ResourceRequirements = new ResourceRequirements
     {
@@ -204,7 +204,7 @@ var graphMetadata = new GraphMetadata
 };
 ```
 
-### Documentação Automática
+### Automatic Documentation
 ```csharp
 var docGenerator = new GraphDocumentationGenerator();
 var documentation = await docGenerator.GenerateAsync(graph, 
@@ -217,9 +217,9 @@ var documentation = await docGenerator.GenerateAsync(graph,
 );
 ```
 
-## Monitoramento e Observabilidade
+## Monitoring and Observability
 
-### Métricas de Execução
+### Execution Metrics
 ```csharp
 var metrics = new GraphPerformanceMetrics
 {
@@ -230,7 +230,7 @@ var metrics = new GraphPerformanceMetrics
 };
 ```
 
-### Logging e Tracing
+### Logging and Tracing
 ```csharp
 var logger = new SemanticKernelGraphLogger();
 logger.LogGraphExecutionStart(graph.Id, executionId);
@@ -238,20 +238,20 @@ logger.LogGraphExecutionComplete(graph.Id, executionId, result);
 logger.LogGraphValidation(graph.Id, validationResult);
 ```
 
-## Veja Também
+## See Also
 
-- [Conceitos de Grafo](../concepts/graph-concepts.md)
-- [Tipos de Nós](../concepts/node-types.md)
-- [Roteamento](../concepts/routing.md)
-- [Execução](../concepts/execution.md)
-- [Construindo um Grafo](../how-to/build-a-graph.md)
-- [Exemplos de Subgrafos](../examples/subgraph-examples.md)
+- [Graph Concepts](../concepts/graph-concepts.md)
+- [Node Types](../concepts/node-types.md)
+- [Routing](../concepts/routing.md)
+- [Execution](../concepts/execution.md)
+- [Building a Graph](../how-to/build-a-graph.md)
+- [Subgraph Examples](../examples/subgraph-examples.md)
 
-## Referências
+## References
 
-- `Graph`: Classe principal para representar grafos computacionais
-- `GraphBuilder`: Construtor fluente para grafos
-- `WorkflowValidator`: Validador de integridade de grafos
-- `GraphExecutor`: Executor principal de grafos
-- `GraphDocumentationGenerator`: Gerador de documentação automática
-- `GraphPerformanceMetrics`: Métricas de performance de execução
+- `Graph`: Main class for representing computational graphs
+- `GraphBuilder`: Fluent builder for graphs
+- `WorkflowValidator`: Graph integrity validator
+- `GraphExecutor`: Main graph executor
+- `GraphDocumentationGenerator`: Automatic documentation generator
+- `GraphPerformanceMetrics`: Execution performance metrics
