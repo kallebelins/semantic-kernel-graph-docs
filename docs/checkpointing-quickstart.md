@@ -12,7 +12,7 @@ Learn how to save and restore graph execution state using SemanticKernel.Graph's
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 6.0 or later
+- .NET 8.0 or later
 - SemanticKernel.Graph package installed
 - Graph memory service configured (required for checkpointing)
 - Checkpoint support enabled in your kernel

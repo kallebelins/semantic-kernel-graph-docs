@@ -14,7 +14,7 @@ Learn how to execute the comprehensive examples included in the SemanticKernel.G
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 6.0 or later
+- .NET 8.0 or later
 - SemanticKernel.Graph repository cloned locally
 - Basic understanding of command line interfaces
 - Optional: OpenAI API key for LLM-powered examples

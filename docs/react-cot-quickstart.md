@@ -12,7 +12,7 @@ Learn how to implement reasoning and acting patterns in SemanticKernel.Graph usi
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 6.0 or later
+- .NET 8.0 or later
 - SemanticKernel.Graph package installed
 - Semantic Kernel with chat completion capabilities
 - Basic understanding of graph execution and node composition

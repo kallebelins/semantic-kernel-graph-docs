@@ -23,50 +23,28 @@ You should see version 8.0.0 or higher. If not, download and install the latest 
 
 ## Package Installation
 
-**Note**: SemanticKernel.Graph is currently in development and not yet published to NuGet. You have two options for installation:
+SemanticKernel.Graph is now available on NuGet! You can install it using the following methods:
 
-### Option 1: Build from Source (Recommended for Development)
+### Using dotnet CLI (Recommended)
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-repo/semantic-kernel-graph.git
-   cd semantic-kernel-graph
-   ```
+```bash
+dotnet add package SemanticKernel.Graph
+```
 
-2. **Build the project**:
-   ```bash
-   cd src
-   dotnet build SemanticKernel.Graph.sln
-   ```
+### Using PackageReference
 
-3. **Reference the project locally** in your solution:
-   ```bash
-   # From your project directory
-   dotnet add reference ../semantic-kernel-graph/src/SemanticKernel.Graph/SemanticKernel.Graph.csproj
-   ```
-
-### Option 2: Local Project Reference
-
-If you want to work with the source code directly:
-
-1. **Add the project to your solution**:
-   ```bash
-   dotnet sln add ../semantic-kernel-graph/src/SemanticKernel.Graph/SemanticKernel.Graph.csproj
-   ```
-
-2. **Add a project reference**:
-   ```bash
-   dotnet add reference ../semantic-kernel-graph/src/SemanticKernel.Graph/SemanticKernel.Graph.csproj
-   ```
-
-### Option 3: PackageReference (When Published)
-
-Once SemanticKernel.Graph is published to NuGet, you'll be able to use:
+Add this to your `.csproj` file:
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="SemanticKernel.Graph" Version="1.0.0" />
+    <PackageReference Include="SemanticKernel.Graph" Version="25.8.191" />
 </ItemGroup>
+```
+
+### Using Package Manager Console
+
+```
+Install-Package SemanticKernel.Graph
 ```
 
 ## Environment Configuration
@@ -178,20 +156,13 @@ dotnet add package Microsoft.Extensions.Configuration.Json
 dotnet add package Microsoft.Extensions.Configuration.EnvironmentVariables
 ```
 
-### 3. Add SemanticKernel.Graph Reference
+### 3. Add SemanticKernel.Graph Package
 
 ```bash
-# If building from source
-dotnet add reference ../semantic-kernel-graph/src/SemanticKernel.Graph/SemanticKernel.Graph.csproj
-
-# Or add to your .csproj file
+dotnet add package SemanticKernel.Graph
 ```
 
-```xml
-<ItemGroup>
-    <ProjectReference Include="../semantic-kernel-graph/src/SemanticKernel.Graph/SemanticKernel.Graph.csproj" />
-</ItemGroup>
-```
+This will automatically add the package reference to your `.csproj` file.
 
 ### 4. Basic Configuration
 
@@ -353,7 +324,7 @@ Test successful! Result: Hello World!
 ```
 error CS0234: The type or namespace name 'SemanticKernel' does not exist
 ```
-**Solution**: Ensure you've added the project reference correctly and built the solution.
+**Solution**: Ensure you've added the SemanticKernel.Graph package correctly using `dotnet add package SemanticKernel.Graph`.
 
 #### Missing Dependencies
 ```
@@ -380,7 +351,7 @@ If you encounter issues:
 1. **Check the logs**: Enable detailed logging to see what's happening
 2. **Verify configuration**: Ensure all environment variables and API keys are correct
 3. **Check versions**: Ensure compatibility between Semantic Kernel and .NET versions
-4. **Build from source**: Try building the project from source to identify any build issues
+4. **Check package version**: Ensure you have the latest version of the SemanticKernel.Graph package
 5. **Run examples**: Use the provided examples to verify your setup
 
 ## Next Steps
@@ -396,8 +367,7 @@ Now that you have SemanticKernel.Graph installed and configured:
 
 This installation guide covers several key concepts:
 
-- **Source Building**: Building SemanticKernel.Graph from source code for development
-- **Project References**: Using local project references instead of NuGet packages
+- **Package Management**: Installing SemanticKernel.Graph from NuGet package repository
 - **Environment Configuration**: Setting up LLM provider credentials and configuration
 - **Configuration Management**: Using appsettings.json and environment variables
 - **Dependency Injection**: Integrating with .NET's DI container for enterprise applications
@@ -406,7 +376,7 @@ This installation guide covers several key concepts:
 
 To successfully install and use SemanticKernel.Graph, you need:
 - **.NET 8.0+** runtime and SDK
-- **Source Code Access** to the SemanticKernel.Graph repository
+- **Internet Access** to download packages from NuGet
 - **Semantic Kernel** package (compatible version)
 - **LLM Provider** configuration (API keys, endpoints)
 - **Configuration Files** or environment variables for sensitive data

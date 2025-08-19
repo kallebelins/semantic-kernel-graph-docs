@@ -12,7 +12,7 @@ Learn how to enable comprehensive metrics collection and structured logging in y
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 6.0 or later
+- .NET 8.0 or later
 - SemanticKernel.Graph package installed
 - Microsoft.Extensions.Logging configured in your application
 
