@@ -40,24 +40,9 @@ Learn how to implement retrieval-augmented generation workflows in Semantic Kern
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Retrieval Agent example
-dotnet run -- --example retrieval-agent
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom kernel
-var kernel = CreateCustomKernel();
-
-await RetrievalAgentExample.RunAsync(kernel);
-```
+This example demonstrates retrieval-augmented generation (RAG) patterns with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

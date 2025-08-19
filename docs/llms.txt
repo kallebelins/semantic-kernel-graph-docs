@@ -1,0 +1,243 @@
+# SemanticKernel.Graph Documentation Index
+# This file provides a comprehensive index of all documentation resources
+# for SemanticKernel.Graph, designed for consumption by AI agents and LLMs
+# 
+# Format: [path] - [description]
+# Last updated: 2025-08-19
+# Version: 1.0.0
+
+# =============================================================================
+# GETTING STARTED - Essential resources for new users
+# =============================================================================
+
+index.md - Main documentation homepage with overview, key features, and quick start guide
+getting-started.md - Comprehensive getting started guide with prerequisites and setup
+installation.md - Installation instructions via NuGet package, requirements, and configuration
+first-graph.md - Complete tutorial for building your first graph workflow
+first-graph-5-minutes.md - Quick 5-minute tutorial to create and run your first graph
+
+# Quickstarts - Essential functionality guides
+state-quickstart.md - Quick guide to state management with GraphState and KernelArguments
+conditional-nodes-quickstart.md - Quick guide to conditional routing and decision nodes
+checkpointing-quickstart.md - Quick guide to saving and restoring graph execution state
+streaming-quickstart.md - Quick guide to streaming execution and real-time events
+metrics-logging-quickstart.md - Quick guide to observability, metrics, and logging
+react-cot-quickstart.md - Quick guide to ReAct and Chain-of-Thought patterns
+
+# =============================================================================
+# CONCEPTS - Core concepts and theoretical foundations
+# =============================================================================
+
+concepts/index.md - Overview of all graph computing concepts
+concepts/graph-concepts.md - Fundamental concepts of graph-based workflows
+concepts/graphs.md - Understanding graph structure, nodes, and edges
+concepts/nodes.md - Core node concepts and lifecycle
+concepts/node-types.md - Detailed explanation of all node types available
+concepts/state.md - State management concepts and GraphState
+concepts/routing.md - Edge concepts and conditional routing
+concepts/execution.md - Execution flow and control concepts
+concepts/execution-model.md - Detailed execution lifecycle and phases
+concepts/checkpointing.md - State persistence and recovery concepts
+concepts/streaming.md - Real-time execution and event streaming
+concepts/visualization.md - Graph visualization and inspection concepts
+
+# =============================================================================
+# HOW-TO GUIDES - Practical implementation guidance
+# =============================================================================
+
+# Core functionality
+how-to/build-a-graph.md - Step-by-step guide to building graph workflows
+how-to/conditional-nodes.md - Implementing conditional logic and routing
+how-to/loops.md - Creating loops and iterative workflows
+
+# Advanced features
+how-to/advanced-routing.md - Advanced routing strategies and dynamic decisions
+how-to/parallelism-and-fork-join.md - Parallel execution and work distribution
+how-to/error-handling-and-resilience.md - Error handling, retry policies, and resilience
+
+# Integration and extensions
+how-to/tools.md - Working with tools and external services
+how-to/rest-tools-integration.md - Integrating REST APIs and external tools
+how-to/multi-agent-and-shared-state.md - Multi-agent coordination and shared state
+how-to/integration-and-extensions.md - Extending the framework and custom integrations
+
+# Observability and debugging
+how-to/metrics-and-observability.md - Setting up metrics, logging, and monitoring
+how-to/debug-and-inspection.md - Debugging workflows and runtime inspection
+how-to/real-time-visualization-and-highlights.md - Real-time graph visualization
+
+# Security and governance
+how-to/security-and-data.md - Security features and data protection
+how-to/resource-governance-and-concurrency.md - Resource management and concurrency control
+how-to/human-in-the-loop.md - Human approval workflows and interaction channels
+
+# Server and APIs
+how-to/server-and-apis.md - Setting up server infrastructure and APIs
+how-to/exposing-rest-apis.md - Exposing graph workflows as REST endpoints
+
+# Templates and memory
+how-to/templates-and-memory.md - Using templates and memory systems
+how-to/schema-typing-and-validation.md - Schema validation and type safety
+
+# =============================================================================
+# PATTERNS - Common workflow patterns and best practices
+# =============================================================================
+
+patterns/react.md - ReAct (Reasoning and Acting) pattern implementation
+patterns/chain-of-thought.md - Chain-of-Thought reasoning patterns
+patterns/multi-agent.md - Multi-agent coordination patterns
+
+# =============================================================================
+# EXAMPLES - Practical examples and code samples
+# =============================================================================
+
+examples/index.md - Overview of all available examples
+examples/running-examples.md - How to run examples and use the CLI
+
+# Core pattern examples
+examples/conditional-nodes.md - Conditional node examples and use cases
+examples/loop-nodes.md - Loop and iteration examples
+examples/checkpointing.md - State persistence and recovery examples
+
+# AI pattern examples
+examples/chain-of-thought.md - Chain-of-Thought reasoning examples
+examples/react-agent.md - ReAct agent implementation examples
+examples/multi-agent.md - Multi-agent workflow examples
+
+# Additional examples (referenced in codebase)
+examples/advanced-patterns.md - Advanced workflow patterns and combinations
+examples/advanced-routing.md - Advanced routing and decision-making examples
+examples/assert-and-suggest.md - Assertion and suggestion pattern examples
+examples/chatbot.md - Chatbot workflow examples with memory
+examples/document-analysis-pipeline.md - Document processing workflow examples
+examples/dynamic-routing.md - Dynamic routing based on state and context
+examples/graph-metrics.md - Metrics collection and performance monitoring examples
+examples/graph-visualization.md - Graph visualization and export examples
+examples/logging.md - Logging configuration and structured logging examples
+examples/memory-agent.md - Memory-enabled agent examples
+examples/multi-hop-rag-retry.md - Multi-hop RAG with retry mechanisms
+examples/optimizers-and-few-shot.md - Optimization and few-shot learning examples
+examples/plugin-system.md - Plugin system integration examples
+examples/react-problem-solving.md - ReAct for complex problem solving
+examples/rest-api.md - REST API integration examples
+examples/retrieval-agent.md - Retrieval-augmented generation examples
+examples/streaming-execution.md - Streaming execution and event consumption
+examples/subgraph-examples.md - Subgraph composition and isolation examples
+
+# =============================================================================
+# ARCHITECTURE - System design and technical decisions
+# =============================================================================
+
+architecture/index.md - Overview of system architecture and design principles
+architecture/adr-0001-graph-executor-design.md - Architecture decision record for graph executor
+architecture/adr-0002-error-recovery-engine.md - Error recovery and resilience design
+architecture/adr-0003-dynamic-routing.md - Dynamic routing system design
+architecture/adr-0004-streaming-execution.md - Streaming execution architecture
+architecture/adr-0005-state-and-checkpointing.md - State management and checkpointing design
+architecture/adr-0006-metrics-and-telemetry.md - Observability and telemetry design
+architecture/adr-0007-multi-agent-coordination.md - Multi-agent coordination architecture
+architecture/adr-0008-resource-governance.md - Resource management and governance
+architecture/adr-0009-human-in-the-loop.md - Human-in-the-loop system design
+architecture/adr-0010-security-and-auth.md - Security and authentication design
+architecture/adr-0011-tool-registry-and-rest-tools.md - Tool integration and REST tools
+architecture/adr-0012-visualization-and-inspection.md - Visualization and inspection APIs
+architecture/adr-0013-workflow-templates.md - Workflow template system design
+architecture/adr-0014-distributed-execution.md - Distributed execution architecture
+architecture/adr-0015-python-bridge.md - Python interoperability design
+
+# =============================================================================
+# REFERENCE - API documentation and technical reference
+# =============================================================================
+
+# Core APIs
+api/graph-executor.md - IGraphExecutor interface and GraphExecutor implementation
+api/graph-nodes.md - Core node interfaces and implementations
+api/graph-state.md - State management APIs and GraphState
+api/graph-routing.md - Routing and edge management APIs
+
+# Execution and context
+api/execution-context.md - GraphExecutionContext and execution lifecycle
+api/streaming.md - Streaming execution APIs and event streams
+api/checkpointing.md - Checkpointing and recovery APIs
+
+# Integration and extensions
+api/integration.md - Integration APIs and extension points
+api/plugins.md - Plugin system APIs and interfaces
+api/rest-tools.md - REST tool integration APIs
+
+# Observability and debugging
+api/metrics.md - Metrics collection and performance APIs
+api/visualization.md - Graph visualization and inspection APIs
+api/debugging.md - Debugging and inspection APIs
+
+# =============================================================================
+# TUTORIALS - Step-by-step learning paths
+# =============================================================================
+
+tutorials/index.md - Overview of available tutorials
+tutorials/chatbot-with-memory.md - Building a chatbot with persistent memory
+tutorials/document-analysis-pipeline.md - Creating document analysis workflows
+tutorials/multi-agent-workflow.md - Building multi-agent coordination workflows
+
+# =============================================================================
+# ADDITIONAL RESOURCES - Supporting documentation
+# =============================================================================
+
+glossary.md - Comprehensive glossary of terms and concepts
+faq.md - Frequently asked questions and common issues
+troubleshooting.md - Troubleshooting guide for common problems
+changelog.md - Version history and changes
+validation-cross-links-checklist.md - Documentation quality checklist
+
+# =============================================================================
+# PROJECT STRUCTURE - Source code organization
+# =============================================================================
+
+# Core library structure
+src/SemanticKernel.Graph/ - Main library source code
+examples/ - Example applications and workflows in documentation
+docs/ - Comprehensive documentation and guides
+
+# Key namespaces and components
+src/SemanticKernel.Graph/Core/ - Core execution engine and graph management
+src/SemanticKernel.Graph/Nodes/ - Node implementations and types
+src/SemanticKernel.Graph/State/ - State management and persistence
+src/SemanticKernel.Graph/Streaming/ - Streaming execution and events
+src/SemanticKernel.Graph/Integration/ - External integrations and extensions
+src/SemanticKernel.Graph/Debug/ - Debugging and inspection tools
+src/SemanticKernel.Graph/Execution/ - Execution context and lifecycle
+
+# =============================================================================
+# DEVELOPMENT AND CONTRIBUTION
+# =============================================================================
+
+backlog/tasks.md - Development roadmap and current tasks
+backlog/tasks-improvements.md - Improvement backlog and enhancements
+backlog/tasks-evolutions.md - Evolution and architectural improvements
+backlog/tasks-documentation.md - Documentation development plan
+
+# =============================================================================
+# USAGE INSTRUCTIONS FOR AI AGENTS
+# =============================================================================
+
+# This file should be consumed by AI agents and LLMs to understand:
+# 1. The complete structure of SemanticKernel.Graph documentation
+# 2. Available resources for different user skill levels
+# 3. Navigation paths for specific topics or use cases
+# 4. Code examples and implementation guidance
+# 5. Architecture decisions and technical context
+
+# Recommended consumption order:
+# 1. Start with index.md for overview
+# 2. Use getting-started.md for setup and installation
+# 3. Follow quickstarts for specific functionality
+# 4. Reference concepts for theoretical understanding
+# 5. Use how-to guides for implementation
+# 6. Study examples for practical patterns
+# 7. Consult architecture docs for system understanding
+# 8. Use API reference for technical details
+
+# For code generation and examples:
+# - All examples are in examples/ directory
+# - Core APIs are in src/SemanticKernel.Graph/
+# - Documentation provides comprehensive examples and patterns

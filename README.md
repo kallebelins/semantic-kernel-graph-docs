@@ -106,7 +106,7 @@ var workflow = new MultiAgentWorkflowBuilder()
 
 ## 📊 Examples
 
-Explore the comprehensive examples in the `src/SemanticKernel.Graph.Examples` directory:
+Explore the comprehensive examples in the [examples/](examples/) directory:
 
 - **Basic Patterns**: Simple workflows and node types
 - **Advanced Routing**: Dynamic execution paths and conditional logic
@@ -116,19 +116,14 @@ Explore the comprehensive examples in the `src/SemanticKernel.Graph.Examples` di
 
 ## 🧪 Testing
 
-Run the comprehensive test suite:
+The project includes comprehensive testing infrastructure. For development and testing:
 
-```bash
-cd src/SemanticKernel.Graph.Tests
-dotnet test
-```
+- **Unit Tests**: Comprehensive test coverage for all components
+- **Integration Tests**: End-to-end workflow testing
+- **Performance Benchmarks**: Performance and scalability testing
+- **Validation**: Graph validation and compilation testing
 
-Run performance benchmarks:
-
-```bash
-cd src/SemanticKernel.Graph.Tests/Benchmarks
-dotnet run --configuration Release
-```
+Refer to the [testing documentation](docs/how-to/debug-and-inspection.md) for detailed testing guidelines.
 
 ## 🤝 Contributing
 
@@ -144,10 +139,10 @@ We welcome contributions! Please see our contributing guidelines and check the [
 
 Check out our [implementation roadmap](docs/roadmap/implementation-roadmap.md) for upcoming features:
 
-- **Q1 2024**: Enhanced visualization and debugging tools
-- **Q2 2024**: Distributed execution and clustering
-- **Q3 2024**: Python bridge and cross-platform support
-- **Q4 2024**: Advanced AI model integration patterns
+- **Q1 2025**: Enhanced visualization and debugging tools
+- **Q2 2025**: Distributed execution and clustering
+- **Q3 2025**: Python bridge and cross-platform support
+- **Q4 2025**: Advanced AI model integration patterns
 
 ## 📄 License
 

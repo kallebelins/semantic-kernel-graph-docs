@@ -36,26 +36,9 @@ Learn how to implement conditional logic in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Conditional Nodes example
-dotnet run -- --example conditional-nodes
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await ConditionalNodesExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await ConditionalNodesExample.RunAsync(kernel);
-```
+This example demonstrates conditional routing and decision-making with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

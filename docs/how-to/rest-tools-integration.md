@@ -415,7 +415,7 @@ var request = new ExecuteGraphRequest
 {
     GraphName = "weather-workflow",
     Arguments = new KernelArguments { ["location"] = "New York" },
-    IdempotencyKey = "weather-ny-2024-01-15" // Unique key for this operation
+    IdempotencyKey = "weather-ny-2025-08-15" // Unique key for this operation
 };
 
 var response = await graphApi.ExecuteGraphAsync(request, cancellationToken);

@@ -38,26 +38,9 @@ Learn how to implement loop patterns in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Loop Nodes example
-dotnet run -- --example loop-nodes
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await LoopNodesExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await LoopNodesExample.RunAsync(kernel);
-```
+This example demonstrates loop control and iteration patterns with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

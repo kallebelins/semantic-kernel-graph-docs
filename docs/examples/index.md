@@ -4,21 +4,14 @@ This section provides a comprehensive overview of all available examples in the 
 
 ## Quick Start
 
-To run examples, use the `SemanticKernel.Graph.Examples` project:
+The examples in this documentation provide comprehensive demonstrations of the Semantic Kernel Graph package capabilities. Each example includes:
 
-```bash
-# List all available examples
-dotnet run -- --list
+- **Complete code snippets** that you can copy and adapt
+- **Step-by-step explanations** of how the code works
+- **Configuration examples** for different scenarios
+- **Best practices** and usage patterns
 
-# Run a specific example
-dotnet run -- --example chain-of-thought
-
-# Run multiple examples
-dotnet run -- --example chain-of-thought,chatbot,checkpointing
-
-# Run all examples sequentially
-dotnet run
-```
+Browse the examples by category below to find the right starting point for your use case.
 
 ## Example Categories
 

@@ -37,26 +37,9 @@ Learn how to implement comprehensive metrics and monitoring in graph-based workf
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Graph Metrics example
-dotnet run -- --example graph-metrics
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await GraphMetricsExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await GraphMetricsExample.RunAsync(kernel);
-```
+This example demonstrates metrics collection and performance monitoring with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

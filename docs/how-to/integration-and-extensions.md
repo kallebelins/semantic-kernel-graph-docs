@@ -461,9 +461,9 @@ arguments.Set("request_id", Guid.NewGuid().ToString());
 var result = await graph.ExecuteAsync(kernel, arguments);
 
 // Logs will include correlation IDs for tracing
-// [2024-01-15 10:30:45.123] [INFO] [graph-exec-abc123] Graph execution started
-// [2024-01-15 10:30:45.125] [DEBUG] [graph-exec-abc123] Node 'start' execution started
-// [2024-01-15 10:30:45.130] [DEBUG] [graph-exec-abc123] Node 'start' execution completed in 5ms
+// [2025-08-15 10:30:45.123] [INFO] [graph-exec-abc123] Graph execution started
+// [2025-08-15 10:30:45.125] [DEBUG] [graph-exec-abc123] Node 'start' execution started
+// [2025-08-15 10:30:45.130] [DEBUG] [graph-exec-abc123] Node 'start' execution completed in 5ms
 ```
 
 ## Policy System Integration

@@ -36,26 +36,13 @@ Learn how to implement Chain-of-Thought reasoning in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
+This example demonstrates Chain-of-Thought reasoning patterns with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
-# Run the Chain of Thought example
-dotnet run -- --example cot
-```
+### Implementation Overview
 
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await ChainOfThoughtExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await ChainOfThoughtExample.RunAsync(kernel);
-```
+The example below shows how to implement Chain-of-Thought reasoning in your own applications:
 
 ## Step-by-Step Implementation
 

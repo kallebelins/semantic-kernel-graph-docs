@@ -37,26 +37,9 @@ Learn how to implement comprehensive logging in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Logging example
-dotnet run -- --example logging
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await LoggingExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await LoggingExample.RunAsync(kernel);
-```
+This example demonstrates comprehensive logging and tracing with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

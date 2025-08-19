@@ -40,24 +40,9 @@ Learn how to implement advanced RAG workflows in graph-based systems to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Multi-Hop RAG Retry example
-dotnet run -- --example multi-hop-rag-retry
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom kernel
-var kernel = CreateCustomKernel();
-
-await MultiHopRagRetryExample.RunAsync(kernel);
-```
+This example demonstrates multi-hop RAG with retry mechanisms using the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

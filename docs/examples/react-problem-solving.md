@@ -40,24 +40,9 @@ Learn how to implement sophisticated ReAct agents that can:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the ReAct Problem Solving Examples
-dotnet run -- --example react-problem-solving
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom kernel
-var kernel = new Kernel();
-
-await ReActProblemSolvingExample.RunAsync(kernel);
-```
+This example demonstrates ReAct problem-solving patterns with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 
@@ -792,6 +777,96 @@ private static KernelFunction CreateConvergenceCheckFunction(Kernel kernel)
         description: "Checks if solution has converged to acceptable quality without external calls"
     );
 }
+
+## Advanced Patterns
+
+### Multi-Objective Problem Solving
+
+```csharp
+// Implement multi-objective optimization with weighted scoring
+var multiObjectiveAgent = new MultiObjectiveReActAgent
+{
+    ObjectiveWeights = new Dictionary<string, double>
+    {
+        ["cost"] = 0.3,
+        ["quality"] = 0.4,
+        ["time"] = 0.2,
+        ["risk"] = 0.1
+    },
+    ParetoFrontierAnalysis = new ParetoFrontierAnalyzer
+    {
+        MaxSolutions = 10,
+        DominanceThreshold = 0.1,
+        ConvergenceCriteria = new MultiObjectiveConvergenceCriteria
+        {
+            HypervolumeImprovement = 0.01,
+            MaxGenerations = 50
+        }
+    }
+};
+
+// Solve multi-objective problem
+var multiObjectiveResult = await multiObjectiveAgent.SolveAsync(kernel, multiObjectiveArgs);
+```
+
+### Adaptive Problem Decomposition
+
+```csharp
+// Implement adaptive problem decomposition based on complexity
+var adaptiveDecomposer = new AdaptiveProblemDecomposer
+{
+    DecompositionStrategies = new Dictionary<string, IDecompositionStrategy>
+    {
+        ["hierarchical"] = new HierarchicalDecompositionStrategy(),
+        ["parallel"] = new ParallelDecompositionStrategy(),
+        ["iterative"] = new IterativeDecompositionStrategy()
+    },
+    ComplexityAnalyzer = new ProblemComplexityAnalyzer
+    {
+        ComplexityFactors = new[] { "stakeholder_count", "constraint_count", "domain_count" },
+        StrategySelectionRules = new Dictionary<string, string>
+        {
+            ["low"] = "hierarchical",
+            ["medium"] = "parallel",
+            ["high"] = "iterative"
+        }
+    }
+};
+
+// Automatically decompose complex problems
+var decomposition = await adaptiveDecomposer.DecomposeAsync(problemStatement);
+var decomposedGraph = await adaptiveDecomposer.CreateDecomposedGraphAsync(decomposition);
+```
+
+### Collaborative Problem Solving
+
+```csharp
+// Implement collaborative problem solving with multiple agents
+var collaborativeSolver = new CollaborativeProblemSolver
+{
+    AgentSpecializations = new Dictionary<string, AgentSpecialization>
+    {
+        ["analyst"] = new AnalystAgent { Domain = "business_analysis" },
+        ["engineer"] = new EngineerAgent { Domain = "technical_implementation" },
+        ["strategist"] = new StrategistAgent { Domain = "strategic_planning" }
+    },
+    CollaborationProtocol = new ConsensusProtocol
+    {
+        VotingMechanism = VotingMechanism.WeightedMajority,
+        ConsensusThreshold = 0.75,
+        ConflictResolution = ConflictResolution.Mediation
+    },
+    KnowledgeSharing = new KnowledgeSharingStrategy
+    {
+        SharedMemory = new SharedMemoryManager(),
+        KnowledgeTransfer = KnowledgeTransfer.Continuous,
+        LearningRate = 0.1
+    }
+};
+
+// Solve problem collaboratively
+var collaborativeResult = await collaborativeSolver.SolveCollaborativelyAsync(kernel, collaborativeArgs);
+```
 ```
 
 ## Expected Output

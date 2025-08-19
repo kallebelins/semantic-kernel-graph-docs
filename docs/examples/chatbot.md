@@ -36,26 +36,9 @@ Learn how to implement a conversational AI system that:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Chatbot example
-dotnet run -- --example chatbot
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await ChatbotExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await ChatbotExample.RunAsync(kernel);
-```
+This example demonstrates how to build a chatbot with memory using the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

@@ -37,26 +37,9 @@ Learn how to implement graph visualization and inspection in graph-based workflo
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Graph Visualization example
-dotnet run -- --example graph-visualization
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await GraphVisualizationExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await GraphVisualizationExample.RunAsync(kernel);
-```
+This example demonstrates graph visualization and export capabilities with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 
@@ -664,7 +647,7 @@ string GetStyleShape(string style) => style switch
    Processing Type: priority
    Node Style: priority_style
    Style Color: #FF9800
-   Export Files: styled_20241201_143022.*
+   Export Files: styled_20250801_143022.*
 ```
 
 ## Configuration Options

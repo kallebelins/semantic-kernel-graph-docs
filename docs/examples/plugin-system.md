@@ -42,26 +42,9 @@ Learn how to implement and manage advanced plugin systems in graph-based workflo
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Plugin System example
-dotnet run -- --example plugin-system
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await PluginSystemExample.RunExampleAsync();
-
-// Or run with custom logging
-var loggerFactory = CreateCustomLoggerFactory();
-await PluginSystemExample.RunExampleAsync();
-```
+This example demonstrates the plugin system and dynamic loading with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

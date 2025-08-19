@@ -38,27 +38,9 @@ Learn how to implement and orchestrate advanced patterns in graph-based workflow
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Advanced Patterns example
-dotnet run -- --example advanced-patterns
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await AdvancedPatternsExample.RunAdvancedPatternsExampleAsync();
-
-// Or run with custom kernel and logger
-var kernel = CreateCustomKernel();
-var logger = CreateCustomLogger();
-await AdvancedPatternsExample.RunAdvancedPatternsExampleAsync();
-```
+This example demonstrates advanced patterns and optimizations with the Semantic Kernel Graph package. The code snippets below show you how to implement these patterns in your own applications.
 
 ## Step-by-Step Implementation
 

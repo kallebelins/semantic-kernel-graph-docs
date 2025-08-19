@@ -39,25 +39,9 @@ Learn how to implement multi-agent coordination in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Multi-Agent example
-dotnet run -- --example multi-agent
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom kernel and logger factory
-var kernel = CreateCustomKernel();
-var loggerFactory = CreateCustomLoggerFactory();
-
-await MultiAgentExample.ExecuteAsync(kernel, loggerFactory);
-```
+This example demonstrates multi-agent coordination and workflow orchestration with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

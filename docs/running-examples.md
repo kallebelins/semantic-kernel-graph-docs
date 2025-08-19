@@ -21,88 +21,30 @@ Learn how to execute the comprehensive examples included in the SemanticKernel.G
 
 ## Quick Start
 
-### 1. Navigate to the Examples Directory
+### 1. Explore the Examples
 
-```bash
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-```
+The examples are available in the [examples/](examples/) directory of this documentation. Each example includes:
 
-### 2. Build the Examples Project
+- **Code snippets** demonstrating specific features
+- **Step-by-step explanations** of how the code works
+- **Configuration examples** for different scenarios
+- **Best practices** and usage patterns
 
-```bash
-dotnet build
-```
+### 2. Choose Your Example
 
-### 3. Run the Examples Program
+Browse the examples by category:
+- **Core Functionality**: Basic setup and configuration
+- **Graph Execution**: Workflow patterns and routing
+- **Advanced Patterns**: Complex AI workflows and reasoning
+- **Enterprise Features**: Production-ready implementations
 
-```bash
-dotnet run
-```
+### 3. Follow the Tutorials
 
-## Command Line Options
+Each example includes detailed explanations and can be used as a reference for building your own graphs.
 
-### List Available Examples
+## Example Categories
 
-Use the `--list` flag to see all available examples:
-
-```bash
-dotnet run -- --list
-```
-
-This will display all available examples with their keys:
-
-```
-Exemplos disponíveis (use --example <nome>[,<nome2>,...]):
- - advanced-patterns
- - assert-suggest
- - chatbot
- - checkpointing
- - conditional-nodes
- - cot
- - documents
- - dynamic-routing
- - logging
- - memory
- - memory-agent
- - metrics
- - multi-agent
- - multihop-rag-retry
- - optimizers-fewshot
- - plugins
- - react
- - react-agent
- - retrieval-agent
- - subgraph-isolated-clone
- - subgraph-scoped-prefix
- - subgraphs
- - templates
- - zero-config
-```
-
-### Run Specific Examples
-
-Use the `--example` flag to run one or more specific examples:
-
-```bash
-# Run a single example
-dotnet run -- --example metrics
-
-# Run multiple examples (comma-separated)
-dotnet run -- --example metrics,checkpointing,cot
-
-# Alternative short form
-dotnet run -- -e chatbot
-```
-
-### Run All Examples
-
-If no flags are provided, the program runs all examples in sequence:
-
-```bash
-dotnet run
-```
-
-Each example will execute, and you'll be prompted to press any key to continue to the next one.
+The examples are organized into logical categories to help you find the right starting point:
 
 ## Available Examples
 
@@ -273,14 +215,14 @@ dotnet run -- --example advanced-patterns,multi-agent,subgraphs
 
 ## See Also
 
-- **Reference**: [Program Examples](../examples/program-examples.md)
+- **Reference**: [Examples Index](../examples/index.md)
 - **Guides**: [Getting Started](../getting-started.md), [Installation](../installation.md)
 - **Examples**: Individual example documentation for detailed explanations
 - **Configuration**: [Environment Setup](../how-to/environment-setup.md)
 
 ## Reference APIs
 
-- **[Program Examples](../examples/program-examples.md)**: Examples program structure and CLI options
-- **[Example Categories](../examples/index.md)**: Overview of available example types
+- **[Examples Index](../examples/index.md)**: Overview of available example types
 - **[Configuration Options](../how-to/environment-setup.md)**: Environment and configuration setup
 - **[CLI Interface](../examples/cli-interface.md)**: Command line interface documentation
+- **[Example Categories](../examples/index.md)**: Detailed breakdown of example types

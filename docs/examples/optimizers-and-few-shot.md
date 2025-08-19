@@ -39,24 +39,9 @@ Learn how to implement and optimize few-shot prompting workflows in graph-based 
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Optimizers and Few-Shot example
-dotnet run -- --example optimizers-and-few-shot
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom kernel
-var kernel = CreateCustomKernel();
-
-await OptimizersAndFewShotExample.RunAsync(kernel);
-```
+This example demonstrates prompt optimization and few-shot learning with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

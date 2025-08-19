@@ -36,26 +36,9 @@ Learn how to implement checkpointing in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Checkpointing example
-dotnet run -- --example checkpointing
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await CheckpointingExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await CheckpointingExample.RunAsync(kernel);
-```
+This example demonstrates checkpointing and state persistence with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 
@@ -316,11 +299,11 @@ Console.WriteLine($"   Storage efficiency: {analytics.StorageEfficiency:P1}");
 
 ```
 🚀 Starting monitored workflow...
-📝 Checkpoint created: cp_001 at 2024-01-15 10:30:15
+📝 Checkpoint created: cp_001 at 2025-08-15 10:30:15
    Size: 2048 bytes, Compression: 75.2%
-📝 Checkpoint created: cp_002 at 2024-01-15 10:30:18
+📝 Checkpoint created: cp_002 at 2025-08-15 10:30:18
    Size: 1920 bytes, Compression: 78.1%
-📝 Checkpoint created: cp_003 at 2024-01-15 10:30:21
+📝 Checkpoint created: cp_003 at 2025-08-15 10:30:21
    Size: 1856 bytes, Compression: 79.8%
 🔄 Checkpoint restored: cp_002 in 45ms
 

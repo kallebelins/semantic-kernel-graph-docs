@@ -39,25 +39,9 @@ Learn how to implement subgraph composition in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Subgraph Examples
-dotnet run -- --example subgraph-examples
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom kernel
-var kernel = new Kernel();
-
-await SubgraphExamples.RunIsolatedCloneSubgraphExampleAsync(kernel);
-await SubgraphExamples.RunScopedPrefixSubgraphExampleAsync(kernel);
-```
+This example demonstrates subgraph composition and isolation with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

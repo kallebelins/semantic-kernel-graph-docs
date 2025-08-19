@@ -37,26 +37,9 @@ Learn how to implement dynamic routing in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Dynamic Routing example
-dotnet run -- --example dynamic-routing
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await DynamicRoutingExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await DynamicRoutingExample.RunAsync(kernel);
-```
+This example demonstrates dynamic routing and adaptive execution with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

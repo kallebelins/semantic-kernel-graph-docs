@@ -40,28 +40,9 @@ Learn how to implement advanced routing strategies in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Advanced Routing example
-dotnet run -- --example advanced-routing
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom services
-var kernel = CreateCustomKernel();
-var embeddingService = kernel.Services.GetService<ITextEmbeddingGenerationService>();
-var memoryService = kernel.Services.GetService<IGraphMemoryService>();
-var logger = kernel.Services.GetService<ILogger>();
-
-await AdvancedRoutingExample.RunAdvancedRoutingDemonstrationAsync(
-    kernel, embeddingService, memoryService, logger);
-```
+This example demonstrates advanced routing and decision-making with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

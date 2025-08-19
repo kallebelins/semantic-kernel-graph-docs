@@ -39,24 +39,9 @@ Learn how to implement ReAct agent patterns in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the ReAct Agent example
-dotnet run -- --example react-agent
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom kernel
-var kernel = CreateCustomKernel();
-
-await ReActAgentExample.RunAsync(kernel);
-```
+This example demonstrates ReAct (Reasoning + Acting) patterns with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 
@@ -383,6 +368,88 @@ public class CurrencyConversionTool
         return $"Unable to convert {amount} {from} to {to} - unsupported currency pair";
     }
 }
+```
+
+## Advanced Patterns
+
+### Multi-Tool Coordination
+
+```csharp
+// Implement coordinated tool usage for complex tasks
+var coordinatedAgent = new CoordinatedReActAgent
+{
+    ToolCoordinationStrategy = new SequentialCoordinationStrategy
+    {
+        MaxParallelTools = 2,
+        CoordinationRules = new Dictionary<string, string[]>
+        {
+            ["data_analysis"] = new[] { "data_clean", "data_transform", "data_analyze" },
+            ["report_generation"] = new[] { "data_analyze", "format_report", "validate_report" }
+        }
+    },
+    FallbackStrategy = new FallbackStrategy
+    {
+        PrimaryTools = new[] { "primary_tool" },
+        BackupTools = new[] { "backup_tool" },
+        RetryAttempts = 3
+    }
+};
+
+// Execute coordinated tool usage
+var coordinatedResult = await coordinatedAgent.ExecuteAsync(kernel, coordinatedArgs);
+```
+
+### Adaptive Reasoning
+
+```csharp
+// Implement adaptive reasoning based on task complexity
+var adaptiveAgent = new AdaptiveReActAgent
+{
+    ReasoningStrategies = new Dictionary<string, IReasoningStrategy>
+    {
+        ["simple"] = new SimpleReasoningStrategy { MaxSteps = 2 },
+        ["moderate"] = new ModerateReasoningStrategy { MaxSteps = 4 },
+        ["complex"] = new ComplexReasoningStrategy { MaxSteps = 6 }
+    },
+    ComplexityAnalyzer = new TaskComplexityAnalyzer
+    {
+        ComplexityMetrics = new[] { "query_length", "tool_count", "domain_specificity" },
+        Thresholds = new Dictionary<string, double>
+        {
+            ["simple"] = 0.3,
+            ["moderate"] = 0.7,
+            ["complex"] = 1.0
+        }
+    }
+};
+
+// Automatically select reasoning strategy
+var strategy = adaptiveAgent.SelectReasoningStrategy(userQuery);
+var adaptiveResult = await adaptiveAgent.ExecuteAsync(kernel, args, strategy);
+```
+
+### Tool Performance Optimization
+
+```csharp
+// Implement tool performance optimization
+var optimizedAgent = new OptimizedReActAgent
+{
+    ToolPerformanceTracker = new ToolPerformanceTracker
+    {
+        PerformanceMetrics = new Dictionary<string, ToolMetrics>(),
+        OptimizationThreshold = TimeSpan.FromSeconds(2)
+    },
+    ToolSelectionOptimizer = new ToolSelectionOptimizer
+    {
+        SelectionCriteria = new[] { "accuracy", "speed", "reliability" },
+        WeightedScoring = true,
+        HistoricalPerformanceWeight = 0.7
+    }
+};
+
+// Track and optimize tool performance
+await optimizedAgent.TrackToolPerformanceAsync("currency_convert", executionTime);
+var optimizedTools = await optimizedAgent.GetOptimizedToolSetAsync();
 ```
 
 ## Expected Output

@@ -39,26 +39,9 @@ Learn how to implement content validation and suggestion workflows in graph-base
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Assert and Suggest example
-dotnet run -- --example assert-and-suggest
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await AssertAndSuggestExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await AssertAndSuggestExample.RunAsync();
-```
+This example demonstrates validation and suggestion patterns with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

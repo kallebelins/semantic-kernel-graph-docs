@@ -38,26 +38,9 @@ Learn how to implement memory-enabled agents in graph-based workflows to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the Memory Agent example
-dotnet run -- --example memory-agent
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example directly
-await MemoryAgentExample.RunAsync();
-
-// Or run with custom kernel
-var kernel = CreateCustomKernel();
-await MemoryAgentExample.RunAsync(kernel);
-```
+This example demonstrates memory-enabled agents with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 

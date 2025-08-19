@@ -10,51 +10,20 @@ This guide provides comprehensive instructions for running examples in the Seman
 2. **OpenAI API Key** or **Azure OpenAI** credentials
 3. **Semantic Kernel Graph package** dependencies
 
-### Basic Commands
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
+The examples in this documentation provide comprehensive demonstrations of the Semantic Kernel Graph package capabilities. Each example includes:
 
-# List all available examples
-dotnet run -- --list
+- **Complete code snippets** that you can copy and adapt
+- **Step-by-step explanations** of how the code works
+- **Configuration examples** for different scenarios
+- **Best practices** and usage patterns
 
-# Run a specific example
-dotnet run -- --example chain-of-thought
+Browse the examples by category below to find the right starting point for your use case.
 
-# Run multiple examples
-dotnet run -- --example chain-of-thought,chatbot,checkpointing
+## Example Categories
 
-# Run all examples sequentially
-dotnet run
-
-# Start REST API server
-dotnet run -- --rest-api
-```
-
-## Command Line Options
-
-### Core Options
-
-| Option | Short | Description | Example |
-|--------|-------|-------------|---------|
-| `--list` | - | Display all available examples | `dotnet run -- --list` |
-| `--example <names>` | `-e <names>` | Run specific example(s) | `dotnet run -- --example react-agent` |
-| `--rest-api` | - | Start REST API server | `dotnet run -- --rest-api` |
-
-### Example Selection
-
-Examples can be specified using:
-- **Single example**: `--example chain-of-thought`
-- **Multiple examples**: `--example chain-of-thought,chatbot,checkpointing`
-- **Comma-separated list**: `--example "react-agent,multi-agent,subgraphs"`
-
-### REST API Mode
-
-When using `--rest-api`, the program starts a web server that provides:
-- **Graph execution endpoints** for external integration
-- **Graph management APIs** for registration and discovery
-- **Streaming support** for real-time execution monitoring
+The examples are organized into logical categories to help you find the right starting point:
 
 ## Available Examples
 
@@ -359,20 +328,22 @@ kernelBuilder.AddGraphSupport(options =>
 # GitHub Actions example
 - name: Run Examples
   run: |
-    cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-    dotnet run -- --example chain-of-thought,chatbot
+    # Examples are available in the documentation
+    # Use the code snippets and patterns provided
+    echo "Examples available in docs/examples/"
 ```
 
 ### Docker Integration
 
 ```dockerfile
-# Dockerfile for examples
+# Dockerfile for your application
 FROM mcr.microsoft.com/dotnet/sdk:8.0
 WORKDIR /app
 COPY . .
 RUN dotnet restore
 RUN dotnet build
-CMD ["dotnet", "run", "--", "--example", "chain-of-thought"]
+# Use the examples from documentation as reference
+# Copy and adapt the code snippets as needed
 ```
 
 ### External Tool Integration
@@ -393,12 +364,13 @@ semantic-kernel-graph-examples --example chatbot --config custom-config.json
 ### 2. Example Selection
 - Start with simple examples (chain-of-thought, conditional-nodes)
 - Progress to complex patterns (multi-agent, advanced-patterns)
-- Use `--list` to discover available examples
+- Browse the [examples index](./index.md) to discover available examples
 
 ### 3. Error Handling
 - Monitor execution logs for errors
 - Use debug mode for troubleshooting
 - Check API key configuration first
+- Refer to the [troubleshooting guide](../troubleshooting.md) for common issues
 
 ### 4. Performance
 - Enable metrics for performance monitoring

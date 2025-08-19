@@ -189,7 +189,7 @@ var jsonGraph = visualizationEngine.SerializeToJson(visualizationData, jsonOptio
 ```json
 {
   "metadata": {
-    "generatedAt": "2024-01-15T10:30:00Z",
+    "generatedAt": "2025-08-15T10:30:00Z",
     "nodeCount": 3,
     "edgeCount": 2,
     "hasExecutionPath": true
@@ -243,7 +243,7 @@ var mermaidDiagram = visualizationEngine.GenerateEnhancedMermaidDiagram(visualiz
 **Generated Mermaid Example:**
 ```mermaid
 graph TB
-    %% Graph generated at 2024-01-15 10:30:00
+    %% Graph generated at 2025-08-15 10:30:00
     
     start((Start))
     process[Process Data]

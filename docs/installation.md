@@ -278,35 +278,29 @@ var app = builder.Build();
 
 The project includes comprehensive examples that demonstrate various features:
 
-### 1. Build and Run Examples
+### 1. Explore the Examples
 
-```bash
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-dotnet run --list
-```
+The documentation includes comprehensive examples in the [examples/](examples/) directory:
 
-### 2. Run Specific Examples
+- **Basic Patterns**: Simple workflows and node types
+- **Advanced Routing**: Dynamic execution paths and conditional logic
+- **Multi-Agent**: Coordinated AI agent workflows
+- **Enterprise**: Production-ready patterns with monitoring and resilience
 
-```bash
-# Run a specific example
-dotnet run --example chatbot
+### 2. Follow the Tutorials
 
-# Run multiple examples
-dotnet run --example "chatbot,memory,checkpointing"
+Each example includes:
+- Complete code snippets you can copy and adapt
+- Step-by-step explanations of how the code works
+- Configuration examples for different scenarios
+- Best practices and usage patterns
 
-# Run with REST API
-dotnet run --rest-api
-```
+### 3. Available Example Categories
 
-### 3. Available Examples
-
-- **chatbot**: Basic chatbot with memory
-- **memory**: Memory and vector search
-- **checkpointing**: State persistence and recovery
-- **conditional-nodes**: Decision-making workflows
-- **react-agent**: ReAct pattern implementation
-- **multi-agent**: Multi-agent coordination
-- **streaming**: Real-time execution monitoring
+- **Core Functionality**: Basic setup and configuration
+- **Graph Execution**: Workflow patterns and routing
+- **Advanced Patterns**: Complex AI workflows and reasoning
+- **Enterprise Features**: Production-ready implementations
 
 ## Verification
 

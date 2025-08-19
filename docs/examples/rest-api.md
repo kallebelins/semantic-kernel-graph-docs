@@ -39,24 +39,9 @@ Learn how to create REST APIs for graph execution in Semantic Kernel Graph to:
 
 ## Running the Example
 
-### Command Line
+### Getting Started
 
-```bash
-# Navigate to examples project
-cd semantic-kernel-graph/src/SemanticKernel.Graph.Examples
-
-# Run the REST API example
-dotnet run -- --example rest-api
-```
-
-### Programmatic Execution
-
-```csharp
-// Run the example with custom arguments
-var args = new[] { "--example", "rest-api" };
-
-await RestApiExample.RunAsync(args);
-```
+This example demonstrates REST API integration with the Semantic Kernel Graph package. The code snippets below show you how to implement this pattern in your own applications.
 
 ## Step-by-Step Implementation
 
