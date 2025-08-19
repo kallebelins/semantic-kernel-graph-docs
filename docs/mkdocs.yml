@@ -12,9 +12,31 @@ theme:
     - content.code.copy
     - content.action.edit
     - toc.follow
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
 
 plugins:
   - search
+  - git-revision-date-localized:
+      enable_creation_date: true
 
 markdown_extensions:
   - admonition
@@ -25,6 +47,25 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.caret
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.squashedlinks
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/microsoft/semantic-kernel
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
 
 nav:
   - Home: index.md
@@ -136,6 +177,21 @@ nav:
       - Visualization & Realtime: api/visualization-realtime.md
       - Server & APIs: api/server-apis.md
       - Graph Options: api/graph-options.md
+      - Additional Utilities: api/additional-utilities.md
+      - Conditional Edge: api/conditional-edge.md
+      - Dynamic Routing: api/dynamic-routing.md
+      - Execution Context: api/execution-context.md
+      - Executors & Middlewares: api/executors-and-middlewares.md
+      - Graph Executor: api/graph-executor.md
+      - Human-in-the-Loop: api/human-in-the-loop.md
+      - IGraph Executor: api/igraph-executor.md
+      - IGraph Node: api/igraph-node.md
+      - Inspection & Visualization: api/inspection-visualization.md
+      - Main Node Types: api/main-node-types.md
+      - Metrics: api/metrics.md
+      - REST Tools: api/rest-tools.md
+      - State & Serialization: api/state-and-serialization.md
+      - Streaming: api/streaming.md
   - Architecture:
       - Overview: architecture/index.md
       - ADR-0001 GraphExecutor Design: architecture/adr-0001-graph-executor-design.md
@@ -162,7 +218,6 @@ nav:
       - Multi-Agent Workflow: tutorials/multi-agent-workflow.md
   - Reference:
       - Glossary: glossary.md
-      - Validation Checklist: validation-cross-links-checklist.md
       - Running Examples: running-examples.md
   - Troubleshooting: troubleshooting.md
   - FAQ: faq.md
