@@ -31,7 +31,7 @@ theme:
   font:
     text: "Public Sans"
     code: "Roboto Mono"
-    
+
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
@@ -66,7 +66,7 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/microsoft/semantic-kernel
+      link: https://github.com/kallebelins/semantic-kernel-graph-docs
   analytics:
     provider: google
     property: !ENV GOOGLE_ANALYTICS_KEY
