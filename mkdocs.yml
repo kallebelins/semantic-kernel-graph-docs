@@ -101,7 +101,7 @@ nav:
       - Checkpointing: concepts/checkpointing.md
       - Streaming: concepts/streaming.md
       - Visualization: concepts/visualization.md
-  - How-to guides:
+  - Guides:
       - Core:
           - Build a graph: how-to/build-a-graph.md
           - Conditional nodes: how-to/conditional-nodes.md
@@ -166,7 +166,7 @@ nav:
           - Analysis Standard Sections: examples/analysis-standard-sections.md
           - Template Standard Sections: examples/template-standard-sections.md
           - Execution Guide: examples/execution-guide.md
-  - API reference:
+  - Reference:
       - Core: api/core.md
       - Nodes: api/nodes.md
       - Extensions: api/extensions.md
@@ -192,9 +192,11 @@ nav:
       - REST Tools: api/rest-tools.md
       - State & Serialization: api/state-and-serialization.md
       - Streaming: api/streaming.md
-  - Glossary: glossary.md
-  - Troubleshooting: troubleshooting.md
-  - FAQ: faq.md
-  - Changelog: changelog.md
+  - Additional Resources:
+      - Glossary: glossary.md
+      - Migrating: migrations/migration.md
+      - Troubleshooting: troubleshooting.md
+      - FAQ: faq.md
+      - Changelog: changelog.md
 
 
