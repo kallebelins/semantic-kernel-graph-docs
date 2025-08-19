@@ -17,17 +17,21 @@ theme:
     - content.tooltips
   palette:
     - scheme: default
-      primary: indigo
-      accent: indigo
+      primary: white
+      accent: gray
       toggle:
-        icon: material/toggle-switch
+        icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: grey
+      accent: white
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: material/brightness-4
         name: Switch to light mode
+  font:
+    text: "Public Sans"
+    code: "Roboto Mono"
+    
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
@@ -188,9 +192,7 @@ nav:
       - REST Tools: api/rest-tools.md
       - State & Serialization: api/state-and-serialization.md
       - Streaming: api/streaming.md
-  - Reference:
-      - Glossary: glossary.md
-      - Running Examples: running-examples.md
+  - Glossary: glossary.md
   - Troubleshooting: troubleshooting.md
   - FAQ: faq.md
   - Changelog: changelog.md
