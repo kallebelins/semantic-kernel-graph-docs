@@ -59,6 +59,12 @@ nav:
       - Nodes: api/nodes.md
       - Extensions: api/extensions.md
       - Integration: api/integration.md
+      - Error Policies: api/error-policies.md
+      - Multi-Agent: api/multi-agent.md
+      - Validation & Compilation: api/validation-compilation.md
+      - Visualization & Realtime: api/visualization-realtime.md
+      - Server & APIs: api/server-apis.md
+      - Graph Options: api/graph-options.md
   - Architecture:
       - Overview: architecture/index.md
       - ADR-0001 GraphExecutor Design: architecture/adr-0001-graph-executor-design.md
