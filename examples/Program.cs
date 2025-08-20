@@ -2,6 +2,7 @@ using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
 using Examples;
 using SemanticKernel.Graph.Examples;
+using SemanticKernel.Graph.Docs.Examples;
 
 namespace Examples;
 
@@ -33,6 +34,7 @@ class Program
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
+                ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 
@@ -88,6 +90,7 @@ class Program
         await ConditionalNodesTutorialExample.RunAllExamples();
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
         await InstallationExample.RunAllExamplesAsync();
+        await MetricsLoggingQuickstartExample.RunBasicExampleAsync();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));
         Console.WriteLine("📋 All examples completed!");
