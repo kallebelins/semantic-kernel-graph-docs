@@ -25,6 +25,7 @@ class Program
                 ["conditional-nodes-tutorial"] = async () => await ConditionalNodesTutorialExample.RunAllExamples(),
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
+                ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 

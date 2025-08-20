@@ -42,11 +42,23 @@ It offers similar functionality to LangGraph, but with a focus on native integra
 
 ### How to integrate with existing applications?
 ```csharp
-// Add graph support
+// Add graph support with basic configuration
 builder.AddGraphSupport();
 
-// Use normally
-var executor = kernel.GetRequiredService<IGraphExecutor>();
+// Build the kernel
+var kernel = builder.Build();
+
+// Get the graph executor factory
+var executor = kernel.GetRequiredService<IGraphExecutorFactory>();
+
+// For advanced configuration, you can also use:
+// builder.AddGraphSupport(options =>
+// {
+//     options.EnableLogging = true;
+//     options.EnableMetrics = true;
+//     options.MaxExecutionSteps = 100;
+//     options.ExecutionTimeout = TimeSpan.FromMinutes(5);
+// });
 ```
 
 ### Does it support custom plugins?
@@ -137,3 +149,49 @@ var executor = kernel.GetRequiredService<IGraphExecutor>();
 * [Semantic Kernel Documentation](https://learn.microsoft.com/en-us/semantic-kernel/)
 * [LangGraph Python](https://langchain-ai.github.io/langgraph/)
 * [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/)
+
+## Complete Integration Example
+
+Here's a complete working example that demonstrates the integration patterns described in this FAQ:
+
+```csharp
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.SemanticKernel;
+using SemanticKernel.Graph.Extensions;
+using SemanticKernel.Graph.Integration;
+
+// Create a kernel builder
+var kernelBuilder = Kernel.CreateBuilder();
+
+// Add basic graph support
+kernelBuilder.AddGraphSupport();
+
+// Add memory support
+kernelBuilder.AddGraphMemory();
+
+// Add checkpoint support with custom options
+kernelBuilder.AddCheckpointSupport(options =>
+{
+    options.EnableCompression = true;
+    options.MaxCacheSize = 1000;
+    options.EnableAutoCleanup = true;
+    options.AutoCleanupInterval = TimeSpan.FromHours(1);
+});
+
+// Build the kernel
+var kernel = kernelBuilder.Build();
+
+// Get the graph executor factory
+var executor = kernel.GetRequiredService<IGraphExecutorFactory>();
+
+Console.WriteLine("✅ Graph support added successfully!");
+Console.WriteLine($"✅ Graph executor factory: {executor.GetType().Name}");
+```
+
+This example demonstrates:
+- Basic graph integration with `AddGraphSupport()`
+- Memory integration with `AddGraphMemory()`
+- Checkpoint support with `AddCheckpointSupport()`
+- Service retrieval from the built kernel
+- Proper error handling and validation
