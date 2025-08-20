@@ -129,7 +129,7 @@ Ready to get started? Here's how to create your first graph in under 5 minutes:
 
 ```csharp
 using Microsoft.SemanticKernel;
-using SemanticKernel.Graph;
+using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
 
@@ -141,8 +141,13 @@ var kernel = builder.Build();
 
 // 2. Create a simple function node
 var echoNode = new FunctionGraphNode(
-    kernel.CreateFunctionFromPrompt("Echo: {{$input}}")
-);
+    kernel.CreateFunctionFromMethod(
+        (string input) => $"Echo: {input}",
+        functionName: "EchoFunction",
+        description: "Echoes the input with a prefix"
+    ),
+    "echo_node"
+).StoreResultAs("output");
 
 // 3. Create and execute a graph
 var graph = new GraphExecutor("MyFirstGraph");
@@ -150,9 +155,9 @@ graph.AddNode(echoNode);
 graph.SetStartNode(echoNode);
 
 var state = new KernelArguments { ["input"] = "Hello, World!" };
-var result = await graph.ExecuteAsync(state);
+var result = await graph.ExecuteAsync(kernel, state);
 
-Console.WriteLine(result["output"]); // Output: Echo: Hello, World!
+Console.WriteLine(state["output"]); // Output: Echo: Hello, World!
 ```
 
 ## Next Steps

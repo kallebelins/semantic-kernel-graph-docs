@@ -10,8 +10,8 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 5. [x] faq.md
 6. [x] first-graph-5-minutes.md
 7. [x] first-graph.md
-8. [ ] getting-started.md
-9. [ ] glossary.md
+8. [x] getting-started.md
+9. [x] glossary.md
 10. [ ] index.md
 11. [ ] installation.md
 12. [ ] metrics-logging-quickstart.md

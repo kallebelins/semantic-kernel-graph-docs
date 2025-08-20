@@ -1,5 +1,6 @@
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
+using Examples;
 
 namespace Examples;
 
@@ -24,6 +25,7 @@ class Program
             {
                 ["first-graph"] = async () => await FirstGraphExample.RunAsync(),
                 ["first-graph-5-minutes"] = async () => await FirstGraph5MinutesExample.RunAsync(),
+                ["getting-started"] = async () => await GettingStartedExample.RunAsync(),
                 ["conditional-nodes-tutorial"] = async () => await ConditionalNodesTutorialExample.RunAllExamples(),
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
