@@ -22,6 +22,7 @@ class Program
             // Define available example options based on task names
             var options = new Dictionary<string, Func<Task>>(StringComparer.OrdinalIgnoreCase)
             {
+                ["first-graph"] = async () => await FirstGraphExample.RunAsync(),
                 ["first-graph-5-minutes"] = async () => await FirstGraph5MinutesExample.RunAsync(),
                 ["conditional-nodes-tutorial"] = async () => await ConditionalNodesTutorialExample.RunAllExamples(),
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
@@ -75,6 +76,7 @@ class Program
         Console.WriteLine("🎯 Running all available examples...\n");
 
         // Run all examples
+        await FirstGraphExample.RunAsync();
         await FirstGraph5MinutesExample.RunAsync();
         await ConditionalNodesTutorialExample.RunAllExamples();
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
