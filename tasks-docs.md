@@ -8,7 +8,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 3. [x] conditional-nodes-quickstart.md
 4. [x] conditional-nodes-tutorial.md
 5. [x] faq.md
-6. [ ] first-graph-5-minutes.md
+6. [x] first-graph-5-minutes.md
 7. [ ] first-graph.md
 8. [ ] getting-started.md
 9. [ ] glossary.md

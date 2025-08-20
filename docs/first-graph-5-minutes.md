@@ -51,55 +51,79 @@ class Program
     {
         Console.WriteLine("=== My First Graph ===\n");
 
-        // 1. Create kernel and enable graph support
-        var builder = Kernel.CreateBuilder();
-        builder.AddOpenAIChatCompletion("gpt-3.5-turbo", Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
-        builder.AddGraphSupport();
-        var kernel = builder.Build();
+        try
+        {
+            // 1. Create kernel and enable graph support
+            var builder = Kernel.CreateBuilder();
+            builder.AddGraphSupport();
+            var kernel = builder.Build();
 
-        // 2. Create a simple function node
-        var greetingNode = new FunctionGraphNode(
-            KernelFunctionFactory.CreateFromMethod(
-                (string name) => $"Hello {name}! Welcome to SemanticKernel.Graph.",
-                "GenerateGreeting",
-                "Creates a personalized greeting"
-            ),
-            "greeting_node"
+            // 2. Create simple function nodes
+            var greetingNode = CreateGreetingNode(kernel);
+            var followUpNode = CreateFollowUpNode(kernel);
+
+            // 3. Build and configure the graph
+            var graph = new GraphExecutor("MyFirstGraph", "A simple greeting workflow");
+            
+            graph.AddNode(greetingNode);
+            graph.AddNode(followUpNode);
+            
+            // Connect nodes in sequence
+            graph.Connect(greetingNode.NodeId, followUpNode.NodeId);
+            
+            // Set the starting point
+            graph.SetStartNode(greetingNode.NodeId);
+
+            // 4. Execute the graph
+            var initialState = new KernelArguments { ["name"] = "Developer" };
+            
+            Console.WriteLine("Executing graph...");
+            var result = await graph.ExecuteAsync(kernel, initialState);
+            
+            Console.WriteLine("\n=== Results ===");
+            
+            // Get results from the graph state
+            var graphState = initialState.GetOrCreateGraphState();
+            var greeting = graphState.GetValue<string>("greeting") ?? "No greeting";
+            var followup = graphState.GetValue<string>("followup") ?? "No follow-up";
+            
+            Console.WriteLine($"Greeting: {greeting}");
+            Console.WriteLine($"Follow-up: {followup}");
+            
+            Console.WriteLine("\n✅ Graph executed successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error executing graph: {ex.Message}");
+        }
+    }
+
+    private static FunctionGraphNode CreateGreetingNode(Kernel kernel)
+    {
+        var greetingFunction = kernel.CreateFunctionFromMethod(
+            (string name) => $"Hello {name}! Welcome to SemanticKernel.Graph.",
+            functionName: "GenerateGreeting",
+            description: "Creates a personalized greeting"
         );
 
-        // 3. Create a follow-up node
-        var followUpNode = new FunctionGraphNode(
-            KernelFunctionFactory.CreateFromMethod(
-                (string greeting) => $"Based on: '{greeting}', here's a follow-up question: How can I help you today?",
-                "GenerateFollowUp",
-                "Creates a follow-up question"
-            ),
-            "followup_node"
+        var node = new FunctionGraphNode(greetingFunction, "greeting_node")
+            .StoreResultAs("greeting");
+
+        return node;
+    }
+
+    private static FunctionGraphNode CreateFollowUpNode(Kernel kernel)
+    {
+        var followUpFunction = kernel.CreateFunctionFromMethod(
+            (string greeting) => $"Based on: '{greeting}', here's a follow-up question: How can I help you today?",
+            functionName: "GenerateFollowUp",
+            description: "Creates a follow-up question"
         );
 
-        // 4. Build and configure the graph
-        var graph = new GraphExecutor("MyFirstGraph", "A simple greeting workflow");
-        
-        graph.AddNode(greetingNode);
-        graph.AddNode(followUpNode);
-        
-        // Connect nodes in sequence
-        graph.Connect(greetingNode, followUpNode);
-        
-        // Set the starting point
-        graph.SetStartNode(greetingNode);
+        var node = new FunctionGraphNode(followUpFunction, "followup_node")
+            .StoreResultAs("followup");
 
-        // 5. Execute the graph
-        var initialState = new KernelArguments { ["name"] = "Developer" };
-        
-        Console.WriteLine("Executing graph...");
-        var result = await graph.ExecuteAsync(initialState);
-        
-        Console.WriteLine("\n=== Results ===");
-        Console.WriteLine($"Greeting: {result.GetValueOrDefault("greeting", "No greeting")}");
-        Console.WriteLine($"Follow-up: {result.GetValueOrDefault("followup", "No follow-up")}");
-        
-        Console.WriteLine("\n✅ Graph executed successfully!");
+        return node;
     }
 }
 ```
@@ -144,34 +168,49 @@ This single line enables all graph functionality in your Semantic Kernel instanc
 
 ### 2. **Function Graph Node**
 ```csharp
-var greetingNode = new FunctionGraphNode(
-    KernelFunctionFactory.CreateFromMethod(...),
-    "greeting_node"
-);
+var greetingNode = CreateGreetingNode(kernel);
+// Where CreateGreetingNode creates a FunctionGraphNode with:
+// - kernel.CreateFunctionFromMethod(...)
+// - .StoreResultAs("greeting") to save the result
 ```
-Creates a node that wraps a simple function and can be connected to other nodes.
+Creates a node that wraps a simple function and can be connected to other nodes. The `StoreResultAs` method ensures the result is saved in the graph state.
 
 ### 3. **Graph Assembly**
 ```csharp
 graph.AddNode(greetingNode);
 graph.AddNode(followUpNode);
-graph.Connect(greetingNode, followUpNode);
+graph.Connect(greetingNode.NodeId, followUpNode.NodeId);
 ```
-Adds nodes to the graph and connects them to define execution flow.
+Adds nodes to the graph and connects them using their NodeId to define execution flow.
 
 ### 4. **Execution**
 ```csharp
-var result = await graph.ExecuteAsync(initialState);
+var result = await graph.ExecuteAsync(kernel, initialState);
 ```
-The graph executor traverses from the start node, executing each connected node in sequence.
+The graph executor traverses from the start node, executing each connected node in sequence. The `kernel` parameter is required for function execution.
 
 ## Key Concepts
 
 * **Graph**: A directed structure of connected nodes that defines workflow execution
 * **Node**: Individual units of work (functions, decisions, operations)
 * **Edge**: Connections between nodes that define execution flow
-* **State**: Data that flows through the graph via `KernelArguments`
+* **State**: Data that flows through the graph via `KernelArguments` and `GraphState`
 * **Executor**: Orchestrates the entire workflow execution
+
+## Accessing Results
+
+The results from your graph execution are stored in the `GraphState`. Here's how to access them:
+
+```csharp
+// Get the graph state from the arguments
+var graphState = initialState.GetOrCreateGraphState();
+
+// Access stored results using the keys specified in StoreResultAs()
+var greeting = graphState.GetValue<string>("greeting") ?? "No greeting";
+var followup = graphState.GetValue<string>("followup") ?? "No follow-up";
+```
+
+The `StoreResultAs("key")` method in each node ensures that the execution result is stored under the specified key in the graph state.
 
 ## Next Steps
 
@@ -186,7 +225,7 @@ The graph executor traverses from the start node, executing each connected node 
 ```
 System.InvalidOperationException: OPENAI_API_KEY not found
 ```
-**Solution**: Set your environment variable and restart your terminal.
+**Solution**: This example works without an API key since it uses simple functions. If you want to use LLM functions, set your environment variable and restart your terminal.
 
 ### **No Start Node Configured**
 ```
@@ -231,3 +270,4 @@ To complete this tutorial, you need:
 * **[FunctionGraphNode](../api/nodes.md#function-graph-node)**: Function wrapper node
 * **[GraphExecutor](../api/core.md#graph-executor)**: Main execution engine
 * **[KernelBuilderExtensions](../api/extensions.md#kernel-builder-extensions)**: Graph support extensions
+* **[GraphState](../api/state-and-serialization.md)**: State management and result storage
