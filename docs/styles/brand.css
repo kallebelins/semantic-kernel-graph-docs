@@ -1,0 +1,11 @@
+﻿/* Swap logo for light/dark schemes */
+
+/* Default (light) uses dark logo for contrast */
+[data-md-color-scheme="default"] .md-header__button.md-logo img {
+content: url("../static/skg_dark.svg");
+}
+
+/* Slate (dark) uses light logo */
+[data-md-color-scheme="slate"] .md-header__button.md-logo img {
+content: url("../static/skg_light.svg");
+}
