@@ -4,6 +4,9 @@ docs_dir: docs
 
 theme:
   name: material
+  logo_dark_mode: static/skg_light.svg
+  logo_light_mode: static/skg_dark.svg
+  favicon: static/favicon.png
   language: en
   features:
     - navigation.tabs
@@ -43,26 +46,55 @@ plugins:
       enable_creation_date: true
 
 markdown_extensions:
+  - abbr
   - admonition
+  - pymdownx.details
   - attr_list
   - def_list
-  - toc:
-      permalink: true
-  - pymdownx.details
+  - footnotes
+  - md_in_html
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  - toc:
+      permalink: true
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.betterem:
+      smart_enable: all
   - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      use_pygments: true
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: langchain-ai
+      repo: langgraph
+  - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.snippets:
       auto_append:
         - includes/mkdocs.md
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.magiclink
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - github-callouts
 
 extra:
   social:
