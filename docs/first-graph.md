@@ -5,17 +5,17 @@ This tutorial will guide you through creating your first graph workflow with Sem
 ## What You'll Build
 
 You'll create a simple "Hello World" graph that demonstrates the basic concepts:
-- A function node that processes input
-- A conditional node that makes decisions
-- Basic state management
-- Graph execution
+* A function node that processes input
+* A conditional node that makes decisions
+* Basic state management
+* Graph execution
 
 ## Prerequisites
 
 Before starting, ensure you have:
-- [SemanticKernel.Graph installed](installation.md) in your project
-- A configured LLM provider (OpenAI, Azure OpenAI, etc.)
-- Your API keys set up in environment variables
+* [SemanticKernel.Graph installed](installation.md) in your project
+* A configured LLM provider (OpenAI, Azure OpenAI, etc.)
+* Your API keys set up in environment variables
 
 ## Step 1: Set Up Your Project
 
@@ -153,10 +153,10 @@ builder.AddGraphSupport(); // This enables all graph functionality
 ```
 
 The `AddGraphSupport()` extension method registers all the necessary services for graph execution, including:
-- Graph executor factory
-- Node converters
-- State management
-- Error handling policies
+* Graph executor factory
+* Node converters
+* State management
+* Error handling policies
 
 ### 2. **Function Graph Node**
 ```csharp
@@ -166,9 +166,9 @@ var greetingNode = new FunctionGraphNode(
 ```
 
 This creates a node that:
-- Wraps a Semantic Kernel function
-- Can be connected to other nodes
-- Automatically handles input/output state management
+* Wraps a Semantic Kernel function
+* Can be connected to other nodes
+* Automatically handles input/output state management
 
 ### 3. **Conditional Node**
 ```csharp
@@ -177,9 +177,9 @@ var decisionNode = new ConditionalGraphNode("ShouldContinue",
 ```
 
 This node:
-- Evaluates a condition based on the current state
-- Routes execution to different paths based on the result
-- Enables dynamic workflow behavior
+* Evaluates a condition based on the current state
+* Routes execution to different paths based on the result
+* Enables dynamic workflow behavior
 
 ### 4. **Graph Assembly**
 ```csharp
@@ -198,9 +198,9 @@ graph.Connect(decisionNode, followUpNode,
 ```
 
 Connections define:
-- The sequence of execution
-- Conditional routing based on state
-- Multiple possible execution paths
+* The sequence of execution
+* Conditional routing based on state
+* Multiple possible execution paths
 
 ### 6. **Execution**
 ```csharp
@@ -208,27 +208,27 @@ var result = await graph.ExecuteAsync(state);
 ```
 
 The graph executor:
-- Traverses the graph from the start node
-- Executes each node in sequence
-- Manages state transitions between nodes
-- Returns the final state with all results
+* Traverses the graph from the start node
+* Executes each node in sequence
+* Manages state transitions between nodes
+* Returns the final state with all results
 
 ## Key Concepts Demonstrated
 
 ### **State Management**
-- Input state: `{ "name": "Alice" }`
-- Intermediate state: `{ "name": "Alice", "greeting": "Hello Alice!..." }`
-- Final state: Contains both input and generated content
+* Input state: `{ "name": "Alice" }`
+* Intermediate state: `{ "name": "Alice", "greeting": "Hello Alice!..." }`
+* Final state: Contains both input and generated content
 
 ### **Conditional Execution**
-- The decision node evaluates the greeting length
-- Only executes the follow-up if the greeting is substantial
-- Demonstrates dynamic workflow behavior
+* The decision node evaluates the greeting length
+* Only executes the follow-up if the greeting is substantial
+* Demonstrates dynamic workflow behavior
 
 ### **Node Types**
-- **FunctionGraphNode**: Executes AI functions
-- **ConditionalGraphNode**: Makes routing decisions
-- **GraphExecutor**: Orchestrates the entire workflow
+* **FunctionGraphNode**: Executes AI functions
+* **ConditionalGraphNode**: Makes routing decisions
+* **GraphExecutor**: Orchestrates the entire workflow
 
 ## Experiment and Customize
 
@@ -278,32 +278,32 @@ System.InvalidOperationException: No next nodes found for node 'NodeName'
 
 Congratulations! You've successfully created your first graph. Here's what to explore next:
 
-- **[State Management Tutorial](state-tutorial.md)**: Learn how to work with graph state and data flow
-- **[Conditional Nodes Guide](how-to/conditional-nodes.md)**: Master conditional logic and routing
-- **[Core Concepts](concepts/index.md)**: Understand the fundamental building blocks
-- **[Examples](examples/index.md)**: See more complex real-world patterns
+* **[State Management Tutorial](state-tutorial.md)**: Learn how to work with graph state and data flow
+* **[Conditional Nodes Guide](how-to/conditional-nodes.md)**: Master conditional logic and routing
+* **[Core Concepts](concepts/index.md)**: Understand the fundamental building blocks
+* **[Examples](examples/index.md)**: See more complex real-world patterns
 
 ## Concepts and Techniques
 
 This tutorial introduces several key concepts:
 
-- **Graph**: A directed structure of nodes and edges that defines workflow execution
-- **Node**: Individual units of work that can execute functions, make decisions, or perform operations
-- **Edge**: Connections between nodes that can include conditional logic for dynamic routing
-- **State**: Data that flows through the graph, maintaining context across execution steps
-- **Execution**: The process of traversing the graph, executing nodes, and managing state transitions
+* **Graph**: A directed structure of nodes and edges that defines workflow execution
+* **Node**: Individual units of work that can execute functions, make decisions, or perform operations
+* **Edge**: Connections between nodes that can include conditional logic for dynamic routing
+* **State**: Data that flows through the graph, maintaining context across execution steps
+* **Execution**: The process of traversing the graph, executing nodes, and managing state transitions
 
 ## Prerequisites and Minimum Configuration
 
 To complete this tutorial, you need:
-- **.NET 8.0+** runtime and SDK
-- **SemanticKernel.Graph** package installed
-- **LLM Provider** configured with valid API keys
-- **Environment Variables** set up for your API credentials
+* **.NET 8.0+** runtime and SDK
+* **SemanticKernel.Graph** package installed
+* **LLM Provider** configured with valid API keys
+* **Environment Variables** set up for your API credentials
 
 ## See Also
 
-- **[Installation Guide](installation.md)**: Set up SemanticKernel.Graph in your project
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
-- **[How-to Guides](how-to/build-a-graph.md)**: Building more complex graph workflows
-- **[API Reference](api/core.md)**: Complete API documentation
+* **[Installation Guide](installation.md)**: Set up SemanticKernel.Graph in your project
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[How-to Guides](how-to/build-a-graph.md)**: Building more complex graph workflows
+* **[API Reference](api/core.md)**: Complete API documentation

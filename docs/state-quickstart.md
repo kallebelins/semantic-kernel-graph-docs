@@ -4,11 +4,11 @@ This quick tutorial will teach you how to work with state in SemanticKernel.Grap
 
 ## What You'll Learn
 
-- Creating and managing state with `KernelArguments`
-- Using `GraphState` for enhanced state management
-- Reading and writing variables with extension methods
-- State flow between nodes
-- Basic state validation and tracking
+* Creating and managing state with `KernelArguments`
+* Using `GraphState` for enhanced state management
+* Reading and writing variables with extension methods
+* State flow between nodes
+* Basic state validation and tracking
 
 ## Concepts and Techniques
 
@@ -22,9 +22,9 @@ This quick tutorial will teach you how to work with state in SemanticKernel.Grap
 
 ## Prerequisites
 
-- [First Graph Tutorial](first-graph-5-minutes.md) completed
-- Basic understanding of SemanticKernel.Graph concepts
-- .NET 8.0+ runtime
+* [First Graph Tutorial](first-graph-5-minutes.md) completed
+* Basic understanding of SemanticKernel.Graph concepts
+* .NET 8.0+ runtime
 
 ## Step 1: Basic State Creation
 
@@ -358,11 +358,11 @@ Each node reads from and writes to the shared state, creating a data pipeline th
 
 ## Key Concepts
 
-- **State**: Data that flows through your graph, maintained in `KernelArguments`
-- **GraphState**: Enhanced wrapper that adds execution tracking and metadata
-- **State Flow**: Data moves from node to node, with each node reading input and writing output
-- **Extension Methods**: Helper methods that add graph-specific functionality to `KernelArguments`
-- **Type Safety**: Use `GetValue<T>()` for type-safe reading of state values
+* **State**: Data that flows through your graph, maintained in `KernelArguments`
+* **GraphState**: Enhanced wrapper that adds execution tracking and metadata
+* **State Flow**: Data moves from node to node, with each node reading input and writing output
+* **Extension Methods**: Helper methods that add graph-specific functionality to `KernelArguments`
+* **Type Safety**: Use `GetValue<T>()` for type-safe reading of state values
 
 ## Common Patterns
 
@@ -417,39 +417,39 @@ State values are missing in subsequent nodes
 
 ## Next Steps
 
-- **[Conditional Logic](conditional-nodes-tutorial.md)**: Add decision-making based on state values
-- **[State Management Tutorial](state-tutorial.md)**: Advanced state features and patterns
-- **[Checkpointing](how-to/checkpointing.md)**: Save and restore graph state
-- **[Core Concepts](concepts/index.md)**: Understanding the fundamental building blocks
+* **[Conditional Logic](conditional-nodes-tutorial.md)**: Add decision-making based on state values
+* **[State Management Tutorial](state-tutorial.md)**: Advanced state features and patterns
+* **[Checkpointing](how-to/checkpointing.md)**: Save and restore graph state
+* **[Core Concepts](concepts/index.md)**: Understanding the fundamental building blocks
 
 ## Concepts and Techniques
 
 This tutorial introduces several key concepts:
 
-- **State**: Data that flows through the graph, maintaining context across execution steps
-- **KernelArguments**: The primary container for state data in Semantic Kernel
-- **GraphState**: Enhanced state wrapper with execution tracking and metadata
-- **Extension Methods**: Helper methods that add graph-specific functionality to existing types
-- **State Flow**: The pattern of data moving from node to node through the graph
+* **State**: Data that flows through the graph, maintaining context across execution steps
+* **KernelArguments**: The primary container for state data in Semantic Kernel
+* **GraphState**: Enhanced state wrapper with execution tracking and metadata
+* **Extension Methods**: Helper methods that add graph-specific functionality to existing types
+* **State Flow**: The pattern of data moving from node to node through the graph
 
 ## Prerequisites and Minimum Configuration
 
 To complete this tutorial, you need:
-- **.NET 8.0+** runtime and SDK
-- **SemanticKernel.Graph** package installed
-- **LLM Provider** configured with valid API keys
-- **Environment Variables** set up for your API credentials
+* **.NET 8.0+** runtime and SDK
+* **SemanticKernel.Graph** package installed
+* **LLM Provider** configured with valid API keys
+* **Environment Variables** set up for your API credentials
 
 ## See Also
 
-- **[First Graph Tutorial](first-graph-5-minutes.md)**: Create your first graph workflow
-- **[State Management Tutorial](state-tutorial.md)**: Advanced state management concepts
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
-- **[API Reference](api/state.md)**: Complete state management API documentation
+* **[First Graph Tutorial](first-graph-5-minutes.md)**: Create your first graph workflow
+* **[State Management Tutorial](state-tutorial.md)**: Advanced state management concepts
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[API Reference](api/state.md)**: Complete state management API documentation
 
 ## Reference APIs
 
-- **[KernelArguments](../api/core.md#kernel-arguments)**: Core state container
-- **[GraphState](../api/state.md#graph-state)**: Enhanced state wrapper
-- **[KernelArgumentsExtensions](../api/extensions.md#kernel-arguments-extensions)**: State extension methods
-- **[ISerializableState](../api/state.md#iserializable-state)**: State serialization interface
+* **[KernelArguments](../api/core.md#kernel-arguments)**: Core state container
+* **[GraphState](../api/state.md#graph-state)**: Enhanced state wrapper
+* **[KernelArgumentsExtensions](../api/extensions.md#kernel-arguments-extensions)**: State extension methods
+* **[ISerializableState](../api/state.md#iserializable-state)**: State serialization interface

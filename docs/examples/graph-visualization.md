@@ -5,35 +5,35 @@ This example demonstrates how to visualize and inspect graph structures using th
 ## Objective
 
 Learn how to implement graph visualization and inspection in graph-based workflows to:
-- Export graphs in multiple formats (DOT, JSON, Mermaid)
-- Create real-time visualizations with execution highlights
-- Implement interactive graph inspection and debugging
-- Generate visual representations for documentation and analysis
-- Monitor graph execution with visual feedback
+* Export graphs in multiple formats (DOT, JSON, Mermaid)
+* Create real-time visualizations with execution highlights
+* Implement interactive graph inspection and debugging
+* Generate visual representations for documentation and analysis
+* Monitor graph execution with visual feedback
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Visualization Concepts](../concepts/visualization.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Visualization Concepts](../concepts/visualization.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Graph Visualization**: Converting graph structures to visual representations
-- **Export Formats**: Supporting multiple visualization formats (DOT, JSON, Mermaid)
-- **Real-Time Highlights**: Visual feedback during graph execution
-- **Interactive Inspection**: Debugging and analyzing graph structures
-- **Execution Overlays**: Visual representation of execution flow
+* **Graph Visualization**: Converting graph structures to visual representations
+* **Export Formats**: Supporting multiple visualization formats (DOT, JSON, Mermaid)
+* **Real-Time Highlights**: Visual feedback during graph execution
+* **Interactive Inspection**: Debugging and analyzing graph structures
+* **Execution Overlays**: Visual representation of execution flow
 
 ### Core Classes
 
-- `GraphVisualizationEngine`: Core visualization engine
-- `GraphRealtimeHighlighter`: Real-time execution highlighting
-- `GraphInspectionApi`: Interactive graph inspection
-- `GraphVisualizationOptions`: Configuration for visualization
+* `GraphVisualizationEngine`: Core visualization engine
+* `GraphRealtimeHighlighter`: Real-time execution highlighting
+* `GraphInspectionApi`: Interactive graph inspection
+* `GraphVisualizationOptions`: Configuration for visualization
 
 ## Running the Example
 
@@ -885,14 +885,14 @@ public class InteractiveDebugger : IGraphDebugger
 
 ## Related Examples
 
-- [Graph Metrics](./graph-metrics.md): Metrics collection and monitoring
-- [Debug and Inspection](./debug-inspection.md): Graph debugging techniques
-- [Streaming Execution](./streaming-execution.md): Real-time execution monitoring
-- [Performance Optimization](./performance-optimization.md): Using visualization for optimization
+* [Graph Metrics](./graph-metrics.md): Metrics collection and monitoring
+* [Debug and Inspection](./debug-inspection.md): Graph debugging techniques
+* [Streaming Execution](./streaming-execution.md): Real-time execution monitoring
+* [Performance Optimization](./performance-optimization.md): Using visualization for optimization
 
 ## See Also
 
-- [Graph Visualization Concepts](../concepts/visualization.md): Understanding visualization concepts
-- [Debug and Inspection](../how-to/debug-and-inspection.md): Debugging and inspection patterns
-- [Performance Monitoring](../how-to/performance-monitoring.md): Performance visualization
-- [API Reference](../api/): Complete API documentation
+* [Graph Visualization Concepts](../concepts/visualization.md): Understanding visualization concepts
+* [Debug and Inspection](../how-to/debug-and-inspection.md): Debugging and inspection patterns
+* [Performance Monitoring](../how-to/performance-monitoring.md): Performance visualization
+* [API Reference](../api/): Complete API documentation

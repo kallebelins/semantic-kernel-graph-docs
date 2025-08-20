@@ -17,10 +17,10 @@ var docGraph = new Graph
 ```
 
 Perfect for:
-- 📋 Legal document review
-- 🏥 Medical record processing
-- 📚 Research paper analysis
-- 📊 Financial report processing
+* 📋 Legal document review
+* 🏥 Medical record processing
+* 📚 Research paper analysis
+* 📊 Financial report processing
 
 **Automate your document workflow** → [https://skgraph.dev/](https://skgraph.dev/)
 

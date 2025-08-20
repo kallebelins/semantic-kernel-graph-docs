@@ -20,15 +20,15 @@ Task<FunctionResult> ExecuteAsync(
 ```
 
 **Parameters:**
-- `kernel`: The Semantic Kernel instance used to resolve functions, prompts, memory, and other services
-- `arguments`: The execution state and inputs as `KernelArguments`; updated values may be written during execution
-- `cancellationToken`: A token for cooperative cancellation
+* `kernel`: The Semantic Kernel instance used to resolve functions, prompts, memory, and other services
+* `arguments`: The execution state and inputs as `KernelArguments`; updated values may be written during execution
+* `cancellationToken`: A token for cooperative cancellation
 
 **Returns:** A `FunctionResult` representing the terminal result of the graph execution
 
 **Exceptions:**
-- `ArgumentNullException`: Thrown if `kernel` or `arguments` is null
-- `OperationCanceledException`: Thrown if the operation is canceled via `cancellationToken`
+* `ArgumentNullException`: Thrown if `kernel` or `arguments` is null
+* `OperationCanceledException`: Thrown if the operation is canceled via `cancellationToken`
 
 ### Node Execution Methods
 
@@ -60,7 +60,7 @@ This method supports conditional routing, branching, or early termination depend
 
 ### Properties
 
-- `Name`: A human-readable logical name for the executor instance, useful for logging, diagnostics, or multi-executor scenarios
+* `Name`: A human-readable logical name for the executor instance, useful for logging, diagnostics, or multi-executor scenarios
 
 ## Execution Semantics
 
@@ -76,18 +76,18 @@ The executor follows a structured execution lifecycle:
 
 ### State Management
 
-- **KernelArguments**: Treated as the authoritative execution state
-- **GraphState**: Wrapper around KernelArguments with additional metadata
-- **Execution Context**: Captures immutable options and execution metadata
-- **State Propagation**: Updates are consistently propagated across nodes
+* **KernelArguments**: Treated as the authoritative execution state
+* **GraphState**: Wrapper around KernelArguments with additional metadata
+* **Execution Context**: Captures immutable options and execution metadata
+* **State Propagation**: Updates are consistently propagated across nodes
 
 ### Safety Features
 
-- **Loop Prevention**: Built-in safeguards against infinite loops
-- **Timeout Support**: Configurable execution timeouts
-- **Cancellation**: Cooperative cancellation via CancellationToken
-- **Resource Limits**: Configurable maximum execution steps
-- **Integrity Validation**: Optional graph structure validation
+* **Loop Prevention**: Built-in safeguards against infinite loops
+* **Timeout Support**: Configurable execution timeouts
+* **Cancellation**: Cooperative cancellation via CancellationToken
+* **Resource Limits**: Configurable maximum execution steps
+* **Integrity Validation**: Optional graph structure validation
 
 ### Thread Safety
 
@@ -97,11 +97,11 @@ Instances are generally safe to reuse across executions if no mutable per-run st
 
 Implementations are expected to:
 
-- Validate inputs and honor the provided `Kernel` configuration and policies
-- Treat `KernelArguments` as the authoritative execution state
-- Support cooperative cancellation via `CancellationToken`
-- Emit rich logging/telemetry as configured elsewhere in the system
-- Handle exceptions appropriately and propagate cancellation
+* Validate inputs and honor the provided `Kernel` configuration and policies
+* Treat `KernelArguments` as the authoritative execution state
+* Support cooperative cancellation via `CancellationToken`
+* Emit rich logging/telemetry as configured elsewhere in the system
+* Handle exceptions appropriately and propagate cancellation
 
 ## Usage Examples
 
@@ -137,14 +137,14 @@ var result = await executor.ExecuteGraphAsync(customNodes, kernel, arguments, ca
 
 ## Related Types
 
-- **GraphExecutor**: The main implementation of this interface
-- **GraphExecutionContext**: Maintains execution state and coordination
-- **GraphExecutionOptions**: Immutable execution configuration snapshot
-- **GraphState**: Wrapper around KernelArguments with execution metadata
+* **GraphExecutor**: The main implementation of this interface
+* **GraphExecutionContext**: Maintains execution state and coordination
+* **GraphExecutionOptions**: Immutable execution configuration snapshot
+* **GraphState**: Wrapper around KernelArguments with execution metadata
 
 ## See Also
 
-- [GraphExecutor](graph-executor.md) - Main implementation details
-- [Execution Model](../concepts/execution-model.md) - How execution flows through graphs
-- [Graph Concepts](../concepts/graph-concepts.md) - Understanding graph structure
-- [Getting Started](../getting-started.md) - Building your first graph
+* [GraphExecutor](graph-executor.md) - Main implementation details
+* [Execution Model](../concepts/execution-model.md) - How execution flows through graphs
+* [Graph Concepts](../concepts/graph-concepts.md) - Understanding graph structure
+* [Getting Started](../getting-started.md) - Building your first graph

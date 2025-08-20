@@ -13,22 +13,22 @@ Visualization allows you to generate diagrams and export graph structures for do
 ## Export Formats
 
 ### DOT (Graphviz)
-- **Format**: Graph description language for Graphviz
-- **Usage**: Generation of static and interactive diagrams
-- **Advantages**: Industry standard, automatic layout support
-- **Example**: `digraph { A -> B [label="condition"]; }`
+* **Format**: Graph description language for Graphviz
+* **Usage**: Generation of static and interactive diagrams
+* **Advantages**: Industry standard, automatic layout support
+* **Example**: `digraph { A -> B [label="condition"]; }`
 
 ### Mermaid
-- **Format**: Text-based diagramming language
-- **Usage**: Integration with tools like GitHub, GitLab, Notion
-- **Advantages**: Simple syntax, automatic rendering
-- **Example**: `graph TD; A-->B; B-->C;`
+* **Format**: Text-based diagramming language
+* **Usage**: Integration with tools like GitHub, GitLab, Notion
+* **Advantages**: Simple syntax, automatic rendering
+* **Example**: `graph TD; A-->B; B-->C;`
 
 ### JSON
-- **Format**: Structured representation of graph data
-- **Usage**: Integration with external tools and APIs
-- **Advantages**: Hierarchical structure, easy parsing
-- **Example**: `{"nodes": [...], "edges": [...], "metadata": {...}}`
+* **Format**: Structured representation of graph data
+* **Usage**: Integration with external tools and APIs
+* **Advantages**: Hierarchical structure, easy parsing
+* **Example**: `{"nodes": [...], "edges": [...], "metadata": {...}}`
 
 ## Main Components
 
@@ -67,19 +67,19 @@ var graphDef = new VisualGraphDefinition
 ## Visualization Features
 
 ### Static Visualization
-- **Graph Structure**: Nodes, edges and hierarchy
-- **Metadata**: Information about types, configurations and documentation
-- **Automatic Layouts**: Automatic organization of elements
+* **Graph Structure**: Nodes, edges and hierarchy
+* **Metadata**: Information about types, configurations and documentation
+* **Automatic Layouts**: Automatic organization of elements
 
 ### Real-Time Visualization
-- **Execution State**: Current node, execution history
-- **Metrics**: Execution times, usage counters
-- **Highlights**: Visual emphasis for active nodes and traversed paths
+* **Execution State**: Current node, execution history
+* **Metrics**: Execution times, usage counters
+* **Highlights**: Visual emphasis for active nodes and traversed paths
 
 ### Interactive Inspection
-- **Zoom and Navigation**: Detailed exploration of specific parts
-- **Filters**: Selective visualization by node type or state
-- **Tooltips**: Detailed information on hover
+* **Zoom and Navigation**: Detailed exploration of specific parts
+* **Filters**: Selective visualization by node type or state
+* **Tooltips**: Detailed information on hover
 
 ## Configuration and Options
 
@@ -98,9 +98,9 @@ var options = new GraphVisualizationOptions
 ```
 
 ### Visualization Themes
-- **Light**: Light theme for printed documentation
-- **Dark**: Dark theme for presentations and demos
-- **Custom**: Custom themes with specific colors
+* **Light**: Light theme for printed documentation
+* **Dark**: Dark theme for presentations and demos
+* **Custom**: Custom themes with specific colors
 
 ## Usage Examples
 
@@ -139,26 +139,26 @@ await realtimeVisualizer.UpdateExecutionStateAsync(executionState);
 ## Tool Integration
 
 ### GitHub/GitLab
-- **Mermaid**: Automatic rendering in markdown
-- **PlantUML**: Integration via extensions
-- **Graphviz**: Rendering via GitHub Actions
+* **Mermaid**: Automatic rendering in markdown
+* **PlantUML**: Integration via extensions
+* **Graphviz**: Rendering via GitHub Actions
 
 ### Documentation Tools
-- **DocFX**: Integration with API documentation
-- **MkDocs**: Native Mermaid support
-- **Sphinx**: Extensions for diagrams
+* **DocFX**: Integration with API documentation
+* **MkDocs**: Native Mermaid support
+* **Sphinx**: Extensions for diagrams
 
 ### IDEs and Editors
-- **VS Code**: Extensions for graph visualization
-- **JetBrains**: Plugins for diagramming
-- **Vim/Emacs**: Modes for graph editing
+* **VS Code**: Extensions for graph visualization
+* **JetBrains**: Plugins for diagramming
+* **Vim/Emacs**: Modes for graph editing
 
 ## Monitoring and Debugging
 
 ### Visualization Metrics
-- **Render Time**: Latency to generate visualizations
-- **Export Size**: Size of generated files
-- **Layout Quality**: Visual organization metrics
+* **Render Time**: Latency to generate visualizations
+* **Export Size**: Size of generated files
+* **Layout Quality**: Visual organization metrics
 
 ### Visualization Debugging
 ```csharp
@@ -172,16 +172,16 @@ var debugOptions = new GraphVisualizationOptions
 
 ## See Also
 
-- [Real-Time Visualization](../how-to/real-time-visualization-and-highlights.md)
-- [Visualization Examples](../examples/graph-visualization.md)
-- [Debug and Inspection](../how-to/debug-and-inspection.md)
-- [Graphs](../concepts/graph-concepts.md)
-- [Execution](../concepts/execution-model.md)
+* [Real-Time Visualization](../how-to/real-time-visualization-and-highlights.md)
+* [Visualization Examples](../examples/graph-visualization.md)
+* [Debug and Inspection](../how-to/debug-and-inspection.md)
+* [Graphs](../concepts/graph-concepts.md)
+* [Execution](../concepts/execution-model.md)
 
 ## References
 
-- `GraphVisualizationEngine`: Main visualization engine
-- `VisualGraphDefinition`: Data structure for visualization
-- `GraphVisualizationOptions`: Visualization configurations
-- `GraphRealtimeHighlighter`: Real-time highlighting
-- `VisualizationFormat`: Supported export formats
+* `GraphVisualizationEngine`: Main visualization engine
+* `VisualGraphDefinition`: Data structure for visualization
+* `GraphVisualizationOptions`: Visualization configurations
+* `GraphRealtimeHighlighter`: Real-time highlighting
+* `VisualizationFormat`: Supported export formats

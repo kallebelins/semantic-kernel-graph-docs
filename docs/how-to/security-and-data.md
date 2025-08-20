@@ -6,11 +6,11 @@ This guide explains how to implement comprehensive security measures and data ha
 
 SemanticKernel.Graph provides enterprise-grade security features that ensure sensitive data protection, secure execution, and compliance with data governance requirements. The system includes:
 
-- **Data Sanitization**: Automatic redaction of sensitive information in logs, events, and exports
-- **Authentication & Authorization**: Bearer token validation and scope-based access control
-- **Encryption**: Support for encrypted checkpoints and secure data transmission
-- **Retention Policies**: Configurable data lifecycle management and automatic cleanup
-- **Multi-tenant Isolation**: Secure boundaries between different tenant contexts
+* **Data Sanitization**: Automatic redaction of sensitive information in logs, events, and exports
+* **Authentication & Authorization**: Bearer token validation and scope-based access control
+* **Encryption**: Support for encrypted checkpoints and secure data transmission
+* **Retention Policies**: Configurable data lifecycle management and automatic cleanup
+* **Multi-tenant Isolation**: Secure boundaries between different tenant contexts
 
 ## Data Sanitization
 
@@ -18,9 +18,9 @@ SemanticKernel.Graph provides enterprise-grade security features that ensure sen
 
 The sanitization system consists of several key components:
 
-- **`SensitiveDataSanitizer`**: Main utility for sanitizing objects and dictionaries
-- **`SensitiveDataPolicy`**: Configuration policy defining sanitization behavior
-- **`SanitizationLevel`**: Enumeration controlling sanitization aggressiveness
+* **`SensitiveDataSanitizer`**: Main utility for sanitizing objects and dictionaries
+* **`SensitiveDataPolicy`**: Configuration policy defining sanitization behavior
+* **`SanitizationLevel`**: Enumeration controlling sanitization aggressiveness
 
 ### Sanitization Levels
 
@@ -508,24 +508,24 @@ public sealed class ComplianceReporter
 ### Common Security Issues
 
 **Authentication Failures**
-- Verify bearer token format and expiration
-- Check required scopes and app roles
-- Validate token issuer and audience
+* Verify bearer token format and expiration
+* Check required scopes and app roles
+* Validate token issuer and audience
 
 **Data Sanitization Problems**
-- Ensure sensitive key patterns are correctly configured
-- Check sanitization level settings
-- Verify custom helper functions don't bypass sanitization
+* Ensure sensitive key patterns are correctly configured
+* Check sanitization level settings
+* Verify custom helper functions don't bypass sanitization
 
 **Encryption Issues**
-- Validate encryption key format and length
-- Check key rotation schedules
-- Verify encryption algorithm compatibility
+* Validate encryption key format and length
+* Check key rotation schedules
+* Verify encryption algorithm compatibility
 
 **Tenant Isolation Problems**
-- Confirm tenant context is properly injected
-- Check subgraph isolation mode configuration
-- Verify tenant validation logic
+* Confirm tenant context is properly injected
+* Check subgraph isolation mode configuration
+* Verify tenant validation logic
 
 ### Debugging Security
 
@@ -536,8 +536,8 @@ public sealed class ComplianceReporter
 
 ## See Also
 
-- [Integration and Extensions](../how-to/integration-and-extensions.md) - Core integration patterns and extensions
-- [Checkpointing and Recovery](../concepts/checkpointing.md) - State persistence and recovery
-- [Multi-Agent Workflows](../how-to/multi-agent-and-shared-state.md) - Secure multi-agent coordination
-- [REST API Integration](../how-to/exposing-rest-apis.md) - Secure API endpoints
-- [API Reference](../api/) - Complete API documentation for security types
+* [Integration and Extensions](../how-to/integration-and-extensions.md) - Core integration patterns and extensions
+* [Checkpointing and Recovery](../concepts/checkpointing.md) - State persistence and recovery
+* [Multi-Agent Workflows](../how-to/multi-agent-and-shared-state.md) - Secure multi-agent coordination
+* [REST API Integration](../how-to/exposing-rest-apis.md) - Secure API endpoints
+* [API Reference](../api/) - Complete API documentation for security types

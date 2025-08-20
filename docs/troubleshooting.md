@@ -19,15 +19,15 @@ Guide for resolving common problems and diagnosing issues in SemanticKernel.Grap
 ### Execution Pauses or is Slow
 
 **Symptoms**:
-- Graph doesn't progress after a specific node
-- Execution time much longer than expected
-- Application seems "frozen"
+* Graph doesn't progress after a specific node
+* Execution time much longer than expected
+* Application seems "frozen"
 
 **Probable Causes**:
-- Infinite or very long loops
-- Nodes with very high timeout
-- Blocking on external resources
-- Routing conditions that are never met
+* Infinite or very long loops
+* Nodes with very high timeout
+* Blocking on external resources
+* Routing conditions that are never met
 
 **Diagnosis**:
 ```csharp
@@ -59,22 +59,22 @@ var nodeOptions = new GraphNodeOptions
 ```
 
 **Prevention**:
-- Always set `MaxIterations` for loop nodes
-- Configure appropriate timeouts
-- Use metrics to monitor performance
-- Implement circuit breakers for external resources
+* Always set `MaxIterations` for loop nodes
+* Configure appropriate timeouts
+* Use metrics to monitor performance
+* Implement circuit breakers for external resources
 
 ### Missing Service or Null Provider
 
 **Symptoms**:
-- `NullReferenceException` when executing graphs
-- "Service not registered" error or similar
-- Specific functionalities don't work
+* `NullReferenceException` when executing graphs
+* "Service not registered" error or similar
+* Specific functionalities don't work
 
 **Probable Causes**:
-- `AddGraphSupport()` was not called
-- Dependencies not registered in DI container
-- Incorrect order of service registration
+* `AddGraphSupport()` was not called
+* Dependencies not registered in DI container
+* Incorrect order of service registration
 
 **Diagnosis**:
 ```csharp
@@ -101,23 +101,23 @@ builder.AddGraphSupport(options => {
 ```
 
 **Prevention**:
-- Always set `MaxIterations` for loop nodes
-- Configure appropriate timeouts
-- Use metrics to monitor performance
-- Implement circuit breakers for external resources
+* Always set `MaxIterations` for loop nodes
+* Configure appropriate timeouts
+* Use metrics to monitor performance
+* Implement circuit breakers for external resources
 
 ### Failed in REST Tools
 
 **Symptoms**:
-- HTTP call timeouts
-- Authentication failures
-- Unexpected API responses
+* HTTP call timeouts
+* Authentication failures
+* Unexpected API responses
 
 **Probable Causes**:
-- Incorrect validation schemas
-- Very low timeouts
-- Authentication issues
-- External APIs unavailable
+* Incorrect validation schemas
+* Very low timeouts
+* Authentication issues
+* External APIs unavailable
 
 **Diagnosis**:
 ```csharp
@@ -152,25 +152,25 @@ var schema = new RestToolSchema
 ```
 
 **Prevention**:
-- Test external APIs before using
-- Implement circuit breakers
-- Configure realistic timeouts
-- Validate input/output schemas
+* Test external APIs before using
+* Implement circuit breakers
+* Configure realistic timeouts
+* Validate input/output schemas
 
 ## State and Checkpoint Problems
 
 ### Checkpoint Not Restored
 
 **Symptoms**:
-- Lost state between executions
-- Error restoring checkpoint
-- Inconsistent data after recovery
+* Lost state between executions
+* Error restoring checkpoint
+* Inconsistent data after recovery
 
 **Probable Causes**:
-- Checkpointing extensions not configured
-- Database collection does not exist
-- Version incompatibility of state
-- Serialization issues
+* Checkpointing extensions not configured
+* Database collection does not exist
+* Version incompatibility of state
+* Serialization issues
 
 **Diagnosis**:
 ```csharp
@@ -201,22 +201,22 @@ builder.AddGraphSupport(options => {
 ```
 
 **Prevention**:
-- Always test database connectivity
-- Implement version state validation
-- Use robust serialization
-- Monitor disk space
+* Always test database connectivity
+* Implement version state validation
+* Use robust serialization
+* Monitor disk space
 
 ### Serialization Problems
 
 **Symptoms**:
-- "Cannot serialize type X" error
-- Corrupted checkpoints
-- Failed to save state
+* "Cannot serialize type X" error
+* Corrupted checkpoints
+* Failed to save state
 
 **Probable Causes**:
-- Non-serializable types
-- Circular references
-- Complex types not supported
+* Non-serializable types
+* Circular references
+* Complex types not supported
 
 **Diagnosis**:
 ```csharp
@@ -249,25 +249,25 @@ state.SetValue("array", new[] { 1, 2, 3 });
 ```
 
 **Prevention**:
-- Use primitive types when possible
-- Implement `ISerializableState` for complex types
-- Avoid circular references
-- Test serialization during development
+* Use primitive types when possible
+* Implement `ISerializableState` for complex types
+* Avoid circular references
+* Test serialization during development
 
 ## Python Node Problems
 
 ### Python Execution Errors
 
 **Symptoms**:
-- "python not found" error
-- Python execution timeouts
-- Communication failures between .NET and Python
+* "python not found" error
+* Python execution timeouts
+* Communication failures between .NET and Python
 
 **Probable Causes**:
-- Python is not in PATH
-- Incorrect Python version
-- Permission issues
-- Missing Python dependencies
+* Python is not in PATH
+* Incorrect Python version
+* Permission issues
+* Missing Python dependencies
 
 **Diagnosis**:
 ```csharp
@@ -295,25 +295,25 @@ var pythonNode = new PythonGraphNode("python", pythonOptions);
 ```
 
 **Prevention**:
-- Use absolute paths for Python
-- Verify Python dependencies
-- Configure environment variables
-- Implement fallbacks for Python nodes
+* Use absolute paths for Python
+* Verify Python dependencies
+* Configure environment variables
+* Implement fallbacks for Python nodes
 
 ## Performance Problems
 
 ### Very Slow Execution
 
 **Symptoms**:
-- Execution time much longer than expected
-- Excessive CPU/memory usage
-- Simple graphs take a long time
+* Execution time much longer than expected
+* Excessive CPU/memory usage
+* Simple graphs take a long time
 
 **Probable Causes**:
-- Inefficient nodes
-- Lack of parallelism
-- Unnecessary blockages
-- Suboptimal configurations
+* Inefficient nodes
+* Lack of parallelism
+* Unnecessary blockages
+* Suboptimal configurations
 
 **Diagnosis**:
 ```csharp
@@ -346,25 +346,25 @@ var optimizedNode = new OptimizedFunctionGraphNode(
 ```
 
 **Prevention**:
-- Monitor metrics regularly
-- Use profiling to identify bottlenecks
-- Implement caching when appropriate
-- Optimize critical nodes
+* Monitor metrics regularly
+* Use profiling to identify bottlenecks
+* Implement caching when appropriate
+* Optimize critical nodes
 
 ## Integration Problems
 
 ### Authentication Failures
 
 **Symptoms**:
-- 401/403 errors on external APIs
-- LLM authentication failures
-- Authorization issues
+* 401/403 errors on external APIs
+* LLM authentication failures
+* Authorization issues
 
 **Probable Causes**:
-- Invalid API keys
-- Expired tokens
-- Incorrect credential configuration
-- Permission issues
+* Invalid API keys
+* Expired tokens
+* Incorrect credential configuration
+* Permission issues
 
 **Diagnosis**:
 ```csharp
@@ -390,10 +390,10 @@ builder.AddAzureOpenAIChatCompletion(
 ```
 
 **Prevention**:
-- Use environment variables for credentials
-- Implement automatic token rotation
-- Monitor credential expiration
-- Use secret managers
+* Use environment variables for credentials
+* Implement automatic token rotation
+* Monitor credential expiration
+* Use secret managers
 
 ## Recovery Strategies
 
@@ -447,19 +447,19 @@ logger.LogExecutionComplete(graphId, executionId, result);
 
 ## See Also
 
-- [Error Handling](../how-to/error-handling-and-resilience.md)
-- [Performance Tuning](../how-to/performance-tuning.md)
-- [Monitoring](../how-to/metrics-and-observability.md)
-- [Configuration](../how-to/configuration.md)
-- [Examples](../examples/index.md)
+* [Error Handling](../how-to/error-handling-and-resilience.md)
+* [Performance Tuning](../how-to/performance-tuning.md)
+* [Monitoring](../how-to/metrics-and-observability.md)
+* [Configuration](../how-to/configuration.md)
+* [Examples](../examples/index.md)
 
 ## References
 
-- `GraphExecutionOptions`: Execution settings
-- `CheckpointingOptions`: Checkpointing settings
-- `PythonNodeOptions`: Python node settings
-- `RetryPolicy`: Retry policies
-- `CircuitBreaker`: Circuit breakers for resilience
-- `GraphAlertingService`: Alerting system
+* `GraphExecutionOptions`: Execution settings
+* `CheckpointingOptions`: Checkpointing settings
+* `PythonNodeOptions`: Python node settings
+* `RetryPolicy`: Retry policies
+* `CircuitBreaker`: Circuit breakers for resilience
+* `GraphAlertingService`: Alerting system
 
 

@@ -5,34 +5,34 @@ This example demonstrates execution state persistence and recovery using the Sem
 ## Objective
 
 Learn how to implement checkpointing in graph-based workflows to:
-- Save execution state at critical points
-- Restore workflows from previous checkpoints
-- Implement automatic checkpoint management
-- Handle distributed checkpoint storage
-- Monitor and optimize checkpoint performance
+* Save execution state at critical points
+* Restore workflows from previous checkpoints
+* Implement automatic checkpoint management
+* Handle distributed checkpoint storage
+* Monitor and optimize checkpoint performance
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [State Management](../concepts/state.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [State Management](../concepts/state.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Checkpointing**: Saving execution state at specific points for later restoration
-- **State Serialization**: Converting graph state to persistent storage format
-- **Recovery**: Restoring workflow execution from saved checkpoints
-- **Distributed Storage**: Managing checkpoints across multiple storage locations
+* **Checkpointing**: Saving execution state at specific points for later restoration
+* **State Serialization**: Converting graph state to persistent storage format
+* **Recovery**: Restoring workflow execution from saved checkpoints
+* **Distributed Storage**: Managing checkpoints across multiple storage locations
 
 ### Core Classes
 
-- `CheckpointManager`: Manages checkpoint creation, storage, and retrieval
-- `CheckpointingGraphExecutor`: Executor with built-in checkpointing support
-- `StateHelpers`: Utilities for state serialization and validation
-- `CheckpointOptions`: Configuration options for checkpoint behavior
+* `CheckpointManager`: Manages checkpoint creation, storage, and retrieval
+* `CheckpointingGraphExecutor`: Executor with built-in checkpointing support
+* `StateHelpers`: Utilities for state serialization and validation
+* `CheckpointOptions`: Configuration options for checkpoint behavior
 
 ## Running the Example
 
@@ -492,14 +492,14 @@ orchestrator.StartOrchestration();
 
 ## Related Examples
 
-- [State Management](./state-management.md): Graph state and argument handling
-- [Streaming Execution](./streaming-execution.md): Real-time execution monitoring
-- [Multi-Agent](./multi-agent.md): Coordinated multi-agent workflows
-- [Graph Metrics](./graph-metrics.md): Performance monitoring and optimization
+* [State Management](./state-management.md): Graph state and argument handling
+* [Streaming Execution](./streaming-execution.md): Real-time execution monitoring
+* [Multi-Agent](./multi-agent.md): Coordinated multi-agent workflows
+* [Graph Metrics](./graph-metrics.md): Performance monitoring and optimization
 
 ## See Also
 
-- [Checkpointing Concepts](../concepts/checkpointing.md): Understanding state persistence
-- [State Management](../concepts/state.md): Graph state fundamentals
-- [Performance Monitoring](../how-to/metrics-and-observability.md): Metrics and optimization
-- [API Reference](../api/): Complete API documentation
+* [Checkpointing Concepts](../concepts/checkpointing.md): Understanding state persistence
+* [State Management](../concepts/state.md): Graph state fundamentals
+* [Performance Monitoring](../how-to/metrics-and-observability.md): Metrics and optimization
+* [API Reference](../api/): Complete API documentation

@@ -4,11 +4,11 @@ State management is the foundation of data flow in SemanticKernel.Graph. This gu
 
 ## What You'll Learn
 
-- How `GraphState` wraps `KernelArguments` for enhanced functionality
-- Managing execution history and metadata
-- State validation and versioning
-- Serialization and deserialization capabilities
-- Best practices for state design and management
+* How `GraphState` wraps `KernelArguments` for enhanced functionality
+* Managing execution history and metadata
+* State validation and versioning
+* Serialization and deserialization capabilities
+* Best practices for state design and management
 
 ## Concepts and Techniques
 
@@ -24,9 +24,9 @@ State management is the foundation of data flow in SemanticKernel.Graph. This gu
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of SemanticKernel.Graph concepts
-- Familiarity with `KernelArguments` from Semantic Kernel
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of SemanticKernel.Graph concepts
+* Familiarity with `KernelArguments` from Semantic Kernel
 
 ## Core State Components
 
@@ -610,8 +610,8 @@ Serialized state too large: 50,000,000 bytes
 
 ## See Also
 
-- [State Quickstart](../state-quickstart.md) - Quick introduction to state management
-- [State Tutorial](../state-tutorial.md) - Comprehensive state management tutorial
-- [Execution Model](execution-model.md) - How state flows through execution
-- [Checkpointing](../checkpointing-quickstart.md) - Saving and restoring state
-- [Graph Concepts](graph-concepts.md) - Core graph concepts and patterns
+* [State Quickstart](../state-quickstart.md) - Quick introduction to state management
+* [State Tutorial](../state-tutorial.md) - Comprehensive state management tutorial
+* [Execution Model](execution-model.md) - How state flows through execution
+* [Checkpointing](../checkpointing-quickstart.md) - Saving and restoring state
+* [Graph Concepts](graph-concepts.md) - Core graph concepts and patterns

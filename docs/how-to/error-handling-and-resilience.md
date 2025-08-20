@@ -4,13 +4,13 @@ Error handling and resilience in SemanticKernel.Graph provide robust mechanisms 
 
 ## What You'll Learn
 
-- How to configure retry policies with exponential backoff and jitter
-- Implementing circuit breaker patterns to prevent cascading failures
-- Managing resource budgets and preventing resource exhaustion
-- Configuring error handling policies through the registry
-- Using specialized error handling nodes for complex scenarios
-- Collecting and analyzing error metrics and telemetry
-- Handling failure and cancellation events in streaming execution
+* How to configure retry policies with exponential backoff and jitter
+* Implementing circuit breaker patterns to prevent cascading failures
+* Managing resource budgets and preventing resource exhaustion
+* Configuring error handling policies through the registry
+* Using specialized error handling nodes for complex scenarios
+* Collecting and analyzing error metrics and telemetry
+* Handling failure and cancellation events in streaming execution
 
 ## Concepts and Techniques
 
@@ -30,10 +30,10 @@ Error handling and resilience in SemanticKernel.Graph provide robust mechanisms 
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of graph execution concepts
-- Familiarity with resilience patterns (retry, circuit breaker)
-- Understanding of resource management principles
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of graph execution concepts
+* Familiarity with resilience patterns (retry, circuit breaker)
+* Understanding of resource management principles
 
 ## Error Types and Recovery Actions
 
@@ -139,10 +139,10 @@ graph.AddEdge(startNode, retryNode);
 ```
 
 The retry node automatically:
-- Tracks attempt counts in `KernelArguments`
-- Applies exponential backoff with jitter
-- Filters retryable error types
-- Records retry statistics in metadata
+* Tracks attempt counts in `KernelArguments`
+* Applies exponential backoff with jitter
+* Filters retryable error types
+* Records retry statistics in metadata
 
 ## Circuit Breaker Patterns
 
@@ -465,37 +465,37 @@ await executor.ExecuteAsync(arguments, eventStream);
 
 ### Error Classification
 
-- **Use specific error types** rather than generic `Unknown`
-- **Mark transient errors** appropriately for retry logic
-- **Set appropriate severity levels** for escalation decisions
+* **Use specific error types** rather than generic `Unknown`
+* **Mark transient errors** appropriately for retry logic
+* **Set appropriate severity levels** for escalation decisions
 
 ### Retry Configuration
 
-- **Start with exponential backoff** for most scenarios
-- **Add jitter** to prevent thundering herd problems
-- **Limit retry attempts** to prevent infinite loops
-- **Use error type filtering** to avoid retrying permanent failures
+* **Start with exponential backoff** for most scenarios
+* **Add jitter** to prevent thundering herd problems
+* **Limit retry attempts** to prevent infinite loops
+* **Use error type filtering** to avoid retrying permanent failures
 
 ### Circuit Breaker Tuning
 
-- **Set appropriate failure thresholds** based on expected failure rates
-- **Configure timeouts** that allow for recovery
-- **Monitor circuit breaker state changes** for operational insights
-- **Use fallback operations** when circuits are open
+* **Set appropriate failure thresholds** based on expected failure rates
+* **Configure timeouts** that allow for recovery
+* **Monitor circuit breaker state changes** for operational insights
+* **Use fallback operations** when circuits are open
 
 ### Resource Management
 
-- **Set realistic resource limits** based on system capacity
-- **Use execution priorities** for critical operations
-- **Monitor resource exhaustion** events for capacity planning
-- **Implement graceful degradation** when budgets are exceeded
+* **Set realistic resource limits** based on system capacity
+* **Use execution priorities** for critical operations
+* **Monitor resource exhaustion** events for capacity planning
+* **Implement graceful degradation** when budgets are exceeded
 
 ### Metrics and Monitoring
 
-- **Collect error metrics** in production environments
-- **Set up alerts** for high error rates or circuit breaker openings
-- **Analyze error patterns** for system improvements
-- **Track recovery success rates** to validate error handling
+* **Collect error metrics** in production environments
+* **Set up alerts** for high error rates or circuit breaker openings
+* **Analyze error patterns** for system improvements
+* **Track recovery success rates** to validate error handling
 
 ## Troubleshooting
 
@@ -526,15 +526,15 @@ var graphLogger = new SemanticKernelGraphLogger(logger, graphOptions);
 
 ### Performance Considerations
 
-- **Error handling adds overhead** - use judiciously in performance-critical paths
-- **Metrics collection** can impact performance at high error rates
-- **Circuit breaker state changes** are logged and can generate noise
-- **Resource budget checks** add latency to node execution
+* **Error handling adds overhead** - use judiciously in performance-critical paths
+* **Metrics collection** can impact performance at high error rates
+* **Circuit breaker state changes** are logged and can generate noise
+* **Resource budget checks** add latency to node execution
 
 ## See Also
 
-- [Resource Governance and Concurrency](resource-governance-and-concurrency.md) - Managing resource limits and priorities
-- [Metrics and Observability](metrics-logging-quickstart.md) - Comprehensive monitoring and telemetry
-- [Streaming Execution](streaming-quickstart.md) - Real-time error event streaming
-- [State Management](state-quickstart.md) - Error state persistence and recovery
-- [Graph Execution](execution.md) - Understanding the execution lifecycle
+* [Resource Governance and Concurrency](resource-governance-and-concurrency.md) - Managing resource limits and priorities
+* [Metrics and Observability](metrics-logging-quickstart.md) - Comprehensive monitoring and telemetry
+* [Streaming Execution](streaming-quickstart.md) - Real-time error event streaming
+* [State Management](state-quickstart.md) - Error state persistence and recovery
+* [Graph Execution](execution.md) - Understanding the execution lifecycle

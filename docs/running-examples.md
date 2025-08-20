@@ -14,10 +14,10 @@ Learn how to execute the comprehensive examples included in the SemanticKernel.G
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 8.0 or later
-- SemanticKernel.Graph repository cloned locally
-- Basic understanding of command line interfaces
-- Optional: OpenAI API key for LLM-powered examples
+* .NET 8.0 or later
+* SemanticKernel.Graph repository cloned locally
+* Basic understanding of command line interfaces
+* Optional: OpenAI API key for LLM-powered examples
 
 ## Quick Start
 
@@ -25,18 +25,18 @@ Learn how to execute the comprehensive examples included in the SemanticKernel.G
 
 The examples are available in the [examples/](examples/) directory of this documentation. Each example includes:
 
-- **Code snippets** demonstrating specific features
-- **Step-by-step explanations** of how the code works
-- **Configuration examples** for different scenarios
-- **Best practices** and usage patterns
+* **Code snippets** demonstrating specific features
+* **Step-by-step explanations** of how the code works
+* **Configuration examples** for different scenarios
+* **Best practices** and usage patterns
 
 ### 2. Choose Your Example
 
 Browse the examples by category:
-- **Core Functionality**: Basic setup and configuration
-- **Graph Execution**: Workflow patterns and routing
-- **Advanced Patterns**: Complex AI workflows and reasoning
-- **Enterprise Features**: Production-ready implementations
+* **Core Functionality**: Basic setup and configuration
+* **Graph Execution**: Workflow patterns and routing
+* **Advanced Patterns**: Complex AI workflows and reasoning
+* **Enterprise Features**: Production-ready implementations
 
 ### 3. Follow the Tutorials
 
@@ -50,38 +50,38 @@ The examples are organized into logical categories to help you find the right st
 
 ### Core Functionality Examples
 
-- **`zero-config`**: Zero-configuration setup using KernelBuilder extensions
-- **`memory`**: Integrated memory system demonstration
-- **`templates`**: Handlebars template system usage
-- **`logging`**: Advanced logging configuration and usage
+* **`zero-config`**: Zero-configuration setup using KernelBuilder extensions
+* **`memory`**: Integrated memory system demonstration
+* **`templates`**: Handlebars template system usage
+* **`logging`**: Advanced logging configuration and usage
 
 ### Graph Execution Examples
 
-- **`conditional-nodes`**: Conditional routing with `ConditionalGraphNode`
-- **`dynamic-routing`**: Dynamic routing patterns and strategies
-- **`metrics`**: Performance metrics collection and analysis
-- **`checkpointing`**: State persistence and recovery systems
+* **`conditional-nodes`**: Conditional routing with `ConditionalGraphNode`
+* **`dynamic-routing`**: Dynamic routing patterns and strategies
+* **`metrics`**: Performance metrics collection and analysis
+* **`checkpointing`**: State persistence and recovery systems
 
 ### Reasoning and AI Examples
 
-- **`cot`**: Chain of Thought reasoning patterns
-- **`react-agent`**: ReAct (Reasoning + Acting) agent implementation
-- **`react`**: ReAct problem-solving workflows
-- **`memory-agent`**: Memory-augmented ReAct agents
+* **`cot`**: Chain of Thought reasoning patterns
+* **`react-agent`**: ReAct (Reasoning + Acting) agent implementation
+* **`react`**: ReAct problem-solving workflows
+* **`memory-agent`**: Memory-augmented ReAct agents
 
 ### Advanced Patterns
 
-- **`advanced-patterns`**: Comprehensive advanced pattern demonstrations
-- **`multi-agent`**: Multi-agent coordination and workflows
-- **`subgraphs`**: Subgraph isolation and scoping patterns
-- **`plugins`**: Plugin system integration examples
+* **`advanced-patterns`**: Comprehensive advanced pattern demonstrations
+* **`multi-agent`**: Multi-agent coordination and workflows
+* **`subgraphs`**: Subgraph isolation and scoping patterns
+* **`plugins`**: Plugin system integration examples
 
 ### Specialized Workflows
 
-- **`chatbot`**: Conversational AI chatbot implementation
-- **`documents`**: Document analysis pipeline examples
-- **`retrieval-agent`**: RAG (Retrieval-Augmented Generation) agents
-- **`multihop-rag-retry`**: Multi-hop RAG with retry mechanisms
+* **`chatbot`**: Conversational AI chatbot implementation
+* **`documents`**: Document analysis pipeline examples
+* **`retrieval-agent`**: RAG (Retrieval-Augmented Generation) agents
+* **`multihop-rag-retry`**: Multi-hop RAG with retry mechanisms
 
 ## Configuration
 
@@ -171,10 +171,10 @@ dotnet run -- --example advanced-patterns,multi-agent
 
 ### Performance Tips
 
-- Start with simple examples to understand the framework
-- Use specific example selection (`--example`) rather than running all examples
-- Monitor console output for execution progress and any warnings
-- Check the configuration section of each example for specific requirements
+* Start with simple examples to understand the framework
+* Use specific example selection (`--example`) rather than running all examples
+* Monitor console output for execution progress and any warnings
+* Check the configuration section of each example for specific requirements
 
 ## Advanced Usage
 
@@ -215,14 +215,14 @@ dotnet run -- --example advanced-patterns,multi-agent,subgraphs
 
 ## See Also
 
-- **Reference**: [Examples Index](../examples/index.md)
-- **Guides**: [Getting Started](../getting-started.md), [Installation](../installation.md)
-- **Examples**: Individual example documentation for detailed explanations
-- **Configuration**: [Environment Setup](../how-to/environment-setup.md)
+* **Reference**: [Examples Index](../examples/index.md)
+* **Guides**: [Getting Started](../getting-started.md), [Installation](../installation.md)
+* **Examples**: Individual example documentation for detailed explanations
+* **Configuration**: [Environment Setup](../how-to/environment-setup.md)
 
 ## Reference APIs
 
-- **[Examples Index](../examples/index.md)**: Overview of available example types
-- **[Configuration Options](../how-to/environment-setup.md)**: Environment and configuration setup
-- **[CLI Interface](../examples/cli-interface.md)**: Command line interface documentation
-- **[Example Categories](../examples/index.md)**: Detailed breakdown of example types
+* **[Examples Index](../examples/index.md)**: Overview of available example types
+* **[Configuration Options](../how-to/environment-setup.md)**: Environment and configuration setup
+* **[CLI Interface](../examples/cli-interface.md)**: Command line interface documentation
+* **[Example Categories](../examples/index.md)**: Detailed breakdown of example types

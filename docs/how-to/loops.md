@@ -5,10 +5,10 @@ This guide explains how to implement iterative workflows using loop nodes in Sem
 ## Overview
 
 Loop nodes enable you to create iterative workflows that can:
-- **Repeat operations** until conditions are met
-- **Process collections** of data items
-- **Implement retry logic** with exponential backoff
-- **Control iteration flow** with break and continue statements
+* **Repeat operations** until conditions are met
+* **Process collections** of data items
+* **Implement retry logic** with exponential backoff
+* **Control iteration flow** with break and continue statements
 
 ## Basic Loop Types
 
@@ -479,9 +479,9 @@ var healthCheckLoop = new WhileGraphNode(
 
 ## See Also
 
-- [Build a Graph](build-a-graph.md) - Learn the fundamentals of graph construction
-- [Conditional Nodes](conditional-nodes.md) - Implement branching logic in your workflows
-- [Advanced Routing](advanced-routing.md) - Explore complex routing patterns
-- [State Management](../state-quickstart.md) - Understand how to manage data flow between nodes
-- [Error Handling and Resilience](error-handling-and-resilience.md) - Learn about error handling in loops
-- [Examples: Loop Workflows](../examples/loop-nodes-example.md) - Complete working examples of loop implementations
+* [Build a Graph](build-a-graph.md) - Learn the fundamentals of graph construction
+* [Conditional Nodes](conditional-nodes.md) - Implement branching logic in your workflows
+* [Advanced Routing](advanced-routing.md) - Explore complex routing patterns
+* [State Management](../state-quickstart.md) - Understand how to manage data flow between nodes
+* [Error Handling and Resilience](error-handling-and-resilience.md) - Learn about error handling in loops
+* [Examples: Loop Workflows](../examples/loop-nodes-example.md) - Complete working examples of loop implementations

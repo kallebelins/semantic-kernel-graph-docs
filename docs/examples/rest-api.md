@@ -5,37 +5,37 @@ This example demonstrates how to expose Semantic Kernel Graph workflows as REST 
 ## Objective
 
 Learn how to create REST APIs for graph execution in Semantic Kernel Graph to:
-- Expose graph workflows as HTTP endpoints
-- Enable remote graph execution with authentication
-- Provide graph discovery and management APIs
-- Integrate graph execution with web applications
-- Support external system integration via HTTP
+* Expose graph workflows as HTTP endpoints
+* Enable remote graph execution with authentication
+* Provide graph discovery and management APIs
+* Integrate graph execution with web applications
+* Support external system integration via HTTP
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- **ASP.NET Core** development experience
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [REST API Integration](../how-to/exposing-rest-apis.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* **ASP.NET Core** development experience
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [REST API Integration](../how-to/exposing-rest-apis.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **REST API Exposure**: HTTP endpoints for graph execution and management
-- **Graph Registry**: Centralized management of available graphs
-- **Remote Execution**: Graph execution from external systems
-- **Authentication**: API key-based access control
-- **Service Integration**: Integration with ASP.NET Core dependency injection
+* **REST API Exposure**: HTTP endpoints for graph execution and management
+* **Graph Registry**: Centralized management of available graphs
+* **Remote Execution**: Graph execution from external systems
+* **Authentication**: API key-based access control
+* **Service Integration**: Integration with ASP.NET Core dependency injection
 
 ### Core Classes
 
-- `WebApplication`: ASP.NET Core web application host
-- `IGraphRegistry`: Registry for managing available graphs
-- `IGraphExecutorFactory`: Factory for creating graph executors
-- `GraphRestApi`: REST API service for graph operations
-- `FunctionGraphNode`: Graph nodes for workflow execution
+* `WebApplication`: ASP.NET Core web application host
+* `IGraphRegistry`: Registry for managing available graphs
+* `IGraphExecutorFactory`: Factory for creating graph executors
+* `GraphRestApi`: REST API service for graph operations
+* `FunctionGraphNode`: Graph nodes for workflow execution
 
 ## Running the Example
 
@@ -314,12 +314,12 @@ builder.Services.Configure<GraphRestApiOptions>(options =>
 
 The example produces a running web server with:
 
-- 🌐 Web application running on http://localhost:5000
-- 📋 GET /graphs endpoint for graph discovery
-- 🚀 POST /graphs/execute endpoint for graph execution
-- 🔐 API key authentication support
-- 📊 Graph execution results and error handling
-- ✅ Complete REST API for graph management
+* 🌐 Web application running on http://localhost:5000
+* 📋 GET /graphs endpoint for graph discovery
+* 🚀 POST /graphs/execute endpoint for graph execution
+* 🔐 API key authentication support
+* 📊 Graph execution results and error handling
+* ✅ Complete REST API for graph management
 
 ## API Usage Examples
 
@@ -360,15 +360,15 @@ curl -X GET http://localhost:5000/graphs/sample-graph
 
 ### Debugging Tips
 
-- Enable detailed logging for service resolution and graph execution
-- Monitor HTTP request/response logs for API debugging
-- Verify graph registration and availability in the registry
-- Check authentication and authorization configuration
+* Enable detailed logging for service resolution and graph execution
+* Monitor HTTP request/response logs for API debugging
+* Verify graph registration and availability in the registry
+* Check authentication and authorization configuration
 
 ## See Also
 
-- [Exposing REST APIs](../how-to/exposing-rest-apis.md)
-- [Graph Registry](../concepts/graph-registry.md)
-- [Service Integration](../how-to/integration-and-extensions.md)
-- [Authentication and Security](../how-to/security-and-data.md)
-- [Streaming Execution](../concepts/streaming.md)
+* [Exposing REST APIs](../how-to/exposing-rest-apis.md)
+* [Graph Registry](../concepts/graph-registry.md)
+* [Service Integration](../how-to/integration-and-extensions.md)
+* [Authentication and Security](../how-to/security-and-data.md)
+* [Streaming Execution](../concepts/streaming.md)

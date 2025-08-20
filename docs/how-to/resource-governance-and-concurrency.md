@@ -4,12 +4,12 @@ Resource governance and concurrency management in SemanticKernel.Graph provide f
 
 ## What You'll Learn
 
-- How to configure resource governance with CPU and memory limits
-- Setting execution priorities and managing node costs
-- Configuring parallel execution with fork/join patterns
-- Implementing adaptive rate limiting and backpressure
-- Managing resource budgets and preventing exhaustion
-- Best practices for production resource management
+* How to configure resource governance with CPU and memory limits
+* Setting execution priorities and managing node costs
+* Configuring parallel execution with fork/join patterns
+* Implementing adaptive rate limiting and backpressure
+* Managing resource budgets and preventing exhaustion
+* Best practices for production resource management
 
 ## Concepts and Techniques
 
@@ -27,10 +27,10 @@ Resource governance and concurrency management in SemanticKernel.Graph provide f
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of graph execution concepts
-- Familiarity with parallel programming concepts
-- Understanding of resource management principles
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of graph execution concepts
+* Familiarity with parallel programming concepts
+* Understanding of resource management principles
 
 ## Resource Governance Configuration
 
@@ -498,35 +498,35 @@ graph.ConfigureConcurrency(cpuOptimizedOptions);
 
 ### Resource Governance Configuration
 
-- **Start Conservative**: Begin with lower permit rates and increase based on performance
-- **Monitor System Load**: Use metrics integration for automatic adaptation
-- **Set Reasonable Thresholds**: CPU thresholds should align with your SLOs
-- **Memory Management**: Set memory thresholds based on available system resources
-- **Priority Strategy**: Use priorities to ensure critical work gets resources
+* **Start Conservative**: Begin with lower permit rates and increase based on performance
+* **Monitor System Load**: Use metrics integration for automatic adaptation
+* **Set Reasonable Thresholds**: CPU thresholds should align with your SLOs
+* **Memory Management**: Set memory thresholds based on available system resources
+* **Priority Strategy**: Use priorities to ensure critical work gets resources
 
 ### Parallel Execution
 
-- **Identify Independent Branches**: Only parallelize truly independent work
-- **Manage State Conflicts**: Choose appropriate merge conflict policies
-- **Limit Parallelism**: Don't exceed reasonable parallelism limits
-- **Handle Cycles**: Use fallback to sequential execution for complex cycles
-- **Resource Coordination**: Ensure resource governance works with parallel execution
+* **Identify Independent Branches**: Only parallelize truly independent work
+* **Manage State Conflicts**: Choose appropriate merge conflict policies
+* **Limit Parallelism**: Don't exceed reasonable parallelism limits
+* **Handle Cycles**: Use fallback to sequential execution for complex cycles
+* **Resource Coordination**: Ensure resource governance works with parallel execution
 
 ### Performance Tuning
 
-- **Profile Your Workload**: Understand resource consumption patterns
-- **Adjust Burst Sizes**: Balance responsiveness with stability
-- **Monitor Exhaustion**: Track budget exhaustion events
-- **Adapt to Load**: Use automatic load adaptation when possible
-- **Test Under Load**: Validate performance under expected load conditions
+* **Profile Your Workload**: Understand resource consumption patterns
+* **Adjust Burst Sizes**: Balance responsiveness with stability
+* **Monitor Exhaustion**: Track budget exhaustion events
+* **Adapt to Load**: Use automatic load adaptation when possible
+* **Test Under Load**: Validate performance under expected load conditions
 
 ### Production Considerations
 
-- **Resource Limits**: Set conservative limits for production stability
-- **Monitoring**: Implement comprehensive resource monitoring
-- **Alerting**: Set up alerts for resource exhaustion
-- **Scaling**: Plan for horizontal scaling when resource limits are reached
-- **Fallbacks**: Implement graceful degradation when resources are constrained
+* **Resource Limits**: Set conservative limits for production stability
+* **Monitoring**: Implement comprehensive resource monitoring
+* **Alerting**: Set up alerts for resource exhaustion
+* **Scaling**: Plan for horizontal scaling when resource limits are reached
+* **Fallbacks**: Implement graceful degradation when resources are constrained
 
 ## Troubleshooting
 
@@ -561,7 +561,7 @@ graph.ConfigureResources(optimizedOptions);
 
 ## See Also
 
-- [Metrics and Observability](metrics-and-observability.md) - Monitoring resource usage and performance
-- [Graph Execution](../concepts/execution.md) - Understanding execution lifecycle and patterns
-- [State Management](../concepts/state.md) - Managing state in parallel execution
-- [Examples](../../examples/) - Practical examples of resource governance and concurrency
+* [Metrics and Observability](metrics-and-observability.md) - Monitoring resource usage and performance
+* [Graph Execution](../concepts/execution.md) - Understanding execution lifecycle and patterns
+* [State Management](../concepts/state.md) - Managing state in parallel execution
+* [Examples](../../examples/) - Practical examples of resource governance and concurrency

@@ -21,10 +21,10 @@ IGraphExecutionEventStream ExecuteStreamAsync(
 Executes a graph and returns a stream of execution events.
 
 **Parameters:**
-- `kernel`: Semantic kernel instance
-- `arguments`: Initial arguments for execution
-- `options`: Optional streaming execution options
-- `cancellationToken`: Cancellation token
+* `kernel`: Semantic kernel instance
+* `arguments`: Initial arguments for execution
+* `options`: Optional streaming execution options
+* `cancellationToken`: Cancellation token
 
 **Returns:** Stream of execution events
 
@@ -42,11 +42,11 @@ IGraphExecutionEventStream ExecuteStreamFromAsync(
 Executes a graph starting from a specific node and returns a stream of execution events.
 
 **Parameters:**
-- `startNodeId`: ID of the node to start from
-- `kernel`: Semantic kernel instance
-- `arguments`: Initial arguments for execution
-- `options`: Optional streaming execution options
-- `cancellationToken`: Cancellation token
+* `startNodeId`: ID of the node to start from
+* `kernel`: Semantic kernel instance
+* `arguments`: Initial arguments for execution
+* `options`: Optional streaming execution options
+* `cancellationToken`: Cancellation token
 
 **Returns:** Stream of execution events
 
@@ -56,18 +56,18 @@ Represents a stream of graph execution events in real-time. Provides asynchronou
 
 ### Properties
 
-- `ExecutionId`: Gets the execution identifier for this stream
-- `Status`: Gets the current status of the execution stream
-- `CreatedAt`: Gets the timestamp when the stream was created
-- `EventCount`: Gets the total number of events emitted by this stream
-- `IsCompleted`: Indicates whether the stream has completed
-- `CompletionResult`: Gets the completion result (if completed)
+* `ExecutionId`: Gets the execution identifier for this stream
+* `Status`: Gets the current status of the execution stream
+* `CreatedAt`: Gets the timestamp when the stream was created
+* `EventCount`: Gets the total number of events emitted by this stream
+* `IsCompleted`: Indicates whether the stream has completed
+* `CompletionResult`: Gets the completion result (if completed)
 
 ### Events
 
-- `StatusChanged`: Event fired when the stream status changes
-- `EventEmitted`: Event fired when a new event is emitted to the stream
-- `SerializedEventEmitted`: Event fired when a serialized payload for an event is available
+* `StatusChanged`: Event fired when the stream status changes
+* `EventEmitted`: Event fired when a new event is emitted to the stream
+* `SerializedEventEmitted`: Event fired when a serialized payload for an event is available
 
 ### Methods
 
@@ -80,7 +80,7 @@ Task<StreamCompletionResult> WaitForCompletionAsync(TimeSpan timeout)
 Waits for the stream to complete with a timeout.
 
 **Parameters:**
-- `timeout`: Maximum time to wait for completion
+* `timeout`: Maximum time to wait for completion
 
 **Returns:** Completion result
 
@@ -147,12 +147,12 @@ Base class for all graph execution events in the streaming system.
 
 ### Properties
 
-- `EventId`: Unique identifier for this event
-- `ExecutionId`: Execution identifier this event belongs to
-- `Timestamp`: Timestamp when this event occurred
-- `EventType`: Type of this event
-- `HighPrecisionTimestamp`: Monotonic high-precision timestamp (Stopwatch ticks)
-- `HighPrecisionFrequency`: Frequency of the high-precision timer
+* `EventId`: Unique identifier for this event
+* `ExecutionId`: Execution identifier this event belongs to
+* `Timestamp`: Timestamp when this event occurred
+* `EventType`: Type of this event
+* `HighPrecisionTimestamp`: Monotonic high-precision timestamp (Stopwatch ticks)
+* `HighPrecisionFrequency`: Frequency of the high-precision timer
 
 ## Event Types
 
@@ -163,37 +163,37 @@ Base class for all graph execution events in the streaming system.
 Fired when graph execution starts.
 
 **Properties:**
-- `StartNode`: Starting node for execution
-- `InitialState`: Initial graph state
+* `StartNode`: Starting node for execution
+* `InitialState`: Initial graph state
 
 #### GraphExecutionCompletedEvent
 
 Fired when graph execution completes successfully.
 
 **Properties:**
-- `FinalResult`: Final execution result
-- `FinalState`: Final graph state
-- `TotalDuration`: Total execution duration
-- `NodesExecuted`: Number of nodes executed
+* `FinalResult`: Final execution result
+* `FinalState`: Final graph state
+* `TotalDuration`: Total execution duration
+* `NodesExecuted`: Number of nodes executed
 
 #### GraphExecutionFailedEvent
 
 Fired when graph execution fails.
 
 **Properties:**
-- `Exception`: Exception that caused the failure
-- `FinalState`: Final graph state
-- `TotalDuration`: Total execution duration
-- `NodesExecuted`: Number of nodes executed before failure
+* `Exception`: Exception that caused the failure
+* `FinalState`: Final graph state
+* `TotalDuration`: Total execution duration
+* `NodesExecuted`: Number of nodes executed before failure
 
 #### GraphExecutionCancelledEvent
 
 Fired when graph execution is cancelled.
 
 **Properties:**
-- `FinalState`: Final graph state
-- `TotalDuration`: Total execution duration
-- `NodesExecuted`: Number of nodes executed before cancellation
+* `FinalState`: Final graph state
+* `TotalDuration`: Total execution duration
+* `NodesExecuted`: Number of nodes executed before cancellation
 
 ### Node Events
 
@@ -202,44 +202,44 @@ Fired when graph execution is cancelled.
 Fired when a node starts executing.
 
 **Properties:**
-- `Node`: Node that started executing
-- `CurrentState`: Current graph state
+* `Node`: Node that started executing
+* `CurrentState`: Current graph state
 
 #### NodeExecutionCompletedEvent
 
 Fired when a node completes execution successfully.
 
 **Properties:**
-- `Node`: Node that completed execution
-- `Result`: Execution result
-- `UpdatedState`: Updated graph state after node execution
-- `ExecutionDuration`: Duration of node execution
+* `Node`: Node that completed execution
+* `Result`: Execution result
+* `UpdatedState`: Updated graph state after node execution
+* `ExecutionDuration`: Duration of node execution
 
 #### NodeExecutionFailedEvent
 
 Fired when a node fails execution.
 
 **Properties:**
-- `Node`: Node that failed execution
-- `Exception`: Exception that occurred during execution
-- `CurrentState`: Current graph state at the time of failure
-- `ExecutionDuration`: Duration of execution before failure
+* `Node`: Node that failed execution
+* `Exception`: Exception that occurred during execution
+* `CurrentState`: Current graph state at the time of failure
+* `ExecutionDuration`: Duration of execution before failure
 
 #### NodeEnteredEvent
 
 Fired when the executor enters a node (selected as current node).
 
 **Properties:**
-- `Node`: Node that was entered
-- `CurrentState`: Current graph state upon entering the node
+* `Node`: Node that was entered
+* `CurrentState`: Current graph state upon entering the node
 
 #### NodeExitedEvent
 
 Fired when the executor exits a node (after navigation decision).
 
 **Properties:**
-- `Node`: Node that was exited
-- `UpdatedState`: Updated graph state upon exiting the node
+* `Node`: Node that was exited
+* `UpdatedState`: Updated graph state upon exiting the node
 
 ### Conditional and Control Events
 
@@ -248,25 +248,25 @@ Fired when the executor exits a node (after navigation decision).
 Fired when a condition is evaluated by a conditional node.
 
 **Properties:**
-- `NodeId`: ID of the conditional node
-- `NodeName`: Name of the conditional node
-- `Expression`: Evaluated expression (if template-based)
-- `Result`: Boolean evaluation result
-- `EvaluationDuration`: Time taken to evaluate the condition
-- `State`: Graph state at evaluation time
+* `NodeId`: ID of the conditional node
+* `NodeName`: Name of the conditional node
+* `Expression`: Evaluated expression (if template-based)
+* `Result`: Boolean evaluation result
+* `EvaluationDuration`: Time taken to evaluate the condition
+* `State`: Graph state at evaluation time
 
 #### StateMergeConflictEvent
 
 Fired when a state merge conflict is detected during execution.
 
 **Properties:**
-- `ConflictKey`: Parameter key where conflict occurred
-- `BaseValue`: Value from base state
-- `OverlayValue`: Value from overlay state
-- `ConflictPolicy`: Merge policy that detected the conflict
-- `ResolvedValue`: Value used after conflict resolution
-- `NodeId`: Node ID where conflict occurred
-- `WasResolved`: Whether the conflict was resolved automatically
+* `ConflictKey`: Parameter key where conflict occurred
+* `BaseValue`: Value from base state
+* `OverlayValue`: Value from overlay state
+* `ConflictPolicy`: Merge policy that detected the conflict
+* `ResolvedValue`: Value used after conflict resolution
+* `NodeId`: Node ID where conflict occurred
+* `WasResolved`: Whether the conflict was resolved automatically
 
 ### Circuit Breaker Events
 
@@ -275,28 +275,28 @@ Fired when a state merge conflict is detected during execution.
 Fired when a circuit breaker state changes.
 
 **Properties:**
-- `NodeId`: Node identifier
-- `OldState`: Previous circuit breaker state
-- `NewState`: New circuit breaker state
+* `NodeId`: Node identifier
+* `OldState`: Previous circuit breaker state
+* `NewState`: New circuit breaker state
 
 #### CircuitBreakerOperationAttemptedEvent
 
 Fired when a circuit breaker operation is attempted.
 
 **Properties:**
-- `NodeId`: Node identifier
-- `OperationType`: Type of operation attempted
-- `CircuitState`: Current circuit breaker state
+* `NodeId`: Node identifier
+* `OperationType`: Type of operation attempted
+* `CircuitState`: Current circuit breaker state
 
 #### CircuitBreakerOperationBlockedEvent
 
 Fired when a circuit breaker blocks an operation.
 
 **Properties:**
-- `NodeId`: Node identifier
-- `Reason`: Reason for blocking the operation
-- `CircuitState`: Current circuit breaker state
-- `FailureCount`: Current failure count
+* `NodeId`: Node identifier
+* `Reason`: Reason for blocking the operation
+* `CircuitState`: Current circuit breaker state
+* `FailureCount`: Current failure count
 
 ### Resource and Error Policy Events
 
@@ -305,29 +305,29 @@ Fired when a circuit breaker blocks an operation.
 Fired when resource budget is exhausted.
 
 **Properties:**
-- `NodeId`: Node identifier
-- `ResourceType`: Type of resource that was exhausted
-- `RequestedAmount`: Amount of resource requested
-- `AvailableAmount`: Amount of resource available
+* `NodeId`: Node identifier
+* `ResourceType`: Type of resource that was exhausted
+* `RequestedAmount`: Amount of resource requested
+* `AvailableAmount`: Amount of resource available
 
 #### RetryScheduledEvent
 
 Fired when a retry is scheduled due to an error policy decision.
 
 **Properties:**
-- `NodeId`: Node identifier
-- `NodeName`: Node name
-- `AttemptNumber`: Retry attempt number
-- `Delay`: Optional delay before retry
+* `NodeId`: Node identifier
+* `NodeName`: Node name
+* `AttemptNumber`: Retry attempt number
+* `Delay`: Optional delay before retry
 
 #### NodeSkippedDueToErrorPolicyEvent
 
 Fired when a node is skipped due to an error policy decision.
 
 **Properties:**
-- `NodeId`: Node identifier
-- `NodeName`: Node name
-- `Reason`: Reason for skipping the node
+* `NodeId`: Node identifier
+* `NodeName`: Node name
+* `Reason`: Reason for skipping the node
 
 ## GraphExecutionEventType Enum
 
@@ -369,11 +369,11 @@ public StreamingGraphExecutor(GraphExecutor executor)
 
 ### Properties
 
-- `Name`: Name of the graph
-- `Description`: Description of the graph
-- `GraphId`: Unique identifier for the graph
-- `IsReadyForExecution`: Whether the graph is ready for execution
-- `NodeCount`: Number of nodes in the graph
+* `Name`: Name of the graph
+* `Description`: Description of the graph
+* `GraphId`: Unique identifier for the graph
+* `IsReadyForExecution`: Whether the graph is ready for execution
+* `NodeCount`: Number of nodes in the graph
 
 ### Methods
 
@@ -471,16 +471,16 @@ All execution events include correlation identifiers that link them to their cor
 
 #### Execution Correlation
 
-- **`ExecutionId`**: Unique identifier for each graph execution run
-- **`GraphId`**: Stable identifier for the graph definition
-- **`EventId`**: Unique identifier for each individual event
+* **`ExecutionId`**: Unique identifier for each graph execution run
+* **`GraphId`**: Stable identifier for the graph definition
+* **`EventId`**: Unique identifier for each individual event
 
 #### Node Correlation
 
-- **`NodeId`**: Stable identifier for the specific node
-- **`NodeName`**: Human-readable name for the node
-- **`Timestamp`**: Precise timestamp when the event occurred
-- **`HighPrecisionTimestamp`**: Monotonic timestamp for precise ordering
+* **`NodeId`**: Stable identifier for the specific node
+* **`NodeName`**: Human-readable name for the node
+* **`Timestamp`**: Precise timestamp when the event occurred
+* **`HighPrecisionTimestamp`**: Monotonic timestamp for precise ordering
 
 ### Multi-Agent Distributed Tracing
 
@@ -561,9 +561,9 @@ public class GraphExecutionEvent
 
 ## See Also
 
-- [Streaming Quickstart](../streaming-quickstart.md) - Get started with streaming execution
-- [Streaming Concepts](../concepts/streaming.md) - Deep dive into streaming concepts
-- [Streaming Examples](../examples/streaming-execution.md) - Practical streaming examples
-- [GraphExecutor Reference](./graph-executor.md) - Core graph execution APIs
-- [State Management Reference](./state.md) - Graph state and serialization
-- [Metrics and Observability](../how-to/metrics-and-observability.md) - Comprehensive observability guide
+* [Streaming Quickstart](../streaming-quickstart.md) - Get started with streaming execution
+* [Streaming Concepts](../concepts/streaming.md) - Deep dive into streaming concepts
+* [Streaming Examples](../examples/streaming-execution.md) - Practical streaming examples
+* [GraphExecutor Reference](./graph-executor.md) - Core graph execution APIs
+* [State Management Reference](./state.md) - Graph state and serialization
+* [Metrics and Observability](../how-to/metrics-and-observability.md) - Comprehensive observability guide

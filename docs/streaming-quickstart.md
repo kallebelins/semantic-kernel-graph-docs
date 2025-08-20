@@ -4,11 +4,11 @@ This quick tutorial will teach you how to use streaming execution in SemanticKer
 
 ## What You'll Learn
 
-- Creating and configuring `StreamingGraphExecutor`
-- Consuming real-time execution events
-- Filtering and buffering event streams
-- Handling streaming completion and errors
-- Real-time monitoring of graph execution
+* Creating and configuring `StreamingGraphExecutor`
+* Consuming real-time execution events
+* Filtering and buffering event streams
+* Handling streaming completion and errors
+* Real-time monitoring of graph execution
 
 ## Concepts and Techniques
 
@@ -22,10 +22,10 @@ This quick tutorial will teach you how to use streaming execution in SemanticKer
 
 ## Prerequisites
 
-- [First Graph Tutorial](first-graph-5-minutes.md) completed
-- [State Quickstart](state-quickstart.md) completed
-- [Conditional Nodes Quickstart](conditional-nodes-quickstart.md) completed
-- Basic understanding of SemanticKernel.Graph concepts
+* [First Graph Tutorial](first-graph-5-minutes.md) completed
+* [State Quickstart](state-quickstart.md) completed
+* [Conditional Nodes Quickstart](conditional-nodes-quickstart.md) completed
+* Basic understanding of SemanticKernel.Graph concepts
 
 ## Step 1: Basic Streaming Setup
 
@@ -521,12 +521,12 @@ Filters specific event types and buffers events for high-throughput scenarios.
 
 ## Key Concepts
 
-- **StreamingGraphExecutor**: Executes graphs while emitting real-time events
-- **IGraphExecutionEventStream**: Provides asynchronous iteration over execution events
-- **GraphExecutionEvent**: Base class for all execution events (started, completed, failed, etc.)
-- **Event Filtering**: Select specific event types for monitoring
-- **Event Buffering**: Batch processing of events for performance
-- **Real-Time Monitoring**: Observing execution progress as it happens
+* **StreamingGraphExecutor**: Executes graphs while emitting real-time events
+* **IGraphExecutionEventStream**: Provides asynchronous iteration over execution events
+* **GraphExecutionEvent**: Base class for all execution events (started, completed, failed, etc.)
+* **Event Filtering**: Select specific event types for monitoring
+* **Event Buffering**: Batch processing of events for performance
+* **Real-Time Monitoring**: Observing execution progress as it happens
 
 ## Common Patterns
 
@@ -597,42 +597,42 @@ Event sequence is not chronological
 
 ## Next Steps
 
-- **[Streaming Tutorial](streaming-tutorial.md)**: Advanced streaming patterns and best practices
-- **[Event Handling](how-to/event-handling.md)**: Custom event handlers and processing
-- **[Performance Optimization](how-to/streaming-performance.md)**: High-throughput streaming scenarios
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[Streaming Tutorial](streaming-tutorial.md)**: Advanced streaming patterns and best practices
+* **[Event Handling](how-to/event-handling.md)**: Custom event handlers and processing
+* **[Performance Optimization](how-to/streaming-performance.md)**: High-throughput streaming scenarios
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
 
 ## Concepts and Techniques
 
 This tutorial introduces several key concepts:
 
-- **Streaming Execution**: Real-time monitoring of graph execution progress
-- **Event Streams**: Asynchronous consumption of execution events
-- **Event Types**: Different categories of execution events (started, completed, failed)
-- **Event Filtering**: Selective monitoring of specific event types
-- **Event Buffering**: Batch processing of events for performance
-- **Real-Time Monitoring**: Observing execution progress as it happens
+* **Streaming Execution**: Real-time monitoring of graph execution progress
+* **Event Streams**: Asynchronous consumption of execution events
+* **Event Types**: Different categories of execution events (started, completed, failed)
+* **Event Filtering**: Selective monitoring of specific event types
+* **Event Buffering**: Batch processing of events for performance
+* **Real-Time Monitoring**: Observing execution progress as it happens
 
 ## Prerequisites and Minimum Configuration
 
 To complete this tutorial, you need:
-- **.NET 8.0+** runtime and SDK
-- **SemanticKernel.Graph** package installed
-- **LLM Provider** configured with valid API keys
-- **Environment Variables** set up for your API credentials
+* **.NET 8.0+** runtime and SDK
+* **SemanticKernel.Graph** package installed
+* **LLM Provider** configured with valid API keys
+* **Environment Variables** set up for your API credentials
 
 ## See Also
 
-- **[First Graph Tutorial](first-graph-5-minutes.md)**: Create your first graph workflow
-- **[State Quickstart](state-quickstart.md)**: Manage data flow between nodes
-- **[Conditional Nodes Quickstart](conditional-nodes-quickstart.md)**: Add decision-making to workflows
-- **[Streaming Tutorial](streaming-tutorial.md)**: Advanced streaming concepts
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
-- **[API Reference](api/streaming.md)**: Complete streaming API documentation
+* **[First Graph Tutorial](first-graph-5-minutes.md)**: Create your first graph workflow
+* **[State Quickstart](state-quickstart.md)**: Manage data flow between nodes
+* **[Conditional Nodes Quickstart](conditional-nodes-quickstart.md)**: Add decision-making to workflows
+* **[Streaming Tutorial](streaming-tutorial.md)**: Advanced streaming concepts
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[API Reference](api/streaming.md)**: Complete streaming API documentation
 
 ## Reference APIs
 
-- **[StreamingGraphExecutor](../api/streaming.md#streaming-graph-executor)**: Streaming execution engine
-- **[IGraphExecutionEventStream](../api/streaming.md#igraph-execution-event-stream)**: Event stream interface
-- **[GraphExecutionEvent](../api/streaming.md#graph-execution-event)**: Execution event types
-- **[StreamingExecutionOptions](../api/streaming.md#streaming-execution-options)**: Streaming configuration
+* **[StreamingGraphExecutor](../api/streaming.md#streaming-graph-executor)**: Streaming execution engine
+* **[IGraphExecutionEventStream](../api/streaming.md#igraph-execution-event-stream)**: Event stream interface
+* **[GraphExecutionEvent](../api/streaming.md#graph-execution-event)**: Execution event types
+* **[StreamingExecutionOptions](../api/streaming.md#streaming-execution-options)**: Streaming configuration

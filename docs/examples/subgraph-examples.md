@@ -5,37 +5,37 @@ This example demonstrates subgraph composition capabilities in Semantic Kernel G
 ## Objective
 
 Learn how to implement subgraph composition in graph-based workflows to:
-- Create reusable subgraphs with isolated execution contexts
-- Implement input/output mapping between parent and child graphs
-- Use different isolation modes (IsolatedClone, ScopedPrefix)
-- Handle state merging and conflict resolution
-- Build modular and composable graph architectures
+* Create reusable subgraphs with isolated execution contexts
+* Implement input/output mapping between parent and child graphs
+* Use different isolation modes (IsolatedClone, ScopedPrefix)
+* Handle state merging and conflict resolution
+* Build modular and composable graph architectures
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Subgraph Composition](../concepts/subgraphs.md)
-- Familiarity with [State Management](../concepts/state.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Subgraph Composition](../concepts/subgraphs.md)
+* Familiarity with [State Management](../concepts/state.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Subgraph Composition**: Building complex graphs from simpler, reusable components
-- **Isolation Modes**: Different strategies for isolating subgraph execution contexts
-- **Input/Output Mapping**: Transforming data between parent and child graph contexts
-- **State Merging**: Combining execution results from subgraphs with parent state
-- **Conflict Resolution**: Handling state conflicts during subgraph execution
+* **Subgraph Composition**: Building complex graphs from simpler, reusable components
+* **Isolation Modes**: Different strategies for isolating subgraph execution contexts
+* **Input/Output Mapping**: Transforming data between parent and child graph contexts
+* **State Merging**: Combining execution results from subgraphs with parent state
+* **Conflict Resolution**: Handling state conflicts during subgraph execution
 
 ### Core Classes
 
-- `GraphExecutor`: Base executor for both parent and child graphs
-- `SubgraphGraphNode`: Node that executes subgraphs with configuration
-- `SubgraphConfiguration`: Configuration for subgraph behavior and mappings
-- `FunctionGraphNode`: Nodes within subgraphs for specific functionality
-- `SubgraphIsolationMode`: Enumeration of isolation strategies
+* `GraphExecutor`: Base executor for both parent and child graphs
+* `SubgraphGraphNode`: Node that executes subgraphs with configuration
+* `SubgraphConfiguration`: Configuration for subgraph behavior and mappings
+* `FunctionGraphNode`: Nodes within subgraphs for specific functionality
+* `SubgraphIsolationMode`: Enumeration of isolation strategies
 
 ## Running the Example
 
@@ -357,12 +357,12 @@ var subgraphSelector = new FunctionGraphNode(
 
 The examples produce comprehensive output showing:
 
-- 🔢 IsolatedClone subgraph execution with explicit mappings
-- 🔀 ScopedPrefix subgraph execution with automatic prefixing
-- 📊 State transformation and mapping results
-- 🔄 State merging and conflict resolution
-- ✅ Complete subgraph workflow execution
-- 📈 Modular graph composition capabilities
+* 🔢 IsolatedClone subgraph execution with explicit mappings
+* 🔀 ScopedPrefix subgraph execution with automatic prefixing
+* 📊 State transformation and mapping results
+* 🔄 State merging and conflict resolution
+* ✅ Complete subgraph workflow execution
+* 📈 Modular graph composition capabilities
 
 ## Troubleshooting
 
@@ -375,15 +375,15 @@ The examples produce comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging for subgraph execution
-- Verify state mapping configurations and transformations
-- Monitor state isolation and merging behavior
-- Check subgraph configuration and isolation mode settings
+* Enable detailed logging for subgraph execution
+* Verify state mapping configurations and transformations
+* Monitor state isolation and merging behavior
+* Check subgraph configuration and isolation mode settings
 
 ## See Also
 
-- [Subgraph Composition](../concepts/subgraphs.md)
-- [State Management](../concepts/state.md)
-- [Graph Composition](../how-to/graph-composition.md)
-- [State Mapping](../concepts/state-mapping.md)
-- [Modular Architecture](../patterns/modular-architecture.md)
+* [Subgraph Composition](../concepts/subgraphs.md)
+* [State Management](../concepts/state.md)
+* [Graph Composition](../how-to/graph-composition.md)
+* [State Mapping](../concepts/state-mapping.md)
+* [Modular Architecture](../patterns/modular-architecture.md)

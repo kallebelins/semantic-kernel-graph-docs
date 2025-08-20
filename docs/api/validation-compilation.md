@@ -12,12 +12,12 @@ This validator performs non-throwing checks and aggregates issues into a `Valida
 
 ### Key Features
 
-- **Structural Validation**: ID uniqueness, dependency integrity, and cycle detection
-- **Agent Capability Validation**: Ensures required capabilities are available
-- **Capacity Validation**: Validates agent capacity configurations
-- **Resource Governance Validation**: Checks resource configuration sanity
-- **Comprehensive Reporting**: Aggregates errors, warnings, and recommendations
-- **Non-Throwing Design**: Safe validation without exceptions
+* **Structural Validation**: ID uniqueness, dependency integrity, and cycle detection
+* **Agent Capability Validation**: Ensures required capabilities are available
+* **Capacity Validation**: Validates agent capacity configurations
+* **Resource Governance Validation**: Checks resource configuration sanity
+* **Comprehensive Reporting**: Aggregates errors, warnings, and recommendations
+* **Non-Throwing Design**: Safe validation without exceptions
 
 ### Configuration
 
@@ -174,11 +174,11 @@ This static engine provides conservative, name-based type inference that examine
 
 ### Key Features
 
-- **Conservative Inference**: Only infers types when confident about relationships
-- **Name-based Propagation**: Maps parameters by name across node boundaries
-- **Upstream Analysis**: Examines predecessor nodes for type information
-- **Fallback Handling**: Provides untyped fallbacks when type information unavailable
-- **Static Analysis**: Compile-time type inference without runtime overhead
+* **Conservative Inference**: Only infers types when confident about relationships
+* **Name-based Propagation**: Maps parameters by name across node boundaries
+* **Upstream Analysis**: Examines predecessor nodes for type information
+* **Fallback Handling**: Provides untyped fallbacks when type information unavailable
+* **Static Analysis**: Compile-time type inference without runtime overhead
 
 ### Type Inference
 
@@ -257,11 +257,11 @@ This static validator performs multiple validation categories including basic pr
 
 ### Key Features
 
-- **Comprehensive Validation**: Full state integrity checking
-- **Critical Property Validation**: Fast validation of essential properties
-- **Size and Memory Validation**: Prevents excessive resource usage
-- **History Validation**: Ensures execution history integrity
-- **Version Compatibility**: Checks state version requirements
+* **Comprehensive Validation**: Full state integrity checking
+* **Critical Property Validation**: Fast validation of essential properties
+* **Size and Memory Validation**: Prevents excessive resource usage
+* **History Validation**: Ensures execution history integrity
+* **Version Compatibility**: Checks state version requirements
 
 ### State Validation
 
@@ -655,9 +655,9 @@ catch (ValidationException ex)
 
 ## See Also
 
-- [Schema Typing and Validation Guide](../how-to/schema-typing-and-validation.md) - Comprehensive guide to implementing schema validation
-- [State and Serialization Reference](state-and-serialization.md) - State management and merge operations
-- [Multi-Agent Reference](multi-agent.md) - Workflow validation in multi-agent systems
-- [Graph Executor Reference](graph-executor.md) - Graph integrity validation
-- [Integration Reference](integration.md) - External system validation
-- [Validation Examples](../examples/validation-examples.md) - Practical examples of validation implementations
+* [Schema Typing and Validation Guide](../how-to/schema-typing-and-validation.md) - Comprehensive guide to implementing schema validation
+* [State and Serialization Reference](state-and-serialization.md) - State management and merge operations
+* [Multi-Agent Reference](multi-agent.md) - Workflow validation in multi-agent systems
+* [Graph Executor Reference](graph-executor.md) - Graph integrity validation
+* [Integration Reference](integration.md) - External system validation
+* [Validation Examples](../examples/validation-examples.md) - Practical examples of validation implementations

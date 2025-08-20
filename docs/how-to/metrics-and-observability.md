@@ -4,12 +4,12 @@ Metrics and observability in SemanticKernel.Graph provide comprehensive insights
 
 ## What You'll Learn
 
-- How to configure and enable comprehensive metrics collection
-- Understanding node-level and path-level performance metrics
-- Exporting metrics to various monitoring systems and dashboards
-- Setting up execution tracing and correlation
-- Monitoring system resources and performance indicators
-- Best practices for production observability
+* How to configure and enable comprehensive metrics collection
+* Understanding node-level and path-level performance metrics
+* Exporting metrics to various monitoring systems and dashboards
+* Setting up execution tracing and correlation
+* Monitoring system resources and performance indicators
+* Best practices for production observability
 
 ## Concepts and Techniques
 
@@ -27,10 +27,10 @@ Metrics and observability in SemanticKernel.Graph provide comprehensive insights
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of graph execution concepts
-- Familiarity with metrics and monitoring concepts
-- Microsoft.Extensions.Logging configured (optional but recommended)
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of graph execution concepts
+* Familiarity with metrics and monitoring concepts
+* Microsoft.Extensions.Logging configured (optional but recommended)
 
 ## Enabling Metrics Collection
 
@@ -588,31 +588,31 @@ var alerting = new PerformanceAlerting(graph);
 
 ### Metrics Configuration
 
-- **Development**: Use `CreateDevelopmentOptions()` for detailed debugging
-- **Production**: Use `CreateProductionOptions()` for performance optimization
-- **High-Throughput**: Use `CreatePerformanceOptions()` for minimal overhead
-- **Resource Monitoring**: Enable only when needed to avoid performance impact
+* **Development**: Use `CreateDevelopmentOptions()` for detailed debugging
+* **Production**: Use `CreateProductionOptions()` for performance optimization
+* **High-Throughput**: Use `CreatePerformanceOptions()` for minimal overhead
+* **Resource Monitoring**: Enable only when needed to avoid performance impact
 
 ### Performance Monitoring
 
-- **Sampling Intervals**: Balance accuracy with performance (5-30 seconds for resources)
-- **Retention Periods**: Keep metrics long enough for trend analysis (7-30 days)
-- **Percentile Tracking**: Focus on p95 and p99 for latency monitoring
-- **Path Analysis**: Monitor execution paths for optimization opportunities
+* **Sampling Intervals**: Balance accuracy with performance (5-30 seconds for resources)
+* **Retention Periods**: Keep metrics long enough for trend analysis (7-30 days)
+* **Percentile Tracking**: Focus on p95 and p99 for latency monitoring
+* **Path Analysis**: Monitor execution paths for optimization opportunities
 
 ### Export and Integration
 
-- **Prometheus**: Use for Kubernetes and cloud-native monitoring
-- **Grafana**: Export dashboard-ready metrics for visualization
-- **Custom Dashboards**: Use JSON export for web-based monitoring
-- **Alerting**: Set up automated alerts for critical performance issues
+* **Prometheus**: Use for Kubernetes and cloud-native monitoring
+* **Grafana**: Export dashboard-ready metrics for visualization
+* **Custom Dashboards**: Use JSON export for web-based monitoring
+* **Alerting**: Set up automated alerts for critical performance issues
 
 ### Tracing and Correlation
 
-- **Correlation IDs**: Use stable IDs for linking spans and events
-- **Span Naming**: Use descriptive names for better observability
-- **Tag Strategy**: Add business context to tracing spans
-- **Sampling**: Configure appropriate sampling rates for production
+* **Correlation IDs**: Use stable IDs for linking spans and events
+* **Span Naming**: Use descriptive names for better observability
+* **Tag Strategy**: Add business context to tracing spans
+* **Sampling**: Configure appropriate sampling rates for production
 
 ## Troubleshooting
 
@@ -648,7 +648,7 @@ graph.ConfigureMetrics(optimizedOptions);
 
 ## See Also
 
-- [Debug and Inspection](debug-and-inspection.md) - Using metrics for debugging and analysis
-- [State Management](../concepts/state.md) - Understanding execution state and context
-- [Graph Execution](../concepts/execution.md) - Execution lifecycle and performance
-- [Examples](../../examples/) - Practical examples of metrics and monitoring
+* [Debug and Inspection](debug-and-inspection.md) - Using metrics for debugging and analysis
+* [State Management](../concepts/state.md) - Understanding execution state and context
+* [Graph Execution](../concepts/execution.md) - Execution lifecycle and performance
+* [Examples](../../examples/) - Practical examples of metrics and monitoring

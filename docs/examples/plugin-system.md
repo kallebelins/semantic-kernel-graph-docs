@@ -5,40 +5,40 @@ This example demonstrates the advanced plugin system capabilities in Semantic Ke
 ## Objective
 
 Learn how to implement and manage advanced plugin systems in graph-based workflows to:
-- Create and manage a comprehensive plugin registry
-- Develop custom plugins with advanced capabilities
-- Implement plugin conversion and integration systems
-- Enable plugin debugging and profiling tools
-- Create plugin marketplace with analytics and discovery
-- Support hot-reloading and template systems
+* Create and manage a comprehensive plugin registry
+* Develop custom plugins with advanced capabilities
+* Implement plugin conversion and integration systems
+* Enable plugin debugging and profiling tools
+* Create plugin marketplace with analytics and discovery
+* Support hot-reloading and template systems
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Plugin Integration](../how-to/integration-and-extensions.md)
-- Familiarity with [Custom Nodes](../concepts/node-types.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Plugin Integration](../how-to/integration-and-extensions.md)
+* Familiarity with [Custom Nodes](../concepts/node-types.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Plugin Registry**: Centralized management of plugins with metadata and lifecycle
-- **Custom Plugin Creation**: Development of specialized plugins with custom functionality
-- **Plugin Conversion**: Automatic conversion of Semantic Kernel plugins to graph nodes
-- **Debugging and Profiling**: Tools for plugin development and performance analysis
-- **Marketplace Analytics**: Discovery, rating, and usage analytics for plugins
-- **Hot-Reloading**: Dynamic plugin updates without system restart
+* **Plugin Registry**: Centralized management of plugins with metadata and lifecycle
+* **Custom Plugin Creation**: Development of specialized plugins with custom functionality
+* **Plugin Conversion**: Automatic conversion of Semantic Kernel plugins to graph nodes
+* **Debugging and Profiling**: Tools for plugin development and performance analysis
+* **Marketplace Analytics**: Discovery, rating, and usage analytics for plugins
+* **Hot-Reloading**: Dynamic plugin updates without system restart
 
 ### Core Classes
 
-- `PluginRegistry`: Central registry for managing plugins and metadata
-- `PluginMetadata`: Comprehensive metadata for plugin identification and categorization
-- `CustomPluginNode`: Base class for creating custom plugin nodes
-- `PluginConverter`: Converts Semantic Kernel plugins to graph-compatible nodes
-- `PluginDebugger`: Debugging and profiling tools for plugin development
-- `PluginMarketplace`: Marketplace functionality with discovery and analytics
+* `PluginRegistry`: Central registry for managing plugins and metadata
+* `PluginMetadata`: Comprehensive metadata for plugin identification and categorization
+* `CustomPluginNode`: Base class for creating custom plugin nodes
+* `PluginConverter`: Converts Semantic Kernel plugins to graph-compatible nodes
+* `PluginDebugger`: Debugging and profiling tools for plugin development
+* `PluginMarketplace`: Marketplace functionality with discovery and analytics
 
 ## Running the Example
 
@@ -450,13 +450,13 @@ private static async Task DemonstrateHotReloadingAsync(ILogger logger, ILoggerFa
 
 The example produces comprehensive output showing:
 
-- 📚 Plugin registry setup and management
-- 🔧 Custom plugin creation and registration
-- 🔄 Advanced plugin conversion from Semantic Kernel
-- 🐛 Plugin debugging and profiling capabilities
-- 🏪 Plugin marketplace analytics and discovery
-- 🔥 Hot-reloading and template system functionality
-- ✅ Complete plugin system workflow execution
+* 📚 Plugin registry setup and management
+* 🔧 Custom plugin creation and registration
+* 🔄 Advanced plugin conversion from Semantic Kernel
+* 🐛 Plugin debugging and profiling capabilities
+* 🏪 Plugin marketplace analytics and discovery
+* 🔥 Hot-reloading and template system functionality
+* ✅ Complete plugin system workflow execution
 
 ## Troubleshooting
 
@@ -469,15 +469,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging for plugin registry operations
-- Use plugin debugging tools to trace execution flow
-- Monitor plugin performance metrics and resource usage
-- Verify template generation and compilation processes
+* Enable detailed logging for plugin registry operations
+* Use plugin debugging tools to trace execution flow
+* Monitor plugin performance metrics and resource usage
+* Verify template generation and compilation processes
 
 ## See Also
 
-- [Plugin Integration](../how-to/integration-and-extensions.md)
-- [Custom Nodes](../concepts/node-types.md)
-- [Plugin Development](../how-to/plugin-development.md)
-- [Debugging and Inspection](../how-to/debug-and-inspection.md)
-- [Template System](../concepts/templates.md)
+* [Plugin Integration](../how-to/integration-and-extensions.md)
+* [Custom Nodes](../concepts/node-types.md)
+* [Plugin Development](../how-to/plugin-development.md)
+* [Debugging and Inspection](../how-to/debug-and-inspection.md)
+* [Template System](../concepts/templates.md)

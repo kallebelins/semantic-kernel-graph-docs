@@ -5,38 +5,38 @@ This example demonstrates a question-answering agent that retrieves relevant con
 ## Objective
 
 Learn how to implement retrieval-augmented generation workflows in Semantic Kernel Graph to:
-- Create a linear retrieval QA pipeline with three steps
-- Implement question analysis and search query generation
-- Retrieve relevant context from a knowledge base
-- Synthesize comprehensive answers using retrieved context
-- Demonstrate RAG-style question answering capabilities
+* Create a linear retrieval QA pipeline with three steps
+* Implement question analysis and search query generation
+* Retrieve relevant context from a knowledge base
+* Synthesize comprehensive answers using retrieved context
+* Demonstrate RAG-style question answering capabilities
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- **Kernel Memory** configured for knowledge base operations
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [RAG Patterns](../patterns/rag.md)
-- Familiarity with [Memory and Retrieval](../concepts/memory.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* **Kernel Memory** configured for knowledge base operations
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [RAG Patterns](../patterns/rag.md)
+* Familiarity with [Memory and Retrieval](../concepts/memory.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Retrieval-Augmented Generation (RAG)**: Combining retrieval with generation for accurate answers
-- **Question Analysis**: Understanding and reformulating user questions for better retrieval
-- **Context Retrieval**: Finding relevant information from knowledge bases
-- **Answer Synthesis**: Generating comprehensive answers using retrieved context
-- **Knowledge Base Management**: Indexing and searching structured information
+* **Retrieval-Augmented Generation (RAG)**: Combining retrieval with generation for accurate answers
+* **Question Analysis**: Understanding and reformulating user questions for better retrieval
+* **Context Retrieval**: Finding relevant information from knowledge bases
+* **Answer Synthesis**: Generating comprehensive answers using retrieved context
+* **Knowledge Base Management**: Indexing and searching structured information
 
 ### Core Classes
 
-- `GraphExecutor`: Executor for retrieval agent workflows
-- `FunctionGraphNode`: Nodes for question analysis, retrieval, and answer synthesis
-- `KernelMemoryGraphProvider`: Provider for knowledge base operations
-- `ConditionalEdge`: Graph edges for workflow control
-- `GraphState`: State management for retrieval results and context
+* `GraphExecutor`: Executor for retrieval agent workflows
+* `FunctionGraphNode`: Nodes for question analysis, retrieval, and answer synthesis
+* `KernelMemoryGraphProvider`: Provider for knowledge base operations
+* `ConditionalEdge`: Graph edges for workflow control
+* `GraphState`: State management for retrieval results and context
 
 ## Running the Example
 
@@ -345,12 +345,12 @@ var args = new KernelArguments
 
 The example produces comprehensive output showing:
 
-- 🧑‍💻 User questions and search query analysis
-- 🔍 Context retrieval from knowledge base
-- 📊 Retrieval scores and result counts
-- 🤖 Synthesized answers using retrieved context
-- ✅ Complete RAG workflow execution
-- 📚 Knowledge base content and retrieval quality
+* 🧑‍💻 User questions and search query analysis
+* 🔍 Context retrieval from knowledge base
+* 📊 Retrieval scores and result counts
+* 🤖 Synthesized answers using retrieved context
+* ✅ Complete RAG workflow execution
+* 📚 Knowledge base content and retrieval quality
 
 ## Troubleshooting
 
@@ -363,15 +363,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Monitor search query generation and refinement
-- Verify knowledge base content indexing and search functionality
-- Check retrieval parameters and scoring thresholds
-- Monitor answer synthesis quality and context utilization
+* Monitor search query generation and refinement
+* Verify knowledge base content indexing and search functionality
+* Check retrieval parameters and scoring thresholds
+* Monitor answer synthesis quality and context utilization
 
 ## See Also
 
-- [RAG Patterns](../patterns/rag.md)
-- [Memory and Retrieval](../concepts/memory.md)
-- [Question Answering](../concepts/qa-systems.md)
-- [Knowledge Base Management](../how-to/knowledge-base.md)
-- [Context Retrieval](../concepts/retrieval.md)
+* [RAG Patterns](../patterns/rag.md)
+* [Memory and Retrieval](../concepts/memory.md)
+* [Question Answering](../concepts/qa-systems.md)
+* [Knowledge Base Management](../how-to/knowledge-base.md)
+* [Context Retrieval](../concepts/retrieval.md)

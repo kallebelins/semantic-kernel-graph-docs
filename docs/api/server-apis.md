@@ -18,11 +18,11 @@ public GraphRestApi(
 ```
 
 **Parameters:**
-- `registry`: Graph registry for managing graph definitions
-- `serviceProvider`: Dependency injection service provider
-- `options`: Configuration options for API behavior
-- `logger`: Logger instance for diagnostics
-- `telemetry`: Optional telemetry service for metrics
+* `registry`: Graph registry for managing graph definitions
+* `serviceProvider`: Dependency injection service provider
+* `options`: Configuration options for API behavior
+* `logger`: Logger instance for diagnostics
+* `telemetry`: Optional telemetry service for metrics
 
 ### Methods
 
@@ -95,13 +95,13 @@ public Task<ExecutionMetricsResponse?> GetExecutionMetricsAsync(string execution
 
 ### Key Features
 
-- **Framework Agnostic**: Adapts to any HTTP framework (ASP.NET Core, Minimal APIs, etc.)
-- **Authentication**: API key and bearer token authentication
-- **Rate Limiting**: Configurable request throttling and quotas
-- **Execution Queue**: Background processing with priority scheduling
-- **Idempotency**: Safe request retry and deduplication
-- **Security Context**: Request correlation and tenant isolation
-- **Human-in-the-Loop**: Integration with HITL workflows
+* **Framework Agnostic**: Adapts to any HTTP framework (ASP.NET Core, Minimal APIs, etc.)
+* **Authentication**: API key and bearer token authentication
+* **Rate Limiting**: Configurable request throttling and quotas
+* **Execution Queue**: Background processing with priority scheduling
+* **Idempotency**: Safe request retry and deduplication
+* **Security Context**: Request correlation and tenant isolation
+* **Human-in-the-Loop**: Integration with HITL workflows
 
 ## GraphRestApiOptions
 
@@ -353,11 +353,11 @@ var options = new GraphRestApiOptions
 
 The API implements sliding window rate limiting:
 
-- **Global Limits**: Overall API request rate across all clients
-- **Per API Key**: Rate limits per individual API key
-- **Per Tenant**: Rate limits per tenant/organization
-- **Sliding Window**: Rolling time window for accurate rate calculation
-- **Automatic Cleanup**: Expired entries are automatically removed
+* **Global Limits**: Overall API request rate across all clients
+* **Per API Key**: Rate limits per individual API key
+* **Per Tenant**: Rate limits per tenant/organization
+* **Sliding Window**: Rolling time window for accurate rate calculation
+* **Automatic Cleanup**: Expired entries are automatically removed
 
 ### Rate Limit Responses
 
@@ -468,10 +468,10 @@ await foreach (var @event in eventStream)
 
 Webhooks include security features:
 
-- **Secret Validation**: HMAC-SHA256 signature validation
-- **Retry Logic**: Configurable retry intervals and maximum attempts
-- **Event Filtering**: Selective event type delivery
-- **Error Handling**: Graceful failure handling and logging
+* **Secret Validation**: HMAC-SHA256 signature validation
+* **Retry Logic**: Configurable retry intervals and maximum attempts
+* **Event Filtering**: Selective event type delivery
+* **Error Handling**: Graceful failure handling and logging
 
 ## GraphQL Subscriptions
 
@@ -856,34 +856,34 @@ await foreach (var progress in subscriptionService.SubscribeToExecutionProgress(
 
 ## Performance Considerations
 
-- **Connection Pooling**: Use connection pooling for external service calls
-- **Event Batching**: Batch events when possible to reduce overhead
-- **Compression**: Enable compression for large event payloads
-- **Caching**: Cache frequently accessed graph definitions and results
-- **Async Operations**: Use async methods for all I/O operations
-- **Rate Limiting**: Configure appropriate rate limits for your use case
+* **Connection Pooling**: Use connection pooling for external service calls
+* **Event Batching**: Batch events when possible to reduce overhead
+* **Compression**: Enable compression for large event payloads
+* **Caching**: Cache frequently accessed graph definitions and results
+* **Async Operations**: Use async methods for all I/O operations
+* **Rate Limiting**: Configure appropriate rate limits for your use case
 
 ## Security Considerations
 
-- **HTTPS**: Always use HTTPS in production
-- **API Keys**: Use strong, randomly generated API keys
-- **Bearer Tokens**: Implement proper JWT validation and scope checking
-- **Input Validation**: Validate all input parameters and sanitize data
-- **Rate Limiting**: Implement appropriate rate limiting per client/tenant
-- **Webhook Security**: Use secrets for webhook signature validation
+* **HTTPS**: Always use HTTPS in production
+* **API Keys**: Use strong, randomly generated API keys
+* **Bearer Tokens**: Implement proper JWT validation and scope checking
+* **Input Validation**: Validate all input parameters and sanitize data
+* **Rate Limiting**: Implement appropriate rate limiting per client/tenant
+* **Webhook Security**: Use secrets for webhook signature validation
 
 ## Monitoring and Observability
 
-- **Metrics**: Track API usage, response times, and error rates
-- **Logging**: Log all API requests and responses for debugging
-- **Tracing**: Use distributed tracing for request correlation
-- **Health Checks**: Implement health check endpoints
-- **Alerting**: Set up alerts for rate limit violations and errors
+* **Metrics**: Track API usage, response times, and error rates
+* **Logging**: Log all API requests and responses for debugging
+* **Tracing**: Use distributed tracing for request correlation
+* **Health Checks**: Implement health check endpoints
+* **Alerting**: Set up alerts for rate limit violations and errors
 
 ## See Also
 
-- [Exposing REST APIs](../how-to/exposing-rest-apis.md) - Guide for implementing REST APIs
-- [Server and APIs](../how-to/server-and-apis.md) - Complete server implementation guide
-- [Security and Data](../how-to/security-and-data.md) - Security best practices
-- [Streaming Execution](../concepts/streaming.md) - Real-time execution concepts
-- [Human-in-the-Loop](../how-to/hitl.md) - HITL integration patterns
+* [Exposing REST APIs](../how-to/exposing-rest-apis.md) - Guide for implementing REST APIs
+* [Server and APIs](../how-to/server-and-apis.md) - Complete server implementation guide
+* [Security and Data](../how-to/security-and-data.md) - Security best practices
+* [Streaming Execution](../concepts/streaming.md) - Real-time execution concepts
+* [Human-in-the-Loop](../how-to/hitl.md) - HITL integration patterns

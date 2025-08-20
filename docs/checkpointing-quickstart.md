@@ -12,10 +12,10 @@ Learn how to save and restore graph execution state using SemanticKernel.Graph's
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 8.0 or later
-- SemanticKernel.Graph package installed
-- Graph memory service configured (required for checkpointing)
-- Checkpoint support enabled in your kernel
+* .NET 8.0 or later
+* SemanticKernel.Graph package installed
+* Graph memory service configured (required for checkpointing)
+* Checkpoint support enabled in your kernel
 
 ## Quick Setup
 
@@ -251,21 +251,21 @@ Console.WriteLine($"Cleaned up {cleanupCount} old checkpoints");
 
 ### Performance Recommendations
 
-- Use appropriate checkpoint intervals based on your execution time
-- Enable compression for large state objects
-- Configure retention policies to prevent storage bloat
-- Use critical nodes sparingly to avoid excessive checkpointing
-- Monitor checkpoint sizes and adjust compression settings accordingly
+* Use appropriate checkpoint intervals based on your execution time
+* Enable compression for large state objects
+* Configure retention policies to prevent storage bloat
+* Use critical nodes sparingly to avoid excessive checkpointing
+* Monitor checkpoint sizes and adjust compression settings accordingly
 
 ## See Also
 
-- **Reference**: [CheckpointManager](../api/CheckpointManager.md), [CheckpointingOptions](../api/CheckpointingOptions.md), [StateHelpers](../api/StateHelpers.md)
-- **Guides**: [State Management](../guides/state-management.md), [Recovery and Replay](../guides/recovery-replay.md)
-- **Examples**: [CheckpointingExample](../examples/checkpointing.md), [AdvancedPatternsExample](../examples/advanced-patterns.md)
+* **Reference**: [CheckpointManager](../api/CheckpointManager.md), [CheckpointingOptions](../api/CheckpointingOptions.md), [StateHelpers](../api/StateHelpers.md)
+* **Guides**: [State Management](../guides/state-management.md), [Recovery and Replay](../guides/recovery-replay.md)
+* **Examples**: [CheckpointingExample](../examples/checkpointing.md), [AdvancedPatternsExample](../examples/advanced-patterns.md)
 
 ## Reference APIs
 
-- **[CheckpointManager](../api/checkpointing.md#checkpoint-manager)**: Checkpoint storage and retrieval
-- **[CheckpointingOptions](../api/checkpointing.md#checkpointing-options)**: Checkpoint configuration
-- **[StateHelpers](../api/state.md#state-helpers)**: State serialization utilities
-- **[ICheckpointingGraphExecutor](../api/checkpointing.md#icheckpointing-graph-executor)**: Checkpointing executor interface
+* **[CheckpointManager](../api/checkpointing.md#checkpoint-manager)**: Checkpoint storage and retrieval
+* **[CheckpointingOptions](../api/checkpointing.md#checkpointing-options)**: Checkpoint configuration
+* **[StateHelpers](../api/state.md#state-helpers)**: State serialization utilities
+* **[ICheckpointingGraphExecutor](../api/checkpointing.md#icheckpointing-graph-executor)**: Checkpointing executor interface

@@ -6,11 +6,11 @@ The REST Tools system in SemanticKernel.Graph provides comprehensive integration
 
 The REST tools system consists of several key components:
 
-- **`RestToolSchema`**: Defines the structure and behavior of REST API operations
-- **`RestToolGraphNode`**: Executable graph node that performs HTTP requests
-- **`RestToolSchemaConverter`**: Converts schemas into executable nodes
-- **`IToolSchemaConverter`**: Interface for custom tool converters
-- **Built-in caching and idempotency**: Performance optimization and request safety
+* **`RestToolSchema`**: Defines the structure and behavior of REST API operations
+* **`RestToolGraphNode`**: Executable graph node that performs HTTP requests
+* **`RestToolSchemaConverter`**: Converts schemas into executable nodes
+* **`IToolSchemaConverter`**: Interface for custom tool converters
+* **Built-in caching and idempotency**: Performance optimization and request safety
 
 ## Core Classes
 
@@ -38,19 +38,19 @@ public sealed class RestToolSchema
 ```
 
 **Key Properties:**
-- **`Id`**: Unique identifier for the REST tool
-- **`Name`**: Human-friendly name for the tool
-- **`Description`**: Purpose and behavior description
-- **`BaseUri`**: Base URI of the remote service
-- **`Path`**: Relative path for the operation
-- **`Method`**: HTTP method (GET, POST, PUT, DELETE, etc.)
-- **`JsonBodyTemplate`**: Optional JSON body template with variable substitution
-- **`QueryParameters`**: Mapping of query parameters to graph state variables
-- **`Headers`**: Header mappings with support for literals and secrets
-- **`TimeoutSeconds`**: Request timeout in seconds
-- **`CacheEnabled`**: Whether response caching is enabled
-- **`CacheTtlSeconds`**: Cache time-to-live in seconds
-- **`TelemetryDependencyName`**: Custom name for telemetry tracking
+* **`Id`**: Unique identifier for the REST tool
+* **`Name`**: Human-friendly name for the tool
+* **`Description`**: Purpose and behavior description
+* **`BaseUri`**: Base URI of the remote service
+* **`Path`**: Relative path for the operation
+* **`Method`**: HTTP method (GET, POST, PUT, DELETE, etc.)
+* **`JsonBodyTemplate`**: Optional JSON body template with variable substitution
+* **`QueryParameters`**: Mapping of query parameters to graph state variables
+* **`Headers`**: Header mappings with support for literals and secrets
+* **`TimeoutSeconds`**: Request timeout in seconds
+* **`CacheEnabled`**: Whether response caching is enabled
+* **`CacheTtlSeconds`**: Cache time-to-live in seconds
+* **`TelemetryDependencyName`**: Custom name for telemetry tracking
 
 ### RestToolGraphNode
 
@@ -69,21 +69,21 @@ public sealed class RestToolGraphNode : IGraphNode, ITypedSchemaNode
 ```
 
 **Constructor Parameters:**
-- `schema`: REST tool schema defining the operation
-- `httpClient`: HTTP client for making requests
-- `logger`: Optional logger for diagnostics
-- `secretResolver`: Optional secret resolver for sensitive data
-- `telemetry`: Optional telemetry adapter for dependency tracking
+* `schema`: REST tool schema defining the operation
+* `httpClient`: HTTP client for making requests
+* `logger`: Optional logger for diagnostics
+* `secretResolver`: Optional secret resolver for sensitive data
+* `telemetry`: Optional telemetry adapter for dependency tracking
 
 **Key Features:**
-- **Input mapping**: Automatically maps graph state to HTTP parameters
-- **Response handling**: Parses JSON responses and provides structured output
-- **Error handling**: Comprehensive error handling with telemetry
-- **Schema validation**: Implements `ITypedSchemaNode` for type safety
-- **Secret resolution**: Secure handling of API keys and sensitive data
-- **Caching**: Built-in response caching with configurable TTL
-- **Timeout management**: Per-request timeout handling
-- **Telemetry integration**: Dependency tracking for monitoring
+* **Input mapping**: Automatically maps graph state to HTTP parameters
+* **Response handling**: Parses JSON responses and provides structured output
+* **Error handling**: Comprehensive error handling with telemetry
+* **Schema validation**: Implements `ITypedSchemaNode` for type safety
+* **Secret resolution**: Secure handling of API keys and sensitive data
+* **Caching**: Built-in response caching with configurable TTL
+* **Timeout management**: Per-request timeout handling
+* **Telemetry integration**: Dependency tracking for monitoring
 
 ### RestToolSchemaConverter
 
@@ -103,10 +103,10 @@ public sealed class RestToolSchemaConverter : IToolSchemaConverter
 ```
 
 **Constructor Parameters:**
-- `httpClient`: HTTP client shared across all REST operations
-- `logger`: Optional logger for conversion diagnostics
-- `secretResolver`: Optional secret resolver for secure operations
-- `telemetry`: Optional telemetry adapter for monitoring
+* `httpClient`: HTTP client shared across all REST operations
+* `logger`: Optional logger for conversion diagnostics
+* `secretResolver`: Optional secret resolver for secure operations
+* `telemetry`: Optional telemetry adapter for monitoring
 
 ### IToolSchemaConverter
 
@@ -120,9 +120,9 @@ public interface IToolSchemaConverter
 ```
 
 **Purpose:**
-- Provides pluggable architecture for tool conversion
-- Enables custom conversion logic for specialized use cases
-- Supports different tool types beyond REST (future extensibility)
+* Provides pluggable architecture for tool conversion
+* Enables custom conversion logic for specialized use cases
+* Supports different tool types beyond REST (future extensibility)
 
 ## Schema Configuration
 
@@ -279,9 +279,9 @@ var apiSchema = new RestToolSchema
 ```
 
 **Header Types:**
-- **Literal values**: Prefixed with `:` for static header values
-- **State variables**: Map to graph state variables
-- **Secret references**: Prefixed with `secret:` for secure resolution
+* **Literal values**: Prefixed with `:` for static header values
+* **State variables**: Map to graph state variables
+* **Secret references**: Prefixed with `secret:` for secure resolution
 
 ### JSON Body Templates
 
@@ -315,10 +315,10 @@ var complexSchema = new RestToolSchema
 ```
 
 **Template Features:**
-- **Variable substitution**: `{variable_name}` syntax
-- **Nested objects**: Support for complex JSON structures
-- **Array support**: Direct array variable insertion
-- **Conditional logic**: Basic conditional rendering (future enhancement)
+* **Variable substitution**: `{variable_name}` syntax
+* **Nested objects**: Support for complex JSON structures
+* **Array support**: Direct array variable insertion
+* **Conditional logic**: Basic conditional rendering (future enhancement)
 
 ## Caching and Performance
 
@@ -336,10 +336,10 @@ var cachedSchema = new RestToolSchema
 ```
 
 **Cache Behavior:**
-- **Cache key**: Generated from HTTP method, URL, and request body hash
-- **TTL management**: Automatic expiration based on schema configuration
-- **Memory efficient**: Uses concurrent dictionary with expiration tracking
-- **Thread safe**: Concurrent access support for high-performance scenarios
+* **Cache key**: Generated from HTTP method, URL, and request body hash
+* **TTL management**: Automatic expiration based on schema configuration
+* **Memory efficient**: Uses concurrent dictionary with expiration tracking
+* **Thread safe**: Concurrent access support for high-performance scenarios
 
 **Cache Configuration Options:**
 ```csharp
@@ -394,10 +394,10 @@ var timeoutSchema = new RestToolSchema
 ```
 
 **Timeout Behavior:**
-- **Per-request**: Each schema can have different timeout values
-- **Cancellation**: Integrates with graph execution cancellation tokens
-- **Fallback**: Graceful handling of timeout scenarios
-- **Logging**: Comprehensive timeout logging and telemetry
+* **Per-request**: Each schema can have different timeout values
+* **Cancellation**: Integrates with graph execution cancellation tokens
+* **Fallback**: Graceful handling of timeout scenarios
+* **Logging**: Comprehensive timeout logging and telemetry
 
 ### Error Handling
 
@@ -436,10 +436,10 @@ catch (Exception ex)
 ```
 
 **Error Types:**
-- **HTTP errors**: Status codes, network issues, timeouts
-- **Validation errors**: Schema validation failures
-- **Secret resolution errors**: Missing or invalid secrets
-- **Serialization errors**: JSON parsing and formatting issues
+* **HTTP errors**: Status codes, network issues, timeouts
+* **Validation errors**: Schema validation failures
+* **Secret resolution errors**: Missing or invalid secrets
+* **Serialization errors**: JSON parsing and formatting issues
 
 ## Secret Resolution
 
@@ -460,10 +460,10 @@ var secureSchema = new RestToolSchema
 ```
 
 **Secret Types:**
-- **API keys**: `"secret:weather_api_key"`
-- **Authentication tokens**: `"secret:bearer_token"`
-- **Connection strings**: `"secret:database_connection"`
-- **Service credentials**: `"secret:service_username"`
+* **API keys**: `"secret:weather_api_key"`
+* **Authentication tokens**: `"secret:bearer_token"`
+* **Connection strings**: `"secret:database_connection"`
+* **Service credentials**: `"secret:service_username"`
 
 ### Secret Resolver Implementation
 
@@ -514,11 +514,11 @@ var monitoredSchema = new RestToolSchema
 ```
 
 **Telemetry Data:**
-- **Request duration**: Time taken for each API call
-- **Success rates**: Percentage of successful requests
-- **Error patterns**: Common failure modes and status codes
-- **Performance metrics**: Response times, throughput, latency
-- **Dependency mapping**: Service dependencies and relationships
+* **Request duration**: Time taken for each API call
+* **Success rates**: Percentage of successful requests
+* **Error patterns**: Common failure modes and status codes
+* **Performance metrics**: Response times, throughput, latency
+* **Dependency mapping**: Service dependencies and relationships
 
 ### Custom Telemetry
 
@@ -580,10 +580,10 @@ if (!validationResult.IsValid)
 ```
 
 **Validation Features:**
-- **Parameter presence**: Check required parameters are available
-- **Type validation**: Ensure parameter types match expectations
-- **Schema compliance**: Validate against REST schema requirements
-- **Secret availability**: Verify secrets can be resolved
+* **Parameter presence**: Check required parameters are available
+* **Type validation**: Ensure parameter types match expectations
+* **Schema compliance**: Validate against REST schema requirements
+* **Secret availability**: Verify secrets can be resolved
 
 ### Schema Validation
 
@@ -754,10 +754,10 @@ var restNode = new RestToolGraphNode(schema, httpClient);
 ```
 
 **Best Practices:**
-- **Connection pooling**: Reuse HTTP connections across requests
-- **Timeout configuration**: Set appropriate timeouts for different APIs
-- **Retry policies**: Implement retry logic for transient failures
-- **Circuit breaker**: Add circuit breaker pattern for fault tolerance
+* **Connection pooling**: Reuse HTTP connections across requests
+* **Timeout configuration**: Set appropriate timeouts for different APIs
+* **Retry policies**: Implement retry logic for transient failures
+* **Circuit breaker**: Add circuit breaker pattern for fault tolerance
 
 ### Caching Strategy
 
@@ -815,10 +815,10 @@ var secureSchema = new RestToolSchema
 ```
 
 **Security Best Practices:**
-- **Secret rotation**: Regularly rotate API keys and tokens
-- **Access control**: Limit access to secret resolution services
-- **Audit logging**: Log all secret access for compliance
-- **Encryption**: Encrypt secrets at rest and in transit
+* **Secret rotation**: Regularly rotate API keys and tokens
+* **Access control**: Limit access to secret resolution services
+* **Audit logging**: Log all secret access for compliance
+* **Encryption**: Encrypt secrets at rest and in transit
 
 ### Data Sanitization
 
@@ -841,8 +841,8 @@ var restNode = new RestToolGraphNode(schema, httpClient, telemetry: telemetry);
 
 ## See Also
 
-- [REST Tools Integration](../how-to/rest-tools-integration.md) - Comprehensive guide to REST tools concepts and techniques
-- [Tools and Extensions](../how-to/tools.md) - General tools system and integration patterns
-- [Graph Executor](./graph-executor.md) - Core execution engine that runs REST tool nodes
-- [Graph State](./graph-state.md) - State management for REST tool parameters
-- [REST API Example](../../examples/rest-api-example.md) - Complete example demonstrating REST tools capabilities
+* [REST Tools Integration](../how-to/rest-tools-integration.md) - Comprehensive guide to REST tools concepts and techniques
+* [Tools and Extensions](../how-to/tools.md) - General tools system and integration patterns
+* [Graph Executor](./graph-executor.md) - Core execution engine that runs REST tool nodes
+* [Graph State](./graph-state.md) - State management for REST tool parameters
+* [REST API Example](../../examples/rest-api-example.md) - Complete example demonstrating REST tools capabilities

@@ -5,34 +5,34 @@ This example demonstrates conditional routing and decision-making in graph-based
 ## Objective
 
 Learn how to implement conditional logic in graph-based workflows to:
-- Route execution based on dynamic conditions
-- Implement if/else branching logic
-- Use conditional expressions for complex routing
-- Handle multiple execution paths efficiently
-- Integrate conditional nodes with other graph patterns
+* Route execution based on dynamic conditions
+* Implement if/else branching logic
+* Use conditional expressions for complex routing
+* Handle multiple execution paths efficiently
+* Integrate conditional nodes with other graph patterns
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Conditional Routing**: Dynamic execution path selection based on state conditions
-- **Conditional Expressions**: Boolean expressions that determine execution flow
-- **Branching Logic**: Multiple execution paths with different outcomes
-- **State Evaluation**: Runtime evaluation of graph state for decision making
+* **Conditional Routing**: Dynamic execution path selection based on state conditions
+* **Conditional Expressions**: Boolean expressions that determine execution flow
+* **Branching Logic**: Multiple execution paths with different outcomes
+* **State Evaluation**: Runtime evaluation of graph state for decision making
 
 ### Core Classes
 
-- `ConditionalGraphNode`: Node that evaluates conditions and routes execution
-- `ConditionalEdge`: Edge that connects nodes based on conditional logic
-- `ConditionalExpressionEvaluator`: Evaluates boolean expressions for routing
-- `GraphState`: Carries state information used in conditional evaluation
+* `ConditionalGraphNode`: Node that evaluates conditions and routes execution
+* `ConditionalEdge`: Edge that connects nodes based on conditional logic
+* `ConditionalExpressionEvaluator`: Evaluates boolean expressions for routing
+* `GraphState`: Carries state information used in conditional evaluation
 
 ## Running the Example
 
@@ -659,14 +659,14 @@ var selectedWorkflow = orchestrator.SelectWorkflow(workflowContext);
 
 ## Related Examples
 
-- [Chain of Thought](./chain-of-thought.md): Reasoning and decision making
-- [Dynamic Routing](./dynamic-routing.md): Advanced routing patterns
-- [Multi-Agent](./multi-agent.md): Coordinated decision making
-- [State Management](./state-management.md): Graph state and argument handling
+* [Chain of Thought](./chain-of-thought.md): Reasoning and decision making
+* [Dynamic Routing](./dynamic-routing.md): Advanced routing patterns
+* [Multi-Agent](./multi-agent.md): Coordinated decision making
+* [State Management](./state-management.md): Graph state and argument handling
 
 ## See Also
 
-- [Conditional Nodes Concepts](../concepts/conditional-nodes.md): Understanding conditional routing
-- [Graph Concepts](../concepts/graph-concepts.md): Graph-based workflow fundamentals
-- [Node Types](../concepts/node-types.md): Graph node fundamentals
-- [API Reference](../api/): Complete API documentation
+* [Conditional Nodes Concepts](../concepts/conditional-nodes.md): Understanding conditional routing
+* [Graph Concepts](../concepts/graph-concepts.md): Graph-based workflow fundamentals
+* [Node Types](../concepts/node-types.md): Graph node fundamentals
+* [API Reference](../api/): Complete API documentation

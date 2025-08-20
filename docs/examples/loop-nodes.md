@@ -5,36 +5,36 @@ This example demonstrates how to implement various types of loop patterns in Sem
 ## Objective
 
 Learn how to implement loop patterns in graph-based workflows to:
-- Create controlled loops with exit conditions
-- Implement iterative processing with state management
-- Handle loop-based decision making and routing
-- Manage loop performance and resource consumption
-- Implement loop monitoring and debugging
+* Create controlled loops with exit conditions
+* Implement iterative processing with state management
+* Handle loop-based decision making and routing
+* Manage loop performance and resource consumption
+* Implement loop monitoring and debugging
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Loop Patterns](../concepts/loops.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Loop Patterns](../concepts/loops.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Loop Control**: Managing loop execution and exit conditions
-- **Iterative Processing**: Processing data in repeated cycles
-- **State Management**: Maintaining state across loop iterations
-- **Loop Monitoring**: Tracking loop performance and progress
-- **Resource Management**: Controlling resource consumption in loops
+* **Loop Control**: Managing loop execution and exit conditions
+* **Iterative Processing**: Processing data in repeated cycles
+* **State Management**: Maintaining state across loop iterations
+* **Loop Monitoring**: Tracking loop performance and progress
+* **Resource Management**: Controlling resource consumption in loops
 
 ### Core Classes
 
-- `LoopGraphNode`: Base loop node implementation
-- `ReActLoopGraphNode`: Reasoning and action loop pattern
-- `IterativeGraphNode`: Simple iterative processing
-- `LoopControlManager`: Loop execution control
-- `LoopPerformanceMetrics`: Loop performance monitoring
+* `LoopGraphNode`: Base loop node implementation
+* `ReActLoopGraphNode`: Reasoning and action loop pattern
+* `IterativeGraphNode`: Simple iterative processing
+* `LoopControlManager`: Loop execution control
+* `LoopPerformanceMetrics`: Loop performance monitoring
 
 ## Running the Example
 
@@ -909,14 +909,14 @@ public class AdvancedLoopStateManager : ILoopStateManager
 
 ## Related Examples
 
-- [ReAct Agent](./react-agent.md): Advanced reasoning and action patterns
-- [Graph Metrics](./graph-metrics.md): Loop performance monitoring
-- [State Management](./state-tutorial.md): Loop state persistence
-- [Performance Optimization](./performance-optimization.md): Loop optimization techniques
+* [ReAct Agent](./react-agent.md): Advanced reasoning and action patterns
+* [Graph Metrics](./graph-metrics.md): Loop performance monitoring
+* [State Management](./state-tutorial.md): Loop state persistence
+* [Performance Optimization](./performance-optimization.md): Loop optimization techniques
 
 ## See Also
 
-- [Loop Patterns](../concepts/loops.md): Understanding loop concepts
-- [Performance Monitoring](../how-to/performance-monitoring.md): Loop performance analysis
-- [State Management](../how-to/state-management.md): Loop state handling
-- [API Reference](../api/): Complete API documentation
+* [Loop Patterns](../concepts/loops.md): Understanding loop concepts
+* [Performance Monitoring](../how-to/performance-monitoring.md): Loop performance analysis
+* [State Management](../how-to/state-management.md): Loop state handling
+* [API Reference](../api/): Complete API documentation

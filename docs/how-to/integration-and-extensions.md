@@ -4,12 +4,12 @@ Integration and extensions in SemanticKernel.Graph provide seamless integration 
 
 ## What You'll Learn
 
-- How to integrate graph functionality with existing Semantic Kernel instances
-- Configuring comprehensive graph options for different environments
-- Implementing data sanitization and security policies
-- Setting up structured logging with correlation and context
-- Managing policies for cost, timeout, and error handling
-- Best practices for production integration and deployment
+* How to integrate graph functionality with existing Semantic Kernel instances
+* Configuring comprehensive graph options for different environments
+* Implementing data sanitization and security policies
+* Setting up structured logging with correlation and context
+* Managing policies for cost, timeout, and error handling
+* Best practices for production integration and deployment
 
 ## Concepts and Techniques
 
@@ -25,10 +25,10 @@ Integration and extensions in SemanticKernel.Graph provide seamless integration 
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of Semantic Kernel concepts
-- Familiarity with dependency injection and configuration
-- Understanding of logging and security best practices
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of Semantic Kernel concepts
+* Familiarity with dependency injection and configuration
+* Understanding of logging and security best practices
 
 ## Kernel Builder Integration
 
@@ -671,31 +671,31 @@ var kernel = Kernel.CreateBuilder()
 
 ### Integration Configuration
 
-- **Start Simple**: Begin with basic `AddGraphSupport()` and add features incrementally
-- **Environment-Specific**: Use preset configurations for different deployment environments
-- **Dependency Management**: Ensure all required services are registered before building the kernel
-- **Configuration Validation**: Validate configuration options early in the startup process
+* **Start Simple**: Begin with basic `AddGraphSupport()` and add features incrementally
+* **Environment-Specific**: Use preset configurations for different deployment environments
+* **Dependency Management**: Ensure all required services are registered before building the kernel
+* **Configuration Validation**: Validate configuration options early in the startup process
 
 ### Security and Data Handling
 
-- **Always Sanitize**: Enable data sanitization for all production deployments
-- **Custom Policies**: Implement domain-specific sanitization policies
-- **Audit Logging**: Log all policy decisions and data access for compliance
-- **Regular Reviews**: Periodically review and update security policies
+* **Always Sanitize**: Enable data sanitization for all production deployments
+* **Custom Policies**: Implement domain-specific sanitization policies
+* **Audit Logging**: Log all policy decisions and data access for compliance
+* **Regular Reviews**: Periodically review and update security policies
 
 ### Logging and Observability
 
-- **Structured Logging**: Use structured logging for better searchability and analysis
-- **Correlation IDs**: Enable correlation IDs for distributed tracing
-- **Performance Monitoring**: Include execution timing in logs for performance analysis
-- **Log Levels**: Configure appropriate log levels for different environments
+* **Structured Logging**: Use structured logging for better searchability and analysis
+* **Correlation IDs**: Enable correlation IDs for distributed tracing
+* **Performance Monitoring**: Include execution timing in logs for performance analysis
+* **Log Levels**: Configure appropriate log levels for different environments
 
 ### Policy Management
 
-- **Business Logic**: Implement policies that reflect your business requirements
-- **Performance Impact**: Consider the performance impact of complex policy logic
-- **Testing**: Thoroughly test policies with various scenarios and edge cases
-- **Documentation**: Document policy behavior and configuration options
+* **Business Logic**: Implement policies that reflect your business requirements
+* **Performance Impact**: Consider the performance impact of complex policy logic
+* **Testing**: Thoroughly test policies with various scenarios and edge cases
+* **Documentation**: Document policy behavior and configuration options
 
 ## Troubleshooting
 
@@ -734,7 +734,7 @@ var perfLoggingOptions = new GraphLoggingOptions
 
 ## See Also
 
-- [Resource Governance and Concurrency](resource-governance-and-concurrency.md) - Managing resource allocation and execution policies
-- [Metrics and Observability](metrics-and-observability.md) - Monitoring and performance analysis
-- [Debug and Inspection](debug-and-inspection.md) - Debugging and inspection capabilities
-- [Examples](../../examples/) - Practical examples of integration and extensions
+* [Resource Governance and Concurrency](resource-governance-and-concurrency.md) - Managing resource allocation and execution policies
+* [Metrics and Observability](metrics-and-observability.md) - Monitoring and performance analysis
+* [Debug and Inspection](debug-and-inspection.md) - Debugging and inspection capabilities
+* [Examples](../../examples/) - Practical examples of integration and extensions

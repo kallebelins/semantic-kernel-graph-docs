@@ -21,10 +21,10 @@ apiCallNode.AddRestTool("https://api.example.com/data");
 ```
 
 Perfect for:
-- 🏢 Enterprise system integration
-- 🌐 Web application backends
-- 📱 Mobile app services
-- 🚀 IoT device orchestration
+* 🏢 Enterprise system integration
+* 🌐 Web application backends
+* 📱 Mobile app services
+* 🚀 IoT device orchestration
 
 **Connect your world** → [https://skgraph.dev/](https://skgraph.dev/)
 

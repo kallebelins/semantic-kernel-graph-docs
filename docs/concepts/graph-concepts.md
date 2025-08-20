@@ -13,35 +13,35 @@ SemanticKernel.Graph extends the Semantic Kernel with a graph-based execution mo
 Nodes are the fundamental building blocks of a graph. Each node represents a unit of work that can be executed, and they communicate through shared state.
 
 **Key Properties:**
-- **NodeId**: Unique identifier for the node
-- **Name**: Human-readable name for debugging and visualization
-- **Description**: What the node does
-- **IsExecutable**: Whether the node can be executed
-- **InputParameters**: Expected input parameters
-- **OutputParameters**: Produced output parameters
+* **NodeId**: Unique identifier for the node
+* **Name**: Human-readable name for debugging and visualization
+* **Description**: What the node does
+* **IsExecutable**: Whether the node can be executed
+* **InputParameters**: Expected input parameters
+* **OutputParameters**: Produced output parameters
 
 **Lifecycle Methods:**
-- `OnBeforeExecuteAsync`: Setup and validation before execution
-- `ExecuteAsync`: Main execution logic
-- `OnAfterExecuteAsync`: Cleanup and post-processing
-- `OnExecutionFailedAsync`: Error handling and recovery
+* `OnBeforeExecuteAsync`: Setup and validation before execution
+* `ExecuteAsync`: Main execution logic
+* `OnAfterExecuteAsync`: Cleanup and post-processing
+* `OnExecutionFailedAsync`: Error handling and recovery
 
 ### Conditional Edges
 
 Edges define the connections between nodes and control the flow of execution. They can be unconditional (always taken) or conditional (taken only when specific conditions are met).
 
 **Edge Types:**
-- **Unconditional**: Always traversed after the source node executes
-- **Parameter-based**: Evaluates against specific argument values
-- **State-based**: Evaluates against the entire graph state
-- **Template-based**: Uses Handlebars-like templates for complex conditions
+* **Unconditional**: Always traversed after the source node executes
+* **Parameter-based**: Evaluates against specific argument values
+* **State-based**: Evaluates against the entire graph state
+* **Template-based**: Uses Handlebars-like templates for complex conditions
 
 **Edge Properties:**
-- **SourceNode**: The origin node
-- **TargetNode**: The destination node
-- **Condition**: Predicate function that determines traversal
-- **Metadata**: Additional information for routing and visualization
-- **MergeConfiguration**: How to handle state when multiple paths converge
+* **SourceNode**: The origin node
+* **TargetNode**: The destination node
+* **Condition**: Predicate function that determines traversal
+* **Metadata**: Additional information for routing and visualization
+* **MergeConfiguration**: How to handle state when multiple paths converge
 
 ## Execution Model
 
@@ -138,10 +138,10 @@ Node A → Node B → Condition → Node A (if condition met)
 
 The graph executor includes built-in safeguards to prevent infinite loops:
 
-- **Maximum Iterations**: Configurable limits on loop execution
-- **Execution Depth**: Tracking of execution depth to detect excessive nesting
-- **Timeout Controls**: Configurable timeouts for long-running operations
-- **Circuit Breakers**: Automatic termination of problematic execution paths
+* **Maximum Iterations**: Configurable limits on loop execution
+* **Execution Depth**: Tracking of execution depth to detect excessive nesting
+* **Timeout Controls**: Configurable timeouts for long-running operations
+* **Circuit Breakers**: Automatic termination of problematic execution paths
 
 ### Loop Control
 
@@ -260,33 +260,33 @@ var approvalNode = new HumanApprovalGraphNode(
 
 ### Node Design
 
-- **Single Responsibility**: Each node should have one clear purpose
-- **State Validation**: Always validate inputs before execution
-- **Error Handling**: Implement robust error handling and recovery
-- **Metadata**: Use metadata to provide context for debugging
+* **Single Responsibility**: Each node should have one clear purpose
+* **State Validation**: Always validate inputs before execution
+* **Error Handling**: Implement robust error handling and recovery
+* **Metadata**: Use metadata to provide context for debugging
 
 ### Edge Design
 
-- **Clear Conditions**: Make conditional logic explicit and readable
-- **Performance**: Keep condition evaluation fast and side-effect free
-- **Documentation**: Document complex routing logic
+* **Clear Conditions**: Make conditional logic explicit and readable
+* **Performance**: Keep condition evaluation fast and side-effect free
+* **Documentation**: Document complex routing logic
 
 ### State Management
 
-- **Immutable Updates**: Avoid modifying existing state directly
-- **Validation**: Validate state changes and provide meaningful error messages
-- **Serialization**: Consider serialization requirements when designing state
+* **Immutable Updates**: Avoid modifying existing state directly
+* **Validation**: Validate state changes and provide meaningful error messages
+* **Serialization**: Consider serialization requirements when designing state
 
 ### Performance
 
-- **Lazy Evaluation**: Only evaluate conditions when necessary
-- **Caching**: Cache expensive computations when possible
-- **Parallelization**: Use parallel execution for independent paths
+* **Lazy Evaluation**: Only evaluate conditions when necessary
+* **Caching**: Cache expensive computations when possible
+* **Parallelization**: Use parallel execution for independent paths
 
 ## See Also
 
-- [Execution Model](execution.md) - Detailed execution lifecycle
-- [Node Types](nodes.md) - Available node implementations
-- [State Management](state.md) - Advanced state handling
-- [Routing Strategies](routing.md) - Dynamic routing techniques
-- [Examples](../examples/) - Practical examples and use cases
+* [Execution Model](execution.md) - Detailed execution lifecycle
+* [Node Types](nodes.md) - Available node implementations
+* [State Management](state.md) - Advanced state handling
+* [Routing Strategies](routing.md) - Dynamic routing techniques
+* [Examples](../examples/) - Practical examples and use cases

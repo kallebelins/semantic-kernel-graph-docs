@@ -40,11 +40,11 @@ if (context.ExecutionOptions.EnablePlanCompilation)
 Each node follows a consistent lifecycle pattern:
 
 #### Before Execution (`OnBeforeExecuteAsync`)
-- **Middleware Pipeline**: Custom middlewares execute before the node
-- **Node Hook**: The node's `OnBeforeExecuteAsync` method runs
-- **Resource Acquisition**: Resource permits are acquired based on node cost and priority
-- **Performance Tracking**: Execution timing begins
-- **Debug Hooks**: Breakpoint and step-mode checks
+* **Middleware Pipeline**: Custom middlewares execute before the node
+* **Node Hook**: The node's `OnBeforeExecuteAsync` method runs
+* **Resource Acquisition**: Resource permits are acquired based on node cost and priority
+* **Performance Tracking**: Execution timing begins
+* **Debug Hooks**: Breakpoint and step-mode checks
 
 ```csharp
 // Execute lifecycle: Before (middlewares then node hook)
@@ -61,15 +61,15 @@ var nodeTracker = _performanceMetrics?.StartNodeTracking(currentNode.NodeId, cur
 ```
 
 #### Main Execution (`ExecuteAsync`)
-- **Function Execution**: The node's core logic runs
-- **Result Processing**: Output is captured and stored
-- **State Updates**: Graph state is modified based on results
+* **Function Execution**: The node's core logic runs
+* **Result Processing**: Output is captured and stored
+* **State Updates**: Graph state is modified based on results
 
 #### After Execution (`OnAfterExecuteAsync`)
-- **Node Hook**: The node's `OnAfterExecuteAsync` method runs
-- **Middleware Pipeline**: Custom middlewares execute after the node
-- **Performance Completion**: Execution timing is finalized
-- **Success Registration**: Node success is recorded for self-healing
+* **Node Hook**: The node's `OnAfterExecuteAsync` method runs
+* **Middleware Pipeline**: Custom middlewares execute after the node
+* **Performance Completion**: Execution timing is finalized
+* **Success Registration**: Node success is recorded for self-healing
 
 ```csharp
 // Execute the node
@@ -87,10 +87,10 @@ RegisterNodeSuccess(execNode.NodeId);
 ```
 
 #### Error Handling (`OnExecutionFailedAsync`)
-- **Failure Recording**: Node failure is logged and tracked
-- **Error Recovery**: Recovery engine attempts to restore execution
-- **Policy Application**: Error handling policies determine retry/skip behavior
-- **Self-Healing**: Failed nodes may be quarantined
+* **Failure Recording**: Node failure is logged and tracked
+* **Error Recovery**: Recovery engine attempts to restore execution
+* **Policy Application**: Error handling policies determine retry/skip behavior
+* **Self-Healing**: Failed nodes may be quarantined
 
 ```csharp
 // Execute lifecycle: Failed
@@ -461,30 +461,30 @@ using var lease = _resourceGovernor != null
 
 ### Execution Configuration
 
-- **Set Reasonable Limits**: Configure `MaxExecutionSteps` and `ExecutionTimeout` based on your workflow complexity
-- **Use Middleware**: Implement custom middlewares for cross-cutting concerns like logging, monitoring, and security
-- **Configure Resource Limits**: Set appropriate resource governance to prevent resource exhaustion
-- **Enable Validation**: Use `ValidateGraphIntegrity` in development to catch structural issues early
+* **Set Reasonable Limits**: Configure `MaxExecutionSteps` and `ExecutionTimeout` based on your workflow complexity
+* **Use Middleware**: Implement custom middlewares for cross-cutting concerns like logging, monitoring, and security
+* **Configure Resource Limits**: Set appropriate resource governance to prevent resource exhaustion
+* **Enable Validation**: Use `ValidateGraphIntegrity` in development to catch structural issues early
 
 ### Error Handling
 
-- **Implement Recovery Policies**: Create custom error handling policies for your domain
-- **Use Circuit Breakers**: Leverage self-healing to automatically handle failing nodes
-- **Monitor Execution Paths**: Track execution paths to identify performance bottlenecks
-- **Set Node Timeouts**: Configure appropriate timeouts for long-running operations
+* **Implement Recovery Policies**: Create custom error handling policies for your domain
+* **Use Circuit Breakers**: Leverage self-healing to automatically handle failing nodes
+* **Monitor Execution Paths**: Track execution paths to identify performance bottlenecks
+* **Set Node Timeouts**: Configure appropriate timeouts for long-running operations
 
 ### Performance
 
-- **Enable Plan Compilation**: Use `EnablePlanCompilation` for complex graphs to improve performance
-- **Configure Parallel Execution**: Use parallel execution for independent branches
-- **Monitor Resource Usage**: Track CPU and memory usage to optimize resource allocation
-- **Use Deterministic Ordering**: Ensure reproducible execution with `DeterministicWorkQueue`
+* **Enable Plan Compilation**: Use `EnablePlanCompilation` for complex graphs to improve performance
+* **Configure Parallel Execution**: Use parallel execution for independent branches
+* **Monitor Resource Usage**: Track CPU and memory usage to optimize resource allocation
+* **Use Deterministic Ordering**: Ensure reproducible execution with `DeterministicWorkQueue`
 
 ## See Also
 
-- [Graph Concepts](graph-concepts.md) - Fundamental graph concepts and components
-- [Node Types](nodes.md) - Available node implementations and their lifecycle
-- [State Management](state.md) - How execution state is managed and propagated
-- [Error Handling](error-handling.md) - Advanced error recovery and resilience patterns
-- [Performance Tuning](performance-tuning.md) - Optimizing graph execution performance
-- [Examples](../examples/) - Practical examples of execution patterns
+* [Graph Concepts](graph-concepts.md) - Fundamental graph concepts and components
+* [Node Types](nodes.md) - Available node implementations and their lifecycle
+* [State Management](state.md) - How execution state is managed and propagated
+* [Error Handling](error-handling.md) - Advanced error recovery and resilience patterns
+* [Performance Tuning](performance-tuning.md) - Optimizing graph execution performance
+* [Examples](../examples/) - Practical examples of execution patterns

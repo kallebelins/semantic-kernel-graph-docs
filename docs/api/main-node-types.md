@@ -12,21 +12,21 @@ This node forwards execution to an underlying `KernelFunction` and augments it w
 
 ### Key Features
 
-- **Function Encapsulation**: Wraps any `KernelFunction` from Semantic Kernel
-- **Navigation Support**: Connect unconditional successors and conditional transitions
-- **Metadata Hooks**: Custom setup, cleanup, and error handling logic
-- **Thread Safety**: Connection lists are guarded by private locks for mutation
-- **Result Storage**: Automatic storage of execution results in graph state
+* **Function Encapsulation**: Wraps any `KernelFunction` from Semantic Kernel
+* **Navigation Support**: Connect unconditional successors and conditional transitions
+* **Metadata Hooks**: Custom setup, cleanup, and error handling logic
+* **Thread Safety**: Connection lists are guarded by private locks for mutation
+* **Result Storage**: Automatic storage of execution results in graph state
 
 ### Metadata Hooks
 
 The following metadata keys enable custom behavior:
 
-- **`"StoreResultAs"`** (string): Stores the last result into `GraphState` under the given key
-- **`"BeforeExecute"`** (Action/Func): Custom setup logic executed in `OnBeforeExecuteAsync`
-- **`"AfterExecute"`** (Action/Func): Custom cleanup logic executed in `OnAfterExecuteAsync`
-- **`"OnExecutionFailed"`** (Action/Func): Error handling hook executed in `OnExecutionFailedAsync`
-- **`"StrictValidation"`** (bool): If true, pre-execution validation failures cause an exception
+* **`"StoreResultAs"`** (string): Stores the last result into `GraphState` under the given key
+* **`"BeforeExecute"`** (Action/Func): Custom setup logic executed in `OnBeforeExecuteAsync`
+* **`"AfterExecute"`** (Action/Func): Custom cleanup logic executed in `OnAfterExecuteAsync`
+* **`"OnExecutionFailed"`** (Action/Func): Error handling hook executed in `OnExecutionFailedAsync`
+* **`"StrictValidation"`** (bool): If true, pre-execution validation failures cause an exception
 
 ### Usage Examples
 
@@ -87,12 +87,12 @@ This node provides function-based and template-based conditions with advanced ca
 
 ### Key Features
 
-- **Function-based Conditions**: Direct evaluation using `Func<GraphState, bool>`
-- **Template-based Conditions**: Handlebars-like templates with variable substitution
-- **Advanced Caching**: Automatic cache of evaluation results for performance
-- **Debugging Support**: Integration with `ConditionalDebugger` for step-by-step analysis
-- **Metrics Tracking**: Comprehensive execution metrics and performance monitoring
-- **Thread Safety**: All operations are thread-safe for concurrent execution
+* **Function-based Conditions**: Direct evaluation using `Func<GraphState, bool>`
+* **Template-based Conditions**: Handlebars-like templates with variable substitution
+* **Advanced Caching**: Automatic cache of evaluation results for performance
+* **Debugging Support**: Integration with `ConditionalDebugger` for step-by-step analysis
+* **Metrics Tracking**: Comprehensive execution metrics and performance monitoring
+* **Thread Safety**: All operations are thread-safe for concurrent execution
 
 ### Condition Types
 
@@ -166,11 +166,11 @@ This node analyzes current context, evaluates available information, and generat
 
 ### Key Features
 
-- **Context-aware Reasoning**: Analyzes current situation and available data
-- **Template-based Prompts**: Uses customizable templates for different reasoning patterns
-- **Quality Metrics**: Tracks reasoning quality and consistency
-- **Domain Specialization**: Can be configured for specific problem domains
-- **Chain-of-thought Support**: Supports step-by-step reasoning patterns
+* **Context-aware Reasoning**: Analyzes current situation and available data
+* **Template-based Prompts**: Uses customizable templates for different reasoning patterns
+* **Quality Metrics**: Tracks reasoning quality and consistency
+* **Domain Specialization**: Can be configured for specific problem domains
+* **Chain-of-thought Support**: Supports step-by-step reasoning patterns
 
 ### Domain Specialization
 
@@ -243,13 +243,13 @@ This node implements the full ReAct pattern by orchestrating reasoning, acting, 
 
 ### Key Features
 
-- **Complete ReAct Orchestration**: Manages the full reasoning-acting-observation cycle
-- **Flexible Node Composition**: Can use custom reasoning, action, and observation nodes
-- **Iteration Limits**: Configurable maximum iterations with early termination
-- **Goal Evaluation**: Sophisticated goal achievement detection
-- **Performance Tracking**: Comprehensive metrics and timing information
-- **Error Handling**: Robust error handling with recovery strategies
-- **Context Management**: Maintains and updates context across iterations
+* **Complete ReAct Orchestration**: Manages the full reasoning-acting-observation cycle
+* **Flexible Node Composition**: Can use custom reasoning, action, and observation nodes
+* **Iteration Limits**: Configurable maximum iterations with early termination
+* **Goal Evaluation**: Sophisticated goal achievement detection
+* **Performance Tracking**: Comprehensive metrics and timing information
+* **Error Handling**: Robust error handling with recovery strategies
+* **Context Management**: Maintains and updates context across iterations
 
 ### Component Configuration
 
@@ -307,24 +307,24 @@ reactLoopNode.SetMetadata("TrackIterations", true);
 ### Metadata Keys
 
 #### Counters (int)
-- `"ExecutionCount"`: Total number of executions
-- `"FailureCount"`: Number of failed executions
-- `"SuccessfulCompletions"`: Number of successful completions
-- `"TotalIterations"`: Total iterations across all executions
+* `"ExecutionCount"`: Total number of executions
+* `"FailureCount"`: Number of failed executions
+* `"SuccessfulCompletions"`: Number of successful completions
+* `"TotalIterations"`: Total iterations across all executions
 
 #### Metrics
-- `"AverageExecutionTime"`: Average time per execution
-- `"AverageIterationsPerExecution"`: Average iterations per execution
-- `"SuccessRate"`: Success rate percentage
-- `"LastExecutedAt"`: Timestamp of last execution
+* `"AverageExecutionTime"`: Average time per execution
+* `"AverageIterationsPerExecution"`: Average iterations per execution
+* `"SuccessRate"`: Success rate percentage
+* `"LastExecutedAt"`: Timestamp of last execution
 
 #### Configuration
-- `"MaxIterations"`: Maximum iterations per execution
-- `"GoalAchievementThreshold"`: Threshold for goal achievement
-- `"EarlyTerminationEnabled"`: Whether to enable early termination
-- `"IterationTimeout"`: Timeout per iteration
-- `"TotalTimeout"`: Total timeout for execution
-- `"Domain"`: Domain-specific configuration
+* `"MaxIterations"`: Maximum iterations per execution
+* `"GoalAchievementThreshold"`: Threshold for goal achievement
+* `"EarlyTerminationEnabled"`: Whether to enable early termination
+* `"IterationTimeout"`: Timeout per iteration
+* `"TotalTimeout"`: Total timeout for execution
+* `"Domain"`: Domain-specific configuration
 
 ## ObservationGraphNode
 
@@ -336,12 +336,12 @@ This node analyzes the results of executed actions, evaluates their success, ext
 
 ### Key Features
 
-- **Result Analysis**: Deep analysis of action execution results
-- **Goal Evaluation**: Determines if objectives have been met
-- **Information Extraction**: Extracts key insights and data from results
-- **Quality Assessment**: Evaluates the quality and relevance of results
-- **Context Update**: Updates context for next reasoning iteration
-- **Decision Making**: Determines whether to continue or conclude the ReAct loop
+* **Result Analysis**: Deep analysis of action execution results
+* **Goal Evaluation**: Determines if objectives have been met
+* **Information Extraction**: Extracts key insights and data from results
+* **Quality Assessment**: Evaluates the quality and relevance of results
+* **Context Update**: Updates context for next reasoning iteration
+* **Decision Making**: Determines whether to continue or conclude the ReAct loop
 
 ### Domain Specialization
 
@@ -390,25 +390,25 @@ var observationNode = new ObservationGraphNode(
 ### Metadata Keys
 
 #### Counters (int)
-- `"ExecutionCount"`: Total number of executions
-- `"FailureCount"`: Number of failed executions
-- `"GoalAchievedCount"`: Number of times goals were achieved
+* `"ExecutionCount"`: Total number of executions
+* `"FailureCount"`: Number of failed executions
+* `"GoalAchievedCount"`: Number of times goals were achieved
 
 #### Metrics
-- `"AverageExecutionTime"`: Average time per execution
-- `"GoalAchievementRate"`: Rate of goal achievement
-- `"AverageSuccessAssessment"`: Average success assessment score
-- `"LastExecutedAt"`: Timestamp of last execution
+* `"AverageExecutionTime"`: Average time per execution
+* `"GoalAchievementRate"`: Rate of goal achievement
+* `"AverageSuccessAssessment"`: Average success assessment score
+* `"LastExecutedAt"`: Timestamp of last execution
 
 #### Configuration
-- `"Domain"`: Domain-specific configuration
-- `"DeepAnalysisEnabled"`: Whether to perform deep analysis
-- `"GoalAchievementThreshold"`: Threshold for goal achievement
+* `"Domain"`: Domain-specific configuration
+* `"DeepAnalysisEnabled"`: Whether to perform deep analysis
+* `"GoalAchievementThreshold"`: Threshold for goal achievement
 
 #### Behavior Customization
-- `"ExtractionPatterns"`: Patterns for information extraction
-- `"ResultTypePatterns"`: Patterns for result type analysis
-- `"GoalCriteria"`: Criteria for goal evaluation
+* `"ExtractionPatterns"`: Patterns for information extraction
+* `"ResultTypePatterns"`: Patterns for result type analysis
+* `"GoalCriteria"`: Criteria for goal evaluation
 
 ## Integration Patterns
 
@@ -473,34 +473,34 @@ validateNode.ConnectTo(qualityCheck);
 
 ### Caching and Optimization
 
-- **Conditional Nodes**: Use template-based conditions for complex logic to leverage caching
-- **Function Nodes**: Enable result storage only when needed to avoid memory overhead
-- **ReAct Loops**: Set appropriate iteration limits and timeouts to prevent infinite loops
+* **Conditional Nodes**: Use template-based conditions for complex logic to leverage caching
+* **Function Nodes**: Enable result storage only when needed to avoid memory overhead
+* **ReAct Loops**: Set appropriate iteration limits and timeouts to prevent infinite loops
 
 ### Memory Management
 
-- **Metadata**: Use metadata sparingly for configuration; avoid storing large objects
-- **State**: Leverage `StoreResultAs` for important results rather than storing everything
-- **Connections**: Minimize the number of conditional edges for better performance
+* **Metadata**: Use metadata sparingly for configuration; avoid storing large objects
+* **State**: Leverage `StoreResultAs` for important results rather than storing everything
+* **Connections**: Minimize the number of conditional edges for better performance
 
 ### Monitoring and Debugging
 
-- **Metrics**: Enable metrics tracking for performance-critical nodes
-- **Logging**: Use the built-in logging capabilities for debugging complex workflows
-- **Validation**: Implement proper validation to catch issues early
+* **Metrics**: Enable metrics tracking for performance-critical nodes
+* **Logging**: Use the built-in logging capabilities for debugging complex workflows
+* **Validation**: Implement proper validation to catch issues early
 
 ## Related Types
 
-- **IGraphNode**: Base interface for all graph nodes
-- **GraphState**: Wrapper around KernelArguments with execution metadata
-- **ConditionalEdge**: Defines conditional transitions between nodes
-- **ActionGraphNode**: Specialized node for executing actions
-- **GraphExecutor**: Orchestrates the execution of graph workflows
+* **IGraphNode**: Base interface for all graph nodes
+* **GraphState**: Wrapper around KernelArguments with execution metadata
+* **ConditionalEdge**: Defines conditional transitions between nodes
+* **ActionGraphNode**: Specialized node for executing actions
+* **GraphExecutor**: Orchestrates the execution of graph workflows
 
 ## See Also
 
-- [Node Types](../concepts/node-types.md) - Comprehensive overview of available node implementations
-- [Execution Model](../concepts/execution-model.md) - How nodes participate in execution
-- [ReAct Pattern](../patterns/react.md) - Understanding the ReAct reasoning pattern
-- [Conditional Nodes](../how-to/conditional-nodes.md) - Building conditional workflows
-- [Getting Started](../getting-started.md) - Building your first graph
+* [Node Types](../concepts/node-types.md) - Comprehensive overview of available node implementations
+* [Execution Model](../concepts/execution-model.md) - How nodes participate in execution
+* [ReAct Pattern](../patterns/react.md) - Understanding the ReAct reasoning pattern
+* [Conditional Nodes](../how-to/conditional-nodes.md) - Building conditional workflows
+* [Getting Started](../getting-started.md) - Building your first graph

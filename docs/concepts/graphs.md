@@ -28,9 +28,9 @@ var graph = new Graph
 ```
 
 ### Nodes and Edges
-- **Nodes**: Encapsulate work (SK functions, loops, subgraphs, tools)
-- **Edges**: Carry optional conditions to control flow
-- **Validation**: The engine ensures validity before execution
+* **Nodes**: Encapsulate work (SK functions, loops, subgraphs, tools)
+* **Edges**: Carry optional conditions to control flow
+* **Validation**: The engine ensures validity before execution
 
 ## Graph Types
 
@@ -102,10 +102,10 @@ if (!validationResult.IsValid)
 ```
 
 ### Validation Rules
-- **Connectivity**: All nodes must be reachable
-- **Cycles**: Detection of infinite loops
-- **Types**: Validation of input/output types
-- **Dependencies**: Circular dependency checks
+* **Connectivity**: All nodes must be reachable
+* **Cycles**: Detection of infinite loops
+* **Types**: Validation of input/output types
+* **Dependencies**: Circular dependency checks
 
 ## Graph Construction
 
@@ -240,18 +240,18 @@ logger.LogGraphValidation(graph.Id, validationResult);
 
 ## See Also
 
-- [Graph Concepts](../concepts/graph-concepts.md)
-- [Node Types](../concepts/node-types.md)
-- [Routing](../concepts/routing.md)
-- [Execution](../concepts/execution.md)
-- [Building a Graph](../how-to/build-a-graph.md)
-- [Subgraph Examples](../examples/subgraph-examples.md)
+* [Graph Concepts](../concepts/graph-concepts.md)
+* [Node Types](../concepts/node-types.md)
+* [Routing](../concepts/routing.md)
+* [Execution](../concepts/execution.md)
+* [Building a Graph](../how-to/build-a-graph.md)
+* [Subgraph Examples](../examples/subgraph-examples.md)
 
 ## References
 
-- `Graph`: Main class for representing computational graphs
-- `GraphBuilder`: Fluent builder for graphs
-- `WorkflowValidator`: Graph integrity validator
-- `GraphExecutor`: Main graph executor
-- `GraphDocumentationGenerator`: Automatic documentation generator
-- `GraphPerformanceMetrics`: Execution performance metrics
+* `Graph`: Main class for representing computational graphs
+* `GraphBuilder`: Fluent builder for graphs
+* `WorkflowValidator`: Graph integrity validator
+* `GraphExecutor`: Main graph executor
+* `GraphDocumentationGenerator`: Automatic documentation generator
+* `GraphPerformanceMetrics`: Execution performance metrics

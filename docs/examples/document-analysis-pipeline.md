@@ -5,36 +5,36 @@ This example demonstrates a comprehensive document processing workflow using the
 ## Objective
 
 Learn how to implement a document analysis pipeline in graph-based workflows to:
-- Process documents through multiple analysis stages
-- Implement parallel processing for performance optimization
-- Handle different document types and formats
-- Extract structured information from unstructured text
-- Build resilient pipelines with error handling and recovery
-- Scale document processing across multiple workers
+* Process documents through multiple analysis stages
+* Implement parallel processing for performance optimization
+* Handle different document types and formats
+* Extract structured information from unstructured text
+* Build resilient pipelines with error handling and recovery
+* Scale document processing across multiple workers
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Pipeline Processing**: Sequential execution of document analysis stages
-- **Parallel Processing**: Concurrent execution of independent analysis tasks
-- **Document Classification**: Automatic categorization of documents by type and content
-- **Information Extraction**: Structured data extraction from unstructured text
-- **Error Handling**: Graceful handling of processing failures and recovery
+* **Pipeline Processing**: Sequential execution of document analysis stages
+* **Parallel Processing**: Concurrent execution of independent analysis tasks
+* **Document Classification**: Automatic categorization of documents by type and content
+* **Information Extraction**: Structured data extraction from unstructured text
+* **Error Handling**: Graceful handling of processing failures and recovery
 
 ### Core Classes
 
-- `FunctionGraphNode`: Executes document processing functions
-- `ConditionalGraphNode`: Routes documents based on type and content
-- `GraphExecutor`: Orchestrates the document analysis pipeline
-- `GraphState`: Manages document state and metadata throughout processing
+* `FunctionGraphNode`: Executes document processing functions
+* `ConditionalGraphNode`: Routes documents based on type and content
+* `GraphExecutor`: Orchestrates the document analysis pipeline
+* `GraphState`: Manages document state and metadata throughout processing
 
 ## Running the Example
 
@@ -904,14 +904,14 @@ realTimePipeline.ResultPublished += (sender, e) =>
 
 ## Related Examples
 
-- [Conditional Nodes](./conditional-nodes.md): Dynamic routing and decision making
-- [Streaming Execution](./streaming-execution.md): Real-time processing and monitoring
-- [Multi-Agent](./multi-agent.md): Coordinated document processing
-- [Checkpointing](./checkpointing.md): State persistence and recovery
+* [Conditional Nodes](./conditional-nodes.md): Dynamic routing and decision making
+* [Streaming Execution](./streaming-execution.md): Real-time processing and monitoring
+* [Multi-Agent](./multi-agent.md): Coordinated document processing
+* [Checkpointing](./checkpointing.md): State persistence and recovery
 
 ## See Also
 
-- [Document Processing Concepts](../concepts/document-processing.md): Understanding document analysis
-- [Pipeline Patterns](../patterns/pipeline.md): Building processing pipelines
-- [Performance Optimization](../how-to/performance-optimization.md): Optimizing processing performance
-- [API Reference](../api/): Complete API documentation
+* [Document Processing Concepts](../concepts/document-processing.md): Understanding document analysis
+* [Pipeline Patterns](../patterns/pipeline.md): Building processing pipelines
+* [Performance Optimization](../how-to/performance-optimization.md): Optimizing processing performance
+* [API Reference](../api/): Complete API documentation

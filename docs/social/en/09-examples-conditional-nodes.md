@@ -21,10 +21,10 @@ decisionNode.AddConditionalEdge(routeB, context => context.State.Score <= 0.8);
 ```
 
 Perfect for:
-- 🎯 Content moderation systems
-- 🏥 Medical diagnosis workflows
-- 💳 Fraud detection pipelines
-- 📊 Dynamic reporting systems
+* 🎯 Content moderation systems
+* 🏥 Medical diagnosis workflows
+* 💳 Fraud detection pipelines
+* 📊 Dynamic reporting systems
 
 **Make your workflows intelligent** → [https://skgraph.dev/](https://skgraph.dev/)
 

@@ -23,10 +23,10 @@ var visualGraph = new Graph
 ```
 
 Perfect for:
-- 🐛 Development and debugging
-- 📊 Performance optimization
-- 👥 Team collaboration
-- 📚 Documentation and training
+* 🐛 Development and debugging
+* 📊 Performance optimization
+* 👥 Team collaboration
+* 📚 Documentation and training
 
 **Visualize your AI workflows** → [https://skgraph.dev/](https://skgraph.dev/)
 

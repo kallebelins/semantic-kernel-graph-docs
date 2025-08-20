@@ -6,11 +6,11 @@ SemanticKernel.Graph provides a comprehensive type system and validation framewo
 
 The schema typing and validation system consists of several key components:
 
-- **GraphTypeInferenceEngine**: Automatically infers input/output schemas for untyped nodes
-- **StateValidator**: Comprehensive validation of graph state integrity and consistency
-- **TypedSchema System**: Strong typing for graph parameters with primitive and .NET type support
-- **State Migration System**: Automatic state evolution between different versions
-- **Compile-time Validation**: Early detection of schema incompatibilities and errors
+* **GraphTypeInferenceEngine**: Automatically infers input/output schemas for untyped nodes
+* **StateValidator**: Comprehensive validation of graph state integrity and consistency
+* **TypedSchema System**: Strong typing for graph parameters with primitive and .NET type support
+* **State Migration System**: Automatic state evolution between different versions
+* **Compile-time Validation**: Early detection of schema incompatibilities and errors
 
 ## Core Components
 
@@ -30,10 +30,10 @@ public static class GraphTypeInferenceEngine
 ```
 
 **Key Features:**
-- **Conservative inference**: Only infers types when confident about the relationship
-- **Name-based propagation**: Maps parameters by name across node boundaries
-- **Upstream analysis**: Examines predecessor nodes to determine input requirements
-- **Fallback handling**: Provides untyped fallbacks when type information is unavailable
+* **Conservative inference**: Only infers types when confident about the relationship
+* **Name-based propagation**: Maps parameters by name across node boundaries
+* **Upstream analysis**: Examines predecessor nodes to determine input requirements
+* **Fallback handling**: Provides untyped fallbacks when type information is unavailable
 
 **Usage Example:**
 ```csharp
@@ -133,14 +133,14 @@ public sealed class GraphType
 ```
 
 **Primitive Types:**
-- **Any**: Accepts any value (default)
-- **String**: String values only
-- **Integer**: Integer values (int, long, etc.)
-- **Number**: Numeric values (int, double, decimal, etc.)
-- **Boolean**: Boolean values only
-- **Object**: Object instances
-- **Array**: Array or collection values
-- **Json**: JSON-formatted strings
+* **Any**: Accepts any value (default)
+* **String**: String values only
+* **Integer**: Integer values (int, long, etc.)
+* **Number**: Numeric values (int, double, decimal, etc.)
+* **Boolean**: Boolean values only
+* **Object**: Object instances
+* **Array**: Array or collection values
+* **Json**: JSON-formatted strings
 
 **Usage Example:**
 ```csharp
@@ -334,10 +334,10 @@ public readonly struct StateVersion : IEquatable<StateVersion>, IComparable<Stat
 ```
 
 **Version Compatibility:**
-- **Major version**: Incompatible changes require migration
-- **Minor version**: Backward-compatible additions
-- **Patch version**: Bug fixes and minor improvements
-- **Compatibility**: Same major version and >= minimum supported
+* **Major version**: Incompatible changes require migration
+* **Minor version**: Backward-compatible additions
+* **Patch version**: Bug fixes and minor improvements
+* **Compatibility**: Same major version and >= minimum supported
 
 ### IStateMigration Interface
 
@@ -470,10 +470,10 @@ foreach (var warning in result.Warnings)
 ```
 
 **Validation Features:**
-- **Type checking**: Ensures output types are compatible with input types
-- **Required parameter validation**: Warns about missing required inputs
-- **Schema propagation**: Uses type inference to fill gaps in untyped nodes
-- **Edge validation**: Checks compatibility across all graph connections
+* **Type checking**: Ensures output types are compatible with input types
+* **Required parameter validation**: Warns about missing required inputs
+* **Schema propagation**: Uses type inference to fill gaps in untyped nodes
+* **Edge validation**: Checks compatibility across all graph connections
 
 ### ValidationResult
 
@@ -643,19 +643,19 @@ Console.WriteLine(baseType.IsAssignableTo(derivedType)); // False
 ### Common Issues
 
 **Type Inference Not Working**
-- Ensure source nodes implement `ITypedSchemaNode`
-- Check that parameter names match exactly (case-insensitive)
-- Verify that nodes are properly connected in the graph
+* Ensure source nodes implement `ITypedSchemaNode`
+* Check that parameter names match exactly (case-insensitive)
+* Verify that nodes are properly connected in the graph
 
 **Migration Failures**
-- Check version compatibility before migration
-- Ensure all required migrations are registered
-- Validate serialized state format before migration
+* Check version compatibility before migration
+* Ensure all required migrations are registered
+* Validate serialized state format before migration
 
 **Validation Errors**
-- Review schema definitions for required fields
-- Check type compatibility across node boundaries
-- Verify that all required inputs are provided
+* Review schema definitions for required fields
+* Check type compatibility across node boundaries
+* Verify that all required inputs are provided
 
 ### Debug Tips
 
@@ -676,7 +676,7 @@ Console.WriteLine(baseType.IsAssignableTo(derivedType)); // False
 
 ## See Also
 
-- [Building a Graph](build-a-graph.md) - Learn how to create graphs with typed schemas
-- [State Management](state.md) - Understand graph state and serialization
-- [Error Handling and Resilience](error-handling-and-resilience.md) - Handle validation failures gracefully
-- [Graph Inspection and Debugging](debug-and-inspection.md) - Debug schema and validation issues
+* [Building a Graph](build-a-graph.md) - Learn how to create graphs with typed schemas
+* [State Management](state.md) - Understand graph state and serialization
+* [Error Handling and Resilience](error-handling-and-resilience.md) - Handle validation failures gracefully
+* [Graph Inspection and Debugging](debug-and-inspection.md) - Debug schema and validation issues

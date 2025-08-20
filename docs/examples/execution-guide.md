@@ -14,10 +14,10 @@ This guide provides comprehensive instructions for running examples in the Seman
 
 The examples in this documentation provide comprehensive demonstrations of the Semantic Kernel Graph package capabilities. Each example includes:
 
-- **Complete code snippets** that you can copy and adapt
-- **Step-by-step explanations** of how the code works
-- **Configuration examples** for different scenarios
-- **Best practices** and usage patterns
+* **Complete code snippets** that you can copy and adapt
+* **Step-by-step explanations** of how the code works
+* **Configuration examples** for different scenarios
+* **Best practices** and usage patterns
 
 Browse the examples by category below to find the right starting point for your use case.
 
@@ -28,42 +28,42 @@ The examples are organized into logical categories to help you find the right st
 ## Available Examples
 
 ### Core Graph Patterns
-- `chain-of-thought` - Chain of Thought reasoning patterns
-- `conditional-nodes` - Dynamic routing with conditional logic
-- `loop-nodes` - Controlled iteration and loop management
-- `subgraphs` - Modular graph composition and isolation
+* `chain-of-thought` - Chain of Thought reasoning patterns
+* `conditional-nodes` - Dynamic routing with conditional logic
+* `loop-nodes` - Controlled iteration and loop management
+* `subgraphs` - Modular graph composition and isolation
 
 ### Agent Patterns
-- `react-agent` - Reasoning and action loops
-- `react` - Complex problem solving with ReAct
-- `memory-agent` - Persistent memory across conversations
-- `retrieval-agent` - Information retrieval and synthesis
-- `multi-agent` - Coordinated multi-agent workflows
+* `react-agent` - Reasoning and action loops
+* `react` - Complex problem solving with ReAct
+* `memory-agent` - Persistent memory across conversations
+* `retrieval-agent` - Information retrieval and synthesis
+* `multi-agent` - Coordinated multi-agent workflows
 
 ### Advanced Workflows
-- `advanced-patterns` - Complex workflow compositions
-- `advanced-routing` - Dynamic routing with semantic similarity
-- `dynamic-routing` - Runtime routing decisions
-- `documents` - Multi-stage document processing
-- `multihop-rag-retry` - Resilient information retrieval
+* `advanced-patterns` - Complex workflow compositions
+* `advanced-routing` - Dynamic routing with semantic similarity
+* `dynamic-routing` - Runtime routing decisions
+* `documents` - Multi-stage document processing
+* `multihop-rag-retry` - Resilient information retrieval
 
 ### State and Persistence
-- `checkpointing` - Execution state persistence and recovery
-- `streaming-execution` - Real-time execution monitoring
+* `checkpointing` - Execution state persistence and recovery
+* `streaming-execution` - Real-time execution monitoring
 
 ### Observability and Debugging
-- `metrics` - Performance monitoring and metrics collection
-- `graph-visualization` - Graph structure visualization
-- `logging` - Comprehensive logging and tracing
+* `metrics` - Performance monitoring and metrics collection
+* `graph-visualization` - Graph structure visualization
+* `logging` - Comprehensive logging and tracing
 
 ### Integration and Extensions
-- `plugins` - Dynamic plugin loading and execution
-- `rest-api` - External API integration via REST tools
-- `assert-suggest` - Validation and suggestion patterns
+* `plugins` - Dynamic plugin loading and execution
+* `rest-api` - External API integration via REST tools
+* `assert-suggest` - Validation and suggestion patterns
 
 ### AI and Optimization
-- `optimizers-fewshot` - Prompt optimization and few-shot learning
-- `chatbot` - Conversational AI with persistent context
+* `optimizers-fewshot` - Prompt optimization and few-shot learning
+* `chatbot` - Conversational AI with persistent context
 
 ## Configuration
 
@@ -326,7 +326,7 @@ kernelBuilder.AddGraphSupport(options =>
 
 ```yaml
 # GitHub Actions example
-- name: Run Examples
+* name: Run Examples
   run: |
     # Examples are available in the documentation
     # Use the code snippets and patterns provided
@@ -357,30 +357,30 @@ semantic-kernel-graph-examples --example chatbot --config custom-config.json
 ## Best Practices
 
 ### 1. Environment Management
-- Use environment variables for sensitive configuration
-- Keep `appsettings.json` for non-sensitive defaults
-- Use different configurations for development/staging/production
+* Use environment variables for sensitive configuration
+* Keep `appsettings.json` for non-sensitive defaults
+* Use different configurations for development/staging/production
 
 ### 2. Example Selection
-- Start with simple examples (chain-of-thought, conditional-nodes)
-- Progress to complex patterns (multi-agent, advanced-patterns)
-- Browse the [examples index](./index.md) to discover available examples
+* Start with simple examples (chain-of-thought, conditional-nodes)
+* Progress to complex patterns (multi-agent, advanced-patterns)
+* Browse the [examples index](./index.md) to discover available examples
 
 ### 3. Error Handling
-- Monitor execution logs for errors
-- Use debug mode for troubleshooting
-- Check API key configuration first
-- Refer to the [troubleshooting guide](../troubleshooting.md) for common issues
+* Monitor execution logs for errors
+* Use debug mode for troubleshooting
+* Check API key configuration first
+* Refer to the [troubleshooting guide](../troubleshooting.md) for common issues
 
 ### 4. Performance
-- Enable metrics for performance monitoring
-- Use appropriate timeouts for long-running examples
-- Monitor memory usage for large graphs
+* Enable metrics for performance monitoring
+* Use appropriate timeouts for long-running examples
+* Monitor memory usage for large graphs
 
 ## Related Documentation
 
-- [Examples Index](./index.md): Complete list of available examples
-- [Getting Started](../getting-started.md): Quick start guide
-- [Installation](../installation.md): Setup and configuration
-- [API Reference](../api/): Complete API documentation
-- [Troubleshooting](../troubleshooting.md): Common issues and solutions
+* [Examples Index](./index.md): Complete list of available examples
+* [Getting Started](../getting-started.md): Quick start guide
+* [Installation](../installation.md): Setup and configuration
+* [API Reference](../api/): Complete API documentation
+* [Troubleshooting](../troubleshooting.md): Common issues and solutions

@@ -12,10 +12,10 @@ Learn how to implement reasoning and acting patterns in SemanticKernel.Graph usi
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 8.0 or later
-- SemanticKernel.Graph package installed
-- Semantic Kernel with chat completion capabilities
-- Basic understanding of graph execution and node composition
+* .NET 8.0 or later
+* SemanticKernel.Graph package installed
+* Semantic Kernel with chat completion capabilities
+* Basic understanding of graph execution and node composition
 
 ## Quick Setup
 
@@ -378,21 +378,21 @@ if (metadata.ContainsKey("iterations"))
 
 ### Performance Recommendations
 
-- Use appropriate iteration limits based on problem complexity
-- Enable caching for Chain of Thought to avoid redundant reasoning
-- Set reasonable timeouts to prevent infinite loops
-- Monitor reasoning quality scores and adjust confidence thresholds
-- Use early termination when possible to improve efficiency
+* Use appropriate iteration limits based on problem complexity
+* Enable caching for Chain of Thought to avoid redundant reasoning
+* Set reasonable timeouts to prevent infinite loops
+* Monitor reasoning quality scores and adjust confidence thresholds
+* Use early termination when possible to improve efficiency
 
 ## See Also
 
-- **Reference**: [ReActLoopGraphNode](../api/ReActLoopGraphNode.md), [ChainOfThoughtGraphNode](../api/ChainOfThoughtGraphNode.md), [ReasoningGraphNode](../api/ReasoningGraphNode.md)
-- **Guides**: [Advanced Reasoning Patterns](../guides/advanced-reasoning.md), [Agent Architecture](../guides/agent-architecture.md)
-- **Examples**: [ReActAgentExample](../examples/react-agent.md), [ChainOfThoughtExample](../examples/chain-of-thought.md), [ReActProblemSolvingExample](../examples/react-problem-solving.md)
+* **Reference**: [ReActLoopGraphNode](../api/ReActLoopGraphNode.md), [ChainOfThoughtGraphNode](../api/ChainOfThoughtGraphNode.md), [ReasoningGraphNode](../api/ReasoningGraphNode.md)
+* **Guides**: [Advanced Reasoning Patterns](../guides/advanced-reasoning.md), [Agent Architecture](../guides/agent-architecture.md)
+* **Examples**: [ReActAgentExample](../examples/react-agent.md), [ChainOfThoughtExample](../examples/chain-of-thought.md), [ReActProblemSolvingExample](../examples/react-problem-solving.md)
 
 ## Reference APIs
 
-- **[ReActLoopGraphNode](../api/nodes.md#react-loop-graph-node)**: ReAct reasoning loop implementation
-- **[ChainOfThoughtGraphNode](../api/nodes.md#chain-of-thought-graph-node)**: Chain of Thought reasoning node
-- **[ReasoningGraphNode](../api/nodes.md#reasoning-graph-node)**: Base reasoning node interface
-- **[ActionGraphNode](../api/nodes.md#action-graph-node)**: Action execution node
+* **[ReActLoopGraphNode](../api/nodes.md#react-loop-graph-node)**: ReAct reasoning loop implementation
+* **[ChainOfThoughtGraphNode](../api/nodes.md#chain-of-thought-graph-node)**: Chain of Thought reasoning node
+* **[ReasoningGraphNode](../api/nodes.md#reasoning-graph-node)**: Base reasoning node interface
+* **[ActionGraphNode](../api/nodes.md#action-graph-node)**: Action execution node

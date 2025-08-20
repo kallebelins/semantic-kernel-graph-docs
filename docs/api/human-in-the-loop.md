@@ -6,11 +6,11 @@ The Human-in-the-Loop system in SemanticKernel.Graph provides comprehensive capa
 
 The HITL system consists of several key components:
 
-- **`HumanApprovalGraphNode`**: Pauses execution for human approval decisions
-- **`ConfidenceGateGraphNode`**: Monitors confidence levels and triggers human intervention when thresholds are not met
-- **`HumanApprovalBatchManager`**: Groups and manages multiple approval requests efficiently
-- **`HumanInteractionStore`**: Persists and coordinates HITL requests and responses
-- **`WebApiHumanInteractionChannel`**: Web-based interaction channel for production deployments
+* **`HumanApprovalGraphNode`**: Pauses execution for human approval decisions
+* **`ConfidenceGateGraphNode`**: Monitors confidence levels and triggers human intervention when thresholds are not met
+* **`HumanApprovalBatchManager`**: Groups and manages multiple approval requests efficiently
+* **`HumanInteractionStore`**: Persists and coordinates HITL requests and responses
+* **`WebApiHumanInteractionChannel`**: Web-based interaction channel for production deployments
 
 ## Core Classes
 
@@ -39,33 +39,33 @@ public sealed class HumanApprovalGraphNode : IGraphNode
 ```
 
 **Constructor Parameters:**
-- `approvalTitle`: Title of the approval request
-- `approvalMessage`: Detailed message presented to the user
-- `interactionChannel`: Communication channel for user interaction
-- `nodeId`: Optional unique identifier for the node
-- `logger`: Optional logger for diagnostics
+* `approvalTitle`: Title of the approval request
+* `approvalMessage`: Detailed message presented to the user
+* `interactionChannel`: Communication channel for user interaction
+* `nodeId`: Optional unique identifier for the node
+* `logger`: Optional logger for diagnostics
 
 **Key Features:**
-- **Conditional activation**: Optional activation conditions based on graph state
-- **Multiple channels**: Support for console, web API, CLI, and custom channels
-- **Configurable timeouts**: Automatic fallback actions when no response is received
-- **Batch approval**: Integration with batch approval management
-- **Context awareness**: Rich context information for human decision-making
-- **State modifications**: Optional user-approved state changes
-- **Audit trail**: Comprehensive tracking of approval decisions and metadata
+* **Conditional activation**: Optional activation conditions based on graph state
+* **Multiple channels**: Support for console, web API, CLI, and custom channels
+* **Configurable timeouts**: Automatic fallback actions when no response is received
+* **Batch approval**: Integration with batch approval management
+* **Context awareness**: Rich context information for human decision-making
+* **State modifications**: Optional user-approved state changes
+* **Audit trail**: Comprehensive tracking of approval decisions and metadata
 
 **Input Parameters:**
-- `execution_context`: Current execution context
-- `previous_result`: Result from previous node execution
-- `graph_state`: Current graph state
-- `user_context`: User-specific context information
+* `execution_context`: Current execution context
+* `previous_result`: Result from previous node execution
+* `graph_state`: Current graph state
+* `user_context`: User-specific context information
 
 **Output Parameters:**
-- `approval_result`: Boolean result of the approval decision
-- `user_response`: Full user response object
-- `approved_by`: Identifier of the user who made the decision
-- `approval_timestamp`: When the decision was made
-- `user_modifications`: Any state modifications requested by the user
+* `approval_result`: Boolean result of the approval decision
+* `user_response`: Full user response object
+* `approved_by`: Identifier of the user who made the decision
+* `approval_timestamp`: When the decision was made
+* `user_modifications`: Any state modifications requested by the user
 
 ### ConfidenceGateGraphNode
 
@@ -88,33 +88,33 @@ public sealed class ConfidenceGateGraphNode : IGraphNode
 ```
 
 **Constructor Parameters:**
-- `confidenceThreshold`: Minimum confidence threshold (0.0 to 1.0)
-- `nodeId`: Optional unique identifier for the node
-- `logger`: Optional logger for diagnostics
+* `confidenceThreshold`: Minimum confidence threshold (0.0 to 1.0)
+* `nodeId`: Optional unique identifier for the node
+* `logger`: Optional logger for diagnostics
 
 **Key Features:**
-- **Configurable threshold**: Set minimum confidence levels for automatic processing
-- **Multiple sources**: Support for LLM confidence, similarity scores, and custom metrics
-- **Automatic analysis**: Detects patterns of uncertainty and potential issues
-- **Escalation levels**: Different approval requirements based on confidence severity
-- **Learning capabilities**: Adjusts thresholds based on historical feedback
-- **Manual bypass**: Optional manual override capabilities
+* **Configurable threshold**: Set minimum confidence levels for automatic processing
+* **Multiple sources**: Support for LLM confidence, similarity scores, and custom metrics
+* **Automatic analysis**: Detects patterns of uncertainty and potential issues
+* **Escalation levels**: Different approval requirements based on confidence severity
+* **Learning capabilities**: Adjusts thresholds based on historical feedback
+* **Manual bypass**: Optional manual override capabilities
 
 **Input Parameters:**
-- `confidence_score`: Overall confidence score
-- `uncertainty_factors`: Factors contributing to uncertainty
-- `llm_confidence`: LLM-generated confidence metrics
-- `similarity_scores`: Similarity-based confidence indicators
-- `validation_results`: Validation outcome confidence
-- `previous_confidence_history`: Historical confidence data
+* `confidence_score`: Overall confidence score
+* `uncertainty_factors`: Factors contributing to uncertainty
+* `llm_confidence`: LLM-generated confidence metrics
+* `similarity_scores`: Similarity-based confidence indicators
+* `validation_results`: Validation outcome confidence
+* `previous_confidence_history`: Historical confidence data
 
 **Output Parameters:**
-- `gate_result`: Whether the gate passed or blocked execution
-- `confidence_level`: Current confidence level assessment
-- `uncertainty_analysis`: Detailed uncertainty factor analysis
-- `human_override`: Whether manual override was applied
-- `confidence_sources`: Sources contributing to confidence calculation
-- `gate_decision_reason`: Explanation of gate decision
+* `gate_result`: Whether the gate passed or blocked execution
+* `confidence_level`: Current confidence level assessment
+* `uncertainty_analysis`: Detailed uncertainty factor analysis
+* `human_override`: Whether manual override was applied
+* `confidence_sources`: Sources contributing to confidence calculation
+* `gate_decision_reason`: Explanation of gate decision
 
 ### HumanApprovalBatchManager
 
@@ -131,22 +131,22 @@ public sealed class HumanApprovalBatchManager : IDisposable
 ```
 
 **Constructor Parameters:**
-- `defaultChannel`: Default interaction channel for processing batches
-- `options`: Configuration options for batch processing
-- `logger`: Optional logger for diagnostics
+* `defaultChannel`: Default interaction channel for processing batches
+* `options`: Configuration options for batch processing
+* `logger`: Optional logger for diagnostics
 
 **Key Features:**
-- **Smart grouping**: Groups requests by type, priority, user, and context
-- **Configurable timeouts**: Batch formation and processing timeouts
-- **Partial approval**: Option to process incomplete batches
-- **Detailed statistics**: Performance and usage metrics
-- **Thread safety**: Safe concurrent operations
-- **Persistence**: Optional batch state persistence
+* **Smart grouping**: Groups requests by type, priority, user, and context
+* **Configurable timeouts**: Batch formation and processing timeouts
+* **Partial approval**: Option to process incomplete batches
+* **Detailed statistics**: Performance and usage metrics
+* **Thread safety**: Safe concurrent operations
+* **Persistence**: Optional batch state persistence
 
 **Events:**
-- `BatchFormed`: Raised when a batch is ready for processing
-- `BatchCompleted`: Raised when a batch processing is finished
-- `RequestAddedToBatch`: Raised when a request is added to a batch
+* `BatchFormed`: Raised when a batch is ready for processing
+* `BatchCompleted`: Raised when a batch processing is finished
+* `RequestAddedToBatch`: Raised when a request is added to a batch
 
 **Batch Configuration Options:**
 ```csharp
@@ -178,17 +178,17 @@ public interface IHumanInteractionStore
 ```
 
 **Key Features:**
-- **Request management**: Add, retrieve, and track pending requests
-- **Response handling**: Submit and process user responses
-- **Status tracking**: Monitor request status throughout lifecycle
-- **Filtering**: List requests by execution ID or node ID
-- **Async operations**: Non-blocking request/response handling
-- **Cancellation support**: Graceful cancellation of pending requests
+* **Request management**: Add, retrieve, and track pending requests
+* **Response handling**: Submit and process user responses
+* **Status tracking**: Monitor request status throughout lifecycle
+* **Filtering**: List requests by execution ID or node ID
+* **Async operations**: Non-blocking request/response handling
+* **Cancellation support**: Graceful cancellation of pending requests
 
 **Events:**
-- `RequestAdded`: Raised when a new request is added
-- `ResponseSubmitted`: Raised when a response is submitted
-- `RequestCancelled`: Raised when a request is cancelled
+* `RequestAdded`: Raised when a new request is added
+* `ResponseSubmitted`: Raised when a response is submitted
+* `RequestCancelled`: Raised when a request is cancelled
 
 ### WebApiHumanInteractionChannel
 
@@ -204,20 +204,20 @@ public sealed class WebApiHumanInteractionChannel : IHumanInteractionChannel, ID
 ```
 
 **Constructor Parameters:**
-- `store`: Backing store for request/response coordination
+* `store`: Backing store for request/response coordination
 
 **Key Features:**
-- **Web API integration**: Exposes requests via backing store for REST consumption
-- **Event-driven**: Raises events for request lifecycle changes
-- **Configuration**: Flexible configuration options
-- **Store cooperation**: Works with any `IHumanInteractionStore` implementation
-- **Production ready**: Designed for web-based approval interfaces
+* **Web API integration**: Exposes requests via backing store for REST consumption
+* **Event-driven**: Raises events for request lifecycle changes
+* **Configuration**: Flexible configuration options
+* **Store cooperation**: Works with any `IHumanInteractionStore` implementation
+* **Production ready**: Designed for web-based approval interfaces
 
 **Events:**
-- `ResponseReceived`: Raised when a response is received
-- `RequestTimedOut`: Raised when a request times out
-- `RequestAvailable`: Raised when a new request becomes available
-- `RequestCancelled`: Raised when a request is cancelled
+* `ResponseReceived`: Raised when a response is received
+* `RequestTimedOut`: Raised when a request times out
+* `RequestAvailable`: Raised when a new request becomes available
+* `RequestCancelled`: Raised when a request is cancelled
 
 ## Configuration and Options
 
@@ -237,11 +237,11 @@ public class HumanInteractionTimeout
 ```
 
 **Properties:**
-- **`PrimaryTimeout`**: Initial timeout for the interaction
-- **`EscalationTimeout`**: Extended timeout for escalation scenarios
-- **`DefaultAction`**: Action to take when timeout occurs
-- **`EnableEscalation`**: Whether to enable timeout escalation
-- **`EscalationRecipients`**: Recipients for escalation notifications
+* **`PrimaryTimeout`**: Initial timeout for the interaction
+* **`EscalationTimeout`**: Extended timeout for escalation scenarios
+* **`DefaultAction`**: Action to take when timeout occurs
+* **`EnableEscalation`**: Whether to enable timeout escalation
+* **`EscalationRecipients`**: Recipients for escalation notifications
 
 ### HumanInteractionOption
 
@@ -261,13 +261,13 @@ public class HumanInteractionOption
 ```
 
 **Properties:**
-- **`OptionId`**: Unique identifier for the option
-- **`DisplayText`**: Human-readable text for display
-- **`Description`**: Detailed description of the option
-- **`Value`**: Value returned when option is selected
-- **`IsDefault`**: Whether this is the default option
-- **`RequiresJustification`**: Whether justification is required
-- **`AllowedUsers`**: Users allowed to select this option
+* **`OptionId`**: Unique identifier for the option
+* **`DisplayText`**: Human-readable text for display
+* **`Description`**: Detailed description of the option
+* **`Value`**: Value returned when option is selected
+* **`IsDefault`**: Whether this is the default option
+* **`RequiresJustification`**: Whether justification is required
+* **`AllowedUsers`**: Users allowed to select this option
 
 ### BatchApprovalOptions
 
@@ -287,13 +287,13 @@ public class BatchApprovalOptions
 ```
 
 **Properties:**
-- **`MaxBatchSize`**: Maximum number of requests per batch
-- **`BatchFormationTimeout`**: Time to wait for batch formation
-- **`MaxBatchAge`**: Maximum age of a batch before processing
-- **`AllowPartialBatches`**: Whether to process incomplete batches
-- **`GroupingCriteria`**: Criteria for grouping requests
-- **`EnableNotifications`**: Whether to enable batch notifications
-- **`NotificationChannels`**: Channels for batch notifications
+* **`MaxBatchSize`**: Maximum number of requests per batch
+* **`BatchFormationTimeout`**: Time to wait for batch formation
+* **`MaxBatchAge`**: Maximum age of a batch before processing
+* **`AllowPartialBatches`**: Whether to process incomplete batches
+* **`GroupingCriteria`**: Criteria for grouping requests
+* **`EnableNotifications`**: Whether to enable batch notifications
+* **`NotificationChannels`**: Channels for batch notifications
 
 ## Usage Examples
 
@@ -755,8 +755,8 @@ privacyApprovalNode.AddApprovalOption("approve", "Approve Processing", true)
 
 ## See Also
 
-- [Human-in-the-Loop Guide](../how-to/human-in-the-loop.md) - Comprehensive guide to HITL concepts and techniques
-- [Conditional Nodes](./conditional-nodes.md) - Conditional execution and routing patterns
-- [Graph State](./graph-state.md) - State management for HITL workflows
-- [Graph Executor](./graph-executor.md) - Core execution engine that supports HITL
-- [HITL Examples](../../examples/hitl-examples.md) - Complete examples demonstrating HITL capabilities
+* [Human-in-the-Loop Guide](../how-to/human-in-the-loop.md) - Comprehensive guide to HITL concepts and techniques
+* [Conditional Nodes](./conditional-nodes.md) - Conditional execution and routing patterns
+* [Graph State](./graph-state.md) - State management for HITL workflows
+* [Graph Executor](./graph-executor.md) - Core execution engine that supports HITL
+* [HITL Examples](../../examples/hitl-examples.md) - Complete examples demonstrating HITL capabilities

@@ -4,12 +4,12 @@ Checkpointing and recovery are essential features in SemanticKernel.Graph that e
 
 ## What You'll Learn
 
-- How to save and restore graph execution state using `StateHelpers`
-- Managing state versions and compatibility across different releases
-- Implementing compression for efficient storage and transmission
-- Ensuring data integrity and validation during checkpoint operations
-- Configuring recovery policies and automatic cleanup
-- Building fault-tolerant workflows with automatic recovery
+* How to save and restore graph execution state using `StateHelpers`
+* Managing state versions and compatibility across different releases
+* Implementing compression for efficient storage and transmission
+* Ensuring data integrity and validation during checkpoint operations
+* Configuring recovery policies and automatic cleanup
+* Building fault-tolerant workflows with automatic recovery
 
 ## Concepts and Techniques
 
@@ -25,10 +25,10 @@ Checkpointing and recovery are essential features in SemanticKernel.Graph that e
 
 ## Prerequisites
 
-- [State Management](state.md) guide completed
-- Basic understanding of `GraphState` and `KernelArguments`
-- Graph memory service configured (required for checkpointing)
-- Checkpoint support enabled in your kernel
+* [State Management](state.md) guide completed
+* Basic understanding of `GraphState` and `KernelArguments`
+* Graph memory service configured (required for checkpointing)
+* Checkpoint support enabled in your kernel
 
 ## Core Checkpointing Components
 
@@ -637,8 +637,8 @@ Recovery taking too long: 5 minutes elapsed
 
 ## See Also
 
-- [State Management](state.md) - Core state management concepts
-- [Checkpointing Quickstart](../checkpointing-quickstart.md) - Quick introduction to checkpointing
-- [Execution Model](execution-model.md) - How execution flows through graphs
-- [Graph Recovery Service](../api/graph-recovery-service.md) - API reference for recovery operations
-- [Checkpointing Examples](../examples/checkpointing-examples.md) - Practical checkpointing examples
+* [State Management](state.md) - Core state management concepts
+* [Checkpointing Quickstart](../checkpointing-quickstart.md) - Quick introduction to checkpointing
+* [Execution Model](execution-model.md) - How execution flows through graphs
+* [Graph Recovery Service](../api/graph-recovery-service.md) - API reference for recovery operations
+* [Checkpointing Examples](../examples/checkpointing-examples.md) - Practical checkpointing examples

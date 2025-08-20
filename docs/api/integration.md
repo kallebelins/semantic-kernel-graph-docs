@@ -8,13 +8,13 @@ Implementation of `IGraphLogger` that integrates with Microsoft.Extensions.Loggi
 
 ### Features
 
-- Integration with Microsoft.Extensions.Logging
-- Structured logging with correlation IDs
-- Configurable data sanitization
-- Category and node-specific logging
-- Performance timing integration
-- State change tracking
-- Exception logging with context
+* Integration with Microsoft.Extensions.Logging
+* Structured logging with correlation IDs
+* Configurable data sanitization
+* Category and node-specific logging
+* Performance timing integration
+* State change tracking
+* Exception logging with context
 
 ### Constructors
 
@@ -58,7 +58,7 @@ public NodeLoggingConfig GetNodeConfig(string nodeId, string nodeType)
 
 ### Properties
 
-- `IsDisposed`: Gets whether the logger has been disposed
+* `IsDisposed`: Gets whether the logger has been disposed
 
 ## IGraphRegistry
 
@@ -66,10 +66,10 @@ Registry interface for managing named `GraphExecutor` instances to enable remote
 
 ### Features
 
-- Graph registration and lifecycle management
-- Thread-safe concurrent access
-- Remote execution support
-- Discovery and metadata access
+* Graph registration and lifecycle management
+* Thread-safe concurrent access
+* Remote execution support
+* Discovery and metadata access
 
 ### Methods
 
@@ -106,10 +106,10 @@ Registry interface for external tools that can be exposed as graph nodes.
 
 ### Features
 
-- Tool registration with metadata
-- Factory-based node creation
-- Search and discovery capabilities
-- Lifecycle management
+* Tool registration with metadata
+* Factory-based node creation
+* Search and discovery capabilities
+* Lifecycle management
 
 ### Methods
 
@@ -138,10 +138,10 @@ Interface for plugin registry operations providing discovery, registration, and 
 
 ### Features
 
-- Plugin registration with metadata
-- Factory-based instantiation
-- Search and filtering capabilities
-- Statistics and monitoring
+* Plugin registration with metadata
+* Factory-based instantiation
+* Search and filtering capabilities
+* Statistics and monitoring
 
 ### Methods
 
@@ -171,11 +171,11 @@ Utility for sanitizing sensitive data in logs, events, and exports with configur
 
 ### Features
 
-- Automatic sensitive key detection
-- Configurable sanitization levels
-- JSON element handling
-- Authorization token masking
-- Custom redaction text
+* Automatic sensitive key detection
+* Configurable sanitization levels
+* JSON element handling
+* Authorization token masking
+* Custom redaction text
 
 ### Constructors
 
@@ -301,10 +301,10 @@ Service that subscribes to human interaction events and records audit entries fo
 
 ### Features
 
-- Automatic audit trail generation
-- Sensitive data sanitization
-- Memory service integration
-- Recent audit caching
+* Automatic audit trail generation
+* Sensitive data sanitization
+* Memory service integration
+* Recent audit caching
 
 ### Constructors
 
@@ -552,9 +552,9 @@ var matchingPlugins = await pluginRegistry.SearchPluginsAsync(searchCriteria);
 
 ## See Also
 
-- [Integration and Extensions Guide](../how-to/integration-and-extensions.md) - How to configure and use integration features
-- [Security and Data Guide](../how-to/security-and-data.md) - Data sanitization and security best practices
-- [Metrics and Logging Guide](../how-to/metrics-and-observability.md) - Logging configuration and observability
-- [Extensions and Options Reference](./extensions-and-options.md) - Graph options and configuration
-- [Streaming APIs Reference](./streaming.md) - Real-time execution monitoring
-- [Inspection and Visualization Reference](./inspection-visualization.md) - Debug and inspection capabilities
+* [Integration and Extensions Guide](../how-to/integration-and-extensions.md) - How to configure and use integration features
+* [Security and Data Guide](../how-to/security-and-data.md) - Data sanitization and security best practices
+* [Metrics and Logging Guide](../how-to/metrics-and-observability.md) - Logging configuration and observability
+* [Extensions and Options Reference](./extensions-and-options.md) - Graph options and configuration
+* [Streaming APIs Reference](./streaming.md) - Real-time execution monitoring
+* [Inspection and Visualization Reference](./inspection-visualization.md) - Debug and inspection capabilities

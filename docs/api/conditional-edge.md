@@ -19,24 +19,24 @@ A conditional edge acts as a gatekeeper in your graph workflow, allowing you to 
 ## Core Properties
 
 ### Edge Identity
-- **`EdgeId`**: Unique, immutable identifier generated at construction time
-- **`Name`**: Human-readable name for diagnostics and visualization
-- **`SourceNode`**: The origin node from which traversal starts
-- **`TargetNode`**: The destination node reached when condition is true
+* **`EdgeId`**: Unique, immutable identifier generated at construction time
+* **`Name`**: Human-readable name for diagnostics and visualization
+* **`SourceNode`**: The origin node from which traversal starts
+* **`TargetNode`**: The destination node reached when condition is true
 
 ### Condition Evaluation
-- **`Condition`**: Predicate function that evaluates against `KernelArguments`
-- **`StateCondition`**: Optional predicate function that evaluates against `GraphState`
-- **`CreatedAt`**: UTC timestamp when the edge was created
+* **`Condition`**: Predicate function that evaluates against `KernelArguments`
+* **`StateCondition`**: Optional predicate function that evaluates against `GraphState`
+* **`CreatedAt`**: UTC timestamp when the edge was created
 
 ### Execution Metadata
-- **`TraversalCount`**: Number of times this edge has been traversed
-- **`LastTraversedAt`**: UTC timestamp of the last traversal
-- **`HasBeenTraversed`**: Boolean indicating if the edge has been used
+* **`TraversalCount`**: Number of times this edge has been traversed
+* **`LastTraversedAt`**: UTC timestamp of the last traversal
+* **`HasBeenTraversed`**: Boolean indicating if the edge has been used
 
 ### Configuration
-- **`Metadata`**: Mutable collection for storing routing weights, visualization hints, or provenance information
-- **`MergeConfiguration`**: Settings for state joining during parallel branch convergence
+* **`Metadata`**: Mutable collection for storing routing weights, visualization hints, or provenance information
+* **`MergeConfiguration`**: Settings for state joining during parallel branch convergence
 
 ## Constructors
 
@@ -53,10 +53,10 @@ public ConditionalEdge(
 Creates an edge with a predicate that evaluates over `KernelArguments`.
 
 **Parameters:**
-- `sourceNode`: The origin node
-- `targetNode`: The destination node  
-- `condition`: Side-effect free predicate function
-- `name`: Optional human-readable name (defaults to "Source -> Target")
+* `sourceNode`: The origin node
+* `targetNode`: The destination node  
+* `condition`: Side-effect free predicate function
+* `name`: Optional human-readable name (defaults to "Source -> Target")
 
 **Example:**
 ```csharp
@@ -81,10 +81,10 @@ public ConditionalEdge(
 Creates an edge with a predicate that evaluates over `GraphState`.
 
 **Parameters:**
-- `sourceNode`: The origin node
-- `targetNode`: The destination node
-- `stateCondition`: Side-effect free predicate function for graph state
-- `name`: Optional human-readable name
+* `sourceNode`: The origin node
+* `targetNode`: The destination node
+* `stateCondition`: Side-effect free predicate function for graph state
+* `name`: Optional human-readable name
 
 **Example:**
 ```csharp
@@ -175,13 +175,13 @@ public bool EvaluateCondition(KernelArguments arguments)
 Evaluates the condition against the provided arguments.
 
 **Parameters:**
-- `arguments`: The argument bag to evaluate
+* `arguments`: The argument bag to evaluate
 
 **Returns:** `true` if the condition is met, `false` otherwise
 
 **Exceptions:**
-- `ArgumentNullException`: When arguments is null
-- `InvalidOperationException`: When the underlying predicate throws
+* `ArgumentNullException`: When arguments is null
+* `InvalidOperationException`: When the underlying predicate throws
 
 **Example:**
 ```csharp
@@ -201,7 +201,7 @@ public bool EvaluateCondition(GraphState graphState)
 Evaluates the condition using `GraphState` when available, otherwise falls back to the `KernelArguments` predicate.
 
 **Parameters:**
-- `graphState`: The graph state to evaluate
+* `graphState`: The graph state to evaluate
 
 **Returns:** `true` if the condition is met, `false` otherwise
 
@@ -456,30 +456,30 @@ graph.ConnectWithTemplate("sourceNode", "targetNode",
 
 ## Performance Considerations
 
-- **Condition Functions**: Keep predicates fast and side-effect free
-- **State Access**: Use `GraphState` methods like `GetValue<T>()` for type-safe access
-- **Caching**: Consider caching expensive condition evaluations
-- **Validation**: Use `ValidateIntegrity()` during development to catch issues early
+* **Condition Functions**: Keep predicates fast and side-effect free
+* **State Access**: Use `GraphState` methods like `GetValue<T>()` for type-safe access
+* **Caching**: Consider caching expensive condition evaluations
+* **Validation**: Use `ValidateIntegrity()` during development to catch issues early
 
 ## Thread Safety
 
-- Instances are safe for concurrent reads
-- The `Metadata` bag and traversal counters are not synchronized
-- External synchronization required when multiple threads may mutate concurrently
-- Use `RecordTraversal()` for atomic updates when exact counts are important
+* Instances are safe for concurrent reads
+* The `Metadata` bag and traversal counters are not synchronized
+* External synchronization required when multiple threads may mutate concurrently
+* Use `RecordTraversal()` for atomic updates when exact counts are important
 
 ## Error Handling
 
-- Conditions that throw are wrapped in `InvalidOperationException`
-- Use try-catch blocks around condition evaluation in production code
-- Validate edge integrity before adding to graphs
-- Monitor traversal metrics for unexpected behavior
+* Conditions that throw are wrapped in `InvalidOperationException`
+* Use try-catch blocks around condition evaluation in production code
+* Validate edge integrity before adding to graphs
+* Monitor traversal metrics for unexpected behavior
 
 ## See Also
 
-- [Conditional Nodes Guide](../how-to/conditional-nodes.md)
-- [State Management](../concepts/state.md)
-- [Graph Execution Model](../concepts/execution-model.md)
-- [Routing Concepts](../concepts/routing.md)
-- [StateMergeConfiguration](state-merge-configuration.md)
-- [StateMergeConflictPolicy](state-merge-conflict-policy.md)
+* [Conditional Nodes Guide](../how-to/conditional-nodes.md)
+* [State Management](../concepts/state.md)
+* [Graph Execution Model](../concepts/execution-model.md)
+* [Routing Concepts](../concepts/routing.md)
+* [StateMergeConfiguration](state-merge-configuration.md)
+* [StateMergeConflictPolicy](state-merge-conflict-policy.md)

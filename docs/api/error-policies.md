@@ -12,12 +12,12 @@ This registry manages error handling policies with versioning, runtime resolutio
 
 ### Key Features
 
-- **Centralized Policy Management**: Single source of truth for all error handling policies
-- **Runtime Policy Resolution**: Dynamic policy selection based on error context and execution state
-- **Policy Versioning**: Support for policy updates and rollbacks
-- **Circuit Breaker Integration**: Built-in circuit breaker policies per node
-- **Budget Management**: Resource budget policies with automatic enforcement
-- **Thread Safety**: All operations are thread-safe for concurrent access
+* **Centralized Policy Management**: Single source of truth for all error handling policies
+* **Runtime Policy Resolution**: Dynamic policy selection based on error context and execution state
+* **Policy Versioning**: Support for policy updates and rollbacks
+* **Circuit Breaker Integration**: Built-in circuit breaker policies per node
+* **Budget Management**: Resource budget policies with automatic enforcement
+* **Thread Safety**: All operations are thread-safe for concurrent access
 
 ### Policy Registration
 
@@ -95,12 +95,12 @@ This specialized node provides automatic retry logic for wrapped nodes, supporti
 
 ### Key Features
 
-- **Automatic Retry Logic**: Configurable retry attempts with intelligent backoff
-- **Multiple Retry Strategies**: Fixed delay, exponential backoff, linear backoff, and custom strategies
-- **Error Type Filtering**: Retry only specific error types or use custom retry conditions
-- **Jitter Support**: Random jitter to prevent thundering herd problems
-- **Retry Statistics**: Comprehensive tracking of retry attempts and performance
-- **Metadata Augmentation**: Adds retry context to kernel arguments and results
+* **Automatic Retry Logic**: Configurable retry attempts with intelligent backoff
+* **Multiple Retry Strategies**: Fixed delay, exponential backoff, linear backoff, and custom strategies
+* **Error Type Filtering**: Retry only specific error types or use custom retry conditions
+* **Jitter Support**: Random jitter to prevent thundering herd problems
+* **Retry Statistics**: Comprehensive tracking of retry attempts and performance
+* **Metadata Augmentation**: Adds retry context to kernel arguments and results
 
 ### Configuration
 
@@ -217,12 +217,12 @@ This node implements sophisticated error handling logic with automatic error cat
 
 ### Key Features
 
-- **Automatic Error Categorization**: Maps exceptions to `GraphErrorType` enum values
-- **Configurable Recovery Actions**: Retry, Skip, Fallback, Rollback, Halt, Escalate, Continue
-- **Conditional Routing**: Dynamic edge selection based on error handling outcomes
-- **Fallback Node Support**: Alternative execution paths for different error scenarios
-- **Comprehensive Telemetry**: Detailed error tracking and recovery metrics
-- **Default Error Handlers**: Pre-configured handling strategies for common error types
+* **Automatic Error Categorization**: Maps exceptions to `GraphErrorType` enum values
+* **Configurable Recovery Actions**: Retry, Skip, Fallback, Rollback, Halt, Escalate, Continue
+* **Conditional Routing**: Dynamic edge selection based on error handling outcomes
+* **Fallback Node Support**: Alternative execution paths for different error scenarios
+* **Comprehensive Telemetry**: Detailed error tracking and recovery metrics
+* **Default Error Handlers**: Pre-configured handling strategies for common error types
 
 ### Error Categorization
 
@@ -346,12 +346,12 @@ This component provides comprehensive error tracking with real-time metrics, his
 
 ### Key Features
 
-- **Real-time Metrics Collection**: Immediate error event processing and aggregation
-- **Multi-dimensional Analysis**: Metrics by execution, node, error type, and time
-- **Performance Insights**: Error rates, recovery success rates, and trend analysis
-- **Anomaly Detection**: Automatic identification of unusual error patterns
-- **Configurable Retention**: Adjustable data retention and cleanup policies
-- **Integration Ready**: Easy integration with monitoring and alerting systems
+* **Real-time Metrics Collection**: Immediate error event processing and aggregation
+* **Multi-dimensional Analysis**: Metrics by execution, node, error type, and time
+* **Performance Insights**: Error rates, recovery success rates, and trend analysis
+* **Anomaly Detection**: Automatic identification of unusual error patterns
+* **Configurable Retention**: Adjustable data retention and cleanup policies
+* **Integration Ready**: Easy integration with monitoring and alerting systems
 
 ### Metrics Structure
 
@@ -569,9 +569,9 @@ public enum ErrorSeverity
 
 ## See Also
 
-- [Error Handling and Resilience Guide](../how-to/error-handling-and-resilience.md) - Comprehensive guide to implementing error handling patterns
-- [Graph Executor Reference](graph-executor.md) - Core execution engine that integrates with error policies
-- [Main Node Types Reference](main-node-types.md) - Other specialized node types for workflow construction
-- [State and Serialization Reference](state-and-serialization.md) - State management for error recovery and rollback
-- [Integration Reference](integration.md) - Error handling integration with external systems
-- [Error Handling Examples](../examples/error-handling-examples.md) - Practical examples of error handling implementations
+* [Error Handling and Resilience Guide](../how-to/error-handling-and-resilience.md) - Comprehensive guide to implementing error handling patterns
+* [Graph Executor Reference](graph-executor.md) - Core execution engine that integrates with error policies
+* [Main Node Types Reference](main-node-types.md) - Other specialized node types for workflow construction
+* [State and Serialization Reference](state-and-serialization.md) - State management for error recovery and rollback
+* [Integration Reference](integration.md) - Error handling integration with external systems
+* [Error Handling Examples](../examples/error-handling-examples.md) - Practical examples of error handling implementations

@@ -21,10 +21,10 @@ await executor.ExecuteAsync(graph, arguments,
 ```
 
 Perfect for:
-- 💬 Live chat applications
-- 📊 Real-time dashboards
-- 🎮 Interactive AI games
-- 📱 Mobile AI experiences
+* 💬 Live chat applications
+* 📊 Real-time dashboards
+* 🎮 Interactive AI games
+* 📱 Mobile AI experiences
 
 **Experience real-time AI today** → [https://skgraph.dev/](https://skgraph.dev/)
 

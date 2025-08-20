@@ -25,11 +25,11 @@ var graph = new Graph
 • **Familiaridade** - Use C# e ferramentas que você já conhece
 
 **Exemplos reais que resolvemos:**
-- Pipeline de análise de documentos com processamento paralelo e validação automática
-- Chatbots que mantêm memória de conversa e roteiam para agentes especializados
-- Sistemas multi-agente com coordenação automática e monitoramento de saúde
-- Pipelines RAG com busca semântica e síntese de respostas contextualizadas
-- Workflows condicionais com roteamento dinâmico e tratamento de erros
+* Pipeline de análise de documentos com processamento paralelo e validação automática
+* Chatbots que mantêm memória de conversa e roteiam para agentes especializados
+* Sistemas multi-agente com coordenação automática e monitoramento de saúde
+* Pipelines RAG com busca semântica e síntese de respostas contextualizadas
+* Workflows condicionais com roteamento dinâmico e tratamento de erros
 
 Transforme a forma como você orquestra IA no .NET. 
 

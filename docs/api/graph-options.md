@@ -874,10 +874,10 @@ public sealed class CompleteGraphOptions
 
 All configuration options are immutable once execution begins. This ensures:
 
-- **Consistent Behavior**: Configuration cannot change during execution
-- **Thread Safety**: Multiple executions can run with different configurations
-- **Predictable Performance**: No runtime configuration overhead
-- **Debugging Clarity**: Configuration state is frozen for analysis
+* **Consistent Behavior**: Configuration cannot change during execution
+* **Thread Safety**: Multiple executions can run with different configurations
+* **Predictable Performance**: No runtime configuration overhead
+* **Debugging Clarity**: Configuration state is frozen for analysis
 
 ### Configuration Per Execution
 
@@ -972,24 +972,24 @@ var specializedOptions = new GraphOptions
 
 ## Performance Considerations
 
-- **Configuration Validation**: Happens once at executor creation, not during execution
-- **Option Access**: Direct property access with no indirection overhead
-- **Memory Usage**: Minimal memory footprint for configuration objects
-- **Serialization**: Options can be serialized for configuration persistence
-- **Caching**: Frequently used configurations can be cached and reused
+* **Configuration Validation**: Happens once at executor creation, not during execution
+* **Option Access**: Direct property access with no indirection overhead
+* **Memory Usage**: Minimal memory footprint for configuration objects
+* **Serialization**: Options can be serialized for configuration persistence
+* **Caching**: Frequently used configurations can be cached and reused
 
 ## Security Considerations
 
-- **Sensitive Data**: Use `LogSensitiveData = false` in production
-- **Sanitization**: Configure appropriate sanitization policies
-- **Validation**: Always validate configuration before use
-- **Environment Variables**: Secure environment variable access
-- **Configuration Files**: Protect configuration files with appropriate permissions
+* **Sensitive Data**: Use `LogSensitiveData = false` in production
+* **Sanitization**: Configure appropriate sanitization policies
+* **Validation**: Always validate configuration before use
+* **Environment Variables**: Secure environment variable access
+* **Configuration Files**: Protect configuration files with appropriate permissions
 
 ## See Also
 
-- [Core API Reference](core.md) - Core graph execution APIs
-- [Extensions and Options](extensions-and-options.md) - Additional configuration options
-- [Module Activation](../how-to/module-activation.md) - How to enable optional modules
-- [Configuration Best Practices](../how-to/configuration-best-practices.md) - Configuration guidelines
-- [Performance Tuning](../how-to/performance-tuning.md) - Performance optimization
+* [Core API Reference](core.md) - Core graph execution APIs
+* [Extensions and Options](extensions-and-options.md) - Additional configuration options
+* [Module Activation](../how-to/module-activation.md) - How to enable optional modules
+* [Configuration Best Practices](../how-to/configuration-best-practices.md) - Configuration guidelines
+* [Performance Tuning](../how-to/performance-tuning.md) - Performance optimization

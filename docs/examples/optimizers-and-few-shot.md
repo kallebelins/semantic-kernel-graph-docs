@@ -5,37 +5,37 @@ This example demonstrates how to combine advanced optimizers with few-shot promp
 ## Objective
 
 Learn how to implement and optimize few-shot prompting workflows in graph-based systems to:
-- Create few-shot classification and response generation workflows
-- Enable advanced optimization engines for performance improvement
-- Implement machine learning optimization with incremental learning
-- Combine few-shot patterns with performance prediction
-- Demonstrate lightweight optimization in simple graph structures
+* Create few-shot classification and response generation workflows
+* Enable advanced optimization engines for performance improvement
+* Implement machine learning optimization with incremental learning
+* Combine few-shot patterns with performance prediction
+* Demonstrate lightweight optimization in simple graph structures
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Optimization](../how-to/advanced-optimizations.md)
-- Familiarity with [Few-Shot Learning](../concepts/few-shot-learning.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Optimization](../how-to/advanced-optimizations.md)
+* Familiarity with [Few-Shot Learning](../concepts/few-shot-learning.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Few-Shot Prompting**: Using examples to guide AI model responses
-- **Advanced Optimizations**: Performance optimization based on execution metrics
-- **Machine Learning Optimization**: ML-based performance prediction and improvement
-- **Performance Metrics**: Tracking and analyzing execution performance
-- **Incremental Learning**: Continuous model improvement based on new data
+* **Few-Shot Prompting**: Using examples to guide AI model responses
+* **Advanced Optimizations**: Performance optimization based on execution metrics
+* **Machine Learning Optimization**: ML-based performance prediction and improvement
+* **Performance Metrics**: Tracking and analyzing execution performance
+* **Incremental Learning**: Continuous model improvement based on new data
 
 ### Core Classes
 
-- `GraphExecutor`: Executor with optimization capabilities
-- `FunctionGraphNode`: Nodes for few-shot classification and response generation
-- `GraphPerformanceMetrics`: Performance tracking and analysis
-- `ConditionalEdge`: Graph edges for workflow control
-- `GraphConfiguration`: Configuration for performance prediction
+* `GraphExecutor`: Executor with optimization capabilities
+* `FunctionGraphNode`: Nodes for few-shot classification and response generation
+* `GraphPerformanceMetrics`: Performance tracking and analysis
+* `ConditionalEdge`: Graph edges for workflow control
+* `GraphConfiguration`: Configuration for performance prediction
 
 ## Running the Example
 
@@ -307,12 +307,12 @@ private static List<GraphPerformanceHistory> GenerateTinyPerformanceHistory()
 
 The example produces comprehensive output showing:
 
-- 🧑‍💻 User input processing with few-shot classification
-- 📂 Category classification results
-- 🤖 Generated answers using few-shot guidance
-- 🔧 Optimization suggestions and performance metrics
-- 🔮 ML-based performance predictions
-- ✅ Complete few-shot workflow with optimization
+* 🧑‍💻 User input processing with few-shot classification
+* 📂 Category classification results
+* 🤖 Generated answers using few-shot guidance
+* 🔧 Optimization suggestions and performance metrics
+* 🔮 ML-based performance predictions
+* ✅ Complete few-shot workflow with optimization
 
 ## Troubleshooting
 
@@ -325,15 +325,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging to trace few-shot classification
-- Monitor performance metrics collection and optimization results
-- Verify ML training data quality and quantity
-- Check optimization engine configuration and thresholds
+* Enable detailed logging to trace few-shot classification
+* Monitor performance metrics collection and optimization results
+* Verify ML training data quality and quantity
+* Check optimization engine configuration and thresholds
 
 ## See Also
 
-- [Advanced Optimizations](../how-to/advanced-optimizations.md)
-- [Few-Shot Learning](../concepts/few-shot-learning.md)
-- [Performance Metrics](../how-to/metrics-and-observability.md)
-- [Machine Learning Optimization](../concepts/ml-optimization.md)
-- [Graph Optimization](../how-to/graph-optimization.md)
+* [Advanced Optimizations](../how-to/advanced-optimizations.md)
+* [Few-Shot Learning](../concepts/few-shot-learning.md)
+* [Performance Metrics](../how-to/metrics-and-observability.md)
+* [Machine Learning Optimization](../concepts/ml-optimization.md)
+* [Graph Optimization](../how-to/graph-optimization.md)

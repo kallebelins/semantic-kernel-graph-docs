@@ -10,19 +10,19 @@ The `GraphExecutor` class is the main orchestrator for graph execution, implemen
 
 ### Core Properties
 
-- **GraphId**: Unique identifier for this graph instance
-- **Name**: Human-readable name of the graph
-- **Description**: Detailed description of what the graph does
-- **CreatedAt**: Timestamp when the graph was created
-- **StartNode**: The configured starting node for execution (nullable)
-- **Nodes**: Read-only collection of all nodes in the graph
-- **Edges**: Read-only collection of all conditional edges
-- **NodeCount**: Total number of nodes in the graph
-- **EdgeCount**: Total number of edges in the graph
+* **GraphId**: Unique identifier for this graph instance
+* **Name**: Human-readable name of the graph
+* **Description**: Detailed description of what the graph does
+* **CreatedAt**: Timestamp when the graph was created
+* **StartNode**: The configured starting node for execution (nullable)
+* **Nodes**: Read-only collection of all nodes in the graph
+* **Edges**: Read-only collection of all conditional edges
+* **NodeCount**: Total number of nodes in the graph
+* **EdgeCount**: Total number of edges in the graph
 
 ### Execution State
 
-- **IsReadyForExecution**: Indicates whether the graph is ready to execute (has nodes and a start node)
+* **IsReadyForExecution**: Indicates whether the graph is ready to execute (has nodes and a start node)
 
 ## Configuration Methods
 
@@ -35,7 +35,7 @@ GraphExecutor ConfigureMetrics(GraphMetricsOptions? options = null)
 ```
 
 **Parameters:**
-- `options`: Metrics collection options (null to disable metrics)
+* `options`: Metrics collection options (null to disable metrics)
 
 **Returns:** This executor for method chaining
 
@@ -59,7 +59,7 @@ GraphExecutor ConfigureConcurrency(GraphConcurrencyOptions? options)
 ```
 
 **Parameters:**
-- `options`: Concurrency options (null disables parallel execution)
+* `options`: Concurrency options (null disables parallel execution)
 
 **Returns:** This executor for method chaining
 
@@ -82,7 +82,7 @@ GraphExecutor ConfigureResources(GraphResourceOptions? options)
 ```
 
 **Parameters:**
-- `options`: Resource governance options (null disables resource governance)
+* `options`: Resource governance options (null disables resource governance)
 
 **Returns:** This executor for method chaining
 
@@ -107,7 +107,7 @@ GraphExecutor ConfigureSelfHealing(SelfHealingOptions options)
 ```
 
 **Parameters:**
-- `options`: Self-healing configuration options
+* `options`: Self-healing configuration options
 
 **Returns:** This executor for method chaining
 
@@ -125,16 +125,16 @@ Task<FunctionResult> ExecuteAsync(
 ```
 
 **Parameters:**
-- `kernel`: Semantic Kernel instance for function resolution
-- `arguments`: Execution state and inputs
-- `cancellationToken`: Cancellation token
+* `kernel`: Semantic Kernel instance for function resolution
+* `arguments`: Execution state and inputs
+* `cancellationToken`: Cancellation token
 
 **Returns:** Final execution result
 
 **Exceptions:**
-- `ArgumentNullException`: When kernel or arguments are null
-- `InvalidOperationException`: When graph is not ready for execution
-- `OperationCanceledException`: When execution is cancelled
+* `ArgumentNullException`: When kernel or arguments are null
+* `InvalidOperationException`: When graph is not ready for execution
+* `OperationCanceledException`: When execution is cancelled
 
 ### Execution from Specific Node
 
@@ -149,16 +149,16 @@ Task<FunctionResult> ExecuteFromNodeAsync(
 ```
 
 **Parameters:**
-- `startNode`: Node instance to begin execution from
-- `kernel`: Semantic Kernel instance
-- `arguments`: Execution state and inputs
-- `cancellationToken`: Cancellation token
+* `startNode`: Node instance to begin execution from
+* `kernel`: Semantic Kernel instance
+* `arguments`: Execution state and inputs
+* `cancellationToken`: Cancellation token
 
 **Returns:** Final execution result
 
 **Exceptions:**
-- `ArgumentNullException`: When any parameter is null
-- `InvalidOperationException`: When startNode is not part of the graph
+* `ArgumentNullException`: When any parameter is null
+* `InvalidOperationException`: When startNode is not part of the graph
 
 ### Execution from Node ID
 
@@ -173,17 +173,17 @@ Task<FunctionResult> ExecuteFromAsync(
 ```
 
 **Parameters:**
-- `kernel`: Semantic Kernel instance
-- `arguments`: Execution state and inputs
-- `startNodeId`: ID of the node to start from
-- `cancellationToken`: Cancellation token
+* `kernel`: Semantic Kernel instance
+* `arguments`: Execution state and inputs
+* `startNodeId`: ID of the node to start from
+* `cancellationToken`: Cancellation token
 
 **Returns:** Final execution result
 
 **Exceptions:**
-- `ArgumentNullException`: When kernel or arguments are null
-- `ArgumentException`: When startNodeId is invalid
-- `InvalidOperationException`: When the start node is not found
+* `ArgumentNullException`: When kernel or arguments are null
+* `ArgumentException`: When startNodeId is invalid
+* `InvalidOperationException`: When the start node is not found
 
 ### Node Execution
 
@@ -198,10 +198,10 @@ Task<FunctionResult> ExecuteNodeAsync(
 ```
 
 **Parameters:**
-- `node`: The node to execute
-- `kernel`: Semantic Kernel instance
-- `arguments`: Execution state and inputs
-- `cancellationToken`: Cancellation token
+* `node`: The node to execute
+* `kernel`: Semantic Kernel instance
+* `arguments`: Execution state and inputs
+* `cancellationToken`: Cancellation token
 
 **Returns:** Node execution result
 
@@ -218,10 +218,10 @@ Task<FunctionResult> ExecuteGraphAsync(
 ```
 
 **Parameters:**
-- `nodes`: Ordered sequence of nodes to execute
-- `kernel`: Semantic Kernel instance
-- `arguments`: Execution state and inputs
-- `cancellationToken`: Cancellation token
+* `nodes`: Ordered sequence of nodes to execute
+* `kernel`: Semantic Kernel instance
+* `arguments`: Execution state and inputs
+* `cancellationToken`: Cancellation token
 
 **Returns:** Final execution result
 
@@ -238,12 +238,12 @@ ValidationResult ValidateGraphIntegrity()
 **Returns:** Validation result with errors and warnings
 
 **Validation Checks:**
-- Graph contains at least one node
-- Start node is configured
-- All nodes are valid
-- All edges are valid
-- Schema compatibility across edges
-- No unreachable nodes (when strict mode enabled)
+* Graph contains at least one node
+* Start node is configured
+* All nodes are valid
+* All edges are valid
+* Schema compatibility across edges
+* No unreachable nodes (when strict mode enabled)
 
 **Example:**
 ```csharp
@@ -269,7 +269,7 @@ GraphExecutor AddNode(IGraphNode node)
 ```
 
 **Parameters:**
-- `node`: The node to add
+* `node`: The node to add
 
 **Returns:** This executor for method chaining
 
@@ -289,9 +289,9 @@ GraphExecutor Connect(string sourceNodeId, string targetNodeId, string? edgeName
 ```
 
 **Parameters:**
-- `sourceNodeId`: Source node identifier
-- `targetNodeId`: Target node identifier
-- `edgeName`: Optional name for the edge
+* `sourceNodeId`: Source node identifier
+* `targetNodeId`: Target node identifier
+* `edgeName`: Optional name for the edge
 
 **Returns:** This executor for method chaining
 
@@ -312,13 +312,13 @@ GraphExecutor SetStartNode(string nodeId)
 ```
 
 **Parameters:**
-- `nodeId`: ID of the node to start execution from
+* `nodeId`: ID of the node to start execution from
 
 **Returns:** This executor for method chaining
 
 **Exceptions:**
-- `ArgumentException`: When nodeId is null or empty
-- `InvalidOperationException`: When the node is not found
+* `ArgumentException`: When nodeId is null or empty
+* `InvalidOperationException`: When the node is not found
 
 ## Middleware Support
 
@@ -331,7 +331,7 @@ GraphExecutor UseMiddleware(IGraphExecutionMiddleware middleware)
 ```
 
 **Parameters:**
-- `middleware`: Middleware instance to add
+* `middleware`: Middleware instance to add
 
 **Returns:** This executor for method chaining
 
@@ -346,29 +346,29 @@ executor.UseMiddleware(new LoggingMiddleware())
 
 The `GraphExecutor` is designed for thread safety:
 
-- **Node collections**: Protected by `ConcurrentDictionary<TKey, TValue>`
-- **Edge mutations**: Guarded by private locks for consistency
-- **Public methods**: Validate inputs and throw appropriate exceptions
-- **Execution**: Honors `CancellationToken` and propagates cancellation
-- **Reuse**: Instances are safe to reuse across executions
+* **Node collections**: Protected by `ConcurrentDictionary<TKey, TValue>`
+* **Edge mutations**: Guarded by private locks for consistency
+* **Public methods**: Validate inputs and throw appropriate exceptions
+* **Execution**: Honors `CancellationToken` and propagates cancellation
+* **Reuse**: Instances are safe to reuse across executions
 
 ## Performance and Observability
 
 ### Built-in Tracing
 
-- **ActivitySource**: Automatic distributed tracing with `ActivitySource`
-- **Execution tags**: Rich metadata for correlation and debugging
-- **Performance metrics**: Optional detailed performance tracking
+* **ActivitySource**: Automatic distributed tracing with `ActivitySource`
+* **Execution tags**: Rich metadata for correlation and debugging
+* **Performance metrics**: Optional detailed performance tracking
 
 ### Event System
 
 Graph mutation events for monitoring and integration:
 
-- **NodeAdded**: Raised after successful node addition
-- **NodeRemoved**: Raised after successful node removal
-- **NodeReplaced**: Raised when a node is replaced
-- **EdgeAdded**: Raised after successful edge addition
-- **EdgeRemoved**: Raised after successful edge removal
+* **NodeAdded**: Raised after successful node addition
+* **NodeRemoved**: Raised after successful node removal
+* **NodeReplaced**: Raised when a node is replaced
+* **EdgeAdded**: Raised after successful edge addition
+* **EdgeRemoved**: Raised after successful edge removal
 
 ## Usage Examples
 
@@ -445,18 +445,18 @@ executor.ConfigureSelfHealing(new SelfHealingOptions
 
 ## Related Types
 
-- **IGraphExecutor**: Interface contract
-- **GraphExecutionContext**: Execution state and coordination
-- **GraphExecutionOptions**: Immutable execution configuration
-- **GraphMetricsOptions**: Performance metrics configuration
-- **GraphConcurrencyOptions**: Parallel execution configuration
-- **GraphResourceOptions**: Resource governance configuration
-- **ValidationResult**: Graph validation results
+* **IGraphExecutor**: Interface contract
+* **GraphExecutionContext**: Execution state and coordination
+* **GraphExecutionOptions**: Immutable execution configuration
+* **GraphMetricsOptions**: Performance metrics configuration
+* **GraphConcurrencyOptions**: Parallel execution configuration
+* **GraphResourceOptions**: Resource governance configuration
+* **ValidationResult**: Graph validation results
 
 ## See Also
 
-- [IGraphExecutor](igraph-executor.md) - Interface contract and semantics
-- [Execution Model](../concepts/execution-model.md) - How execution flows through graphs
-- [Resource Governance and Concurrency](../how-to/resource-governance-and-concurrency.md) - Advanced configuration
-- [Parallelism and Fork/Join](../how-to/parallelism-and-fork-join.md) - Parallel execution patterns
-- [Getting Started](../getting-started.md) - Building your first graph
+* [IGraphExecutor](igraph-executor.md) - Interface contract and semantics
+* [Execution Model](../concepts/execution-model.md) - How execution flows through graphs
+* [Resource Governance and Concurrency](../how-to/resource-governance-and-concurrency.md) - Advanced configuration
+* [Parallelism and Fork/Join](../how-to/parallelism-and-fork-join.md) - Parallel execution patterns
+* [Getting Started](../getting-started.md) - Building your first graph

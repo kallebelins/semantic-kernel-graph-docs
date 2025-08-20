@@ -6,11 +6,11 @@ Advanced routing in SemanticKernel.Graph goes beyond simple conditional edges to
 
 Advanced routing combines multiple strategies to make intelligent decisions about which node to execute next:
 
-- **Semantic Routing**: Uses embeddings to find semantically similar nodes
-- **Content Similarity**: Leverages execution history to find similar patterns
-- **Probabilistic Routing**: Applies weighted random selection with dynamic weights
-- **Contextual Routing**: Considers execution history patterns and transitions
-- **Feedback Learning**: Adapts routing decisions based on user feedback
+* **Semantic Routing**: Uses embeddings to find semantically similar nodes
+* **Content Similarity**: Leverages execution history to find similar patterns
+* **Probabilistic Routing**: Applies weighted random selection with dynamic weights
+* **Contextual Routing**: Considers execution history patterns and transitions
+* **Feedback Learning**: Adapts routing decisions based on user feedback
 
 ## Core Components
 
@@ -110,8 +110,8 @@ public sealed class ContentSimilarityRoutingStrategy : IRoutingStrategy
 4. Selects node with best combination of frequency and success rate
 
 **Requirements:**
-- `IGraphMemoryService` implementation
-- Similar executions in context (`context.SimilarExecutions`)
+* `IGraphMemoryService` implementation
+* Similar executions in context (`context.SimilarExecutions`)
 
 ### 3. Probabilistic Routing Strategy
 
@@ -172,9 +172,9 @@ public sealed class ContextualRoutingStrategy : IRoutingStrategy
 4. Selects node with best historical performance pattern
 
 **Features:**
-- Looks back at recent history (configurable limit)
-- Considers both frequency and success rate
-- Adapts to changing execution patterns
+* Looks back at recent history (configurable limit)
+* Considers both frequency and success rate
+* Adapts to changing execution patterns
 
 ### 5. Feedback Learning Routing Strategy
 
@@ -247,11 +247,11 @@ public sealed class AdvancedRoutingOptions
 
 Each strategy contributes to the final decision with configurable weights:
 
-- **Semantic**: 0.3 (30%) - High weight for semantic understanding
-- **Similarity**: 0.25 (25%) - Good weight for historical patterns
-- **Probabilistic**: 0.2 (20%) - Balanced weight for exploration
-- **Contextual**: 0.15 (15%) - Moderate weight for patterns
-- **Feedback**: 0.1 (10%) - Lower weight for learning
+* **Semantic**: 0.3 (30%) - High weight for semantic understanding
+* **Similarity**: 0.25 (25%) - Good weight for historical patterns
+* **Probabilistic**: 0.2 (20%) - Balanced weight for exploration
+* **Contextual**: 0.15 (15%) - Moderate weight for patterns
+* **Feedback**: 0.1 (10%) - Lower weight for learning
 
 ## Usage Examples
 
@@ -401,9 +401,9 @@ var routingOptions = new DynamicRoutingOptions
 
 ### Memory Management
 
-- Node embeddings are cached with TTL (24 hours default)
-- Routing history uses concurrent dictionaries for thread safety
-- Similar executions are limited by `HistoryLookbackLimit`
+* Node embeddings are cached with TTL (24 hours default)
+* Routing history uses concurrent dictionaries for thread safety
+* Similar executions are limited by `HistoryLookbackLimit`
 
 ### Fallback Mechanisms
 
@@ -468,52 +468,52 @@ foreach (var strategyResult in result.UsedStrategies)
 
 ### 1. Service Availability
 
-- Always check if required services are available before enabling strategies
-- Provide fallback mechanisms when services are unavailable
-- Use dependency injection for service management
+* Always check if required services are available before enabling strategies
+* Provide fallback mechanisms when services are unavailable
+* Use dependency injection for service management
 
 ### 2. Threshold Tuning
 
-- Start with default thresholds and adjust based on your use case
-- Monitor routing confidence scores to identify optimal thresholds
-- Use feedback learning to automatically tune parameters
+* Start with default thresholds and adjust based on your use case
+* Monitor routing confidence scores to identify optimal thresholds
+* Use feedback learning to automatically tune parameters
 
 ### 3. Memory Management
 
-- Set appropriate limits for history lookback and cache sizes
-- Monitor memory usage in production environments
-- Implement cleanup policies for old routing data
+* Set appropriate limits for history lookback and cache sizes
+* Monitor memory usage in production environments
+* Implement cleanup policies for old routing data
 
 ### 4. Performance Monitoring
 
-- Track routing decision latency
-- Monitor cache hit rates
-- Analyze strategy contribution patterns
+* Track routing decision latency
+* Monitor cache hit rates
+* Analyze strategy contribution patterns
 
 ### 5. Feedback Quality
 
-- Provide consistent and meaningful feedback
-- Use appropriate feedback types for different scenarios
-- Regularly review and clean up feedback data
+* Provide consistent and meaningful feedback
+* Use appropriate feedback types for different scenarios
+* Regularly review and clean up feedback data
 
 ## Troubleshooting
 
 ### Common Issues
 
 **Low routing confidence:**
-- Check if embedding service is working correctly
-- Verify memory service has relevant historical data
-- Adjust similarity thresholds
+* Check if embedding service is working correctly
+* Verify memory service has relevant historical data
+* Adjust similarity thresholds
 
 **Slow routing decisions:**
-- Enable caching for frequently accessed routes
-- Reduce history lookback limits
-- Optimize embedding generation
+* Enable caching for frequently accessed routes
+* Reduce history lookback limits
+* Optimize embedding generation
 
 **Inconsistent routing:**
-- Check strategy weights and thresholds
-- Verify feedback data quality
-- Monitor routing history patterns
+* Check strategy weights and thresholds
+* Verify feedback data quality
+* Monitor routing history patterns
 
 ### Debug Information
 
@@ -533,14 +533,14 @@ Console.WriteLine($"Final confidence: {result.FinalConfidence:F3}");
 
 ## See Also
 
-- [Conditional Nodes](./conditional-nodes.md) - Basic conditional routing
-- [Dynamic Routing](./dynamic-routing.md) - Template-based routing
-- [State Management](./state.md) - Graph state and context
-- [Memory and Templates](./templates-and-memory.md) - Memory services and templates
-- [Performance Metrics](./metrics-and-observability.md) - Monitoring routing performance
+* [Conditional Nodes](./conditional-nodes.md) - Basic conditional routing
+* [Dynamic Routing](./dynamic-routing.md) - Template-based routing
+* [State Management](./state.md) - Graph state and context
+* [Memory and Templates](./templates-and-memory.md) - Memory services and templates
+* [Performance Metrics](./metrics-and-observability.md) - Monitoring routing performance
 
 ## Examples
 
-- [Advanced Routing Example](../../examples/advanced-routing.md) - Complete demonstration
-- [Dynamic Routing Example](../../examples/dynamic-routing.md) - Template-based routing
-- [Multi-Agent Workflow](../../tutorials/multi-agent-workflow.md) - Complex routing scenarios
+* [Advanced Routing Example](../../examples/advanced-routing.md) - Complete demonstration
+* [Dynamic Routing Example](../../examples/dynamic-routing.md) - Template-based routing
+* [Multi-Agent Workflow](../../tutorials/multi-agent-workflow.md) - Complex routing scenarios

@@ -6,10 +6,10 @@ This guide explains how to use SemanticKernel.Graph's template engine system and
 
 SemanticKernel.Graph provides a comprehensive template and memory system that enables:
 
-- **Dynamic prompt generation** using template engines with variable substitution
-- **Workflow templates** for reusable graph patterns
-- **Memory integration** for storing and retrieving execution context
-- **Vector and semantic search** capabilities for enhanced decision-making
+* **Dynamic prompt generation** using template engines with variable substitution
+* **Workflow templates** for reusable graph patterns
+* **Memory integration** for storing and retrieving execution context
+* **Vector and semantic search** capabilities for enhanced decision-making
 
 ## Template Engine System
 
@@ -17,10 +17,10 @@ SemanticKernel.Graph provides a comprehensive template and memory system that en
 
 The template system consists of several key components:
 
-- **`IGraphTemplateEngine`**: Interface for template rendering engines
-- **`GraphTemplateOptions`**: Configuration options for template functionality
-- **`IWorkflowTemplate`**: Blueprint for creating executable graphs
-- **`WorkflowTemplateRegistry`**: Central registry for discovering and using templates
+* **`IGraphTemplateEngine`**: Interface for template rendering engines
+* **`GraphTemplateOptions`**: Configuration options for template functionality
+* **`IWorkflowTemplate`**: Blueprint for creating executable graphs
+* **`WorkflowTemplateRegistry`**: Central registry for discovering and using templates
 
 ### Template Engine Types
 
@@ -39,11 +39,11 @@ builder.AddGraphTemplates(opts =>
 ```
 
 **Features:**
-- Variable substitution: `{{variable}}`
-- Helper functions: `{{helper arg1 arg2}}`
-- Conditional statements: `{{#if condition}}...{{else}}...{{/if}}`
-- Template compilation and caching
-- Custom helper registration
+* Variable substitution: `{{variable}}`
+* Helper functions: `{{helper arg1 arg2}}`
+* Conditional statements: `{{#if condition}}...{{else}}...{{/if}}`
+* Template compilation and caching
+* Custom helper registration
 
 #### Specialized Template Engines
 
@@ -404,19 +404,19 @@ builder.Services.AddSingleton<IGraphTemplateEngine, HandlebarsGraphTemplateEngin
 ### Common Issues
 
 **Template Rendering Errors**
-- Ensure all required variables are provided in the context
-- Check template syntax for proper Handlebars formatting
-- Verify custom helpers are properly registered
+* Ensure all required variables are provided in the context
+* Check template syntax for proper Handlebars formatting
+* Verify custom helpers are properly registered
 
 **Memory Integration Issues**
-- Confirm memory service is properly configured and registered
-- Check similarity thresholds are appropriate for your data
-- Verify memory provider availability
+* Confirm memory service is properly configured and registered
+* Check similarity thresholds are appropriate for your data
+* Verify memory provider availability
 
 **Template Registry Problems**
-- Ensure templates are properly registered in the DI container
-- Check template ID and version uniqueness
-- Verify template parameter validation logic
+* Ensure templates are properly registered in the DI container
+* Check template ID and version uniqueness
+* Verify template parameter validation logic
 
 ### Debugging Tips
 
@@ -427,8 +427,8 @@ builder.Services.AddSingleton<IGraphTemplateEngine, HandlebarsGraphTemplateEngin
 
 ## See Also
 
-- [Graph Concepts](../concepts/graph-concepts.md) - Core graph concepts and terminology
-- [State Management](../how-to/state-management.md) - Working with graph state and arguments
-- [Conditional Nodes](../how-to/conditional-nodes.md) - Dynamic routing and decision making
-- [Multi-Agent Workflows](../how-to/multi-agent-and-shared-state.md) - Coordinating multiple agents
-- [API Reference](../api/) - Complete API documentation for template and memory types
+* [Graph Concepts](../concepts/graph-concepts.md) - Core graph concepts and terminology
+* [State Management](../how-to/state-management.md) - Working with graph state and arguments
+* [Conditional Nodes](../how-to/conditional-nodes.md) - Dynamic routing and decision making
+* [Multi-Agent Workflows](../how-to/multi-agent-and-shared-state.md) - Coordinating multiple agents
+* [API Reference](../api/) - Complete API documentation for template and memory types

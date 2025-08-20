@@ -585,9 +585,9 @@ services.AddTransient<LoggingMiddleware>();
 
 ## See Also
 
-- [GraphExecutor API](./graph-executor.md) - Core executor interface and implementation
-- [Execution Context](./execution-context.md) - Execution context and event utilities
-- [State and Serialization](./state-and-serialization.md) - State management and checkpointing
-- [Streaming Execution](../concepts/streaming.md) - Streaming execution concepts
-- [Error Handling and Resilience](../how-to/error-handling-and-resilience.md) - Error handling patterns
-- [Resource Governance and Concurrency](../how-to/resource-governance-and-concurrency.md) - Resource management guides
+* [GraphExecutor API](./graph-executor.md) - Core executor interface and implementation
+* [Execution Context](./execution-context.md) - Execution context and event utilities
+* [State and Serialization](./state-and-serialization.md) - State management and checkpointing
+* [Streaming Execution](../concepts/streaming.md) - Streaming execution concepts
+* [Error Handling and Resilience](../how-to/error-handling-and-resilience.md) - Error handling patterns
+* [Resource Governance and Concurrency](../how-to/resource-governance-and-concurrency.md) - Resource management guides

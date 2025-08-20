@@ -12,13 +12,13 @@ This central orchestrator manages the complete lifecycle of multiple agents, coo
 
 ### Key Features
 
-- **Agent Lifecycle Management**: Registration, execution, and disposal of agent instances
-- **Shared State Coordination**: Integration with `SharedStateManager` for state synchronization
-- **Work Distribution**: Delegates to `WorkDistributor` for intelligent task assignment
-- **Result Aggregation**: Uses `ResultAggregator` to combine agent outputs
-- **Health Monitoring**: Circuit breaker patterns and failover mechanisms
-- **Distributed Tracing**: OpenTelemetry integration for cross-agent observability
-- **Concurrent Execution**: Bounded parallelism with configurable limits
+* **Agent Lifecycle Management**: Registration, execution, and disposal of agent instances
+* **Shared State Coordination**: Integration with `SharedStateManager` for state synchronization
+* **Work Distribution**: Delegates to `WorkDistributor` for intelligent task assignment
+* **Result Aggregation**: Uses `ResultAggregator` to combine agent outputs
+* **Health Monitoring**: Circuit breaker patterns and failover mechanisms
+* **Distributed Tracing**: OpenTelemetry integration for cross-agent observability
+* **Concurrent Execution**: Bounded parallelism with configurable limits
 
 ### Configuration
 
@@ -178,12 +178,12 @@ This component provides intelligent result combination using configurable strate
 
 ### Key Features
 
-- **Multiple Aggregation Strategies**: Merge, Weighted, Consensus, and custom strategies
-- **Result Caching**: Configurable caching with expiration and invalidation
-- **Result Validation**: Built-in validation and size limits
-- **Metadata Preservation**: Maintains individual result metadata and provenance
-- **Performance Optimization**: Efficient aggregation algorithms and caching
-- **Extensible Architecture**: Custom aggregation strategy registration
+* **Multiple Aggregation Strategies**: Merge, Weighted, Consensus, and custom strategies
+* **Result Caching**: Configurable caching with expiration and invalidation
+* **Result Validation**: Built-in validation and size limits
+* **Metadata Preservation**: Maintains individual result metadata and provenance
+* **Performance Optimization**: Efficient aggregation algorithms and caching
+* **Extensible Architecture**: Custom aggregation strategy registration
 
 ### Configuration
 
@@ -312,12 +312,12 @@ This thread-safe pool provides efficient connection management for remote agent 
 
 ### Key Features
 
-- **Connection Pooling**: Efficient reuse of agent connections
-- **Health-Aware Selection**: Automatic filtering of unhealthy connections
-- **Load Balancing**: Round-robin and health-based connection selection
-- **Thread Safety**: Concurrent access with proper synchronization
-- **Metrics Integration**: Built-in performance and health metrics
-- **Automatic Cleanup**: Connection disposal and resource management
+* **Connection Pooling**: Efficient reuse of agent connections
+* **Health-Aware Selection**: Automatic filtering of unhealthy connections
+* **Load Balancing**: Round-robin and health-based connection selection
+* **Thread Safety**: Concurrent access with proper synchronization
+* **Metrics Integration**: Built-in performance and health metrics
+* **Automatic Cleanup**: Connection disposal and resource management
 
 ### Configuration
 
@@ -446,12 +446,12 @@ This component implements intelligent work distribution algorithms that consider
 
 ### Key Features
 
-- **Multiple Distribution Strategies**: RoundRobin, LoadBased, RoleBased, CapacityBased
-- **Load Balancing**: Automatic distribution based on agent capacity and current load
-- **Priority Support**: Work item prioritization and scheduling
-- **Capacity Management**: Dynamic agent capacity tracking and updates
-- **Metrics Integration**: Comprehensive distribution metrics and monitoring
-- **Strategy Fallbacks**: Automatic fallback to alternative distribution methods
+* **Multiple Distribution Strategies**: RoundRobin, LoadBased, RoleBased, CapacityBased
+* **Load Balancing**: Automatic distribution based on agent capacity and current load
+* **Priority Support**: Work item prioritization and scheduling
+* **Capacity Management**: Dynamic agent capacity tracking and updates
+* **Metrics Integration**: Comprehensive distribution metrics and monitoring
+* **Strategy Fallbacks**: Automatic fallback to alternative distribution methods
 
 ### Configuration
 
@@ -676,9 +676,9 @@ public sealed class AggregatedResult
 
 ## See Also
 
-- [Multi-Agent and Shared State Guide](../how-to/multi-agent-and-shared-state.md) - Comprehensive guide to implementing multi-agent workflows
-- [State and Serialization Reference](state-and-serialization.md) - State management for agent coordination
-- [Error Policies Reference](error-policies.md) - Error handling and resilience in multi-agent systems
-- [Graph Executor Reference](graph-executor.md) - Core execution engine for individual agents
-- [Integration Reference](integration.md) - External system integration for multi-agent workflows
-- [Multi-Agent Examples](../examples/multi-agent-examples.md) - Practical examples of multi-agent implementations
+* [Multi-Agent and Shared State Guide](../how-to/multi-agent-and-shared-state.md) - Comprehensive guide to implementing multi-agent workflows
+* [State and Serialization Reference](state-and-serialization.md) - State management for agent coordination
+* [Error Policies Reference](error-policies.md) - Error handling and resilience in multi-agent systems
+* [Graph Executor Reference](graph-executor.md) - Core execution engine for individual agents
+* [Integration Reference](integration.md) - External system integration for multi-agent workflows
+* [Multi-Agent Examples](../examples/multi-agent-examples.md) - Practical examples of multi-agent implementations

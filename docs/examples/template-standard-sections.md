@@ -13,21 +13,21 @@ This example demonstrates [brief description of what the example does].
 ## Objective
 
 Learn how to implement [functionality] in graph-based workflows for:
-- [Benefit 1]
-- [Benefit 2]
-- [Benefit 3]
-- [Benefit 4]
+* [Benefit 1]
+* [Benefit 2]
+* [Benefit 3]
+* [Benefit 4]
 ```
 
 ### 2. Prerequisites
 ```markdown
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Execution Model](../concepts/execution-model.md)
-- Familiarity with [Related Guide](../how-to/related-guide.md) (when applicable)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Execution Model](../concepts/execution-model.md)
+* Familiarity with [Related Guide](../how-to/related-guide.md) (when applicable)
 ```
 
 ### 3. Concepts and Techniques
@@ -38,15 +38,15 @@ This section defines the components and patterns used in the example, with links
 
 ### Component Definitions
 
-- **[Component Name]**: [Clear and concise definition]
-- **[Pattern/Concept]**: [Explanation of the pattern or concept used]
-- **[Technique]**: [Description of the implemented technique]
+* **[Component Name]**: [Clear and concise definition]
+* **[Pattern/Concept]**: [Explanation of the pattern or concept used]
+* **[Technique]**: [Description of the implemented technique]
 
 ### Main Classes
 
-- `[MainClass]`: [Description of main functionality]
-- `[SecondaryClass]`: [Description of secondary functionality]
-- `[Interface]`: [Description of interface or contract]
+* `[MainClass]`: [Description of main functionality]
+* `[SecondaryClass]`: [Description of secondary functionality]
+* `[Interface]`: [Description of interface or contract]
 ```
 
 ### 4. Running the Example
@@ -97,7 +97,7 @@ var example = new ExampleClass();
 
 The example produces output showing:
 
-- ✅ [Expected result 1]
+* ✅ [Expected result 1]
 ```
 
 ### 7. Troubleshooting
@@ -118,9 +118,9 @@ The example produces output showing:
 
 ### Debug Tips
 
-- [Debug tip 1]
-- [Debug tip 2]
-- [Debug tip 3]
+* [Debug tip 1]
+* [Debug tip 2]
+* [Debug tip 3]
 ```
 
 ### 8. Advanced Patterns (when applicable)
@@ -147,33 +147,33 @@ var advancedPattern = new AdvancedPattern();
 ```markdown
 ## Related Examples
 
-- [Related Example 1](./related-example-1.md): [Brief description]
-- [Related Example 2](./related-example-2.md): [Brief description]
-- [Related Example 3](./related-example-3.md): [Brief description]
+* [Related Example 1](./related-example-1.md): [Brief description]
+* [Related Example 2](./related-example-2.md): [Brief description]
+* [Related Example 3](./related-example-3.md): [Brief description]
 ```
 
 ### 10. See Also (Links for Reference and Guides)
 ```markdown
 ## See Also
 
-- [Related Concepts](../concepts/related-concept.md): [Description of what to find]
-- [Implementation Guide](../how-to/related-guide.md): [Description of guide]
-- [API Reference](../api/): [Description of API documentation]
-- [Performance Monitoring](../how-to/metrics-and-observability.md): [Description of metrics]
+* [Related Concepts](../concepts/related-concept.md): [Description of what to find]
+* [Implementation Guide](../how-to/related-guide.md): [Description of guide]
+* [API Reference](../api/): [Description of API documentation]
+* [Performance Monitoring](../how-to/metrics-and-observability.md): [Description of metrics]
 ```
 
 ## Implementation Checklist
 
 For each example, check if it contains:
 
-- [ ] **Concepts and Techniques**: Definition of components and patterns used (with links to Reference)
-- [ ] **References**: Links to related APIs and Guides
-- [ ] **Prerequisites**: Technical requirements and required knowledge
-- [ ] **Steps**: Step-by-step implementation with main snippets
-- [ ] **Expected Output**: Expected results of the example
-- [ ] **Troubleshooting**: Common problems and solutions
-- [ ] **Suggested Variants**: Advanced patterns when applicable
-- [ ] **Cross-linked Sections**: "See Also" section with links to Reference and Guides
+* [ ] **Concepts and Techniques**: Definition of components and patterns used (with links to Reference)
+* [ ] **References**: Links to related APIs and Guides
+* [ ] **Prerequisites**: Technical requirements and required knowledge
+* [ ] **Steps**: Step-by-step implementation with main snippets
+* [ ] **Expected Output**: Expected results of the example
+* [ ] **Troubleshooting**: Common problems and solutions
+* [ ] **Suggested Variants**: Advanced patterns when applicable
+* [ ] **Cross-linked Sections**: "See Also" section with links to Reference and Guides
 
 ## Implementation Notes
 

@@ -10,10 +10,10 @@ Think of AI workflows as a recipe. But what if your recipe could make decisions,
 ⚡ **Streaming** = Real-time processing and events  
 
 Perfect for:
-- 🤖 AI Agents with reasoning capabilities
-- 📊 Document processing pipelines  
-- 🎯 Recommendation systems
-- 🏗️ Microservice orchestration
+* 🤖 AI Agents with reasoning capabilities
+* 📊 Document processing pipelines  
+* 🎯 Recommendation systems
+* 🏗️ Microservice orchestration
 
 **Discover the power of computational graphs** → [https://skgraph.dev/](https://skgraph.dev/)
 

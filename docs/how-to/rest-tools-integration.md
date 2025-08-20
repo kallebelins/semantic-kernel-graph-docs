@@ -6,11 +6,11 @@ SemanticKernel.Graph provides comprehensive integration capabilities for externa
 
 The REST tools integration system consists of several key components:
 
-- **RestToolSchema**: Defines the structure and behavior of REST API operations
-- **RestToolGraphNode**: Executable graph node that performs HTTP requests
-- **IToolRegistry**: Central registry for managing and discovering available tools
-- **IToolSchemaConverter**: Converts schemas into executable nodes
-- **Built-in caching and idempotency**: Performance optimization and request safety
+* **RestToolSchema**: Defines the structure and behavior of REST API operations
+* **RestToolGraphNode**: Executable graph node that performs HTTP requests
+* **IToolRegistry**: Central registry for managing and discovering available tools
+* **IToolSchemaConverter**: Converts schemas into executable nodes
+* **Built-in caching and idempotency**: Performance optimization and request safety
 
 ## Core Components
 
@@ -38,11 +38,11 @@ public sealed class RestToolSchema
 ```
 
 **Key Features:**
-- **Flexible parameter mapping**: Map query parameters and headers to graph state variables
-- **Template support**: JSON body templates with variable substitution
-- **Configurable timeouts**: Per-request timeout settings
-- **Built-in caching**: Response caching with configurable TTL
-- **Telemetry integration**: Dependency tracking for monitoring
+* **Flexible parameter mapping**: Map query parameters and headers to graph state variables
+* **Template support**: JSON body templates with variable substitution
+* **Configurable timeouts**: Per-request timeout settings
+* **Built-in caching**: Response caching with configurable TTL
+* **Telemetry integration**: Dependency tracking for monitoring
 
 ### RestToolGraphNode
 
@@ -61,11 +61,11 @@ public sealed class RestToolGraphNode : IGraphNode, ITypedSchemaNode
 ```
 
 **Capabilities:**
-- **Input mapping**: Automatically maps graph state to HTTP parameters
-- **Response handling**: Parses JSON responses and provides structured output
-- **Error handling**: Comprehensive error handling with telemetry
-- **Schema validation**: Implements `ITypedSchemaNode` for type safety
-- **Secret resolution**: Secure handling of API keys and sensitive data
+* **Input mapping**: Automatically maps graph state to HTTP parameters
+* **Response handling**: Parses JSON responses and provides structured output
+* **Error handling**: Comprehensive error handling with telemetry
+* **Schema validation**: Implements `ITypedSchemaNode` for type safety
+* **Secret resolution**: Secure handling of API keys and sensitive data
 
 ## Schema Definition
 
@@ -209,9 +209,9 @@ var schema = new RestToolSchema
 ```
 
 **Header Value Types:**
-- **Literal values**: Prefixed with `:` (e.g., `":application/json"`)
-- **Secret references**: Prefixed with `secret:` (e.g., `"secret:api_key"`)
-- **State variables**: No prefix (e.g., `"correlation_id"`)
+* **Literal values**: Prefixed with `:` (e.g., `":application/json"`)
+* **Secret references**: Prefixed with `secret:` (e.g., `"secret:api_key"`)
+* **State variables**: No prefix (e.g., `"correlation_id"`)
 
 ### JSON Body Templates
 
@@ -239,10 +239,10 @@ var schema = new RestToolSchema
 ```
 
 **Template Features:**
-- **Variable substitution**: `{{variable_name}}` replaced with graph state values
-- **JSON embedding**: `{{json_variable}}` for complex objects
-- **Conditional logic**: Support for basic Handlebars expressions
-- **Escape handling**: Automatic JSON escaping for safe output
+* **Variable substitution**: `{{variable_name}}` replaced with graph state values
+* **JSON embedding**: `{{json_variable}}` for complex objects
+* **Conditional logic**: Support for basic Handlebars expressions
+* **Escape handling**: Automatic JSON escaping for safe output
 
 ## Tool Registry
 
@@ -377,10 +377,10 @@ var schema = new RestToolSchema
 ```
 
 **Cache Behavior:**
-- **Cache key**: Generated from HTTP method, URL, and request body hash
-- **TTL management**: Automatic expiration based on schema configuration
-- **Memory efficient**: Uses concurrent dictionary with expiration tracking
-- **Thread safe**: Concurrent access support for high-performance scenarios
+* **Cache key**: Generated from HTTP method, URL, and request body hash
+* **TTL management**: Automatic expiration based on schema configuration
+* **Memory efficient**: Uses concurrent dictionary with expiration tracking
+* **Thread safe**: Concurrent access support for high-performance scenarios
 
 ### Cache Configuration
 
@@ -422,10 +422,10 @@ var response = await graphApi.ExecuteGraphAsync(request, cancellationToken);
 ```
 
 **Idempotency Features:**
-- **Automatic handling**: Built into the GraphRestApi service
-- **Request deduplication**: Prevents duplicate executions
-- **Hash validation**: Ensures request consistency
-- **Configurable window**: Adjustable idempotency time window
+* **Automatic handling**: Built into the GraphRestApi service
+* **Request deduplication**: Prevents duplicate executions
+* **Hash validation**: Ensures request consistency
+* **Configurable window**: Adjustable idempotency time window
 
 ## Validation and Error Handling
 
@@ -518,12 +518,12 @@ var schema = new RestToolSchema
 ```
 
 **Telemetry Data:**
-- **Dependency type**: HTTP
-- **Target**: API hostname
-- **Operation**: HTTP method + path
-- **Duration**: Request execution time
-- **Success**: HTTP status code range
-- **Properties**: Node ID, graph name, URI
+* **Dependency type**: HTTP
+* **Target**: API hostname
+* **Operation**: HTTP method + path
+* **Duration**: Request execution time
+* **Success**: HTTP status code range
+* **Properties**: Node ID, graph name, URI
 
 ### Performance Monitoring
 
@@ -555,9 +555,9 @@ var restNode = new RestToolGraphNode(schema, httpClient, secretResolver: secretR
 ```
 
 **Secret Types:**
-- **API keys**: `"secret:weather_api_key"`
-- **Authentication tokens**: `"secret:bearer_token"`
-- **Connection strings**: `"secret:database_connection"`
+* **API keys**: `"secret:weather_api_key"`
+* **Authentication tokens**: `"secret:bearer_token"`
+* **Connection strings**: `"secret:database_connection"`
 
 ### Data Sanitization
 
@@ -680,66 +680,66 @@ var orderCreateSchema = new RestToolSchema
 
 ### 1. Schema Design
 
-- **Use descriptive IDs**: Clear, hierarchical naming (e.g., `"api.weather.current"`)
-- **Provide descriptions**: Help developers understand tool purpose
-- **Set appropriate timeouts**: Balance responsiveness with reliability
-- **Configure caching**: Enable for read operations, disable for mutations
+* **Use descriptive IDs**: Clear, hierarchical naming (e.g., `"api.weather.current"`)
+* **Provide descriptions**: Help developers understand tool purpose
+* **Set appropriate timeouts**: Balance responsiveness with reliability
+* **Configure caching**: Enable for read operations, disable for mutations
 
 ### 2. Security
 
-- **Use secret resolver**: Never hardcode API keys
-- **Validate inputs**: Sanitize user-provided data
-- **Set timeouts**: Prevent hanging requests
-- **Monitor usage**: Track API consumption and errors
+* **Use secret resolver**: Never hardcode API keys
+* **Validate inputs**: Sanitize user-provided data
+* **Set timeouts**: Prevent hanging requests
+* **Monitor usage**: Track API consumption and errors
 
 ### 3. Performance
 
-- **Enable caching**: Cache responses for read operations
-- **Set TTL appropriately**: Balance freshness with performance
-- **Use connection pooling**: Reuse HttpClient instances
-- **Monitor metrics**: Track response times and error rates
+* **Enable caching**: Cache responses for read operations
+* **Set TTL appropriately**: Balance freshness with performance
+* **Use connection pooling**: Reuse HttpClient instances
+* **Monitor metrics**: Track response times and error rates
 
 ### 4. Error Handling
 
-- **Handle HTTP errors**: Check status codes and error responses
-- **Implement retries**: Use exponential backoff for transient failures
-- **Log failures**: Provide context for debugging
-- **Graceful degradation**: Continue execution when possible
+* **Handle HTTP errors**: Check status codes and error responses
+* **Implement retries**: Use exponential backoff for transient failures
+* **Log failures**: Provide context for debugging
+* **Graceful degradation**: Continue execution when possible
 
 ### 5. Testing
 
-- **Mock external APIs**: Use test doubles for development
-- **Validate schemas**: Ensure schema definitions are correct
-- **Test error scenarios**: Verify error handling behavior
-- **Performance testing**: Validate caching and timeout behavior
+* **Mock external APIs**: Use test doubles for development
+* **Validate schemas**: Ensure schema definitions are correct
+* **Test error scenarios**: Verify error handling behavior
+* **Performance testing**: Validate caching and timeout behavior
 
 ## Troubleshooting
 
 ### Common Issues
 
 **Timeout errors:**
-- Check network connectivity
-- Verify API endpoint availability
-- Adjust timeout settings in schema
-- Monitor API response times
+* Check network connectivity
+* Verify API endpoint availability
+* Adjust timeout settings in schema
+* Monitor API response times
 
 **Authentication failures:**
-- Verify secret resolver configuration
-- Check API key validity
-- Ensure proper header formatting
-- Validate authorization scopes
+* Verify secret resolver configuration
+* Check API key validity
+* Ensure proper header formatting
+* Validate authorization scopes
 
 **Cache issues:**
-- Verify cache configuration
-- Check TTL settings
-- Monitor memory usage
-- Validate cache key generation
+* Verify cache configuration
+* Check TTL settings
+* Monitor memory usage
+* Validate cache key generation
 
 **Schema validation errors:**
-- Check required properties
-- Verify URI format
-- Validate HTTP method
-- Ensure parameter mappings
+* Check required properties
+* Verify URI format
+* Validate HTTP method
+* Ensure parameter mappings
 
 ### Debug Information
 
@@ -762,14 +762,14 @@ Console.WriteLine($"From cache: {result.GetValue<bool>("from_cache")}");
 
 ## See Also
 
-- [Exposing REST APIs](./exposing-rest-apis.md) - Expose graph functionality via REST
-- [State Management](./state.md) - Graph state and argument handling
-- [Performance Metrics](./metrics-and-observability.md) - Monitoring and observability
-- [Security and Data](./security-and-data.md) - Security best practices
-- [Integration and Extensions](./integration-and-extensions.md) - General integration patterns
+* [Exposing REST APIs](./exposing-rest-apis.md) - Expose graph functionality via REST
+* [State Management](./state.md) - Graph state and argument handling
+* [Performance Metrics](./metrics-and-observability.md) - Monitoring and observability
+* [Security and Data](./security-and-data.md) - Security best practices
+* [Integration and Extensions](./integration-and-extensions.md) - General integration patterns
 
 ## Examples
 
-- [REST API Example](../../examples/rest-api.md) - Complete REST integration demonstration
-- [Multi-Agent Workflow](../../tutorials/multi-agent-workflow.md) - Complex tool orchestration
-- [Document Analysis Pipeline](../../tutorials/document-analysis-pipeline.md) - External service integration
+* [REST API Example](../../examples/rest-api.md) - Complete REST integration demonstration
+* [Multi-Agent Workflow](../../tutorials/multi-agent-workflow.md) - Complex tool orchestration
+* [Document Analysis Pipeline](../../tutorials/document-analysis-pipeline.md) - External service integration

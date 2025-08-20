@@ -5,38 +5,38 @@ This example demonstrates multi-hop Retrieval-Augmented Generation (RAG) with re
 ## Objective
 
 Learn how to implement advanced RAG workflows in graph-based systems to:
-- Implement iterative retrieval loops with multiple attempts
-- Refine search queries based on context evaluation
-- Dynamically adjust search parameters (top_k, min_score) for better results
-- Synthesize comprehensive answers from accumulated context
-- Handle complex queries that require multiple retrieval hops
+* Implement iterative retrieval loops with multiple attempts
+* Refine search queries based on context evaluation
+* Dynamically adjust search parameters (top_k, min_score) for better results
+* Synthesize comprehensive answers from accumulated context
+* Handle complex queries that require multiple retrieval hops
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- **Kernel Memory** configured for knowledge base operations
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [RAG Patterns](../patterns/rag.md)
-- Familiarity with [Retrieval and Memory](../concepts/memory.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* **Kernel Memory** configured for knowledge base operations
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [RAG Patterns](../patterns/rag.md)
+* Familiarity with [Retrieval and Memory](../concepts/memory.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Multi-Hop RAG**: Iterative retrieval process that refines queries and accumulates context
-- **Query Refinement**: Dynamic adjustment of search parameters based on context evaluation
-- **Retry Mechanisms**: Multiple retrieval attempts with widening search parameters
-- **Context Evaluation**: Assessment of retrieved content quality and sufficiency
-- **Answer Synthesis**: Combining multiple retrieval results into comprehensive answers
+* **Multi-Hop RAG**: Iterative retrieval process that refines queries and accumulates context
+* **Query Refinement**: Dynamic adjustment of search parameters based on context evaluation
+* **Retry Mechanisms**: Multiple retrieval attempts with widening search parameters
+* **Context Evaluation**: Assessment of retrieved content quality and sufficiency
+* **Answer Synthesis**: Combining multiple retrieval results into comprehensive answers
 
 ### Core Classes
 
-- `GraphExecutor`: Executor for multi-hop RAG workflows
-- `FunctionGraphNode`: Nodes for query analysis, retrieval, evaluation, and synthesis
-- `KernelMemoryGraphProvider`: Provider for knowledge base operations
-- `ConditionalEdge`: Edges that control retry loops and query refinement
-- `GraphState`: State management for accumulated context and search parameters
+* `GraphExecutor`: Executor for multi-hop RAG workflows
+* `FunctionGraphNode`: Nodes for query analysis, retrieval, evaluation, and synthesis
+* `KernelMemoryGraphProvider`: Provider for knowledge base operations
+* `ConditionalEdge`: Edges that control retry loops and query refinement
+* `GraphState`: State management for accumulated context and search parameters
 
 ## Running the Example
 
@@ -353,12 +353,12 @@ foreach (var question in scenarios)
 
 The example produces comprehensive output showing:
 
-- 🧑‍💻 User questions and search queries
-- 🔍 Retrieval attempts with varying parameters
-- 📊 Context evaluation and quality assessment
-- 🔄 Query refinement and retry mechanisms
-- 🤖 Final synthesized answers from accumulated context
-- ✅ Multi-hop RAG workflow completion
+* 🧑‍💻 User questions and search queries
+* 🔍 Retrieval attempts with varying parameters
+* 📊 Context evaluation and quality assessment
+* 🔄 Query refinement and retry mechanisms
+* 🤖 Final synthesized answers from accumulated context
+* ✅ Multi-hop RAG workflow completion
 
 ## Troubleshooting
 
@@ -371,15 +371,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Monitor retrieval scores and chunk counts for each attempt
-- Check query refinement parameters and their progression
-- Verify context evaluation logic and sufficiency criteria
-- Monitor the retry loop to prevent infinite iterations
+* Monitor retrieval scores and chunk counts for each attempt
+* Check query refinement parameters and their progression
+* Verify context evaluation logic and sufficiency criteria
+* Monitor the retry loop to prevent infinite iterations
 
 ## See Also
 
-- [RAG Patterns](../patterns/rag.md)
-- [Memory and Retrieval](../concepts/memory.md)
-- [Conditional Nodes](../concepts/node-types.md)
-- [Graph Execution](../concepts/execution.md)
-- [Query Optimization](../how-to/query-optimization.md)
+* [RAG Patterns](../patterns/rag.md)
+* [Memory and Retrieval](../concepts/memory.md)
+* [Conditional Nodes](../concepts/node-types.md)
+* [Graph Execution](../concepts/execution.md)
+* [Query Optimization](../how-to/query-optimization.md)

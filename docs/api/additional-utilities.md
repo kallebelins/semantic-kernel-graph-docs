@@ -708,8 +708,8 @@ var kernel = builder.Build();
 
 ## See Also
 
-- [Extensions and Options](./extensions-and-options.md) - Core extension classes and configuration options
-- [State and Serialization](./state-and-serialization.md) - State management and serialization utilities
-- [Execution Context](./execution-context.md) - Execution context and event utilities
-- [GraphExecutor API](./graph-executor.md) - Main executor interface
-- [Advanced Patterns](../how-to/advanced-patterns.md) - Advanced pattern usage guides
+* [Extensions and Options](./extensions-and-options.md) - Core extension classes and configuration options
+* [State and Serialization](./state-and-serialization.md) - State management and serialization utilities
+* [Execution Context](./execution-context.md) - Execution context and event utilities
+* [GraphExecutor API](./graph-executor.md) - Main executor interface
+* [Advanced Patterns](../how-to/advanced-patterns.md) - Advanced pattern usage guides

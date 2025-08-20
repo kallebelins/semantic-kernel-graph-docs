@@ -13,19 +13,19 @@ Routing determines which node will be executed next using conditional edges or d
 ## Routing Types
 
 ### Simple Predicate Routing
-- **State Conditions**: Direct evaluation of `GraphState` properties
-- **Boolean Expressions**: Simple conditions like `state.Value > 10`
-- **Comparisons**: Equality, inequality and range operators
+* **State Conditions**: Direct evaluation of `GraphState` properties
+* **Boolean Expressions**: Simple conditions like `state.Value > 10`
+* **Comparisons**: Equality, inequality and range operators
 
 ### Template-Based Routing
-- **SK Evaluation**: Use of Semantic Kernel functions for complex decisions
-- **Prompt-based Routing**: Decisions based on text or context analysis
-- **Semantic Matching**: Routing by semantic similarity
+* **SK Evaluation**: Use of Semantic Kernel functions for complex decisions
+* **Prompt-based Routing**: Decisions based on text or context analysis
+* **Semantic Matching**: Routing by semantic similarity
 
 ### Advanced Routing
-- **Semantic Similarity**: Use of embeddings to find the best path
-- **Probabilistic Routing**: Decisions with weights and probabilities
-- **Learning from Feedback**: Adaptation based on previous results
+* **Semantic Similarity**: Use of embeddings to find the best path
+* **Probabilistic Routing**: Decisions with weights and probabilities
+* **Learning from Feedback**: Adaptation based on previous results
 
 ## Main Components
 
@@ -47,9 +47,9 @@ var routingEngine = new DynamicRoutingEngine(
 ```
 
 ### RoutingStrategies
-- **SemanticRoutingStrategy**: Routing by semantic similarity
-- **ProbabilisticRoutingStrategy**: Routing with probabilistic weights
-- **ContextualRoutingStrategy**: Routing based on execution history
+* **SemanticRoutingStrategy**: Routing by semantic similarity
+* **ProbabilisticRoutingStrategy**: Routing with probabilistic weights
+* **ContextualRoutingStrategy**: Routing based on execution history
 
 ## Usage Examples
 
@@ -106,16 +106,16 @@ var options = new GraphRoutingOptions
 ```
 
 ### Routing Policies
-- **Retry Policy**: Multiple retries in case of failure
-- **Circuit Breaker**: Temporary interruption in case of problems
-- **Load Balancing**: Balanced load distribution
+* **Retry Policy**: Multiple retries in case of failure
+* **Circuit Breaker**: Temporary interruption in case of problems
+* **Load Balancing**: Balanced load distribution
 
 ## Monitoring and Debugging
 
 ### Routing Metrics
-- **Decision Time**: Latency to determine the next node
-- **Success Rate**: Percentage of successful routings
-- **Path Distribution**: Frequency of use of each route
+* **Decision Time**: Latency to determine the next node
+* **Success Rate**: Percentage of successful routings
+* **Path Distribution**: Frequency of use of each route
 
 ### Routing Debugging
 ```csharp
@@ -126,17 +126,17 @@ debugger.LogRoutingDecisions = true;
 
 ## See Also
 
-- [Conditional Nodes](../how-to/conditional-nodes.md)
-- [Advanced Routing](../how-to/advanced-routing.md)
-- [Routing Examples](../examples/dynamic-routing.md)
-- [Advanced Routing Examples](../examples/advanced-routing.md)
-- [Nodes](../concepts/node-types.md)
-- [Execution](../concepts/execution-model.md)
+* [Conditional Nodes](../how-to/conditional-nodes.md)
+* [Advanced Routing](../how-to/advanced-routing.md)
+* [Routing Examples](../examples/dynamic-routing.md)
+* [Advanced Routing Examples](../examples/advanced-routing.md)
+* [Nodes](../concepts/node-types.md)
+* [Execution](../concepts/execution-model.md)
 
 ## References
 
-- `ConditionalEdge`: Class to create edges with conditions
-- `DynamicRoutingEngine`: Adaptive routing engine
-- `RoutingStrategies`: Predefined routing strategies
-- `GraphRoutingOptions`: Routing configurations
-- `ConditionalDebugger`: Debugging tools for routing
+* `ConditionalEdge`: Class to create edges with conditions
+* `DynamicRoutingEngine`: Adaptive routing engine
+* `RoutingStrategies`: Predefined routing strategies
+* `GraphRoutingOptions`: Routing configurations
+* `ConditionalDebugger`: Debugging tools for routing

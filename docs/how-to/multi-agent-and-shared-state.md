@@ -4,11 +4,11 @@ Multi-agent coordination and shared state management in SemanticKernel.Graph ena
 
 ## What You'll Learn
 
-- How to create and coordinate multiple specialized agents
-- Managing shared state between agents with conflict resolution
-- Implementing different work distribution strategies
-- Handling agent failures and health monitoring
-- Best practices for multi-agent workflow design
+* How to create and coordinate multiple specialized agents
+* Managing shared state between agents with conflict resolution
+* Implementing different work distribution strategies
+* Handling agent failures and health monitoring
+* Best practices for multi-agent workflow design
 
 ## Concepts and Techniques
 
@@ -24,10 +24,10 @@ Multi-agent coordination and shared state management in SemanticKernel.Graph ena
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Understanding of [Graph Concepts](../concepts/graph-concepts.md)
-- Familiarity with [State Management](state-tutorial.md)
-- Basic knowledge of concurrent programming concepts
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Understanding of [Graph Concepts](../concepts/graph-concepts.md)
+* Familiarity with [State Management](state-tutorial.md)
+* Basic knowledge of concurrent programming concepts
 
 ## Multi-Agent Architecture
 
@@ -690,31 +690,31 @@ if (Activity.Current != null)
 
 ### Workflow Design
 
-- **Task Granularity**: Design tasks that are neither too small nor too large
-- **Dependency Management**: Minimize unnecessary dependencies to maximize parallelism
-- **Agent Specialization**: Create agents with focused capabilities rather than general-purpose ones
-- **Resource Planning**: Consider agent capacity and workload when designing workflows
+* **Task Granularity**: Design tasks that are neither too small nor too large
+* **Dependency Management**: Minimize unnecessary dependencies to maximize parallelism
+* **Agent Specialization**: Create agents with focused capabilities rather than general-purpose ones
+* **Resource Planning**: Consider agent capacity and workload when designing workflows
 
 ### State Management
 
-- **Conflict Resolution**: Choose appropriate conflict resolution strategies for your use case
-- **State Size**: Keep shared state minimal to reduce synchronization overhead
-- **Versioning**: Use state versioning for audit trails and debugging
-- **Cleanup**: Configure automatic cleanup to prevent memory leaks
+* **Conflict Resolution**: Choose appropriate conflict resolution strategies for your use case
+* **State Size**: Keep shared state minimal to reduce synchronization overhead
+* **Versioning**: Use state versioning for audit trails and debugging
+* **Cleanup**: Configure automatic cleanup to prevent memory leaks
 
 ### Performance Optimization
 
-- **Parallelism**: Maximize parallel execution where dependencies allow
-- **Load Balancing**: Use appropriate distribution strategies for your workload
-- **Health Monitoring**: Monitor agent health to prevent bottlenecks
-- **Failover**: Configure failover to handle agent failures gracefully
+* **Parallelism**: Maximize parallel execution where dependencies allow
+* **Load Balancing**: Use appropriate distribution strategies for your workload
+* **Health Monitoring**: Monitor agent health to prevent bottlenecks
+* **Failover**: Configure failover to handle agent failures gracefully
 
 ### Monitoring and Debugging
 
-- **Distributed Tracing**: Enable tracing for end-to-end visibility
-- **Metrics Collection**: Monitor execution times and success rates
-- **Logging**: Use structured logging for better observability
-- **Health Checks**: Implement comprehensive health monitoring
+* **Distributed Tracing**: Enable tracing for end-to-end visibility
+* **Metrics Collection**: Monitor execution times and success rates
+* **Logging**: Use structured logging for better observability
+* **Health Checks**: Implement comprehensive health monitoring
 
 ## Troubleshooting
 
@@ -759,10 +759,10 @@ foreach (var result in workflow.Results)
 
 ## See Also
 
-- [State Management](state-tutorial.md) - Managing graph state and persistence
-- [Resource Governance](resource-governance-and-concurrency.md) - Managing resource allocation and execution policies
-- [Metrics and Observability](metrics-and-observability.md) - Monitoring and performance analysis
-- [Examples](../../examples/) - Practical examples of multi-agent coordination
+* [State Management](state-tutorial.md) - Managing graph state and persistence
+* [Resource Governance](resource-governance-and-concurrency.md) - Managing resource allocation and execution policies
+* [Metrics and Observability](metrics-and-observability.md) - Monitoring and performance analysis
+* [Examples](../../examples/) - Practical examples of multi-agent coordination
 
 ## Concepts and Techniques
 

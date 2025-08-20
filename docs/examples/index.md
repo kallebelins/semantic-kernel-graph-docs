@@ -6,10 +6,10 @@ This section provides a comprehensive overview of all available examples in the 
 
 The examples in this documentation provide comprehensive demonstrations of the Semantic Kernel Graph package capabilities. Each example includes:
 
-- **Complete code snippets** that you can copy and adapt
-- **Step-by-step explanations** of how the code works
-- **Configuration examples** for different scenarios
-- **Best practices** and usage patterns
+* **Complete code snippets** that you can copy and adapt
+* **Step-by-step explanations** of how the code works
+* **Configuration examples** for different scenarios
+* **Best practices** and usage patterns
 
 Browse the examples by category below to find the right starting point for your use case.
 
@@ -92,22 +92,22 @@ Examples demonstrating AI-specific patterns and optimization strategies.
 ## Example Complexity Levels
 
 ### 🟢 Beginner
-- **Chain of Thought**: Basic reasoning patterns
-- **Conditional Nodes**: Simple routing logic
-- **State Management**: Basic state handling
-- **Logging**: Basic observability
+* **Chain of Thought**: Basic reasoning patterns
+* **Conditional Nodes**: Simple routing logic
+* **State Management**: Basic state handling
+* **Logging**: Basic observability
 
 ### 🟡 Intermediate
-- **ReAct Agent**: Tool integration and reasoning
-- **Checkpointing**: State persistence
-- **Graph Metrics**: Performance monitoring
-- **Plugin System**: Dynamic loading
+* **ReAct Agent**: Tool integration and reasoning
+* **Checkpointing**: State persistence
+* **Graph Metrics**: Performance monitoring
+* **Plugin System**: Dynamic loading
 
 ### 🔴 Advanced
-- **Multi-Agent**: Distributed coordination
-- **Advanced Patterns**: Complex workflow composition
-- **Document Analysis**: Multi-stage pipelines
-- **Dynamic Routing**: Adaptive execution
+* **Multi-Agent**: Distributed coordination
+* **Advanced Patterns**: Complex workflow composition
+* **Document Analysis**: Multi-stage pipelines
+* **Dynamic Routing**: Adaptive execution
 
 ## Running Examples
 
@@ -171,21 +171,21 @@ When contributing new examples:
 
 ### Common Issues
 
-- **API Key Missing**: Check `appsettings.json` configuration
-- **Package Dependencies**: Ensure all required packages are installed
-- **Memory Issues**: Large graphs may require increased memory limits
-- **Timeout Errors**: Adjust execution timeouts for complex workflows
+* **API Key Missing**: Check `appsettings.json` configuration
+* **Package Dependencies**: Ensure all required packages are installed
+* **Memory Issues**: Large graphs may require increased memory limits
+* **Timeout Errors**: Adjust execution timeouts for complex workflows
 
 ### Getting Help
 
-- Check the [Troubleshooting Guide](../troubleshooting.md)
-- Review [API Reference](../api/) for detailed class documentation
-- Open issues on the project repository for specific problems
+* Check the [Troubleshooting Guide](../troubleshooting.md)
+* Review [API Reference](../api/) for detailed class documentation
+* Open issues on the project repository for specific problems
 
 ## Related Documentation
 
-- [Getting Started](../getting-started.md): Quick start guide
-- [Concepts](../concepts/): Core concepts and terminology
-- [How-to Guides](../how-to/): Step-by-step tutorials
-- [API Reference](../api/): Complete API documentation
-- [Architecture](../architecture/): System design and decisions
+* [Getting Started](../getting-started.md): Quick start guide
+* [Concepts](../concepts/): Core concepts and terminology
+* [How-to Guides](../how-to/): Step-by-step tutorials
+* [API Reference](../api/): Complete API documentation
+* [Architecture](../architecture/): System design and decisions

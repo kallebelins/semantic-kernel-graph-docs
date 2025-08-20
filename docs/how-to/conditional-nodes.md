@@ -5,10 +5,10 @@ This guide explains how to use conditional nodes and edges to create dynamic, br
 ## Overview
 
 Conditional nodes enable you to create dynamic workflows that can:
-- **Branch execution** based on state values or conditions
-- **Route data** to different processing paths
-- **Implement decision trees** for complex business logic
-- **Handle multiple scenarios** within a single graph
+* **Branch execution** based on state values or conditions
+* **Route data** to different processing paths
+* **Implement decision trees** for complex business logic
+* **Handle multiple scenarios** within a single graph
 
 ## Basic Conditional Logic
 
@@ -355,9 +355,9 @@ var traceCondition = new ConditionalGraphNode(
 
 ## See Also
 
-- [Build a Graph](build-a-graph.md) - Learn the fundamentals of graph construction
-- [Loops](loops.md) - Implement iterative workflows with loop nodes
-- [Advanced Routing](advanced-routing.md) - Explore complex routing patterns and strategies
-- [State Management](../state-quickstart.md) - Understand how to manage data flow between nodes
-- [Debug and Inspection](debug-and-inspection.md) - Learn how to debug conditional logic
-- [Examples: Conditional Workflows](../examples/conditional-nodes-example.md) - Complete working examples of conditional routing
+* [Build a Graph](build-a-graph.md) - Learn the fundamentals of graph construction
+* [Loops](loops.md) - Implement iterative workflows with loop nodes
+* [Advanced Routing](advanced-routing.md) - Explore complex routing patterns and strategies
+* [State Management](../state-quickstart.md) - Understand how to manage data flow between nodes
+* [Debug and Inspection](debug-and-inspection.md) - Learn how to debug conditional logic
+* [Examples: Conditional Workflows](../examples/conditional-nodes-example.md) - Complete working examples of conditional routing

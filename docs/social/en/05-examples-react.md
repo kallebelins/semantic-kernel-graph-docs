@@ -19,9 +19,9 @@ var reactGraph = new Graph
 ```
 
 Perfect for:
-- 🔍 Problem-solving applications
-- 🎯 Decision-making systems
-- 🧪 Research and analysis tools
+* 🔍 Problem-solving applications
+* 🎯 Decision-making systems
+* 🧪 Research and analysis tools
 
 **Learn ReAct with Semantic Kernel Graph** → [https://skgraph.dev/](https://skgraph.dev/)
 

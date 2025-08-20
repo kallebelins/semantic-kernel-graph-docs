@@ -6,11 +6,11 @@ SemanticKernel.Graph provides comprehensive real-time visualization capabilities
 
 The real-time visualization system consists of several key components:
 
-- **GraphVisualizationEngine**: Multi-format export engine for DOT, JSON, Mermaid, and SVG
-- **GraphRealtimeHighlighter**: Live execution path tracking with visual highlights
-- **Export Formats**: Professional-grade output for various visualization tools
-- **Execution Overlays**: Real-time highlighting of current execution state
-- **Customizable Themes**: Multiple visual themes and styling options
+* **GraphVisualizationEngine**: Multi-format export engine for DOT, JSON, Mermaid, and SVG
+* **GraphRealtimeHighlighter**: Live execution path tracking with visual highlights
+* **Export Formats**: Professional-grade output for various visualization tools
+* **Execution Overlays**: Real-time highlighting of current execution state
+* **Customizable Themes**: Multiple visual themes and styling options
 
 ## Core Components
 
@@ -39,11 +39,11 @@ public sealed class GraphVisualizationEngine : IDisposable
 ```
 
 **Key Features:**
-- **Multi-format support**: DOT, JSON, Mermaid, and SVG export
-- **Advanced styling**: Customizable themes and visual elements
-- **Performance metrics**: Integration with execution metrics
-- **Real-time updates**: Support for live execution highlighting
-- **Professional output**: Production-ready visualization formats
+* **Multi-format support**: DOT, JSON, Mermaid, and SVG export
+* **Advanced styling**: Customizable themes and visual elements
+* **Performance metrics**: Integration with execution metrics
+* **Real-time updates**: Support for live execution highlighting
+* **Professional output**: Production-ready visualization formats
 
 **Usage Example:**
 ```csharp
@@ -90,11 +90,11 @@ public sealed class GraphRealtimeHighlighter : IDisposable
 ```
 
 **Key Features:**
-- **Real-time tracking**: Live updates of execution progress
-- **Visual highlights**: Customizable styles for current and completed nodes
-- **Streaming support**: Web/mobile consumption ready
-- **Performance optimized**: Batched updates for high-frequency executions
-- **Multi-subscriber**: Support for multiple visualization consumers
+* **Real-time tracking**: Live updates of execution progress
+* **Visual highlights**: Customizable styles for current and completed nodes
+* **Streaming support**: Web/mobile consumption ready
+* **Performance optimized**: Batched updates for high-frequency executions
+* **Multi-subscriber**: Support for multiple visualization consumers
 
 **Usage Example:**
 ```csharp
@@ -138,11 +138,11 @@ var dotGraph = visualizationEngine.SerializeToDot(visualizationData, dotOptions)
 ```
 
 **DOT Format Features:**
-- **Layout control**: Top-to-bottom, left-to-right, and other directions
-- **Node clustering**: Automatic grouping of related nodes
-- **Custom styling**: User-defined node and edge styles
-- **Execution highlighting**: Visual emphasis on execution path
-- **Professional output**: Industry-standard GraphViz format
+* **Layout control**: Top-to-bottom, left-to-right, and other directions
+* **Node clustering**: Automatic grouping of related nodes
+* **Custom styling**: User-defined node and edge styles
+* **Execution highlighting**: Visual emphasis on execution path
+* **Professional output**: Industry-standard GraphViz format
 
 **Generated DOT Example:**
 ```dot
@@ -179,11 +179,11 @@ var jsonGraph = visualizationEngine.SerializeToJson(visualizationData, jsonOptio
 ```
 
 **JSON Format Features:**
-- **Structured data**: Hierarchical representation of graph structure
-- **Metadata inclusion**: Timestamps, execution metrics, and layout information
-- **API ready**: Optimized for web and mobile consumption
-- **Extensible**: Easy to extend with custom properties
-- **Performance**: Efficient serialization for large graphs
+* **Structured data**: Hierarchical representation of graph structure
+* **Metadata inclusion**: Timestamps, execution metrics, and layout information
+* **API ready**: Optimized for web and mobile consumption
+* **Extensible**: Easy to extend with custom properties
+* **Performance**: Efficient serialization for large graphs
 
 **Generated JSON Example:**
 ```json
@@ -234,11 +234,11 @@ var mermaidDiagram = visualizationEngine.GenerateEnhancedMermaidDiagram(visualiz
 ```
 
 **Mermaid Format Features:**
-- **Web integration**: Native support in Markdown and documentation
-- **Enhanced styling**: Custom themes and visual customization
-- **Real-time highlights**: Live execution path emphasis
-- **Accessibility**: High contrast and professional themes
-- **Interactive**: Support for click events and tooltips
+* **Web integration**: Native support in Markdown and documentation
+* **Enhanced styling**: Custom themes and visual customization
+* **Real-time highlights**: Live execution path emphasis
+* **Accessibility**: High contrast and professional themes
+* **Interactive**: Support for click events and tooltips
 
 **Generated Mermaid Example:**
 ```mermaid
@@ -282,11 +282,11 @@ var svgGraph = visualizationEngine.SerializeToSvg(visualizationData, svgOptions)
 ```
 
 **SVG Format Features:**
-- **Vector graphics**: Scalable without quality loss
-- **Customizable dimensions**: Configurable canvas size and spacing
-- **Metrics overlay**: Built-in performance indicators
-- **Execution highlighting**: Real-time path and node emphasis
-- **Web integration**: Native browser support
+* **Vector graphics**: Scalable without quality loss
+* **Customizable dimensions**: Configurable canvas size and spacing
+* **Metrics overlay**: Built-in performance indicators
+* **Execution highlighting**: Real-time path and node emphasis
+* **Web integration**: Native browser support
 
 ## Real-time Execution Overlays
 
@@ -584,19 +584,19 @@ dashboard.ExecutionUpdated += (sender, e) =>
 ### Common Issues
 
 **Visualization Not Updating**
-- Check if real-time updates are enabled
-- Verify event stream connectivity
-- Ensure proper disposal of components
+* Check if real-time updates are enabled
+* Verify event stream connectivity
+* Ensure proper disposal of components
 
 **Export Format Issues**
-- Validate input data structure
-- Check format-specific options
-- Verify file permissions for export
+* Validate input data structure
+* Check format-specific options
+* Verify file permissions for export
 
 **Performance Problems**
-- Reduce update frequency
-- Enable caching
-- Limit concurrent visualizations
+* Reduce update frequency
+* Enable caching
+* Limit concurrent visualizations
 
 ### Debug Tips
 
@@ -619,7 +619,7 @@ dashboard.ExecutionUpdated += (sender, e) =>
 
 ## See Also
 
-- [Debug and Inspection](debug-and-inspection.md) - Debug visualization and inspection capabilities
-- [Graph Inspection API](graph-inspection-api.md) - Runtime graph inspection and monitoring
-- [Performance Metrics](metrics-and-observability.md) - Integration with performance monitoring
-- [Streaming Execution](streaming-execution.md) - Real-time execution event streaming
+* [Debug and Inspection](debug-and-inspection.md) - Debug visualization and inspection capabilities
+* [Graph Inspection API](graph-inspection-api.md) - Runtime graph inspection and monitoring
+* [Performance Metrics](metrics-and-observability.md) - Integration with performance monitoring
+* [Streaming Execution](streaming-execution.md) - Real-time execution event streaming

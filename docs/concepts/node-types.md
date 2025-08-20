@@ -13,10 +13,10 @@ Nodes are the fundamental building blocks of graphs in SemanticKernel.Graph. Eac
 The `FunctionGraphNode` encapsulates a Semantic Kernel function and provides graph-specific functionality around existing `ISKFunction` instances.
 
 **Key Features:**
-- **Function Encapsulation**: Wraps any `KernelFunction` with graph-aware behavior
-- **Navigation Control**: Connects to unconditional successors or conditional transitions
-- **Metadata Hooks**: Custom setup, cleanup, and error handling logic
-- **Result Storage**: Automatically stores execution results in graph state
+* **Function Encapsulation**: Wraps any `KernelFunction` with graph-aware behavior
+* **Navigation Control**: Connects to unconditional successors or conditional transitions
+* **Metadata Hooks**: Custom setup, cleanup, and error handling logic
+* **Result Storage**: Automatically stores execution results in graph state
 
 **Usage Example:**
 ```csharp
@@ -39,22 +39,22 @@ mathNode.ConnectTo(processNode);
 ```
 
 **Metadata Keys:**
-- `"StoreResultAs"` (string): Stores the last result into `GraphState` under the given key
-- `"BeforeExecute"` (Action/Func): Custom setup logic executed in `OnBeforeExecuteAsync`
-- `"AfterExecute"` (Action/Func): Custom cleanup logic executed in `OnAfterExecuteAsync`
-- `"OnExecutionFailed"` (Action/Func): Error handling hook executed in `OnExecutionFailedAsync`
-- `"StrictValidation"` (bool): If true, pre-execution validation failures cause an exception
+* `"StoreResultAs"` (string): Stores the last result into `GraphState` under the given key
+* `"BeforeExecute"` (Action/Func): Custom setup logic executed in `OnBeforeExecuteAsync`
+* `"AfterExecute"` (Action/Func): Custom cleanup logic executed in `OnAfterExecuteAsync`
+* `"OnExecutionFailed"` (Action/Func): Error handling hook executed in `OnExecutionFailedAsync`
+* `"StrictValidation"` (bool): If true, pre-execution validation failures cause an exception
 
 ### ConditionalGraphNode
 
 The `ConditionalGraphNode` implements conditional if/else logic based on graph state, enabling dynamic routing without executing functions.
 
 **Key Features:**
-- **Function-based Conditions**: Direct evaluation using `Func<GraphState, bool>`
-- **Template-based Conditions**: Handlebars-like templates with variable substitution
-- **Advanced Caching**: Automatic cache of evaluation results for performance
-- **Debugging Support**: Integration with `ConditionalDebugger` for step-by-step analysis
-- **Metrics Tracking**: Comprehensive execution metrics and performance monitoring
+* **Function-based Conditions**: Direct evaluation using `Func<GraphState, bool>`
+* **Template-based Conditions**: Handlebars-like templates with variable substitution
+* **Advanced Caching**: Automatic cache of evaluation results for performance
+* **Debugging Support**: Integration with `ConditionalDebugger` for step-by-step analysis
+* **Metrics Tracking**: Comprehensive execution metrics and performance monitoring
 
 **Usage Example:**
 ```csharp
@@ -84,20 +84,20 @@ discountCondition
 ```
 
 **Metadata Keys:**
-- `"ExecutionCount"`, `"FailureCount"`: Aggregate counters (int)
-- `"AverageExecutionTime"`, `"LastExecutedAt"`: Metrics
-- `"ConditionTemplate"`: Template string for template-based conditions
-- `"CacheEnabled"`, `"CacheTimeout"`: Caching configuration
+* `"ExecutionCount"`, `"FailureCount"`: Aggregate counters (int)
+* `"AverageExecutionTime"`, `"LastExecutedAt"`: Metrics
+* `"ConditionTemplate"`: Template string for template-based conditions
+* `"CacheEnabled"`, `"CacheTimeout"`: Caching configuration
 
 ### SwitchGraphNode
 
 The `SwitchGraphNode` provides multi-way branching logic similar to a switch statement, with multiple cases and associated nodes.
 
 **Key Features:**
-- **Multiple Cases**: Each case has its own condition and associated nodes
-- **Template Support**: Handlebars templates for case conditions
-- **Case Management**: Add, remove, and configure cases dynamically
-- **Default Case**: Optional default case for unmatched conditions
+* **Multiple Cases**: Each case has its own condition and associated nodes
+* **Template Support**: Handlebars templates for case conditions
+* **Case Management**: Add, remove, and configure cases dynamically
+* **Default Case**: Optional default case for unmatched conditions
 
 **Usage Example:**
 ```csharp
@@ -122,12 +122,12 @@ switchNode.SetDefaultCase(defaultCase);
 ```
 
 **SwitchCase Properties:**
-- `CaseId`: Unique identifier for the case
-- `Name`: Human-readable name
-- `Condition`: Function that evaluates the case condition
-- `ConditionTemplate`: Handlebars template (if provided)
-- `Nodes`: List of nodes associated with this case
-- `CreatedAt`: Timestamp when the case was created
+* `CaseId`: Unique identifier for the case
+* `Name`: Human-readable name
+* `Condition`: Function that evaluates the case condition
+* `ConditionTemplate`: Handlebars template (if provided)
+* `Nodes`: List of nodes associated with this case
+* `CreatedAt`: Timestamp when the case was created
 
 ## ReAct Pattern Nodes
 
@@ -136,11 +136,11 @@ switchNode.SetDefaultCase(defaultCase);
 The `ReasoningGraphNode` implements reasoning capabilities for analyzing the current situation and planning next actions, designed to be used as part of the ReAct pattern.
 
 **Key Features:**
-- **Context-aware Reasoning**: Analyzes current situation and available data
-- **Template-based Prompts**: Uses customizable templates for different reasoning patterns
-- **Quality Metrics**: Tracks reasoning quality and consistency
-- **Domain Specialization**: Can be configured for specific problem domains
-- **Chain-of-thought Support**: Supports step-by-step reasoning patterns
+* **Context-aware Reasoning**: Analyzes current situation and available data
+* **Template-based Prompts**: Uses customizable templates for different reasoning patterns
+* **Quality Metrics**: Tracks reasoning quality and consistency
+* **Domain Specialization**: Can be configured for specific problem domains
+* **Chain-of-thought Support**: Supports step-by-step reasoning patterns
 
 **Usage Example:**
 ```csharp
@@ -166,20 +166,20 @@ reasoningNode.SetMetadata("ConfidenceThreshold", 0.8);
 ```
 
 **Metadata Keys:**
-- `"ExecutionCount"`, `"FailureCount"`: Aggregate counters (int)
-- `"AverageExecutionTime"`, `"AverageConfidenceScore"`, `"LastExecutedAt"`: Metrics
-- `"Domain"`, `"ChainOfThoughtEnabled"`, `"MaxReasoningSteps"`, `"ConfidenceThreshold"`: Configuration
+* `"ExecutionCount"`, `"FailureCount"`: Aggregate counters (int)
+* `"AverageExecutionTime"`, `"AverageConfidenceScore"`, `"LastExecutedAt"`: Metrics
+* `"Domain"`, `"ChainOfThoughtEnabled"`, `"MaxReasoningSteps"`, `"ConfidenceThreshold"`: Configuration
 
 ### ActionGraphNode
 
 The `ActionGraphNode` performs action selection and execution for ReAct-style workflows, choosing functions to invoke based on reasoning output and context.
 
 **Key Features:**
-- **Action Selection**: Direct, intelligent (context/reasoning-aware), or random strategies
-- **Safe Execution**: Time-bounded execution with retry and cancellation support
-- **Parameter Mapping**: Optional mapping from graph arguments to function parameters
-- **Observability**: Per-action success/failure counts, average latency, last execution time
-- **Dynamic Routing**: Next-node selection driven by edge predicates and success/failure outcomes
+* **Action Selection**: Direct, intelligent (context/reasoning-aware), or random strategies
+* **Safe Execution**: Time-bounded execution with retry and cancellation support
+* **Parameter Mapping**: Optional mapping from graph arguments to function parameters
+* **Observability**: Per-action success/failure counts, average latency, last execution time
+* **Dynamic Routing**: Next-node selection driven by edge predicates and success/failure outcomes
 
 **Usage Example:**
 ```csharp
@@ -213,22 +213,22 @@ actions.ConfigureParameterMapping("custom_action", args =>
 ```
 
 **Metadata Keys:**
-- `"ExecutionCount"`, `"FailureCount"`: Aggregate counters (int)
-- `"SuccessfulActionCounts"`, `"FailedActionCounts"`: Per-action counters (Dictionary<string,int>)
-- `"AverageExecutionTime"`, `"TotalExecutionTime"`, `"LastExecutedAt"`: Timings
-- `"SelectionStrategy"`, `"ParameterValidationEnabled"`, `"MaxExecutionTime"`, `"EnableRetryOnFailure"`, `"MaxRetries"`: Configuration
+* `"ExecutionCount"`, `"FailureCount"`: Aggregate counters (int)
+* `"SuccessfulActionCounts"`, `"FailedActionCounts"`: Per-action counters (Dictionary<string,int>)
+* `"AverageExecutionTime"`, `"TotalExecutionTime"`, `"LastExecutedAt"`: Timings
+* `"SelectionStrategy"`, `"ParameterValidationEnabled"`, `"MaxExecutionTime"`, `"EnableRetryOnFailure"`, `"MaxRetries"`: Configuration
 
 ### ObservationGraphNode
 
 The `ObservationGraphNode` analyzes action results, extracts insights, and determines if goals have been achieved for the ReAct pattern.
 
 **Key Features:**
-- **Result Analysis**: Deep analysis of action execution results
-- **Goal Evaluation**: Determines if objectives have been met
-- **Information Extraction**: Extracts key insights and data from results
-- **Quality Assessment**: Evaluates the quality and relevance of results
-- **Context Update**: Updates context for next reasoning iteration
-- **Decision Making**: Determines whether to continue or conclude the ReAct loop
+* **Result Analysis**: Deep analysis of action execution results
+* **Goal Evaluation**: Determines if objectives have been met
+* **Information Extraction**: Extracts key insights and data from results
+* **Quality Assessment**: Evaluates the quality and relevance of results
+* **Context Update**: Updates context for next reasoning iteration
+* **Decision Making**: Determines whether to continue or conclude the ReAct loop
 
 **Usage Example:**
 ```csharp
@@ -253,23 +253,23 @@ observationNode.SetMetadata("ExtractionPatterns", new[] { "result", "insight", "
 ```
 
 **Metadata Keys:**
-- `"ExecutionCount"`, `"FailureCount"`, `"GoalAchievedCount"`: Aggregate counters (int)
-- `"AverageExecutionTime"`, `"GoalAchievementRate"`, `"AverageSuccessAssessment"`, `"LastExecutedAt"`: Metrics
-- `"Domain"`, `"DeepAnalysisEnabled"`, `"GoalAchievementThreshold"`: Configuration
-- `"ExtractionPatterns"`, `"ResultTypePatterns"`, `"GoalCriteria"`: Behavior customization
+* `"ExecutionCount"`, `"FailureCount"`, `"GoalAchievedCount"`: Aggregate counters (int)
+* `"AverageExecutionTime"`, `"GoalAchievementRate"`, `"AverageSuccessAssessment"`, `"LastExecutedAt"`: Metrics
+* `"Domain"`, `"DeepAnalysisEnabled"`, `"GoalAchievementThreshold"`: Configuration
+* `"ExtractionPatterns"`, `"ResultTypePatterns"`, `"GoalCriteria"`: Behavior customization
 
 ### ReActLoopGraphNode
 
 The `ReActLoopGraphNode` orchestrates the complete ReAct (Reasoning + Acting) pattern loop, coordinating reasoning, action execution, and observation in iterative cycles until goal achievement.
 
 **Key Features:**
-- **Complete ReAct Orchestration**: Manages the full reasoning-acting-observation cycle
-- **Flexible Node Composition**: Can use custom reasoning, action, and observation nodes
-- **Iteration Limits**: Configurable maximum iterations with early termination
-- **Goal Evaluation**: Sophisticated goal achievement detection
-- **Performance Tracking**: Comprehensive metrics and timing information
-- **Error Handling**: Robust error handling with recovery strategies
-- **Context Management**: Maintains and updates context across iterations
+* **Complete ReAct Orchestration**: Manages the full reasoning-acting-observation cycle
+* **Flexible Node Composition**: Can use custom reasoning, action, and observation nodes
+* **Iteration Limits**: Configurable maximum iterations with early termination
+* **Goal Evaluation**: Sophisticated goal achievement detection
+* **Performance Tracking**: Comprehensive metrics and timing information
+* **Error Handling**: Robust error handling with recovery strategies
+* **Context Management**: Maintains and updates context across iterations
 
 **Usage Example:**
 ```csharp
@@ -298,9 +298,9 @@ reactNode.ConnectTo(finalResultNode);
 ```
 
 **Metadata Keys:**
-- `"ExecutionCount"`, `"FailureCount"`, `"SuccessfulCompletions"`, `"TotalIterations"`: Aggregate counters (int)
-- `"AverageExecutionTime"`, `"AverageIterationsPerExecution"`, `"SuccessRate"`, `"LastExecutedAt"`: Metrics
-- `"MaxIterations"`, `"GoalAchievementThreshold"`, `"EarlyTerminationEnabled"`, `"IterationTimeout"`, `"TotalTimeout"`, `"Domain"`: Configuration
+* `"ExecutionCount"`, `"FailureCount"`, `"SuccessfulCompletions"`, `"TotalIterations"`: Aggregate counters (int)
+* `"AverageExecutionTime"`, `"AverageIterationsPerExecution"`, `"SuccessRate"`, `"LastExecutedAt"`: Metrics
+* `"MaxIterations"`, `"GoalAchievementThreshold"`, `"EarlyTerminationEnabled"`, `"IterationTimeout"`, `"TotalTimeout"`, `"Domain"`: Configuration
 
 ## Loop Control Nodes
 
@@ -309,11 +309,11 @@ reactNode.ConnectTo(finalResultNode);
 The `WhileLoopGraphNode` implements while-loop semantics with configurable conditions and iteration limits.
 
 **Key Features:**
-- **Condition-based Looping**: Continues while a condition evaluates to true
-- **Iteration Limits**: Configurable maximum iterations to prevent infinite loops
-- **State Management**: Maintains loop state across iterations
-- **Early Termination**: Support for breaking out of loops early
-- **Performance Tracking**: Monitors loop performance and efficiency
+* **Condition-based Looping**: Continues while a condition evaluates to true
+* **Iteration Limits**: Configurable maximum iterations to prevent infinite loops
+* **State Management**: Maintains loop state across iterations
+* **Early Termination**: Support for breaking out of loops early
+* **Performance Tracking**: Monitors loop performance and efficiency
 
 **Usage Example:**
 ```csharp
@@ -342,11 +342,11 @@ whileLoop.SetExitCondition(state =>
 The `ForeachLoopGraphNode` iterates over collections, executing nodes for each item.
 
 **Key Features:**
-- **Collection Iteration**: Processes each item in a collection
-- **Parallel Execution**: Optional parallel processing of collection items
-- **State Isolation**: Each iteration gets its own state context
-- **Progress Tracking**: Monitors iteration progress and completion
-- **Error Handling**: Configurable error handling for individual iterations
+* **Collection Iteration**: Processes each item in a collection
+* **Parallel Execution**: Optional parallel processing of collection items
+* **State Isolation**: Each iteration gets its own state context
+* **Progress Tracking**: Monitors iteration progress and completion
+* **Error Handling**: Configurable error handling for individual iterations
 
 **Usage Example:**
 ```csharp
@@ -378,11 +378,11 @@ foreachLoop.ConfigureItemProcessing(
 The `HumanApprovalGraphNode` pauses execution for human approval, enabling human-in-the-loop workflows.
 
 **Key Features:**
-- **Human Interaction**: Pauses execution until human approval is received
-- **Multiple Channels**: Console, Web API, and custom interaction channels
-- **Timeout Support**: Configurable timeouts for approval requests
-- **Audit Trail**: Tracks approval decisions and timestamps
-- **Conditional Routing**: Routes execution based on approval decisions
+* **Human Interaction**: Pauses execution until human approval is received
+* **Multiple Channels**: Console, Web API, and custom interaction channels
+* **Timeout Support**: Configurable timeouts for approval requests
+* **Audit Trail**: Tracks approval decisions and timestamps
+* **Conditional Routing**: Routes execution based on approval decisions
 
 **Usage Example:**
 ```csharp
@@ -411,11 +411,11 @@ approvalNode.AddRejectedNode(rejectedProcessNode);
 The `ConfidenceGateGraphNode` routes execution based on confidence scores, enabling quality-based decision making.
 
 **Key Features:**
-- **Confidence Evaluation**: Routes based on confidence scores from previous nodes
-- **Configurable Thresholds**: Set minimum confidence levels for different paths
-- **Quality Metrics**: Tracks confidence distribution and quality trends
-- **Fallback Paths**: Routes to fallback nodes when confidence is insufficient
-- **Dynamic Thresholds**: Adjustable thresholds based on context
+* **Confidence Evaluation**: Routes based on confidence scores from previous nodes
+* **Configurable Thresholds**: Set minimum confidence levels for different paths
+* **Quality Metrics**: Tracks confidence distribution and quality trends
+* **Fallback Paths**: Routes to fallback nodes when confidence is insufficient
+* **Dynamic Thresholds**: Adjustable thresholds based on context
 
 **Usage Example:**
 ```csharp
@@ -445,11 +445,11 @@ confidenceGate.SetConfidenceSource(state =>
 The `ErrorHandlerGraphNode` provides centralized error handling and recovery for graph execution.
 
 **Key Features:**
-- **Error Categorization**: Classifies errors by type and severity
-- **Recovery Strategies**: Implements retry, rollback, and compensation logic
-- **Error Metrics**: Tracks error patterns and recovery success rates
-- **Context Preservation**: Maintains execution context during error handling
-- **Fallback Mechanisms**: Routes to alternative execution paths on errors
+* **Error Categorization**: Classifies errors by type and severity
+* **Recovery Strategies**: Implements retry, rollback, and compensation logic
+* **Error Metrics**: Tracks error patterns and recovery success rates
+* **Context Preservation**: Maintains execution context during error handling
+* **Fallback Mechanisms**: Routes to alternative execution paths on errors
 
 **Usage Example:**
 ```csharp
@@ -480,11 +480,11 @@ errorHandler.AddErrorRoute(ErrorType.Critical, emergencyNode);
 The `SubgraphGraphNode` allows you to embed one graph within another, enabling modular graph composition.
 
 **Key Features:**
-- **Graph Composition**: Embeds complete graphs as nodes
-- **State Isolation**: Maintains separate state contexts for subgraphs
-- **Parameter Passing**: Passes parameters between parent and child graphs
-- **Result Aggregation**: Collects and processes subgraph results
-- **Error Propagation**: Handles errors from subgraph execution
+* **Graph Composition**: Embeds complete graphs as nodes
+* **State Isolation**: Maintains separate state contexts for subgraphs
+* **Parameter Passing**: Passes parameters between parent and child graphs
+* **Result Aggregation**: Collects and processes subgraph results
+* **Error Propagation**: Handles errors from subgraph execution
 
 **Usage Example:**
 ```csharp
@@ -512,11 +512,11 @@ subgraphNode.SetMetadata("Timeout", TimeSpan.FromMinutes(30));
 The `PythonGraphNode` enables integration with Python code, allowing you to leverage Python libraries and scripts.
 
 **Key Features:**
-- **Python Integration**: Executes Python scripts and functions
-- **Environment Management**: Manages Python virtual environments
-- **Parameter Passing**: Passes data between C# and Python
-- **Result Handling**: Processes Python execution results
-- **Error Handling**: Manages Python execution errors
+* **Python Integration**: Executes Python scripts and functions
+* **Environment Management**: Manages Python virtual environments
+* **Parameter Passing**: Passes data between C# and Python
+* **Result Handling**: Processes Python execution results
+* **Error Handling**: Manages Python execution errors
 
 **Usage Example:**
 ```csharp
@@ -541,29 +541,29 @@ pythonNode.SetOutputParameter("metrics", "processing_metrics.json");
 
 ### Node Selection
 
-- **Choose the Right Type**: Select node types that match your workflow requirements
-- **Composition over Complexity**: Use simple nodes in combination rather than complex monolithic nodes
-- **Reuse Patterns**: Leverage existing node types for common patterns like ReAct loops
-- **Custom Nodes**: Create custom nodes only when existing types don't meet your needs
+* **Choose the Right Type**: Select node types that match your workflow requirements
+* **Composition over Complexity**: Use simple nodes in combination rather than complex monolithic nodes
+* **Reuse Patterns**: Leverage existing node types for common patterns like ReAct loops
+* **Custom Nodes**: Create custom nodes only when existing types don't meet your needs
 
 ### Configuration
 
-- **Metadata Management**: Use metadata to configure node behavior and track metrics
-- **Parameter Mapping**: Configure parameter mapping for seamless data flow between nodes
-- **Error Handling**: Implement appropriate error handling strategies for each node type
-- **Performance Monitoring**: Enable metrics collection to monitor node performance
+* **Metadata Management**: Use metadata to configure node behavior and track metrics
+* **Parameter Mapping**: Configure parameter mapping for seamless data flow between nodes
+* **Error Handling**: Implement appropriate error handling strategies for each node type
+* **Performance Monitoring**: Enable metrics collection to monitor node performance
 
 ### Integration
 
-- **State Management**: Ensure proper state flow between different node types
-- **Edge Configuration**: Use conditional edges to create dynamic routing based on node results
-- **Middleware**: Leverage middleware for cross-cutting concerns across all node types
-- **Testing**: Test individual nodes and their combinations to ensure proper integration
+* **State Management**: Ensure proper state flow between different node types
+* **Edge Configuration**: Use conditional edges to create dynamic routing based on node results
+* **Middleware**: Leverage middleware for cross-cutting concerns across all node types
+* **Testing**: Test individual nodes and their combinations to ensure proper integration
 
 ## See Also
 
-- [Graph Concepts](graph-concepts.md) - Fundamental graph concepts and components
-- [Execution Model](execution-model.md) - How nodes are executed and managed
-- [State Management](state.md) - How data flows between nodes
-- [Routing Strategies](routing.md) - How to connect and route between nodes
-- [Examples](../examples/) - Practical examples of node usage patterns
+* [Graph Concepts](graph-concepts.md) - Fundamental graph concepts and components
+* [Execution Model](execution-model.md) - How nodes are executed and managed
+* [State Management](state.md) - How data flows between nodes
+* [Routing Strategies](routing.md) - How to connect and route between nodes
+* [Examples](../examples/) - Practical examples of node usage patterns

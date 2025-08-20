@@ -7,8 +7,8 @@ title: Migrating from Semantic Kernel to SemanticKernel.Graph
 This guide shows how to move from ad-hoc pipelines built with Semantic Kernel (SK) to structured graphs using SemanticKernel.Graph with minimal changes.
 
 ### Prerequisites
-- SK configured with your LLM provider
-- Existing plugins/functions you want to reuse
+* SK configured with your LLM provider
+* Existing plugins/functions you want to reuse
 
 ### 1) Install and configure
 ```csharp
@@ -53,16 +53,16 @@ var result = await graph.ExecuteAsync(kernel, args);
 ```
 
 ### Feature mapping
-- SK function pipeline → `FunctionGraphNode` chain
-- Conditional branching → `ConditionalGraphNode`/`SwitchGraphNode`
-- Loops → `WhileLoopGraphNode`/`ForeachLoopGraphNode`
-- Error handling/retry → `ErrorHandlerGraphNode`/`RetryPolicyGraphNode`
-- Observability → `GraphPerformanceMetrics` + `IGraphTelemetry`
-- Checkpoint/recovery → `CheckpointingExtensions`
+* SK function pipeline → `FunctionGraphNode` chain
+* Conditional branching → `ConditionalGraphNode`/`SwitchGraphNode`
+* Loops → `WhileLoopGraphNode`/`ForeachLoopGraphNode`
+* Error handling/retry → `ErrorHandlerGraphNode`/`RetryPolicyGraphNode`
+* Observability → `GraphPerformanceMetrics` + `IGraphTelemetry`
+* Checkpoint/recovery → `CheckpointingExtensions`
 
 ### Migration checklist
-- Reuse plugins/functions via `FunctionGraphNode`
-- External APIs via `RestToolGraphNode` + `IToolSchemaConverter`
-- Replace custom flow code with nodes/edges
-- Enable metrics/telemetry and (optionally) checkpointing
-- Add streaming if you need real-time events
+* Reuse plugins/functions via `FunctionGraphNode`
+* External APIs via `RestToolGraphNode` + `IToolSchemaConverter`
+* Replace custom flow code with nodes/edges
+* Enable metrics/telemetry and (optionally) checkpointing
+* Add streaming if you need real-time events

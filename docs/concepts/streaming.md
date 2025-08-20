@@ -4,12 +4,12 @@ Streaming execution in SemanticKernel.Graph enables real-time monitoring and eve
 
 ## What You'll Learn
 
-- How to create and configure `StreamingGraphExecutor` for real-time execution
-- Consuming execution events through `IGraphExecutionEventStream`
-- Implementing event filtering and buffering for performance optimization
-- Managing backpressure and connection stability
-- Configuring streaming options for different production scenarios
-- Building real-time monitoring and responsive applications
+* How to create and configure `StreamingGraphExecutor` for real-time execution
+* Consuming execution events through `IGraphExecutionEventStream`
+* Implementing event filtering and buffering for performance optimization
+* Managing backpressure and connection stability
+* Configuring streaming options for different production scenarios
+* Building real-time monitoring and responsive applications
 
 ## Concepts and Techniques
 
@@ -25,10 +25,10 @@ Streaming execution in SemanticKernel.Graph enables real-time monitoring and eve
 
 ## Prerequisites
 
-- [Execution Model](execution-model.md) guide completed
-- [State Management](state.md) guide completed
-- Basic understanding of `GraphExecutor` and graph execution
-- Familiarity with asynchronous programming and event-driven patterns
+* [Execution Model](execution-model.md) guide completed
+* [State Management](state.md) guide completed
+* Basic understanding of `GraphExecutor` and graph execution
+* Familiarity with asynchronous programming and event-driven patterns
 
 ## Core Streaming Components
 
@@ -822,9 +822,9 @@ Events are being dropped due to buffer overflow
 
 ## See Also
 
-- [Streaming Quickstart](../streaming-quickstart.md) - Quick introduction to streaming execution
-- [Execution Model](execution-model.md) - How execution flows through graphs
-- [State Management](state.md) - Managing state during streaming execution
-- [Checkpointing and Recovery](checkpointing.md) - State persistence during streaming
-- [Graph Execution Events](../api/graph-execution-events.md) - API reference for execution events
-- [Streaming Examples](../examples/streaming-examples.md) - Practical streaming examples
+* [Streaming Quickstart](../streaming-quickstart.md) - Quick introduction to streaming execution
+* [Execution Model](execution-model.md) - How execution flows through graphs
+* [State Management](state.md) - Managing state during streaming execution
+* [Checkpointing and Recovery](checkpointing.md) - State persistence during streaming
+* [Graph Execution Events](../api/graph-execution-events.md) - API reference for execution events
+* [Streaming Examples](../examples/streaming-examples.md) - Practical streaming examples

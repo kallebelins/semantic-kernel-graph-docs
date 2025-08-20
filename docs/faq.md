@@ -53,10 +53,10 @@ var executor = kernel.GetRequiredService<IGraphExecutor>();
 **Yes**, all existing SK plugins work as graph nodes.
 
 ### How to debug complex graphs?
-- Interactive debug sessions
-- Breakpoints on specific nodes
-- Real-time visualization
-- Detailed metrics per node
+* Interactive debug sessions
+* Breakpoints on specific nodes
+* Real-time visualization
+* Detailed metrics per node
 
 ### Is there testing support?
 **Yes**, with integrated testing framework and mocks for development.
@@ -70,10 +70,10 @@ var executor = kernel.GetRequiredService<IGraphExecutor>();
 **Yes**, with support for multiple processes and machines.
 
 ### How to handle failures?
-- Configurable retry policies
-- Circuit breakers
-- Automatic fallbacks
-- Checkpoint recovery
+* Configurable retry policies
+* Circuit breakers
+* Automatic fallbacks
+* Checkpoint recovery
 
 ## Configuration and Deployment
 
@@ -84,24 +84,24 @@ var executor = kernel.GetRequiredService<IGraphExecutor>();
 **Yes**, with full support for containerized environments.
 
 ### How to monitor in production?
-- Native metrics (.NET Metrics)
-- Structured logging
-- Application Insights integration
-- Export to Prometheus/Grafana
+* Native metrics (.NET Metrics)
+* Structured logging
+* Application Insights integration
+* Export to Prometheus/Grafana
 
 ## Support and Community
 
 ### Where to find help?
-- [Documentation](../index.md)
-- [Examples](../examples/index.md)
-- [GitHub Issues](https://github.com/your-org/semantic-kernel-graph/issues)
-- [Discussions](https://github.com/your-org/semantic-kernel-graph/discussions)
+* [Documentation](../index.md)
+* [Examples](../examples/index.md)
+* [GitHub Issues](https://github.com/your-org/semantic-kernel-graph/issues)
+* [Discussions](https://github.com/your-org/semantic-kernel-graph/discussions)
 
 ### How to contribute?
-- Report bugs
-- Suggest improvements
-- Contribute examples
-- Improve documentation
+* Report bugs
+* Suggest improvements
+* Contribute examples
+* Improve documentation
 
 ### Is there a public roadmap?
 **Yes**, available at [Roadmap](../architecture/implementation-roadmap.md).
@@ -109,31 +109,31 @@ var executor = kernel.GetRequiredService<IGraphExecutor>();
 ## Use Cases
 
 ### What types of applications is it ideal for?
-- Complex AI workflows
-- Data processing pipelines
-- Automated decision systems
-- Microservice orchestration
-- Advanced chatbot applications
+* Complex AI workflows
+* Data processing pipelines
+* Automated decision systems
+* Microservice orchestration
+* Advanced chatbot applications
 
 ### Examples of production usage?
-- Automated document analysis
-- Content classification at scale
-- Recommendation systems
-- Approval workflows
-- Form processing
+* Automated document analysis
+* Content classification at scale
+* Recommendation systems
+* Approval workflows
+* Form processing
 
 ---
 
 ## See Also
 
-- [Getting Started](../getting-started.md)
-- [Installation](../installation.md)
-- [Examples](../examples/index.md)
-- [Architecture](../architecture/index.md)
-- [Troubleshooting](../troubleshooting.md)
+* [Getting Started](../getting-started.md)
+* [Installation](../installation.md)
+* [Examples](../examples/index.md)
+* [Architecture](../architecture/index.md)
+* [Troubleshooting](../troubleshooting.md)
 
 ## References
 
-- [Semantic Kernel Documentation](https://learn.microsoft.com/en-us/semantic-kernel/)
-- [LangGraph Python](https://langchain-ai.github.io/langgraph/)
-- [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/)
+* [Semantic Kernel Documentation](https://learn.microsoft.com/en-us/semantic-kernel/)
+* [LangGraph Python](https://langchain-ai.github.io/langgraph/)
+* [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/)

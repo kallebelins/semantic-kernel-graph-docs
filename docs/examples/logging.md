@@ -5,35 +5,35 @@ This example demonstrates comprehensive logging and structured logging capabilit
 ## Objective
 
 Learn how to implement comprehensive logging in graph-based workflows to:
-- Configure different logging levels and categories
-- Implement structured logging with semantic information
-- Aggregate and analyze logs across graph execution
-- Integrate with external logging systems and dashboards
-- Monitor and debug graph execution through logs
+* Configure different logging levels and categories
+* Implement structured logging with semantic information
+* Aggregate and analyze logs across graph execution
+* Integrate with external logging systems and dashboards
+* Monitor and debug graph execution through logs
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Logging Concepts](../concepts/logging.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Logging Concepts](../concepts/logging.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Structured Logging**: Logging with structured data and semantic information
-- **Log Levels**: Different levels of logging detail (Debug, Info, Warning, Error)
-- **Log Aggregation**: Collecting and analyzing logs across executions
-- **Log Correlation**: Correlating logs with execution context and node IDs
-- **Log Export**: Exporting logs to external systems and dashboards
+* **Structured Logging**: Logging with structured data and semantic information
+* **Log Levels**: Different levels of logging detail (Debug, Info, Warning, Error)
+* **Log Aggregation**: Collecting and analyzing logs across executions
+* **Log Correlation**: Correlating logs with execution context and node IDs
+* **Log Export**: Exporting logs to external systems and dashboards
 
 ### Core Classes
 
-- `SemanticKernelGraphLogger`: Core logging implementation
-- `GraphExecutionLogger`: Execution-specific logging
-- `NodeExecutionLogger`: Node-level logging
-- `LogAggregator`: Log collection and analysis
+* `SemanticKernelGraphLogger`: Core logging implementation
+* `GraphExecutionLogger`: Execution-specific logging
+* `NodeExecutionLogger`: Node-level logging
+* `LogAggregator`: Log collection and analysis
 
 ## Running the Example
 
@@ -1216,14 +1216,14 @@ public class RealTimeLogMonitor : ILogMonitor
 
 ## Related Examples
 
-- [Graph Metrics](./graph-metrics.md): Metrics collection and monitoring
-- [Graph Visualization](./graph-visualization.md): Visual log representation
-- [Debug and Inspection](./debug-inspection.md): Using logs for debugging
-- [Performance Optimization](./performance-optimization.md): Log-based performance analysis
+* [Graph Metrics](./graph-metrics.md): Metrics collection and monitoring
+* [Graph Visualization](./graph-visualization.md): Visual log representation
+* [Debug and Inspection](./debug-inspection.md): Using logs for debugging
+* [Performance Optimization](./performance-optimization.md): Log-based performance analysis
 
 ## See Also
 
-- [Logging and Observability](../concepts/logging.md): Understanding logging concepts
-- [Debug and Inspection](../how-to/debug-and-inspection.md): Debugging with logs
-- [Performance Monitoring](../how-to/performance-monitoring.md): Performance logging
-- [API Reference](../api/): Complete API documentation
+* [Logging and Observability](../concepts/logging.md): Understanding logging concepts
+* [Debug and Inspection](../how-to/debug-and-inspection.md): Debugging with logs
+* [Performance Monitoring](../how-to/performance-monitoring.md): Performance logging
+* [API Reference](../api/): Complete API documentation

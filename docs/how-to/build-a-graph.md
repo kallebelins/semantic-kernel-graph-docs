@@ -218,9 +218,9 @@ graph.AddNode(errorHandler)
 
 ## See Also
 
-- [First Graph in 5 Minutes](../first-graph-5-minutes.md) - Quick start guide for building your first graph
-- [Conditional Nodes](conditional-nodes.md) - Learn about branching and conditional execution
-- [Loops](loops.md) - Implement iterative workflows with loop nodes
-- [State Management](../state-quickstart.md) - Understand how to manage data flow between nodes
-- [Graph Execution](../concepts/execution.md) - Learn about the execution lifecycle and flow control
-- [Examples: Basic Graph Building](../examples/basic-graph-example.md) - Complete working examples of graph construction
+* [First Graph in 5 Minutes](../first-graph-5-minutes.md) - Quick start guide for building your first graph
+* [Conditional Nodes](conditional-nodes.md) - Learn about branching and conditional execution
+* [Loops](loops.md) - Implement iterative workflows with loop nodes
+* [State Management](../state-quickstart.md) - Understand how to manage data flow between nodes
+* [Graph Execution](../concepts/execution.md) - Learn about the execution lifecycle and flow control
+* [Examples: Basic Graph Building](../examples/basic-graph-example.md) - Complete working examples of graph construction

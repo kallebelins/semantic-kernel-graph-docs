@@ -4,10 +4,10 @@ This quick tutorial will teach you how to use conditional nodes and edges in Sem
 
 ## What You'll Learn
 
-- Creating `ConditionalGraphNode` for if/else logic
-- Using `ConditionalEdge` for dynamic routing
-- Building workflows that adapt to different scenarios
-- Template-based and function-based conditions
+* Creating `ConditionalGraphNode` for if/else logic
+* Using `ConditionalEdge` for dynamic routing
+* Building workflows that adapt to different scenarios
+* Template-based and function-based conditions
 
 ## Concepts and Techniques
 
@@ -21,9 +21,9 @@ This quick tutorial will teach you how to use conditional nodes and edges in Sem
 
 ## Prerequisites
 
-- [First Graph Tutorial](first-graph-5-minutes.md) completed
-- [State Quickstart](state-quickstart.md) completed
-- Basic understanding of SemanticKernel.Graph concepts
+* [First Graph Tutorial](first-graph-5-minutes.md) completed
+* [State Quickstart](state-quickstart.md) completed
+* Basic understanding of SemanticKernel.Graph concepts
 
 ## Step 1: Basic Conditional Node
 
@@ -342,20 +342,20 @@ Uses `ConditionalEdge` to create dynamic routing based on state conditions.
 
 ### 3. **Multiple Execution Paths**
 The graph creates different execution paths:
-- **Alice (25)**: Input → Age Check (true) → VIP Check (true) → Adult Access → Summary
-- **Bob (17)**: Input → Age Check (false) → Minor Access → Summary  
-- **Charlie (30)**: Input → Age Check (true) → VIP Check (false) → VIP Upgrade → Summary
+* **Alice (25)**: Input → Age Check (true) → VIP Check (true) → Adult Access → Summary
+* **Bob (17)**: Input → Age Check (false) → Minor Access → Summary  
+* **Charlie (30)**: Input → Age Check (true) → VIP Check (false) → VIP Upgrade → Summary
 
 ### 4. **State-Based Decision Making**
 Each conditional node reads from the current state to make routing decisions, creating a dynamic workflow that adapts to different inputs.
 
 ## Key Concepts
 
-- **ConditionalGraphNode**: Evaluates conditions and routes execution to different paths
-- **ConditionalEdge**: Creates guarded transitions between nodes based on state conditions
-- **Template Conditions**: Use Handlebars-like syntax for simple conditions
-- **Function Conditions**: Use C# functions for complex conditional logic
-- **Dynamic Routing**: Execution flow changes based on the current state
+* **ConditionalGraphNode**: Evaluates conditions and routes execution to different paths
+* **ConditionalEdge**: Creates guarded transitions between nodes based on state conditions
+* **Template Conditions**: Use Handlebars-like syntax for simple conditions
+* **Function Conditions**: Use C# functions for complex conditional logic
+* **Dynamic Routing**: Execution flow changes based on the current state
 
 ## Common Patterns
 
@@ -428,41 +428,41 @@ Template condition fails to evaluate
 
 ## Next Steps
 
-- **[Conditional Nodes Tutorial](conditional-nodes-tutorial.md)**: Advanced conditional patterns and best practices
-- **[State Management](state-tutorial.md)**: Advanced state manipulation and validation
-- **[Switch Nodes](how-to/switch-nodes.md)**: Multi-branch conditional logic
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[Conditional Nodes Tutorial](conditional-nodes-tutorial.md)**: Advanced conditional patterns and best practices
+* **[State Management](state-tutorial.md)**: Advanced state manipulation and validation
+* **[Switch Nodes](how-to/switch-nodes.md)**: Multi-branch conditional logic
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
 
 ## Concepts and Techniques
 
 This tutorial introduces several key concepts:
 
-- **Conditional Routing**: The ability to direct execution flow based on state conditions
-- **ConditionalGraphNode**: A node that evaluates conditions and routes execution
-- **ConditionalEdge**: An edge that only allows traversal when specific conditions are met
-- **Template Conditions**: Natural language expressions for simple conditional logic
-- **Function Conditions**: C# functions for complex conditional evaluation
-- **Dynamic Workflows**: Graphs that adapt their execution path based on runtime state
+* **Conditional Routing**: The ability to direct execution flow based on state conditions
+* **ConditionalGraphNode**: A node that evaluates conditions and routes execution
+* **ConditionalEdge**: An edge that only allows traversal when specific conditions are met
+* **Template Conditions**: Natural language expressions for simple conditional logic
+* **Function Conditions**: C# functions for complex conditional evaluation
+* **Dynamic Workflows**: Graphs that adapt their execution path based on runtime state
 
 ## Prerequisites and Minimum Configuration
 
 To complete this tutorial, you need:
-- **.NET 8.0+** runtime and SDK
-- **SemanticKernel.Graph** package installed
-- **LLM Provider** configured with valid API keys
-- **Environment Variables** set up for your API credentials
+* **.NET 8.0+** runtime and SDK
+* **SemanticKernel.Graph** package installed
+* **LLM Provider** configured with valid API keys
+* **Environment Variables** set up for your API credentials
 
 ## See Also
 
-- **[First Graph Tutorial](first-graph-5-minutes.md)**: Create your first graph workflow
-- **[State Quickstart](state-quickstart.md)**: Manage data flow between nodes
-- **[Conditional Nodes Tutorial](conditional-nodes-tutorial.md)**: Advanced conditional patterns
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
-- **[API Reference](api/nodes.md)**: Complete node API documentation
+* **[First Graph Tutorial](first-graph-5-minutes.md)**: Create your first graph workflow
+* **[State Quickstart](state-quickstart.md)**: Manage data flow between nodes
+* **[Conditional Nodes Tutorial](conditional-nodes-tutorial.md)**: Advanced conditional patterns
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[API Reference](api/nodes.md)**: Complete node API documentation
 
 ## Reference APIs
 
-- **[ConditionalGraphNode](../api/nodes.md#conditional-graph-node)**: Conditional routing node
-- **[ConditionalEdge](../api/core.md#conditional-edge)**: Conditional connection edge
-- **[IGraphNode](../api/core.md#igraph-node)**: Base node interface
-- **[GraphExecutor](../api/core.md#graph-executor)**: Graph execution engine
+* **[ConditionalGraphNode](../api/nodes.md#conditional-graph-node)**: Conditional routing node
+* **[ConditionalEdge](../api/core.md#conditional-edge)**: Conditional connection edge
+* **[IGraphNode](../api/core.md#igraph-node)**: Base node interface
+* **[GraphExecutor](../api/core.md#graph-executor)**: Graph execution engine

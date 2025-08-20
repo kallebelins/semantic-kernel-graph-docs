@@ -8,13 +8,13 @@ Comprehensive performance metrics collector for graph execution. Tracks node-lev
 
 ### Properties
 
-- `TotalExecutions`: Total number of graph executions tracked
-- `Uptime`: Time since metrics collection started
-- `NodeMetrics`: Dictionary of metrics per node
-- `PathMetrics`: Dictionary of metrics per execution path
-- `CircuitBreakerMetrics`: Dictionary of circuit breaker metrics per node
-- `ResourceUsage`: Current system resource usage (CPU, memory)
-- `LastSampleTime`: Timestamp of the last resource sample
+* `TotalExecutions`: Total number of graph executions tracked
+* `Uptime`: Time since metrics collection started
+* `NodeMetrics`: Dictionary of metrics per node
+* `PathMetrics`: Dictionary of metrics per execution path
+* `CircuitBreakerMetrics`: Dictionary of circuit breaker metrics per node
+* `ResourceUsage`: Current system resource usage (CPU, memory)
+* `LastSampleTime`: Timestamp of the last resource sample
 
 ### Methods
 
@@ -27,9 +27,9 @@ public NodeExecutionTracker StartNodeTracking(string nodeId, string nodeName, st
 Starts tracking a node execution and returns a tracker for completion.
 
 **Parameters:**
-- `nodeId`: Node identifier
-- `nodeName`: Node name
-- `executionId`: Execution identifier
+* `nodeId`: Node identifier
+* `nodeName`: Node name
+* `executionId`: Execution identifier
 
 **Returns:** Tracking token for completion
 
@@ -42,10 +42,10 @@ public void CompleteNodeTracking(NodeExecutionTracker tracker, bool success, obj
 Completes node execution tracking and records metrics.
 
 **Parameters:**
-- `tracker`: Node execution tracker
-- `success`: Whether execution was successful
-- `result`: Execution result (optional)
-- `exception`: Exception if failed (optional)
+* `tracker`: Node execution tracker
+* `success`: Whether execution was successful
+* `result`: Execution result (optional)
+* `exception`: Exception if failed (optional)
 
 #### GetNodeMetrics
 
@@ -56,7 +56,7 @@ public NodeExecutionMetrics? GetNodeMetrics(string nodeId)
 Retrieves metrics for a specific node.
 
 **Parameters:**
-- `nodeId`: Node identifier
+* `nodeId`: Node identifier
 
 **Returns:** Node metrics or null if not found
 
@@ -92,17 +92,17 @@ Tracks execution metrics for a specific graph node. Provides detailed statistics
 
 ### Properties
 
-- `NodeId`: Node identifier
-- `NodeName`: Node name
-- `TotalExecutions`: Total number of executions
-- `SuccessfulExecutions`: Number of successful executions
-- `FailedExecutions`: Number of failed executions
-- `SuccessRate`: Success rate as a percentage (0-100)
-- `AverageExecutionTime`: Average execution duration
-- `MinExecutionTime`: Minimum execution duration
-- `MaxExecutionTime`: Maximum execution duration
-- `FirstExecution`: Timestamp of first execution
-- `LastExecution`: Timestamp of last execution
+* `NodeId`: Node identifier
+* `NodeName`: Node name
+* `TotalExecutions`: Total number of executions
+* `SuccessfulExecutions`: Number of successful executions
+* `FailedExecutions`: Number of failed executions
+* `SuccessRate`: Success rate as a percentage (0-100)
+* `AverageExecutionTime`: Average execution duration
+* `MinExecutionTime`: Minimum execution duration
+* `MaxExecutionTime`: Maximum execution duration
+* `FirstExecution`: Timestamp of first execution
+* `LastExecution`: Timestamp of last execution
 
 ### Methods
 
@@ -115,10 +115,10 @@ public void RecordExecution(TimeSpan duration, bool success, object? result = nu
 Records a single execution with its outcome and timing.
 
 **Parameters:**
-- `duration`: Execution duration
-- `success`: Whether execution succeeded
-- `result`: Execution result (optional)
-- `exception`: Exception if failed (optional)
+* `duration`: Execution duration
+* `success`: Whether execution succeeded
+* `result`: Execution result (optional)
+* `exception`: Exception if failed (optional)
 
 #### GetPercentiles
 
@@ -129,7 +129,7 @@ public Dictionary<string, TimeSpan> GetPercentiles(params int[] percentiles)
 Calculates execution time percentiles (P50, P95, P99, etc.).
 
 **Parameters:**
-- `percentiles`: Array of percentile values (0-100)
+* `percentiles`: Array of percentile values (0-100)
 
 **Returns:** Dictionary mapping percentile to execution time
 
@@ -186,19 +186,19 @@ All metrics in SemanticKernel.Graph use consistent tagging for correlation and f
 
 #### Core Tags
 
-- **`executionId`**: Unique identifier for each graph execution run
-- **`graph`**: Stable identifier for the graph definition
-- **`node`**: Stable identifier for the specific node
-- **`event_type`**: Type of event or operation being measured
+* **`executionId`**: Unique identifier for each graph execution run
+* **`graph`**: Stable identifier for the graph definition
+* **`node`**: Stable identifier for the specific node
+* **`event_type`**: Type of event or operation being measured
 
 #### Additional Context Tags
 
-- **`workflow.id`**: Multi-agent workflow identifier
-- **`workflow.name`**: Human-readable workflow name
-- **`agent.id`**: Agent identifier in multi-agent scenarios
-- **`operation.type`**: Type of operation being performed
-- **`compressed`**: Whether data compression was applied
-- **`memory_mapped`**: Whether memory-mapped buffers were used
+* **`workflow.id`**: Multi-agent workflow identifier
+* **`workflow.name`**: Human-readable workflow name
+* **`agent.id`**: Agent identifier in multi-agent scenarios
+* **`operation.type`**: Type of operation being performed
+* **`compressed`**: Whether data compression was applied
+* **`memory_mapped`**: Whether memory-mapped buffers were used
 
 ### Metric Naming Convention
 
@@ -209,12 +209,12 @@ skg.{component}.{metric_name}
 ```
 
 Examples:
-- `skg.stream.events` - Event counter for streaming
-- `skg.stream.event.latency_ms` - Event latency histogram
-- `skg.stream.event.payload_bytes` - Event payload size histogram
-- `skg.stream.producer.flush_ms` - Producer flush latency
-- `skg.agent_pool.connections` - Agent pool connection counter
-- `skg.work_distributor.tasks` - Work distribution task counter
+* `skg.stream.events` - Event counter for streaming
+* `skg.stream.event.latency_ms` - Event latency histogram
+* `skg.stream.event.payload_bytes` - Event payload size histogram
+* `skg.stream.producer.flush_ms` - Producer flush latency
+* `skg.agent_pool.connections` - Agent pool connection counter
+* `skg.work_distributor.tasks` - Work distribution task counter
 
 ## Streaming Metrics
 
@@ -231,10 +231,10 @@ var stream = executor.ExecuteStreamAsync(kernel, args, options);
 ```
 
 **Available Metrics:**
-- `skg.stream.events` - Total events emitted (counter)
-- `skg.stream.event.latency_ms` - Event processing latency (histogram)
-- `skg.stream.event.payload_bytes` - Serialized payload size (histogram)
-- `skg.stream.producer.flush_ms` - Producer buffer flush latency (histogram)
+* `skg.stream.events` - Total events emitted (counter)
+* `skg.stream.event.latency_ms` - Event processing latency (histogram)
+* `skg.stream.event.payload_bytes` - Serialized payload size (histogram)
+* `skg.stream.producer.flush_ms` - Producer buffer flush latency (histogram)
 
 ### Connection Pool Metrics
 
@@ -247,9 +247,9 @@ var poolOptions = new StreamingPoolOptions
 ```
 
 **Available Metrics:**
-- `skg.stream.pool.connections` - Active connections (counter)
-- `skg.stream.pool.requests` - Request count (counter)
-- `skg.stream.pool.latency_ms` - Request latency (histogram)
+* `skg.stream.pool.connections` - Active connections (counter)
+* `skg.stream.pool.requests` - Request count (counter)
+* `skg.stream.pool.latency_ms` - Request latency (histogram)
 
 ## Multi-Agent Metrics
 
@@ -264,9 +264,9 @@ var agentOptions = new AgentConnectionPoolOptions
 ```
 
 **Available Metrics:**
-- `skg.agent_pool.connections` - Active agent connections (counter)
-- `skg.agent_pool.requests` - Request count (counter)
-- `skg.agent_pool.latency_ms` - Request latency (histogram)
+* `skg.agent_pool.connections` - Active agent connections (counter)
+* `skg.agent_pool.requests` - Request count (counter)
+* `skg.agent_pool.latency_ms` - Request latency (histogram)
 
 ### Work Distribution Metrics
 
@@ -279,9 +279,9 @@ var distributorOptions = new WorkDistributorOptions
 ```
 
 **Available Metrics:**
-- `skg.work_distributor.tasks` - Task count (counter)
-- `skg.work_distributor.latency_ms` - Task distribution latency (histogram)
-- `skg.work_distributor.queue_size` - Queue size (gauge)
+* `skg.work_distributor.tasks` - Task count (counter)
+* `skg.work_distributor.latency_ms` - Task distribution latency (histogram)
+* `skg.work_distributor.queue_size` - Queue size (gauge)
 
 ## Performance Monitoring
 
@@ -298,10 +298,10 @@ var metrics = new GraphPerformanceMetrics(metricsOptions);
 ```
 
 **Monitored Resources:**
-- CPU usage percentage
-- Available memory (MB)
-- Process processor time
-- System load indicators
+* CPU usage percentage
+* Available memory (MB)
+* Process processor time
+* System load indicators
 
 ### Execution Path Analysis
 
@@ -316,10 +316,10 @@ if (pathMetrics != null)
 ```
 
 **Path Metrics:**
-- Execution count per path
-- Success/failure rates
-- Average execution times
-- Path-specific performance trends
+* Execution count per path
+* Success/failure rates
+* Average execution times
+* Path-specific performance trends
 
 ## Metrics Export and Visualization
 
@@ -386,8 +386,8 @@ var minimalOptions = GraphMetricsOptions.CreateMinimalOptions();
 
 ## See Also
 
-- [Metrics and Observability Guide](../how-to/metrics-and-observability.md) - Comprehensive observability guide
-- [Metrics Quickstart](../metrics-logging-quickstart.md) - Get started with metrics and logging
-- [Streaming APIs Reference](./streaming.md) - Streaming execution with metrics
-- [Multi-Agent Reference](./multi-agent.md) - Multi-agent metrics and monitoring
-- [Graph Options Reference](./graph-options.md) - Metrics configuration options
+* [Metrics and Observability Guide](../how-to/metrics-and-observability.md) - Comprehensive observability guide
+* [Metrics Quickstart](../metrics-logging-quickstart.md) - Get started with metrics and logging
+* [Streaming APIs Reference](./streaming.md) - Streaming execution with metrics
+* [Multi-Agent Reference](./multi-agent.md) - Multi-agent metrics and monitoring
+* [Graph Options Reference](./graph-options.md) - Metrics configuration options

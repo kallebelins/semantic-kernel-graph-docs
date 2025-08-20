@@ -5,37 +5,37 @@ This example demonstrates how to enforce constraints on LLM outputs, validate co
 ## Objective
 
 Learn how to implement content validation and suggestion workflows in graph-based systems to:
-- Enforce business constraints and content policies on LLM outputs
-- Validate content quality and compliance automatically
-- Generate actionable suggestions for content improvements
-- Implement feedback loops for continuous content quality improvement
-- Handle constraint violations gracefully with fallback mechanisms
+* Enforce business constraints and content policies on LLM outputs
+* Validate content quality and compliance automatically
+* Generate actionable suggestions for content improvements
+* Implement feedback loops for continuous content quality improvement
+* Handle constraint violations gracefully with fallback mechanisms
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
-- Familiarity with [State Management](../concepts/state.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
+* Familiarity with [State Management](../concepts/state.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Content Validation**: Automated checking of content against predefined constraints
-- **Constraint Enforcement**: Business rule validation with clear error reporting
-- **Suggestion Generation**: Actionable recommendations for content improvement
-- **Feedback Loops**: Continuous improvement through validation and correction cycles
-- **State Management**: Tracking validation results and suggestions through graph execution
+* **Content Validation**: Automated checking of content against predefined constraints
+* **Constraint Enforcement**: Business rule validation with clear error reporting
+* **Suggestion Generation**: Actionable recommendations for content improvement
+* **Feedback Loops**: Continuous improvement through validation and correction cycles
+* **State Management**: Tracking validation results and suggestions through graph execution
 
 ### Core Classes
 
-- `FunctionGraphNode`: Nodes for content generation, validation, and rewriting
-- `KernelFunctionFactory`: Factory for creating kernel functions from methods
-- `GraphExecutor`: Executor for running validation workflows
-- `GraphState`: State management for validation results and suggestions
-- `KernelArguments`: Input/output management for graph execution
+* `FunctionGraphNode`: Nodes for content generation, validation, and rewriting
+* `KernelFunctionFactory`: Factory for creating kernel functions from methods
+* `GraphExecutor`: Executor for running validation workflows
+* `GraphState`: State management for validation results and suggestions
+* `KernelArguments`: Input/output management for graph execution
 
 ## Running the Example
 
@@ -287,12 +287,12 @@ private static string ApplySuggestions(string text)
 
 The example produces comprehensive output showing:
 
-- 📝 Original draft content with constraint violations
-- ❌ Validation errors and business rule violations
-- 💡 Actionable suggestions for content improvement
-- ✅ Corrected version with constraints applied
-- 🎯 Final validation status (PASSED/FAILED)
-- 📋 Complete validation workflow results
+* 📝 Original draft content with constraint violations
+* ❌ Validation errors and business rule violations
+* 💡 Actionable suggestions for content improvement
+* ✅ Corrected version with constraints applied
+* 🎯 Final validation status (PASSED/FAILED)
+* 📋 Complete validation workflow results
 
 ## Troubleshooting
 
@@ -305,15 +305,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging to trace validation steps
-- Monitor state transitions between validation nodes
-- Verify constraint logic handles all content types
-- Check suggestion application for completeness
+* Enable detailed logging to trace validation steps
+* Monitor state transitions between validation nodes
+* Verify constraint logic handles all content types
+* Check suggestion application for completeness
 
 ## See Also
 
-- [Content Validation](../how-to/content-validation.md)
-- [State Management](../concepts/state.md)
-- [Node Types](../concepts/node-types.md)
-- [Graph Concepts](../concepts/graph-concepts.md)
-- [Error Handling](../how-to/error-handling-and-resilience.md)
+* [Content Validation](../how-to/content-validation.md)
+* [State Management](../concepts/state.md)
+* [Node Types](../concepts/node-types.md)
+* [Graph Concepts](../concepts/graph-concepts.md)
+* [Error Handling](../how-to/error-handling-and-resilience.md)

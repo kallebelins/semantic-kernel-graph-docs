@@ -5,10 +5,10 @@ This quick tutorial will get you up and running with SemanticKernel.Graph in jus
 ## What You'll Build
 
 A simple "Hello World" graph that demonstrates the core concepts:
-- Creating a kernel with graph support
-- Building function nodes
-- Connecting nodes to form a workflow
-- Executing the graph and getting results
+* Creating a kernel with graph support
+* Building function nodes
+* Connecting nodes to form a workflow
+* Executing the graph and getting results
 
 ## Concepts and Techniques
 
@@ -22,9 +22,9 @@ A simple "Hello World" graph that demonstrates the core concepts:
 
 ## Prerequisites
 
-- [SemanticKernel.Graph installed](installation.md)
-- .NET 8.0+ runtime
-- LLM provider configured (OpenAI, Azure OpenAI, etc.)
+* [SemanticKernel.Graph installed](installation.md)
+* .NET 8.0+ runtime
+* LLM provider configured (OpenAI, Azure OpenAI, etc.)
 
 ## Step 1: Create Your Project
 
@@ -167,18 +167,18 @@ The graph executor traverses from the start node, executing each connected node 
 
 ## Key Concepts
 
-- **Graph**: A directed structure of connected nodes that defines workflow execution
-- **Node**: Individual units of work (functions, decisions, operations)
-- **Edge**: Connections between nodes that define execution flow
-- **State**: Data that flows through the graph via `KernelArguments`
-- **Executor**: Orchestrates the entire workflow execution
+* **Graph**: A directed structure of connected nodes that defines workflow execution
+* **Node**: Individual units of work (functions, decisions, operations)
+* **Edge**: Connections between nodes that define execution flow
+* **State**: Data that flows through the graph via `KernelArguments`
+* **Executor**: Orchestrates the entire workflow execution
 
 ## Next Steps
 
-- **[State Management](state-tutorial.md)**: Learn to work with data flow between nodes
-- **[Conditional Logic](conditional-nodes-tutorial.md)**: Add decision-making to your workflows
-- **[Core Concepts](concepts/index.md)**: Understand the fundamental building blocks
-- **[Examples](examples/index.md)**: See more complex real-world patterns
+* **[State Management](state-tutorial.md)**: Learn to work with data flow between nodes
+* **[Conditional Logic](conditional-nodes-tutorial.md)**: Add decision-making to your workflows
+* **[Core Concepts](concepts/index.md)**: Understand the fundamental building blocks
+* **[Examples](examples/index.md)**: See more complex real-world patterns
 
 ## Troubleshooting
 
@@ -204,30 +204,30 @@ System.InvalidOperationException: No next nodes found
 
 This tutorial introduces several key concepts:
 
-- **Graph**: A directed structure of nodes and edges that defines workflow execution
-- **Node**: Individual units of work that can execute functions, make decisions, or perform operations
-- **Edge**: Connections between nodes that define the sequence of execution
-- **State**: Data that flows through the graph, maintaining context across execution steps
-- **Execution**: The process of traversing the graph, executing nodes, and managing state transitions
+* **Graph**: A directed structure of nodes and edges that defines workflow execution
+* **Node**: Individual units of work that can execute functions, make decisions, or perform operations
+* **Edge**: Connections between nodes that define the sequence of execution
+* **State**: Data that flows through the graph, maintaining context across execution steps
+* **Execution**: The process of traversing the graph, executing nodes, and managing state transitions
 
 ## Prerequisites and Minimum Configuration
 
 To complete this tutorial, you need:
-- **.NET 8.0+** runtime and SDK
-- **SemanticKernel.Graph** package installed
-- **LLM Provider** configured with valid API keys
-- **Environment Variables** set up for your API credentials
+* **.NET 8.0+** runtime and SDK
+* **SemanticKernel.Graph** package installed
+* **LLM Provider** configured with valid API keys
+* **Environment Variables** set up for your API credentials
 
 ## See Also
 
-- **[Installation Guide](installation.md)**: Set up SemanticKernel.Graph in your project
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
-- **[How-to Guides](how-to/build-a-graph.md)**: Building more complex graph workflows
-- **[API Reference](api/core.md)**: Complete API documentation
+* **[Installation Guide](installation.md)**: Set up SemanticKernel.Graph in your project
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[How-to Guides](how-to/build-a-graph.md)**: Building more complex graph workflows
+* **[API Reference](api/core.md)**: Complete API documentation
 
 ## Reference APIs
 
-- **[IGraphExecutor](../api/core.md#igraph-executor)**: Core execution interface
-- **[FunctionGraphNode](../api/nodes.md#function-graph-node)**: Function wrapper node
-- **[GraphExecutor](../api/core.md#graph-executor)**: Main execution engine
-- **[KernelBuilderExtensions](../api/extensions.md#kernel-builder-extensions)**: Graph support extensions
+* **[IGraphExecutor](../api/core.md#igraph-executor)**: Core execution interface
+* **[FunctionGraphNode](../api/nodes.md#function-graph-node)**: Function wrapper node
+* **[GraphExecutor](../api/core.md#graph-executor)**: Main execution engine
+* **[KernelBuilderExtensions](../api/extensions.md#kernel-builder-extensions)**: Graph support extensions

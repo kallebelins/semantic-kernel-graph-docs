@@ -5,37 +5,37 @@ This example demonstrates multi-agent coordination capabilities in Semantic Kern
 ## Objective
 
 Learn how to implement multi-agent coordination in graph-based workflows to:
-- Create and manage specialized agents with specific capabilities
-- Distribute work across multiple agents using different strategies
-- Coordinate complex workflows with explicit task definitions
-- Monitor agent health and system performance
-- Aggregate results from multiple agents using various strategies
+* Create and manage specialized agents with specific capabilities
+* Distribute work across multiple agents using different strategies
+* Coordinate complex workflows with explicit task definitions
+* Monitor agent health and system performance
+* Aggregate results from multiple agents using various strategies
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Multi-Agent Coordination](../how-to/multi-agent-and-shared-state.md)
-- Familiarity with [Workflow Management](../concepts/execution.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Multi-Agent Coordination](../how-to/multi-agent-and-shared-state.md)
+* Familiarity with [Workflow Management](../concepts/execution.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Multi-Agent Coordination**: Managing multiple specialized agents in coordinated workflows
-- **Work Distribution**: Automatic and manual distribution of tasks across agents
-- **Capability Management**: Defining and requiring specific agent capabilities
-- **Health Monitoring**: Tracking agent status and system performance
-- **Result Aggregation**: Combining results from multiple agents using various strategies
+* **Multi-Agent Coordination**: Managing multiple specialized agents in coordinated workflows
+* **Work Distribution**: Automatic and manual distribution of tasks across agents
+* **Capability Management**: Defining and requiring specific agent capabilities
+* **Health Monitoring**: Tracking agent status and system performance
+* **Result Aggregation**: Combining results from multiple agents using various strategies
 
 ### Core Classes
 
-- `MultiAgentCoordinator`: Main coordinator for managing multiple agents
-- `AgentInstance`: Individual agent instances with specific capabilities
-- `MultiAgentOptions`: Configuration options for coordination behavior
-- `WorkflowBuilder`: Builder pattern for creating complex workflows
-- `AgentHealthMonitor`: Monitoring agent health and system status
+* `MultiAgentCoordinator`: Main coordinator for managing multiple agents
+* `AgentInstance`: Individual agent instances with specific capabilities
+* `MultiAgentOptions`: Configuration options for coordination behavior
+* `WorkflowBuilder`: Builder pattern for creating complex workflows
+* `AgentHealthMonitor`: Monitoring agent health and system status
 
 ## Running the Example
 
@@ -303,12 +303,12 @@ private static void LogWorkflowResult(WorkflowExecutionResult result, ILogger lo
 
 The example produces comprehensive output showing:
 
-- 🤖 Multi-agent coordination setup and configuration
-- 📋 Basic multi-agent scenario with task distribution
-- 🔄 Advanced workflow with explicit task definitions
-- 🏥 Health monitoring and agent status tracking
-- 📊 Workflow execution results and performance metrics
-- ✅ Successful coordination across multiple specialized agents
+* 🤖 Multi-agent coordination setup and configuration
+* 📋 Basic multi-agent scenario with task distribution
+* 🔄 Advanced workflow with explicit task definitions
+* 🏥 Health monitoring and agent status tracking
+* 📊 Workflow execution results and performance metrics
+* ✅ Successful coordination across multiple specialized agents
 
 ## Troubleshooting
 
@@ -321,15 +321,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging to trace agent interactions
-- Monitor agent health status and performance metrics
-- Verify workflow requirements and agent capabilities match
-- Check coordination timeout and concurrency settings
+* Enable detailed logging to trace agent interactions
+* Monitor agent health status and performance metrics
+* Verify workflow requirements and agent capabilities match
+* Check coordination timeout and concurrency settings
 
 ## See Also
 
-- [Multi-Agent and Shared State](../how-to/multi-agent-and-shared-state.md)
-- [Workflow Management](../concepts/execution.md)
-- [Agent Coordination](../concepts/agent-coordination.md)
-- [Health Monitoring](../how-to/health-monitoring.md)
-- [Result Aggregation](../concepts/result-aggregation.md)
+* [Multi-Agent and Shared State](../how-to/multi-agent-and-shared-state.md)
+* [Workflow Management](../concepts/execution.md)
+* [Agent Coordination](../concepts/agent-coordination.md)
+* [Health Monitoring](../how-to/health-monitoring.md)
+* [Result Aggregation](../concepts/result-aggregation.md)

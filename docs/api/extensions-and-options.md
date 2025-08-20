@@ -765,30 +765,30 @@ var kernel = builder.Build();
 
 ## Performance Considerations
 
-- **Logging**: Disable detailed logging in production to improve performance
-- **Metrics**: Use sampling for high-frequency operations
-- **Checkpointing**: Balance checkpoint frequency with storage costs
-- **Streaming**: Configure buffer sizes based on memory constraints
-- **Templates**: Use caching for frequently accessed templates
+* **Logging**: Disable detailed logging in production to improve performance
+* **Metrics**: Use sampling for high-frequency operations
+* **Checkpointing**: Balance checkpoint frequency with storage costs
+* **Streaming**: Configure buffer sizes based on memory constraints
+* **Templates**: Use caching for frequently accessed templates
 
 ## Thread Safety
 
-- **GraphOptions**: Thread-safe for configuration; immutable during execution
-- **KernelArgumentsExtensions**: Thread-safe for concurrent access
-- **KernelBuilderExtensions**: Thread-safe during builder configuration
+* **GraphOptions**: Thread-safe for configuration; immutable during execution
+* **KernelArgumentsExtensions**: Thread-safe for concurrent access
+* **KernelBuilderExtensions**: Thread-safe during builder configuration
 
 ## Error Handling
 
-- **Configuration Validation**: Options are validated during builder configuration
-- **Graceful Degradation**: Optional features fail gracefully if dependencies are missing
-- **Environment Detection**: Automatic configuration based on environment variables
+* **Configuration Validation**: Options are validated during builder configuration
+* **Graceful Degradation**: Optional features fail gracefully if dependencies are missing
+* **Environment Detection**: Automatic configuration based on environment variables
 
 ## See Also
 
-- [Graph Executor](graph-executor.md)
-- [Graph State](state-and-serialization.md)
-- [Streaming Execution](../concepts/streaming.md)
-- [Checkpointing](../concepts/checkpointing.md)
-- [Memory Integration](../concepts/memory.md)
-- [Template Engine](../concepts/templates.md)
-- [Integration Guide](../how-to/integration-and-extensions.md)
+* [Graph Executor](graph-executor.md)
+* [Graph State](state-and-serialization.md)
+* [Streaming Execution](../concepts/streaming.md)
+* [Checkpointing](../concepts/checkpointing.md)
+* [Memory Integration](../concepts/memory.md)
+* [Template Engine](../concepts/templates.md)
+* [Integration Guide](../how-to/integration-and-extensions.md)

@@ -4,18 +4,18 @@ This tutorial will teach you how to work with state in SemanticKernel.Graph. You
 
 ## What You'll Learn
 
-- How state flows through your graph
-- Using `KernelArguments` for input and output
-- Working with `GraphState` for enhanced state management
-- State validation and versioning
-- Best practices for state design
+* How state flows through your graph
+* Using `KernelArguments` for input and output
+* Working with `GraphState` for enhanced state management
+* State validation and versioning
+* Best practices for state design
 
 ## Prerequisites
 
 Before starting, ensure you have:
-- Completed the [First Graph Tutorial](first-graph.md)
-- Basic understanding of SemanticKernel.Graph concepts
-- A configured LLM provider
+* Completed the [First Graph Tutorial](first-graph.md)
+* Basic understanding of SemanticKernel.Graph concepts
+* A configured LLM provider
 
 ## Understanding State in Graphs
 
@@ -25,9 +25,9 @@ State in SemanticKernel.Graph represents the data that flows through your workfl
 
 ### State Components
 
-- **Input State**: Initial data when the graph starts
-- **Intermediate State**: Data modified by each node during execution
-- **Output State**: Final state containing all results and intermediate data
+* **Input State**: Initial data when the graph starts
+* **Intermediate State**: Data modified by each node during execution
+* **Output State**: Final state containing all results and intermediate data
 
 ## Basic State Management
 
@@ -99,10 +99,10 @@ processingNode.StoreResultAs("analysis");
 ### What is GraphState?
 
 `GraphState` is an enhanced wrapper around `KernelArguments` that provides additional features like:
-- State versioning and validation
-- Execution history tracking
-- Metadata management
-- Serialization capabilities
+* State versioning and validation
+* Execution history tracking
+* Metadata management
+* Serialization capabilities
 
 ### Using GraphState
 
@@ -464,32 +464,32 @@ System.Text.Json.JsonException: The JSON value could not be converted to KernelA
 
 Now that you understand state management, explore these advanced topics:
 
-- **[Conditional Nodes Guide](how-to/conditional-nodes.md)**: Master conditional logic and routing
-- **[Checkpointing Tutorial](checkpointing-tutorial.md)**: Learn about state persistence and recovery
-- **[Error Handling Guide](how-to/error-handling.md)**: Handle state errors and exceptions
-- **[Advanced Patterns](patterns/index.md)**: Discover complex state management patterns
+* **[Conditional Nodes Guide](how-to/conditional-nodes.md)**: Master conditional logic and routing
+* **[Checkpointing Tutorial](checkpointing-tutorial.md)**: Learn about state persistence and recovery
+* **[Error Handling Guide](how-to/error-handling.md)**: Handle state errors and exceptions
+* **[Advanced Patterns](patterns/index.md)**: Discover complex state management patterns
 
 ## Concepts and Techniques
 
 This tutorial covers several key concepts:
 
-- **State**: Data that flows through the graph, maintaining context across execution steps
-- **KernelArguments**: The base state container that holds key-value pairs
-- **GraphState**: Enhanced state wrapper with versioning, validation, and metadata
-- **State Flow**: How data moves between nodes and transforms during execution
-- **State Validation**: Ensuring data integrity and type safety throughout the workflow
+* **State**: Data that flows through the graph, maintaining context across execution steps
+* **KernelArguments**: The base state container that holds key-value pairs
+* **GraphState**: Enhanced state wrapper with versioning, validation, and metadata
+* **State Flow**: How data moves between nodes and transforms during execution
+* **State Validation**: Ensuring data integrity and type safety throughout the workflow
 
 ## Prerequisites and Minimum Configuration
 
 To complete this tutorial, you need:
-- **SemanticKernel.Graph** package installed and configured
-- **LLM Provider** with valid API keys
-- **Basic understanding** of graph concepts from the first tutorial
-- **.NET 8.0+** runtime environment
+* **SemanticKernel.Graph** package installed and configured
+* **LLM Provider** with valid API keys
+* **Basic understanding** of graph concepts from the first tutorial
+* **.NET 8.0+** runtime environment
 
 ## See Also
 
-- **[First Graph Tutorial](first-graph.md)**: Build your first complete graph workflow
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
-- **[API Reference](api/core.md)**: Complete API documentation
-- **[Examples](examples/index.md)**: Real-world usage patterns and implementations
+* **[First Graph Tutorial](first-graph.md)**: Build your first complete graph workflow
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[API Reference](api/core.md)**: Complete API documentation
+* **[Examples](examples/index.md)**: Real-world usage patterns and implementations

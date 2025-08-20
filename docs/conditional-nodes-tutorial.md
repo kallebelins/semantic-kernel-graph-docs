@@ -4,17 +4,17 @@ This tutorial will teach you how to use conditional nodes and edges in SemanticK
 
 ## What You'll Learn
 
-- How to create conditional nodes that make routing decisions
-- Using conditional edges for dynamic workflow paths
-- Building intelligent workflows that adapt to different scenarios
-- Best practices for conditional logic in graphs
+* How to create conditional nodes that make routing decisions
+* Using conditional edges for dynamic workflow paths
+* Building intelligent workflows that adapt to different scenarios
+* Best practices for conditional logic in graphs
 
 ## Prerequisites
 
 Before starting, ensure you have:
-- Completed the [First Graph Tutorial](first-graph.md)
-- Understanding of [State Management](state-tutorial.md)
-- Basic knowledge of SemanticKernel.Graph concepts
+* Completed the [First Graph Tutorial](first-graph.md)
+* Understanding of [State Management](state-tutorial.md)
+* Basic knowledge of SemanticKernel.Graph concepts
 
 ## Understanding Conditional Nodes
 
@@ -24,10 +24,10 @@ Conditional nodes are special nodes that evaluate conditions and decide which pa
 
 ### Types of Conditions
 
-- **Simple Boolean Conditions**: Basic true/false decisions
-- **State-Based Conditions**: Decisions based on data in the state
-- **AI-Generated Conditions**: Complex decisions made by AI analysis
-- **Template-Based Conditions**: Conditions expressed in natural language
+* **Simple Boolean Conditions**: Basic true/false decisions
+* **State-Based Conditions**: Decisions based on data in the state
+* **AI-Generated Conditions**: Complex decisions made by AI analysis
+* **Template-Based Conditions**: Conditions expressed in natural language
 
 ## Basic Conditional Node
 
@@ -547,32 +547,32 @@ var validationNode = new ConditionalGraphNode("ValidateState",
 
 Now that you understand conditional nodes, explore these advanced topics:
 
-- **[Loops Tutorial](loops-tutorial.md)**: Learn about loop nodes and iterative workflows
-- **[Error Handling Guide](how-to/error-handling.md)**: Handle errors and exceptions in your workflows
-- **[Advanced Routing](how-to/advanced-routing.md)**: Master complex routing patterns
-- **[Patterns](patterns/index.md)**: Discover common workflow patterns
+* **[Loops Tutorial](loops-tutorial.md)**: Learn about loop nodes and iterative workflows
+* **[Error Handling Guide](how-to/error-handling.md)**: Handle errors and exceptions in your workflows
+* **[Advanced Routing](how-to/advanced-routing.md)**: Master complex routing patterns
+* **[Patterns](patterns/index.md)**: Discover common workflow patterns
 
 ## Concepts and Techniques
 
 This tutorial covers several key concepts:
 
-- **Conditional Node**: A node that evaluates conditions and routes execution based on the result
-- **Conditional Edge**: An edge that only allows execution when its condition evaluates to true
-- **Routing Logic**: The decision-making process that determines workflow execution paths
-- **State Evaluation**: How conditions analyze the current state to make routing decisions
-- **Multi-path Workflows**: Creating workflows that can take different paths based on conditions
+* **Conditional Node**: A node that evaluates conditions and routes execution based on the result
+* **Conditional Edge**: An edge that only allows execution when its condition evaluates to true
+* **Routing Logic**: The decision-making process that determines workflow execution paths
+* **State Evaluation**: How conditions analyze the current state to make routing decisions
+* **Multi-path Workflows**: Creating workflows that can take different paths based on conditions
 
 ## Prerequisites and Minimum Configuration
 
 To complete this tutorial, you need:
-- **SemanticKernel.Graph** package installed and configured
-- **LLM Provider** with valid API keys
-- **Understanding** of basic graph concepts and state management
-- **.NET 8.0+** runtime environment
+* **SemanticKernel.Graph** package installed and configured
+* **LLM Provider** with valid API keys
+* **Understanding** of basic graph concepts and state management
+* **.NET 8.0+** runtime environment
 
 ## See Also
 
-- **[State Management Tutorial](state-tutorial.md)**: Understanding how data flows through your graph
-- **[First Graph Tutorial](first-graph.md)**: Building your first complete graph workflow
-- **[How-to Guides](how-to/conditional-nodes.md)**: Advanced conditional node techniques
-- **[API Reference](api/nodes.md)**: Complete node API documentation
+* **[State Management Tutorial](state-tutorial.md)**: Understanding how data flows through your graph
+* **[First Graph Tutorial](first-graph.md)**: Building your first complete graph workflow
+* **[How-to Guides](how-to/conditional-nodes.md)**: Advanced conditional node techniques
+* **[API Reference](api/nodes.md)**: Complete node API documentation

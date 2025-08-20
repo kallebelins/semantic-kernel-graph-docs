@@ -6,10 +6,10 @@ This guide will help you install and configure SemanticKernel.Graph in your .NET
 
 Before installing SemanticKernel.Graph, ensure you have:
 
-- **.NET 8.0** or later installed on your system
-- **Visual Studio 2022** (17.8+) or **VS Code** with C# extension
-- **Semantic Kernel** package already installed in your project
-- **LLM Provider API Key** (OpenAI, Azure OpenAI, or other supported providers)
+* **.NET 8.0** or later installed on your system
+* **Visual Studio 2022** (17.8+) or **VS Code** with C# extension
+* **Semantic Kernel** package already installed in your project
+* **LLM Provider API Key** (OpenAI, Azure OpenAI, or other supported providers)
 
 ### .NET Version Check
 
@@ -253,25 +253,25 @@ The project includes comprehensive examples that demonstrate various features:
 
 The documentation includes comprehensive examples in the [examples/](examples/) directory:
 
-- **Basic Patterns**: Simple workflows and node types
-- **Advanced Routing**: Dynamic execution paths and conditional logic
-- **Multi-Agent**: Coordinated AI agent workflows
-- **Enterprise**: Production-ready patterns with monitoring and resilience
+* **Basic Patterns**: Simple workflows and node types
+* **Advanced Routing**: Dynamic execution paths and conditional logic
+* **Multi-Agent**: Coordinated AI agent workflows
+* **Enterprise**: Production-ready patterns with monitoring and resilience
 
 ### 2. Follow the Tutorials
 
 Each example includes:
-- Complete code snippets you can copy and adapt
-- Step-by-step explanations of how the code works
-- Configuration examples for different scenarios
-- Best practices and usage patterns
+* Complete code snippets you can copy and adapt
+* Step-by-step explanations of how the code works
+* Configuration examples for different scenarios
+* Best practices and usage patterns
 
 ### 3. Available Example Categories
 
-- **Core Functionality**: Basic setup and configuration
-- **Graph Execution**: Workflow patterns and routing
-- **Advanced Patterns**: Complex AI workflows and reasoning
-- **Enterprise Features**: Production-ready implementations
+* **Core Functionality**: Basic setup and configuration
+* **Graph Execution**: Workflow patterns and routing
+* **Advanced Patterns**: Complex AI workflows and reasoning
+* **Enterprise Features**: Production-ready implementations
 
 ## Verification
 
@@ -358,32 +358,32 @@ If you encounter issues:
 
 Now that you have SemanticKernel.Graph installed and configured:
 
-- **[First Graph Tutorial](first-graph.md)**: Build your first complete graph workflow
-- **[Core Concepts](concepts/index.md)**: Understand the fundamental concepts
-- **[Examples](examples/index.md)**: Explore real-world usage patterns
-- **[API Reference](api/core.md)**: Dive into the complete API surface
+* **[First Graph Tutorial](first-graph.md)**: Build your first complete graph workflow
+* **[Core Concepts](concepts/index.md)**: Understand the fundamental concepts
+* **[Examples](examples/index.md)**: Explore real-world usage patterns
+* **[API Reference](api/core.md)**: Dive into the complete API surface
 
 ## Concepts and Techniques
 
 This installation guide covers several key concepts:
 
-- **Package Management**: Installing SemanticKernel.Graph from NuGet package repository
-- **Environment Configuration**: Setting up LLM provider credentials and configuration
-- **Configuration Management**: Using appsettings.json and environment variables
-- **Dependency Injection**: Integrating with .NET's DI container for enterprise applications
+* **Package Management**: Installing SemanticKernel.Graph from NuGet package repository
+* **Environment Configuration**: Setting up LLM provider credentials and configuration
+* **Configuration Management**: Using appsettings.json and environment variables
+* **Dependency Injection**: Integrating with .NET's DI container for enterprise applications
 
 ## Prerequisites and Minimum Configuration
 
 To successfully install and use SemanticKernel.Graph, you need:
-- **.NET 8.0+** runtime and SDK
-- **Internet Access** to download packages from NuGet
-- **Semantic Kernel** package (compatible version)
-- **LLM Provider** configuration (API keys, endpoints)
-- **Configuration Files** or environment variables for sensitive data
+* **.NET 8.0+** runtime and SDK
+* **Internet Access** to download packages from NuGet
+* **Semantic Kernel** package (compatible version)
+* **LLM Provider** configuration (API keys, endpoints)
+* **Configuration Files** or environment variables for sensitive data
 
 ## See Also
 
-- **[Getting Started](getting-started.md)**: Overview of SemanticKernel.Graph capabilities
-- **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
-- **[Troubleshooting](troubleshooting.md)**: Common issues and solutions
-- **[API Reference](api/core.md)**: Complete API documentation
+* **[Getting Started](getting-started.md)**: Overview of SemanticKernel.Graph capabilities
+* **[Core Concepts](concepts/index.md)**: Understanding graphs, nodes, and execution
+* **[Troubleshooting](troubleshooting.md)**: Common issues and solutions
+* **[API Reference](api/core.md)**: Complete API documentation

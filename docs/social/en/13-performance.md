@@ -24,10 +24,10 @@ var performanceGraph = new Graph
 ```
 
 Perfect for:
-- 🚀 High-traffic applications
-- 📊 Big data processing
-- 🏢 Enterprise workloads
-- 🌐 Global scale deployments
+* 🚀 High-traffic applications
+* 📊 Big data processing
+* 🏢 Enterprise workloads
+* 🌐 Global scale deployments
 
 **Scale without limits** → [https://skgraph.dev/](https://skgraph.dev/)
 

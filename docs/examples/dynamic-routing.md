@@ -5,35 +5,35 @@ This example demonstrates advanced routing patterns using the Semantic Kernel Gr
 ## Objective
 
 Learn how to implement dynamic routing in graph-based workflows to:
-- Route execution based on content analysis and semantic similarity
-- Implement intelligent decision-making with multiple routing strategies
-- Handle dynamic routing with real-time condition evaluation
-- Scale routing logic across complex workflow scenarios
-- Optimize routing performance with caching and prediction
+* Route execution based on content analysis and semantic similarity
+* Implement intelligent decision-making with multiple routing strategies
+* Handle dynamic routing with real-time condition evaluation
+* Scale routing logic across complex workflow scenarios
+* Optimize routing performance with caching and prediction
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Routing Concepts](../concepts/routing.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Routing Concepts](../concepts/routing.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Dynamic Routing**: Runtime determination of execution paths based on conditions
-- **Content-Based Routing**: Routing decisions based on content analysis and classification
-- **Semantic Similarity**: Using embeddings and similarity scores for intelligent routing
-- **Multi-Strategy Routing**: Combining multiple routing approaches for optimal decisions
-- **Performance Optimization**: Caching and prediction for efficient routing
+* **Dynamic Routing**: Runtime determination of execution paths based on conditions
+* **Content-Based Routing**: Routing decisions based on content analysis and classification
+* **Semantic Similarity**: Using embeddings and similarity scores for intelligent routing
+* **Multi-Strategy Routing**: Combining multiple routing approaches for optimal decisions
+* **Performance Optimization**: Caching and prediction for efficient routing
 
 ### Core Classes
 
-- `DynamicRoutingEngine`: Core engine for dynamic routing decisions
-- `ConditionalGraphNode`: Nodes that evaluate routing conditions
-- `FunctionGraphNode`: Processing nodes for different content types
-- `GraphExecutor`: Orchestrates the dynamic routing workflow
+* `DynamicRoutingEngine`: Core engine for dynamic routing decisions
+* `ConditionalGraphNode`: Nodes that evaluate routing conditions
+* `FunctionGraphNode`: Processing nodes for different content types
+* `GraphExecutor`: Orchestrates the dynamic routing workflow
 
 ## Running the Example
 
@@ -861,14 +861,14 @@ public class ABTestingRouter : IRouter
 
 ## Related Examples
 
-- [Conditional Nodes](./conditional-nodes.md): Basic conditional routing
-- [Advanced Patterns](./advanced-patterns.md): Complex routing patterns
-- [Multi-Agent](./multi-agent.md): Coordinated routing decisions
-- [Performance Optimization](./performance-optimization.md): Routing performance tuning
+* [Conditional Nodes](./conditional-nodes.md): Basic conditional routing
+* [Advanced Patterns](./advanced-patterns.md): Complex routing patterns
+* [Multi-Agent](./multi-agent.md): Coordinated routing decisions
+* [Performance Optimization](./performance-optimization.md): Routing performance tuning
 
 ## See Also
 
-- [Dynamic Routing Concepts](../concepts/dynamic-routing.md): Understanding dynamic routing
-- [Routing Strategies](../patterns/routing-strategies.md): Routing pattern implementations
-- [Performance Optimization](../how-to/performance-optimization.md): Optimizing routing performance
-- [API Reference](../api/): Complete API documentation
+* [Dynamic Routing Concepts](../concepts/dynamic-routing.md): Understanding dynamic routing
+* [Routing Strategies](../patterns/routing-strategies.md): Routing pattern implementations
+* [Performance Optimization](../how-to/performance-optimization.md): Optimizing routing performance
+* [API Reference](../api/): Complete API documentation

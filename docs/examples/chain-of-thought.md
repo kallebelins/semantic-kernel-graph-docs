@@ -5,34 +5,34 @@ This example demonstrates Chain-of-Thought reasoning patterns using the Semantic
 ## Objective
 
 Learn how to implement Chain-of-Thought reasoning in graph-based workflows to:
-- Break down complex problems into logical steps
-- Validate reasoning quality at each step
-- Enable backtracking when reasoning fails
-- Customize reasoning templates for different use cases
-- Monitor and optimize reasoning performance
+* Break down complex problems into logical steps
+* Validate reasoning quality at each step
+* Enable backtracking when reasoning fails
+* Customize reasoning templates for different use cases
+* Monitor and optimize reasoning performance
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Node Types](../concepts/node-types.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Chain of Thought**: A reasoning pattern where the AI breaks down complex problems into sequential steps, showing its thinking process
-- **Reasoning Validation**: Quality assessment of each reasoning step using confidence scoring and validation rules
-- **Backtracking**: Ability to retry failed reasoning steps with different approaches
-- **Template Engine**: Customizable prompts and reasoning patterns for different problem domains
+* **Chain of Thought**: A reasoning pattern where the AI breaks down complex problems into sequential steps, showing its thinking process
+* **Reasoning Validation**: Quality assessment of each reasoning step using confidence scoring and validation rules
+* **Backtracking**: Ability to retry failed reasoning steps with different approaches
+* **Template Engine**: Customizable prompts and reasoning patterns for different problem domains
 
 ### Core Classes
 
-- `ChainOfThoughtGraphNode`: Main node for implementing CoT reasoning
-- `ChainOfThoughtTemplateEngine`: Manages reasoning templates and validation
-- `ChainOfThoughtType`: Enumeration of reasoning strategies (ProblemSolving, Analysis, DecisionMaking)
-- `ChainOfThoughtValidator`: Validates reasoning quality and confidence
+* `ChainOfThoughtGraphNode`: Main node for implementing CoT reasoning
+* `ChainOfThoughtTemplateEngine`: Manages reasoning templates and validation
+* `ChainOfThoughtType`: Enumeration of reasoning strategies (ProblemSolving, Analysis, DecisionMaking)
+* `ChainOfThoughtValidator`: Validates reasoning quality and confidence
 
 ## Running the Example
 
@@ -183,10 +183,10 @@ Console.WriteLine($"Node Statistics: {cotNode.Statistics.ExecutionCount} executi
 ✅ Step 4 completed with confidence: 0.79
 
 ✅ Final Answer: Comprehensive cost reduction plan including:
-- Process optimization (8% savings)
-- Technology automation (7% savings)
-- Vendor renegotiation (5% savings)
-- Total: 20% cost reduction while maintaining satisfaction
+* Process optimization (8% savings)
+* Technology automation (7% savings)
+* Vendor renegotiation (5% savings)
+* Total: 20% cost reduction while maintaining satisfaction
 
 📊 Node Statistics: 1 executions, 81.0% avg quality, 100% success rate
 ```
@@ -344,14 +344,14 @@ cotNode.TemplateSelector = templateSelector;
 
 ## Related Examples
 
-- [ReAct Agent](./react-agent.md): Reasoning and action loops
-- [ReAct Problem Solving](./react-problem-solving.md): Complex problem decomposition
-- [Conditional Nodes](./conditional-nodes.md): Dynamic routing based on reasoning results
-- [Graph Metrics](./graph-metrics.md): Performance monitoring and optimization
+* [ReAct Agent](./react-agent.md): Reasoning and action loops
+* [ReAct Problem Solving](./react-problem-solving.md): Complex problem decomposition
+* [Conditional Nodes](./conditional-nodes.md): Dynamic routing based on reasoning results
+* [Graph Metrics](./graph-metrics.md): Performance monitoring and optimization
 
 ## See Also
 
-- [Chain of Thought Concepts](../concepts/chain-of-thought.md): Understanding reasoning patterns
-- [Node Types](../concepts/node-types.md): Graph node fundamentals
-- [Performance Monitoring](../how-to/metrics-and-observability.md): Metrics and optimization
-- [API Reference](../api/): Complete API documentation
+* [Chain of Thought Concepts](../concepts/chain-of-thought.md): Understanding reasoning patterns
+* [Node Types](../concepts/node-types.md): Graph node fundamentals
+* [Performance Monitoring](../how-to/metrics-and-observability.md): Metrics and optimization
+* [API Reference](../api/): Complete API documentation

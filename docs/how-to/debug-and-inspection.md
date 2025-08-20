@@ -4,12 +4,12 @@ Debug and inspection capabilities in SemanticKernel.Graph provide comprehensive 
 
 ## What You'll Learn
 
-- How to create and configure debug sessions
-- Setting up different types of breakpoints
-- Using the GraphInspectionApi for runtime monitoring
-- Generating graph visualizations in multiple formats
-- Replaying execution history for analysis
-- Best practices for debugging complex workflows
+* How to create and configure debug sessions
+* Setting up different types of breakpoints
+* Using the GraphInspectionApi for runtime monitoring
+* Generating graph visualizations in multiple formats
+* Replaying execution history for analysis
+* Best practices for debugging complex workflows
 
 ## Concepts and Techniques
 
@@ -25,9 +25,9 @@ Debug and inspection capabilities in SemanticKernel.Graph provide comprehensive 
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of graph execution concepts
-- Familiarity with state management and conditional nodes
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of graph execution concepts
+* Familiarity with state management and conditional nodes
 
 ## Debug Sessions
 
@@ -562,24 +562,24 @@ var retryBreakpoint = debugSession.AddBreakpoint(
 
 ### Debug Session Management
 
-- **Session Lifecycle**: Always dispose of debug sessions to free resources
-- **Mode Selection**: Choose appropriate debug modes for different scenarios
-- **Breakpoint Strategy**: Use conditional breakpoints sparingly to avoid excessive pausing
-- **State Inspection**: Inspect state at key decision points rather than every node
+* **Session Lifecycle**: Always dispose of debug sessions to free resources
+* **Mode Selection**: Choose appropriate debug modes for different scenarios
+* **Breakpoint Strategy**: Use conditional breakpoints sparingly to avoid excessive pausing
+* **State Inspection**: Inspect state at key decision points rather than every node
 
 ### Performance Considerations
 
-- **Breakpoint Impact**: Each breakpoint adds overhead to execution
-- **History Size**: Large execution histories consume memory
-- **Visualization Generation**: Complex visualizations can be expensive for large graphs
-- **Replay Memory**: Long replays require significant memory for state snapshots
+* **Breakpoint Impact**: Each breakpoint adds overhead to execution
+* **History Size**: Large execution histories consume memory
+* **Visualization Generation**: Complex visualizations can be expensive for large graphs
+* **Replay Memory**: Long replays require significant memory for state snapshots
 
 ### Debugging Workflows
 
-- **Start Simple**: Begin with basic step-over debugging to understand flow
-- **Add Breakpoints**: Gradually add breakpoints at critical decision points
-- **Use Replay**: Leverage replay for post-execution analysis
-- **Document Issues**: Use debug session export for issue reporting
+* **Start Simple**: Begin with basic step-over debugging to understand flow
+* **Add Breakpoints**: Gradually add breakpoints at critical decision points
+* **Use Replay**: Leverage replay for post-execution analysis
+* **Document Issues**: Use debug session export for issue reporting
 
 ## Troubleshooting
 
@@ -611,7 +611,7 @@ var sessionData = debugSession.ExportSessionData(includeHistory: true);
 
 ## See Also
 
-- [Conditional Nodes](../conditional-nodes.md) - Understanding conditional logic and routing
-- [State Management](../state.md) - Working with graph state and variables
-- [Graph Execution](../execution.md) - Understanding execution flow and lifecycle
-- [Examples](../../examples/) - Practical examples of debugging workflows
+* [Conditional Nodes](../conditional-nodes.md) - Understanding conditional logic and routing
+* [State Management](../state.md) - Working with graph state and variables
+* [Graph Execution](../execution.md) - Understanding execution flow and lifecycle
+* [Examples](../../examples/) - Practical examples of debugging workflows

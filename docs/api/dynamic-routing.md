@@ -6,11 +6,11 @@ The `DynamicRoutingEngine` provides advanced node selection capabilities that go
 
 The dynamic routing system consists of several key components:
 
-- **`DynamicRoutingEngine`**: Main orchestrator that coordinates routing strategies
-- **`AdvancedRoutingEngine`**: Handles sophisticated routing using embeddings and memory
-- **Routing Strategies**: Multiple approaches to node selection
-- **Template Engine Integration**: Handlebars-based routing decisions
-- **Caching and Fallback**: Performance optimization and reliability
+* **`DynamicRoutingEngine`**: Main orchestrator that coordinates routing strategies
+* **`AdvancedRoutingEngine`**: Handles sophisticated routing using embeddings and memory
+* **Routing Strategies**: Multiple approaches to node selection
+* **Template Engine Integration**: Handlebars-based routing decisions
+* **Caching and Fallback**: Performance optimization and reliability
 
 ## Core Classes
 
@@ -31,18 +31,18 @@ public sealed class DynamicRoutingEngine : IAsyncDisposable
 ```
 
 **Key Features:**
-- **Content-based routing**: Analyzes state content and execution results
-- **Template-based routing**: Uses Handlebars templates for dynamic decisions
-- **Caching**: Stores routing decisions for performance optimization
-- **Fallback mechanisms**: Ensures routing always succeeds
-- **Advanced routing integration**: Automatically enables when services are available
+* **Content-based routing**: Analyzes state content and execution results
+* **Template-based routing**: Uses Handlebars templates for dynamic decisions
+* **Caching**: Stores routing decisions for performance optimization
+* **Fallback mechanisms**: Ensures routing always succeeds
+* **Advanced routing integration**: Automatically enables when services are available
 
 **Constructor Parameters:**
-- `templateEngine`: Optional template engine for routing decisions
-- `options`: Configuration options for caching and fallback behavior
-- `logger`: Optional logger for debugging and monitoring
-- `embeddingService`: Optional service for semantic routing
-- `memoryService`: Optional service for contextual routing
+* `templateEngine`: Optional template engine for routing decisions
+* `options`: Configuration options for caching and fallback behavior
+* `logger`: Optional logger for debugging and monitoring
+* `embeddingService`: Optional service for semantic routing
+* `memoryService`: Optional service for contextual routing
 
 ### DynamicRoutingOptions
 
@@ -59,10 +59,10 @@ public sealed class DynamicRoutingOptions
 ```
 
 **Properties:**
-- `EnableCaching`: Whether to cache routing decisions for performance
-- `EnableFallback`: Whether to use fallback mechanisms when routing fails
-- `MaxCacheSize`: Maximum number of cached decisions to store
-- `CacheExpirationMinutes`: How long cached decisions remain valid
+* `EnableCaching`: Whether to cache routing decisions for performance
+* `EnableFallback`: Whether to use fallback mechanisms when routing fails
+* `MaxCacheSize`: Maximum number of cached decisions to store
+* `CacheExpirationMinutes`: How long cached decisions remain valid
 
 ## Advanced Routing Integration
 
@@ -102,18 +102,18 @@ public sealed class AdvancedRoutingOptions
 ```
 
 **Strategy Controls:**
-- `EnableSemanticRouting`: Uses text embeddings for similarity-based routing
-- `EnableSimilarityRouting`: Leverages execution history for pattern matching
-- `EnableProbabilisticRouting`: Applies weighted random selection with dynamic weights
-- `EnableContextualRouting`: Considers execution history patterns and transitions
-- `EnableFeedbackLearning`: Adapts routing decisions based on user feedback
+* `EnableSemanticRouting`: Uses text embeddings for similarity-based routing
+* `EnableSimilarityRouting`: Leverages execution history for pattern matching
+* `EnableProbabilisticRouting`: Applies weighted random selection with dynamic weights
+* `EnableContextualRouting`: Considers execution history patterns and transitions
+* `EnableFeedbackLearning`: Adapts routing decisions based on user feedback
 
 **Thresholds and Limits:**
-- `SemanticSimilarityThreshold`: Minimum similarity score for semantic routing (0.0 to 1.0)
-- `HistoryLookbackLimit`: Number of similar executions to consider
-- `FeedbackLearningRate`: How quickly feedback affects future decisions (0.0 to 1.0)
-- `ProbabilisticDecayFactor`: Weight decay factor over time (0.0 to 1.0)
-- `MinimumConfidenceThreshold`: Minimum confidence required for routing decisions
+* `SemanticSimilarityThreshold`: Minimum similarity score for semantic routing (0.0 to 1.0)
+* `HistoryLookbackLimit`: Number of similar executions to consider
+* `FeedbackLearningRate`: How quickly feedback affects future decisions (0.0 to 1.0)
+* `ProbabilisticDecayFactor`: Weight decay factor over time (0.0 to 1.0)
+* `MinimumConfidenceThreshold`: Minimum confidence required for routing decisions
 
 ## Routing Strategies
 
@@ -138,8 +138,8 @@ public sealed class SemanticRoutingStrategy : IRoutingStrategy
 4. Applies similarity threshold filtering
 
 **Requirements:**
-- `ITextEmbeddingGenerationService` implementation
-- Node embeddings stored in `_nodeEmbeddings` cache
+* `ITextEmbeddingGenerationService` implementation
+* Node embeddings stored in `_nodeEmbeddings` cache
 
 ### 2. Content Similarity Routing Strategy
 
@@ -160,8 +160,8 @@ public sealed class ContentSimilarityRoutingStrategy : IRoutingStrategy
 4. Selects node based on historical success patterns
 
 **Requirements:**
-- `IGraphMemoryService` implementation
-- Similar executions in context (`context.SimilarExecutions`)
+* `IGraphMemoryService` implementation
+* Similar executions in context (`context.SimilarExecutions`)
 
 ### 3. Probabilistic Routing Strategy
 
@@ -210,10 +210,10 @@ public sealed class ContextualRoutingStrategy : IRoutingStrategy
 4. Selects node with best historical performance pattern
 
 **Features:**
-- Transition probability analysis
-- Success rate weighting
-- Historical pattern recognition
-- Context-aware decision making
+* Transition probability analysis
+* Success rate weighting
+* Historical pattern recognition
+* Context-aware decision making
 
 ### 5. Feedback Learning Routing Strategy
 
@@ -258,9 +258,9 @@ public interface IGraphTemplateEngine
 ```
 
 **Available Implementations:**
-- `HandlebarsGraphTemplateEngine`: Basic Handlebars-like templating
-- `ChainOfThoughtTemplateEngine`: Specialized for reasoning patterns
-- `ReActTemplateEngine`: Optimized for ReAct pattern prompts
+* `HandlebarsGraphTemplateEngine`: Basic Handlebars-like templating
+* `ChainOfThoughtTemplateEngine`: Specialized for reasoning patterns
+* `ReActTemplateEngine`: Optimized for ReAct pattern prompts
 
 ### Template-Based Routing
 
@@ -278,11 +278,11 @@ var routingDecision = await templateEngine.RenderWithArgumentsAsync(
 ```
 
 **Template Features:**
-- Variable substitution: `{{variable}}`
-- Conditional statements: `{{#if condition}}...{{else}}...{{/if}}`
-- Helper functions: `{{helper arg1 arg2}}`
-- State-aware rendering
-- Caching for performance
+* Variable substitution: `{{variable}}`
+* Conditional statements: `{{#if condition}}...{{else}}...{{/if}}`
+* Helper functions: `{{helper arg1 arg2}}`
+* State-aware rendering
+* Caching for performance
 
 ## Routing Context and Results
 
@@ -322,12 +322,12 @@ public sealed class AdvancedRoutingResult
 ```
 
 **Properties:**
-- `SelectedNode`: The node chosen by the routing engine
-- `FinalConfidence`: Overall confidence score (0.0 to 1.0)
-- `UsedStrategies`: List of strategies that contributed to the decision
-- `StrategyDetails`: Detailed information from each strategy
-- `DecisionId`: Unique identifier for the routing decision
-- `Timestamp`: When the decision was made
+* `SelectedNode`: The node chosen by the routing engine
+* `FinalConfidence`: Overall confidence score (0.0 to 1.0)
+* `UsedStrategies`: List of strategies that contributed to the decision
+* `StrategyDetails`: Detailed information from each strategy
+* `DecisionId`: Unique identifier for the routing decision
+* `Timestamp`: When the decision was made
 
 ## Metrics and Monitoring
 
@@ -353,12 +353,12 @@ public sealed class RoutingMetrics
 ```
 
 **Key Metrics:**
-- `TotalDecisions`: Total number of routing decisions made
-- `CachedDecisions`: Number of decisions served from cache
-- `FailedDecisions`: Number of failed routing attempts
-- `AverageDecisionTime`: Average time to make routing decisions
-- `CacheHitRatio`: Percentage of decisions served from cache
-- `SuccessRatio`: Percentage of successful routing decisions
+* `TotalDecisions`: Total number of routing decisions made
+* `CachedDecisions`: Number of decisions served from cache
+* `FailedDecisions`: Number of failed routing attempts
+* `AverageDecisionTime`: Average time to make routing decisions
+* `CacheHitRatio`: Percentage of decisions served from cache
+* `SuccessRatio`: Percentage of successful routing decisions
 
 ### RoutingAnalytics
 
@@ -491,10 +491,10 @@ public static class DynamicRoutingExtensions
 
 The routing engine implements intelligent caching:
 
-- **Decision caching**: Stores routing decisions to avoid recomputation
-- **Template caching**: Compiles and caches templates for faster rendering
-- **Embedding caching**: Stores node embeddings to avoid regeneration
-- **Configurable expiration**: Cache entries expire based on time and usage
+* **Decision caching**: Stores routing decisions to avoid recomputation
+* **Template caching**: Compiles and caches templates for faster rendering
+* **Embedding caching**: Stores node embeddings to avoid regeneration
+* **Configurable expiration**: Cache entries expire based on time and usage
 
 ### Fallback Mechanisms
 
@@ -509,10 +509,10 @@ Multiple fallback strategies ensure routing always succeeds:
 
 The engine implements proper resource management:
 
-- **Async disposal**: Implements `IAsyncDisposable` for cleanup
-- **Memory management**: Configurable cache sizes and expiration
-- **Concurrent access**: Thread-safe operations using concurrent collections
-- **Performance monitoring**: Built-in metrics and logging
+* **Async disposal**: Implements `IAsyncDisposable` for cleanup
+* **Memory management**: Configurable cache sizes and expiration
+* **Concurrent access**: Thread-safe operations using concurrent collections
+* **Performance monitoring**: Built-in metrics and logging
 
 ## Error Handling
 
@@ -520,24 +520,24 @@ The engine implements proper resource management:
 
 When routing fails, the engine provides detailed error information:
 
-- **Exception details**: Specific error messages and stack traces
-- **Fallback behavior**: Automatic fallback when enabled
-- **Logging**: Comprehensive logging of routing decisions and failures
-- **Metrics tracking**: Failed decisions are tracked for analysis
+* **Exception details**: Specific error messages and stack traces
+* **Fallback behavior**: Automatic fallback when enabled
+* **Logging**: Comprehensive logging of routing decisions and failures
+* **Metrics tracking**: Failed decisions are tracked for analysis
 
 ### Recovery Strategies
 
 The engine implements several recovery strategies:
 
-- **Automatic fallback**: Uses alternative routing methods
-- **Cache invalidation**: Removes invalid cached decisions
-- **Strategy adjustment**: Adapts strategy weights based on failures
-- **Feedback learning**: Learns from routing failures to improve future decisions
+* **Automatic fallback**: Uses alternative routing methods
+* **Cache invalidation**: Removes invalid cached decisions
+* **Strategy adjustment**: Adapts strategy weights based on failures
+* **Feedback learning**: Learns from routing failures to improve future decisions
 
 ## See Also
 
-- [Advanced Routing Guide](../how-to/advanced-routing.md) - Comprehensive guide to advanced routing concepts and techniques
-- [Templates and Memory](../how-to/templates-and-memory.md) - Template engine system and memory integration
-- [Graph Executor](./graph-executor.md) - Core execution engine that uses routing
-- [Graph State](./graph-state.md) - State management for routing decisions
-- [Dynamic Routing Example](../../examples/dynamic-routing-example.md) - Complete example demonstrating dynamic routing capabilities
+* [Advanced Routing Guide](../how-to/advanced-routing.md) - Comprehensive guide to advanced routing concepts and techniques
+* [Templates and Memory](../how-to/templates-and-memory.md) - Template engine system and memory integration
+* [Graph Executor](./graph-executor.md) - Core execution engine that uses routing
+* [Graph State](./graph-state.md) - State management for routing decisions
+* [Dynamic Routing Example](../../examples/dynamic-routing-example.md) - Complete example demonstrating dynamic routing capabilities

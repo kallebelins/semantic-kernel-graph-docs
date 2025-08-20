@@ -5,11 +5,11 @@ This guide explains how to implement Human-in-the-Loop (HITL) workflows in Seman
 ## Overview
 
 Human-in-the-Loop workflows enable you to:
-- **Pause execution** and wait for human approval or input
-- **Implement confidence gates** for quality control
-- **Support multiple channels** including CLI, web, and API interfaces
-- **Batch approvals** for multiple pending decisions
-- **Set timeouts and SLAs** for human response requirements
+* **Pause execution** and wait for human approval or input
+* **Implement confidence gates** for quality control
+* **Support multiple channels** including CLI, web, and API interfaces
+* **Batch approvals** for multiple pending decisions
+* **Set timeouts and SLAs** for human response requirements
 
 ## Core HITL Components
 
@@ -425,8 +425,8 @@ auditLogger.LogApprovalRequested("audited_approval", new {
 
 ## See Also
 
-- [Human-in-the-Loop](human-in-the-loop.md) - Comprehensive guide to HITL workflows
-- [Build a Graph](build-a-graph.md) - Learn how to construct graphs with approval nodes
-- [Error Handling and Resilience](error-handling-and-resilience.md) - Handle approval failures gracefully
-- [Security and Data](security-and-data.md) - Secure HITL implementation practices
-- [Examples: HITL Workflows](../examples/hitl-example.md) - Complete working examples of human-in-the-loop workflows
+* [Human-in-the-Loop](human-in-the-loop.md) - Comprehensive guide to HITL workflows
+* [Build a Graph](build-a-graph.md) - Learn how to construct graphs with approval nodes
+* [Error Handling and Resilience](error-handling-and-resilience.md) - Handle approval failures gracefully
+* [Security and Data](security-and-data.md) - Secure HITL implementation practices
+* [Examples: HITL Workflows](../examples/hitl-example.md) - Complete working examples of human-in-the-loop workflows

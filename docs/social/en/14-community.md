@@ -9,10 +9,10 @@ Building the future of AI workflows isn't a solo journey. **Semantic Kernel Grap
 🚀 **Regular Updates** - Stay ahead with the latest features
 
 **Why developers choose Semantic Kernel Graph:**
-- 🎯 **Native .NET** - No Python bridges or compatibility issues
-- ⚡ **Performance** - Built for production from day one
-- 🔧 **Developer Experience** - Intuitive APIs and great tooling
-- 🌐 **Ecosystem** - Full Semantic Kernel integration
+* 🎯 **Native .NET** - No Python bridges or compatibility issues
+* ⚡ **Performance** - Built for production from day one
+* 🔧 **Developer Experience** - Intuitive APIs and great tooling
+* 🌐 **Ecosystem** - Full Semantic Kernel integration
 
 **Join thousands of developers** → [https://skgraph.dev/](https://skgraph.dev/)
 

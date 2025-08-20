@@ -5,34 +5,34 @@ This example demonstrates a basic chatbot with memory using graphs. It shows con
 ## Objective
 
 Learn how to implement a conversational AI system that:
-- Maintains conversation context across multiple turns
-- Integrates short-term and long-term memory
-- Routes conversations intelligently based on user intent
-- Provides personalized responses based on conversation history
-- Scales from simple to advanced conversation patterns
+* Maintains conversation context across multiple turns
+* Integrates short-term and long-term memory
+* Routes conversations intelligently based on user intent
+* Provides personalized responses based on conversation history
+* Scales from simple to advanced conversation patterns
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [State Management](../concepts/state.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [State Management](../concepts/state.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Conversation Memory**: Persistent storage of conversation context and user interactions
-- **Intent Recognition**: Understanding user intent and routing conversations appropriately
-- **Context Management**: Maintaining relevant information across conversation turns
-- **Memory Integration**: Combining short-term and long-term memory for better responses
+* **Conversation Memory**: Persistent storage of conversation context and user interactions
+* **Intent Recognition**: Understanding user intent and routing conversations appropriately
+* **Context Management**: Maintaining relevant information across conversation turns
+* **Memory Integration**: Combining short-term and long-term memory for better responses
 
 ### Core Classes
 
-- `GraphMemoryService`: Manages conversation memory and context
-- `FunctionGraphNode`: Executes conversation logic and memory operations
-- `GraphMemoryOptions`: Configures memory behavior and storage
-- `KernelArguments`: Carries conversation state and context between turns
+* `GraphMemoryService`: Manages conversation memory and context
+* `FunctionGraphNode`: Executes conversation logic and memory operations
+* `GraphMemoryOptions`: Configures memory behavior and storage
+* `KernelArguments`: Carries conversation state and context between turns
 
 ## Running the Example
 
@@ -257,9 +257,9 @@ Bot: For beginners in machine learning, I recommend starting with:
 
 User: I have some experience with Python.
 Bot: Excellent! Since you know Python, you're already ahead. I'd suggest diving into:
-- Scikit-learn for traditional ML
-- TensorFlow or PyTorch for deep learning
-- Jupyter notebooks for experimentation
+* Scikit-learn for traditional ML
+* TensorFlow or PyTorch for deep learning
+* Jupyter notebooks for experimentation
 
 === Second Conversation (with Memory) ===
 User: Hi again! Remember our discussion about machine learning?
@@ -270,11 +270,11 @@ Bot: That's fantastic, Alex! I'm glad you've been following up on those recommen
 
 User: Can you suggest some advanced topics?
 Bot: Absolutely! Based on your foundation, here are some advanced topics to explore:
-- Deep Learning architectures (CNNs, RNNs, Transformers)
-- Advanced optimization techniques
-- Model interpretability and explainability
-- MLOps and model deployment
-- Reinforcement learning fundamentals
+* Deep Learning architectures (CNNs, RNNs, Transformers)
+* Advanced optimization techniques
+* Model interpretability and explainability
+* MLOps and model deployment
+* Reinforcement learning fundamentals
 
 Would you like me to elaborate on any of these areas?
 ```
@@ -442,14 +442,14 @@ var multiModalChatbot = new MultiModalChatbot
 
 ## Related Examples
 
-- [Memory Agent](./memory-agent.md): Persistent memory across conversations
-- [Retrieval Agent](./retrieval-agent.md): Information retrieval and synthesis
-- [Multi-Agent](./multi-agent.md): Coordinated multi-agent workflows
-- [State Management](./state-management.md): Graph state and argument handling
+* [Memory Agent](./memory-agent.md): Persistent memory across conversations
+* [Retrieval Agent](./retrieval-agent.md): Information retrieval and synthesis
+* [Multi-Agent](./multi-agent.md): Coordinated multi-agent workflows
+* [State Management](./state-management.md): Graph state and argument handling
 
 ## See Also
 
-- [Memory and State](../concepts/state.md): Understanding conversation persistence
-- [Graph Concepts](../concepts/graph-concepts.md): Graph-based workflow fundamentals
-- [Conversation Patterns](../patterns/chatbot.md): Building conversational AI
-- [API Reference](../api/): Complete API documentation
+* [Memory and State](../concepts/state.md): Understanding conversation persistence
+* [Graph Concepts](../concepts/graph-concepts.md): Graph-based workflow fundamentals
+* [Conversation Patterns](../patterns/chatbot.md): Building conversational AI
+* [API Reference](../api/): Complete API documentation

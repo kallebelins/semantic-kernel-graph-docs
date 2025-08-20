@@ -12,9 +12,9 @@ Learn how to enable comprehensive metrics collection and structured logging in y
 
 ## Prerequisites and Minimum Configuration
 
-- .NET 8.0 or later
-- SemanticKernel.Graph package installed
-- Microsoft.Extensions.Logging configured in your application
+* .NET 8.0 or later
+* SemanticKernel.Graph package installed
+* Microsoft.Extensions.Logging configured in your application
 
 ## Quick Setup
 
@@ -221,20 +221,20 @@ graphLogger.LogPerformance(executionId, "execution_time", 150.5, "ms",
 
 ### Performance Recommendations
 
-- Use `CreateProductionOptions()` for production environments
-- Enable resource monitoring only when needed
-- Set appropriate retention periods based on your analysis requirements
-- Monitor memory usage when collecting detailed metrics
+* Use `CreateProductionOptions()` for production environments
+* Enable resource monitoring only when needed
+* Set appropriate retention periods based on your analysis requirements
+* Monitor memory usage when collecting detailed metrics
 
 ## See Also
 
-- **Reference**: [GraphPerformanceMetrics](../api/GraphPerformanceMetrics.md), [GraphMetricsOptions](../api/GraphMetricsOptions.md), [SemanticKernelGraphLogger](../api/SemanticKernelGraphLogger.md)
-- **Guides**: [Performance Monitoring](../guides/performance-monitoring.md), [Debugging and Inspection](../guides/debugging-inspection.md)
-- **Examples**: [GraphMetricsExample](../examples/graph-metrics.md), [AdvancedPatternsExample](../examples/advanced-patterns.md)
+* **Reference**: [GraphPerformanceMetrics](../api/GraphPerformanceMetrics.md), [GraphMetricsOptions](../api/GraphMetricsOptions.md), [SemanticKernelGraphLogger](../api/SemanticKernelGraphLogger.md)
+* **Guides**: [Performance Monitoring](../guides/performance-monitoring.md), [Debugging and Inspection](../guides/debugging-inspection.md)
+* **Examples**: [GraphMetricsExample](../examples/graph-metrics.md), [AdvancedPatternsExample](../examples/advanced-patterns.md)
 
 ## Reference APIs
 
-- **[GraphPerformanceMetrics](../api/metrics.md#graph-performance-metrics)**: Performance metrics collection
-- **[GraphMetricsOptions](../api/metrics.md#graph-metrics-options)**: Metrics configuration options
-- **[SemanticKernelGraphLogger](../api/logging.md#semantic-kernel-graph-logger)**: Structured logging system
-- **[MetricsDashboard](../api/metrics.md#metrics-dashboard)**: Real-time metrics visualization
+* **[GraphPerformanceMetrics](../api/metrics.md#graph-performance-metrics)**: Performance metrics collection
+* **[GraphMetricsOptions](../api/metrics.md#graph-metrics-options)**: Metrics configuration options
+* **[SemanticKernelGraphLogger](../api/logging.md#semantic-kernel-graph-logger)**: Structured logging system
+* **[MetricsDashboard](../api/metrics.md#metrics-dashboard)**: Real-time metrics visualization

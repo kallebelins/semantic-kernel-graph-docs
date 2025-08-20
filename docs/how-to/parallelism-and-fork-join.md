@@ -4,12 +4,12 @@ Parallelism and fork/join in SemanticKernel.Graph provide sophisticated mechanis
 
 ## What You'll Learn
 
-- How to enable and configure parallel execution in graphs
-- Understanding deterministic work scheduling and ordering
-- Configuring state merge strategies and conflict resolution policies
-- Implementing work-stealing for load balancing
-- Ensuring reproducible execution with stable seeds
-- Best practices for parallel graph design and performance optimization
+* How to enable and configure parallel execution in graphs
+* Understanding deterministic work scheduling and ordering
+* Configuring state merge strategies and conflict resolution policies
+* Implementing work-stealing for load balancing
+* Ensuring reproducible execution with stable seeds
+* Best practices for parallel graph design and performance optimization
 
 ## Concepts and Techniques
 
@@ -27,10 +27,10 @@ Parallelism and fork/join in SemanticKernel.Graph provide sophisticated mechanis
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of graph execution concepts
-- Familiarity with state management and conditional routing
-- Understanding of concurrent programming concepts
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of graph execution concepts
+* Familiarity with state management and conditional routing
+* Understanding of concurrent programming concepts
 
 ## Enabling Parallel Execution
 
@@ -453,33 +453,33 @@ parallelB.SetMetadata("ResourceCost", 1); // Lower cost
 
 ### Parallel Graph Design
 
-- **Keep Branches Independent**: Design parallel branches to minimize shared state and dependencies
-- **Balanced Workload**: Ensure parallel branches have similar execution times for optimal performance
-- **Clear Join Points**: Define explicit join nodes where parallel execution converges
-- **State Isolation**: Use state cloning to prevent write conflicts between parallel branches
+* **Keep Branches Independent**: Design parallel branches to minimize shared state and dependencies
+* **Balanced Workload**: Ensure parallel branches have similar execution times for optimal performance
+* **Clear Join Points**: Define explicit join nodes where parallel execution converges
+* **State Isolation**: Use state cloning to prevent write conflicts between parallel branches
 
 ### Merge Strategy Selection
 
-- **PreferSecond**: Use for most cases where latest data should win
-- **PreferFirst**: Use for immutable or reference data that shouldn't change
-- **LastWriteWins**: Use when temporal ordering is important
-- **Reduce**: Use for accumulators, counters, and aggregations
-- **CRDT-like**: Use for complex data structures that can be intelligently merged
-- **ThrowOnConflict**: Use for critical data where conflicts indicate design issues
+* **PreferSecond**: Use for most cases where latest data should win
+* **PreferFirst**: Use for immutable or reference data that shouldn't change
+* **LastWriteWins**: Use when temporal ordering is important
+* **Reduce**: Use for accumulators, counters, and aggregations
+* **CRDT-like**: Use for complex data structures that can be intelligently merged
+* **ThrowOnConflict**: Use for critical data where conflicts indicate design issues
 
 ### Performance Considerations
 
-- **Monitor Resource Usage**: Track CPU, memory, and I/O usage during parallel execution
-- **Tune Parallelism**: Adjust MaxDegreeOfParallelism based on your system capabilities
-- **Profile Merge Operations**: Ensure state merging doesn't become a bottleneck
-- **Use Work Stealing**: Enable work stealing for better load balancing in heterogeneous workloads
+* **Monitor Resource Usage**: Track CPU, memory, and I/O usage during parallel execution
+* **Tune Parallelism**: Adjust MaxDegreeOfParallelism based on your system capabilities
+* **Profile Merge Operations**: Ensure state merging doesn't become a bottleneck
+* **Use Work Stealing**: Enable work stealing for better load balancing in heterogeneous workloads
 
 ### Debugging and Testing
 
-- **Use Stable Seeds**: Always use fixed execution seeds for reproducible debugging
-- **Enable Tracing**: Use execution tracing to understand parallel execution flow
-- **Test Edge Cases**: Test with various merge policies and conflict scenarios
-- **Monitor Metrics**: Track parallel execution metrics for performance analysis
+* **Use Stable Seeds**: Always use fixed execution seeds for reproducible debugging
+* **Enable Tracing**: Use execution tracing to understand parallel execution flow
+* **Test Edge Cases**: Test with various merge policies and conflict scenarios
+* **Monitor Metrics**: Track parallel execution metrics for performance analysis
 
 ## Troubleshooting
 
@@ -532,8 +532,8 @@ eventStream.SubscribeToEvents<GraphExecutionEvent>(event =>
 
 ## See Also
 
-- [Graph Execution](execution.md) - Understanding the execution lifecycle and parallel processing
-- [State Management](state-quickstart.md) - Managing state in parallel execution scenarios
-- [Error Handling and Resilience](error-handling-and-resilience.md) - Handling failures in parallel branches
-- [Resource Governance](resource-governance-and-concurrency.md) - Managing resources during parallel execution
-- [Streaming Execution](streaming-quickstart.md) - Real-time monitoring of parallel execution
+* [Graph Execution](execution.md) - Understanding the execution lifecycle and parallel processing
+* [State Management](state-quickstart.md) - Managing state in parallel execution scenarios
+* [Error Handling and Resilience](error-handling-and-resilience.md) - Handling failures in parallel branches
+* [Resource Governance](resource-governance-and-concurrency.md) - Managing resources during parallel execution
+* [Streaming Execution](streaming-quickstart.md) - Real-time monitoring of parallel execution

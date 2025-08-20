@@ -13,8 +13,8 @@ public GraphVisualizationEngine(GraphVisualizationOptions? options = null, IGrap
 ```
 
 **Parameters:**
-- `options`: Visualization configuration options
-- `logger`: Logger instance for diagnostics
+* `options`: Visualization configuration options
+* `logger`: Logger instance for diagnostics
 
 ### Methods
 
@@ -43,8 +43,8 @@ public string SerializeToSvg(GraphVisualizationData visualizationData, SvgSerial
 ```
 
 **Parameters:**
-- `visualizationData`: Graph visualization data containing nodes, edges, and execution state
-- `options`: Format-specific serialization options
+* `visualizationData`: Graph visualization data containing nodes, edges, and execution state
+* `options`: Format-specific serialization options
 
 **Returns:** Formatted string representation in the requested format
 
@@ -54,11 +54,11 @@ public string SerializeToSvg(GraphVisualizationData visualizationData, SvgSerial
 Professional-grade graph visualization format for GraphViz rendering with advanced layout options.
 
 **Features:**
-- Layout control (top-to-bottom, left-to-right, bottom-to-top, right-to-left)
-- Node clustering and grouping
-- Custom styling for nodes and edges
-- Execution path highlighting
-- Node type information display
+* Layout control (top-to-bottom, left-to-right, bottom-to-top, right-to-left)
+* Node clustering and grouping
+* Custom styling for nodes and edges
+* Execution path highlighting
+* Node type information display
 
 **Example Output:**
 ```dot
@@ -79,11 +79,11 @@ digraph "My Workflow" {
 Structured data format for API consumption, data exchange, and programmatic visualization.
 
 **Features:**
-- Hierarchical representation of graph structure
-- Metadata inclusion (timestamps, execution metrics, layout information)
-- API-ready format for web and mobile consumption
-- Extensible structure with custom properties
-- Efficient serialization for large graphs
+* Hierarchical representation of graph structure
+* Metadata inclusion (timestamps, execution metrics, layout information)
+* API-ready format for web and mobile consumption
+* Extensible structure with custom properties
+* Efficient serialization for large graphs
 
 **Example Output:**
 ```json
@@ -127,12 +127,12 @@ Structured data format for API consumption, data exchange, and programmatic visu
 Web-friendly diagram format with enhanced styling and real-time highlighting support.
 
 **Features:**
-- Multiple layout directions (TB, LR, BT, RL)
-- Advanced styling with CSS classes
-- Execution path highlighting
-- Node type-based styling
-- Performance indicators
-- Multiple themes (Default, Dark, Forest, Base, Neutral)
+* Multiple layout directions (TB, LR, BT, RL)
+* Advanced styling with CSS classes
+* Execution path highlighting
+* Node type-based styling
+* Performance indicators
+* Multiple themes (Default, Dark, Forest, Base, Neutral)
 
 **Example Output:**
 ```mermaid
@@ -159,11 +159,11 @@ graph TD
 Vector graphics format for web display and static image generation.
 
 **Features:**
-- Configurable canvas dimensions
-- Customizable node spacing
-- Metrics overlay display
-- Execution path highlighting
-- Current node emphasis
+* Configurable canvas dimensions
+* Customizable node spacing
+* Metrics overlay display
+* Execution path highlighting
+* Current node emphasis
 
 ## GraphRealtimeHighlighter
 
@@ -179,9 +179,9 @@ public GraphRealtimeHighlighter(
 ```
 
 **Parameters:**
-- `eventStream`: Optional event stream for automatic updates
-- `options`: Highlighting configuration options
-- `logger`: Logger instance for diagnostics
+* `eventStream`: Optional event stream for automatic updates
+* `options`: Highlighting configuration options
+* `logger`: Logger instance for diagnostics
 
 ### Methods
 
@@ -219,10 +219,10 @@ public string GenerateHighlightedVisualization(string executionId, HighlightVisu
 ```
 
 **Supported Formats:**
-- `HighlightVisualizationFormat.Mermaid`: Enhanced Mermaid with highlights
-- `HighlightVisualizationFormat.Json`: JSON with execution state
-- `HighlightVisualizationFormat.Dot`: DOT with execution path
-- `HighlightVisualizationFormat.Svg`: SVG with real-time overlays
+* `HighlightVisualizationFormat.Mermaid`: Enhanced Mermaid with highlights
+* `HighlightVisualizationFormat.Json`: JSON with execution state
+* `HighlightVisualizationFormat.Dot`: DOT with execution path
+* `HighlightVisualizationFormat.Svg`: SVG with real-time overlays
 
 #### Event Handling
 
@@ -528,23 +528,23 @@ var mermaidOutput = visualizationEngine.GenerateEnhancedMermaidDiagram(
 
 ## Performance Considerations
 
-- **Caching**: Enable visualization caching for repeated exports
-- **Batch Updates**: Use appropriate update intervals for real-time highlighting
-- **Node Limits**: Configure maximum nodes per visualization for large graphs
-- **Memory Management**: Dispose of visualization engines when no longer needed
-- **Async Operations**: Use async methods for large graph processing
+* **Caching**: Enable visualization caching for repeated exports
+* **Batch Updates**: Use appropriate update intervals for real-time highlighting
+* **Node Limits**: Configure maximum nodes per visualization for large graphs
+* **Memory Management**: Dispose of visualization engines when no longer needed
+* **Async Operations**: Use async methods for large graph processing
 
 ## Integration Points
 
-- **GraphInspectionApi**: Runtime inspection and visualization data generation
-- **GraphMetricsExporter**: Performance metrics integration with visualizations
-- **GraphDocumentationGenerator**: Automatic documentation with visual diagrams
-- **Event Streams**: Real-time updates from graph execution events
-- **Debug Sessions**: Visualization during debugging and development
+* **GraphInspectionApi**: Runtime inspection and visualization data generation
+* **GraphMetricsExporter**: Performance metrics integration with visualizations
+* **GraphDocumentationGenerator**: Automatic documentation with visual diagrams
+* **Event Streams**: Real-time updates from graph execution events
+* **Debug Sessions**: Visualization during debugging and development
 
 ## See Also
 
-- [Real-time Visualization and Highlights](../how-to/real-time-visualization-and-highlights.md) - Guide for implementing real-time visualization
-- [Debug and Inspection](../how-to/debug-and-inspection.md) - Using visualization for debugging
-- [GraphVisualizationExample](../examples/graph-visualization-example.md) - Complete example implementation
-- [GraphInspectionApi](inspection-visualization.md) - Runtime inspection and visualization API
+* [Real-time Visualization and Highlights](../how-to/real-time-visualization-and-highlights.md) - Guide for implementing real-time visualization
+* [Debug and Inspection](../how-to/debug-and-inspection.md) - Using visualization for debugging
+* [GraphVisualizationExample](../examples/graph-visualization-example.md) - Complete example implementation
+* [GraphInspectionApi](inspection-visualization.md) - Runtime inspection and visualization API

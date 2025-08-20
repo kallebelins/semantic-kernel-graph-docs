@@ -5,36 +5,36 @@ This example demonstrates the comprehensive integration of advanced architectura
 ## Objective
 
 Learn how to implement and orchestrate advanced patterns in graph-based workflows to:
-- Configure and use academic patterns (Circuit Breaker, Bulkhead, Cache-Aside)
-- Enable machine learning-based performance prediction and anomaly detection
-- Implement enterprise integration patterns for distributed systems
-- Orchestrate multiple patterns in real-world scenarios
-- Monitor and diagnose pattern performance comprehensively
+* Configure and use academic patterns (Circuit Breaker, Bulkhead, Cache-Aside)
+* Enable machine learning-based performance prediction and anomaly detection
+* Implement enterprise integration patterns for distributed systems
+* Orchestrate multiple patterns in real-world scenarios
+* Monitor and diagnose pattern performance comprehensively
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Execution Model](../concepts/execution-model.md)
-- Familiarity with [Error Handling and Resilience](../how-to/error-handling-and-resilience.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Execution Model](../concepts/execution-model.md)
+* Familiarity with [Error Handling and Resilience](../how-to/error-handling-and-resilience.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Academic Patterns**: Enterprise-grade resilience patterns including Circuit Breaker, Bulkhead, and Cache-Aside
-- **Machine Learning Optimization**: Performance prediction and anomaly detection using historical execution data
-- **Enterprise Integration**: Message routing, content-based routing, publish-subscribe, and aggregation patterns
-- **Pattern Orchestration**: Coordinated execution of multiple patterns with comprehensive diagnostics
+* **Academic Patterns**: Enterprise-grade resilience patterns including Circuit Breaker, Bulkhead, and Cache-Aside
+* **Machine Learning Optimization**: Performance prediction and anomaly detection using historical execution data
+* **Enterprise Integration**: Message routing, content-based routing, publish-subscribe, and aggregation patterns
+* **Pattern Orchestration**: Coordinated execution of multiple patterns with comprehensive diagnostics
 
 ### Core Classes
 
-- `GraphExecutor`: Enhanced executor with advanced pattern support via `WithAllAdvancedPatterns`
-- `AcademicPatterns`: Circuit breaker, bulkhead, and cache-aside implementations
-- `MachineLearningOptimizer`: Performance prediction and anomaly detection engine
-- `EnterpriseIntegrationPatterns`: Message routing and processing patterns
-- `GraphPerformanceMetrics`: Comprehensive performance tracking and analysis
+* `GraphExecutor`: Enhanced executor with advanced pattern support via `WithAllAdvancedPatterns`
+* `AcademicPatterns`: Circuit breaker, bulkhead, and cache-aside implementations
+* `MachineLearningOptimizer`: Performance prediction and anomaly detection engine
+* `EnterpriseIntegrationPatterns`: Message routing and processing patterns
+* `GraphPerformanceMetrics`: Comprehensive performance tracking and analysis
 
 ## Running the Example
 
@@ -328,12 +328,12 @@ if (diagnosticReport.OptimizationAnalysis != null)
 
 The example produces comprehensive output showing:
 
-- ✅ Advanced Graph Executor creation with all patterns enabled
-- 🎓 Academic patterns demonstration (Circuit Breaker, Bulkhead, Cache-Aside)
-- ⚡ Advanced optimizations analysis with performance recommendations
-- 🤖 Machine learning training and performance prediction
-- 🏢 Enterprise integration patterns (Message Router, Content Router, Pub-Sub)
-- 🔍 Comprehensive diagnostics report for all patterns
+* ✅ Advanced Graph Executor creation with all patterns enabled
+* 🎓 Academic patterns demonstration (Circuit Breaker, Bulkhead, Cache-Aside)
+* ⚡ Advanced optimizations analysis with performance recommendations
+* 🤖 Machine learning training and performance prediction
+* 🏢 Enterprise integration patterns (Message Router, Content Router, Pub-Sub)
+* 🔍 Comprehensive diagnostics report for all patterns
 
 ## Troubleshooting
 
@@ -346,15 +346,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging to trace pattern execution
-- Use the comprehensive diagnostics to identify configuration issues
-- Monitor circuit breaker states and bulkhead concurrency limits
-- Check cache hit rates and ML model training status
+* Enable detailed logging to trace pattern execution
+* Use the comprehensive diagnostics to identify configuration issues
+* Monitor circuit breaker states and bulkhead concurrency limits
+* Check cache hit rates and ML model training status
 
 ## See Also
 
-- [Error Handling and Resilience](../how-to/error-handling-and-resilience.md)
-- [Resource Governance and Concurrency](../how-to/resource-governance-and-concurrency.md)
-- [Metrics and Observability](../how-to/metrics-and-observability.md)
-- [Integration and Extensions](../how-to/integration-and-extensions.md)
-- [Advanced Routing](../how-to/advanced-routing.md)
+* [Error Handling and Resilience](../how-to/error-handling-and-resilience.md)
+* [Resource Governance and Concurrency](../how-to/resource-governance-and-concurrency.md)
+* [Metrics and Observability](../how-to/metrics-and-observability.md)
+* [Integration and Extensions](../how-to/integration-and-extensions.md)
+* [Advanced Routing](../how-to/advanced-routing.md)

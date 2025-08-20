@@ -6,11 +6,11 @@ This guide explains how to expose SemanticKernel.Graph functionality through RES
 
 SemanticKernel.Graph provides a robust API infrastructure that enables:
 
-- **Remote graph execution** through REST endpoints with authentication and rate limiting
-- **Real-time streaming** of execution events via WebSockets, Server-Sent Events, or HTTP polling
-- **Execution monitoring** and asynchronous result retrieval
-- **Framework-agnostic design** that adapts to any HTTP framework (ASP.NET Core, Minimal APIs, etc.)
-- **Enterprise features** including idempotency, queuing, and security context enrichment
+* **Remote graph execution** through REST endpoints with authentication and rate limiting
+* **Real-time streaming** of execution events via WebSockets, Server-Sent Events, or HTTP polling
+* **Execution monitoring** and asynchronous result retrieval
+* **Framework-agnostic design** that adapts to any HTTP framework (ASP.NET Core, Minimal APIs, etc.)
+* **Enterprise features** including idempotency, queuing, and security context enrichment
 
 ## Core REST API Components
 
@@ -35,13 +35,13 @@ var api = new GraphRestApi(
 ```
 
 **Key Capabilities:**
-- **Graph Execution**: Execute graphs with parameters and retrieve results
-- **Graph Management**: List, register, and manage graph definitions
-- **Execution Monitoring**: Track execution status and retrieve results
-- **Security**: API key and bearer token authentication
-- **Rate Limiting**: Configurable request throttling and quotas
-- **Execution Queue**: Background processing with priority scheduling
-- **Idempotency**: Safe request retry and deduplication
+* **Graph Execution**: Execute graphs with parameters and retrieve results
+* **Graph Management**: List, register, and manage graph definitions
+* **Execution Monitoring**: Track execution status and retrieve results
+* **Security**: API key and bearer token authentication
+* **Rate Limiting**: Configurable request throttling and quotas
+* **Execution Queue**: Background processing with priority scheduling
+* **Idempotency**: Safe request retry and deduplication
 
 ### API Configuration Options
 
@@ -529,8 +529,8 @@ public class GraphExecutionController : ControllerBase
 
 ## See Also
 
-- [Streaming Execution](streaming-quickstart.md) - Learn about streaming execution patterns
-- [Error Handling and Resilience](error-handling-and-resilience.md) - Understand error handling strategies
-- [Security and Data](security-and-data.md) - Security best practices and data protection
-- [REST Tools Integration](rest-tools-integration.md) - Integrate external REST APIs into your graphs
-- [Examples: RestApiExample](../examples/rest-api-example.md) - Complete working example of REST API integration
+* [Streaming Execution](streaming-quickstart.md) - Learn about streaming execution patterns
+* [Error Handling and Resilience](error-handling-and-resilience.md) - Understand error handling strategies
+* [Security and Data](security-and-data.md) - Security best practices and data protection
+* [REST Tools Integration](rest-tools-integration.md) - Integrate external REST APIs into your graphs
+* [Examples: RestApiExample](../examples/rest-api-example.md) - Complete working example of REST API integration

@@ -23,10 +23,10 @@ var functionNode = new FunctionGraphNode(
 ```
 
 **Characteristics**:
-- **Encapsulation**: Wraps `KernelFunction`
-- **Synchronous Execution**: Direct function processing
-- **Shared State**: Access to global `GraphState`
-- **Metrics**: Automatic performance collection
+* **Encapsulation**: Wraps `KernelFunction`
+* **Synchronous Execution**: Direct function processing
+* **Shared State**: Access to global `GraphState`
+* **Metrics**: Automatic performance collection
 
 ### Conditional Nodes
 ```csharp
@@ -42,10 +42,10 @@ var conditionalNode = new ConditionalGraphNode(
 ```
 
 **Characteristics**:
-- **Condition Evaluation**: Boolean expressions over state
-- **Dynamic Routing**: Runtime decisions
-- **SK Templates**: Use of Semantic Kernel functions for decisions
-- **Fallbacks**: Fallback strategies for unmet conditions
+* **Condition Evaluation**: Boolean expressions over state
+* **Dynamic Routing**: Runtime decisions
+* **SK Templates**: Use of Semantic Kernel functions for decisions
+* **Fallbacks**: Fallback strategies for unmet conditions
 
 ### Reasoning Nodes
 ```csharp
@@ -60,10 +60,10 @@ var reasoningNode = new ReasoningGraphNode(
 ```
 
 **Characteristics**:
-- **Chain of Thought**: Step-by-step reasoning
-- **Few-shot Learning**: Examples to guide reasoning
-- **Result Validation**: Quality verification of responses
-- **Controlled Iteration**: Limits to avoid infinite loops
+* **Chain of Thought**: Step-by-step reasoning
+* **Few-shot Learning**: Examples to guide reasoning
+* **Result Validation**: Quality verification of responses
+* **Controlled Iteration**: Limits to avoid infinite loops
 
 ### Loop Nodes
 ```csharp
@@ -78,10 +78,10 @@ var loopNode = new ReActLoopGraphNode(
 ```
 
 **Characteristics**:
-- **ReAct Pattern**: Observation → Thinking → Action
-- **Clear Objectives**: Specific goals for each iteration
-- **Iteration Control**: Limits to avoid infinite loops
-- **Persistent State**: Context maintenance between iterations
+* **ReAct Pattern**: Observation → Thinking → Action
+* **Clear Objectives**: Specific goals for each iteration
+* **Iteration Control**: Limits to avoid infinite loops
+* **Persistent State**: Context maintenance between iterations
 
 ### Observation Nodes
 ```csharp
@@ -94,10 +94,10 @@ var observationNode = new ObservationGraphNode(
 ```
 
 **Characteristics**:
-- **Passive Observation**: Does not modify state
-- **Logging**: Recording of execution information
-- **Metrics**: Performance data collection
-- **Debug**: Troubleshooting support
+* **Passive Observation**: Does not modify state
+* **Logging**: Recording of execution information
+* **Metrics**: Performance data collection
+* **Debug**: Troubleshooting support
 
 ### Subgraph Nodes
 ```csharp
@@ -110,10 +110,10 @@ var subgraphNode = new SubgraphGraphNode(
 ```
 
 **Characteristics**:
-- **Composition**: Reuse of existing graphs
-- **Encapsulation**: Clean interface for complex graphs
-- **Isolated State**: Variable scope control
-- **Reusability**: Reusable modules in different contexts
+* **Composition**: Reuse of existing graphs
+* **Encapsulation**: Clean interface for complex graphs
+* **Isolated State**: Variable scope control
+* **Reusability**: Reusable modules in different contexts
 
 ### Error Handler Nodes
 ```csharp
@@ -126,10 +126,10 @@ var errorHandlerNode = new ErrorHandlerGraphNode(
 ```
 
 **Characteristics**:
-- **Error Policies**: Retry, backoff, circuit breaker
-- **Recovery**: Strategies for handling failures
-- **Logging**: Detailed error recording
-- **Fallbacks**: Alternatives when main operation fails
+* **Error Policies**: Retry, backoff, circuit breaker
+* **Recovery**: Strategies for handling failures
+* **Logging**: Detailed error recording
+* **Fallbacks**: Alternatives when main operation fails
 
 ### Human Approval Nodes
 ```csharp
@@ -143,10 +143,10 @@ var approvalNode = new HumanApprovalGraphNode(
 ```
 
 **Characteristics**:
-- **Human Interaction**: Pause for human input
-- **Timeouts**: Time limits for response
-- **Multiple Channels**: Console, web, email
-- **Audit**: Recording of human decisions
+* **Human Interaction**: Pause for human input
+* **Timeouts**: Time limits for response
+* **Multiple Channels**: Console, web, email
+* **Audit**: Recording of human decisions
 
 ## Node Lifecycle
 
@@ -273,21 +273,21 @@ _logger.LogInformation("Node execution started", new
 
 ## See Also
 
-- [Node Types](../concepts/node-types.md)
-- [Conditional Nodes](../how-to/conditional-nodes.md)
-- [Loops](../how-to/loops.md)
-- [Human-in-the-Loop](../how-to/hitl.md)
-- [Error Handling](../how-to/error-handling-and-resilience.md)
-- [Node Examples](../examples/conditional-nodes.md)
+* [Node Types](../concepts/node-types.md)
+* [Conditional Nodes](../how-to/conditional-nodes.md)
+* [Loops](../how-to/loops.md)
+* [Human-in-the-Loop](../how-to/hitl.md)
+* [Error Handling](../how-to/error-handling-and-resilience.md)
+* [Node Examples](../examples/conditional-nodes.md)
 
 ## References
 
-- `IGraphNode`: Base interface for all nodes
-- `FunctionGraphNode`: Node that encapsulates SK functions
-- `ConditionalGraphNode`: Node for conditional decisions
-- `ReasoningGraphNode`: Node for step-by-step reasoning
-- `ReActLoopGraphNode`: Node for ReAct loops
-- `ObservationGraphNode`: Node for observation and logging
-- `SubgraphGraphNode`: Node that encapsulates other graphs
-- `ErrorHandlerGraphNode`: Node for error handling
-- `HumanApprovalGraphNode`: Node for human interaction
+* `IGraphNode`: Base interface for all nodes
+* `FunctionGraphNode`: Node that encapsulates SK functions
+* `ConditionalGraphNode`: Node for conditional decisions
+* `ReasoningGraphNode`: Node for step-by-step reasoning
+* `ReActLoopGraphNode`: Node for ReAct loops
+* `ObservationGraphNode`: Node for observation and logging
+* `SubgraphGraphNode`: Node that encapsulates other graphs
+* `ErrorHandlerGraphNode`: Node for error handling
+* `HumanApprovalGraphNode`: Node for human interaction

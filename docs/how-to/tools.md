@@ -5,11 +5,11 @@ This guide explains how to integrate external tools and REST APIs into your Sema
 ## Overview
 
 The tools integration system enables you to:
-- **Wrap external APIs** as executable graph nodes
-- **Validate input/output schemas** automatically
-- **Cache responses** for improved performance
-- **Handle authentication** and error scenarios
-- **Integrate with any REST service** through standardized schemas
+* **Wrap external APIs** as executable graph nodes
+* **Validate input/output schemas** automatically
+* **Cache responses** for improved performance
+* **Handle authentication** and error scenarios
+* **Integrate with any REST service** through standardized schemas
 
 ## Core Components
 
@@ -513,8 +513,8 @@ var telemetryNode = new RestToolGraphNode(customTelemetryTool, httpClient)
 
 ## See Also
 
-- [REST Tools Integration](rest-tools-integration.md) - Comprehensive guide to REST tool integration
-- [Build a Graph](build-a-graph.md) - Learn how to construct graphs with tool nodes
-- [Error Handling and Resilience](error-handling-and-resilience.md) - Handle tool failures gracefully
-- [Security and Data](security-and-data.md) - Secure tool integration practices
-- [Examples: Tool Integration](../examples/plugin-system-example.md) - Complete working examples of tool integration
+* [REST Tools Integration](rest-tools-integration.md) - Comprehensive guide to REST tool integration
+* [Build a Graph](build-a-graph.md) - Learn how to construct graphs with tool nodes
+* [Error Handling and Resilience](error-handling-and-resilience.md) - Handle tool failures gracefully
+* [Security and Data](security-and-data.md) - Secure tool integration practices
+* [Examples: Tool Integration](../examples/plugin-system-example.md) - Complete working examples of tool integration

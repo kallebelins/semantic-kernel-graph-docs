@@ -13,22 +13,22 @@ Execution defines how graphs are processed, including sequential, parallel and d
 ## Execution Modes
 
 ### Sequential Execution
-- **Linear Processing**: Nodes execute one after another
-- **Dependencies Respected**: Order based on graph structure
-- **Shared State**: Data passes from one node to the next
-- **Simple Debug**: Easy execution flow tracking
+* **Linear Processing**: Nodes execute one after another
+* **Dependencies Respected**: Order based on graph structure
+* **Shared State**: Data passes from one node to the next
+* **Simple Debug**: Easy execution flow tracking
 
 ### Parallel Execution (Fork/Join)
-- **Simultaneous Processing**: Multiple nodes execute at the same time
-- **Deterministic Scheduler**: Guarantee of reproducibility
-- **State Merging**: Combination of parallel execution results
-- **Concurrency Control**: Resource limits and policies
+* **Simultaneous Processing**: Multiple nodes execute at the same time
+* **Deterministic Scheduler**: Guarantee of reproducibility
+* **State Merging**: Combination of parallel execution results
+* **Concurrency Control**: Resource limits and policies
 
 ### Distributed Execution
-- **Remote Processing**: Execution in separate processes or machines
-- **Asynchronous Communication**: Message exchange between components
-- **Fault Tolerance**: Recovery from network or process failures
-- **Load Balancing**: Balanced work distribution
+* **Remote Processing**: Execution in separate processes or machines
+* **Asynchronous Communication**: Message exchange between components
+* **Fault Tolerance**: Recovery from network or process failures
+* **Load Balancing**: Balanced work distribution
 
 ## Main Components
 
@@ -212,10 +212,10 @@ var streamingOptions = new StreamingExecutionOptions
 ## Monitoring and Metrics
 
 ### Performance Metrics
-- **Execution Time**: Total latency and per node
-- **Throughput**: Number of nodes executed per second
-- **Resource Utilization**: CPU, memory, and I/O
-- **Success Rate**: Percentage of successful executions
+* **Execution Time**: Total latency and per node
+* **Throughput**: Number of nodes executed per second
+* **Resource Utilization**: CPU, memory, and I/O
+* **Success Rate**: Percentage of successful executions
 
 ### Logging and Tracing
 ```csharp
@@ -227,19 +227,19 @@ logger.LogExecutionComplete(graph.Id, context.ExecutionId, result);
 
 ## See Also
 
-- [Execution Model](../concepts/execution-model.md)
-- [Checkpointing](../concepts/checkpointing.md)
-- [Streaming](../concepts/streaming.md)
-- [Metrics and Observability](../how-to/metrics-and-observability.md)
-- [Execution Examples](../examples/execution-guide.md)
-- [Streaming Execution Examples](../examples/streaming-execution.md)
+* [Execution Model](../concepts/execution-model.md)
+* [Checkpointing](../concepts/checkpointing.md)
+* [Streaming](../concepts/streaming.md)
+* [Metrics and Observability](../how-to/metrics-and-observability.md)
+* [Execution Examples](../examples/execution-guide.md)
+* [Streaming Execution Examples](../examples/streaming-execution.md)
 
 ## References
 
-- `GraphExecutor`: Main graph executor
-- `StreamingGraphExecutor`: Executor with event streaming
-- `CheckpointManager`: Checkpoint manager
-- `GraphExecutionOptions`: Execution options
-- `StreamingExecutionOptions`: Streaming options
-- `ExecutionState`: Execution state
-- `GraphExecutionEvent`: Execution events
+* `GraphExecutor`: Main graph executor
+* `StreamingGraphExecutor`: Executor with event streaming
+* `CheckpointManager`: Checkpoint manager
+* `GraphExecutionOptions`: Execution options
+* `StreamingExecutionOptions`: Streaming options
+* `ExecutionState`: Execution state
+* `GraphExecutionEvent`: Execution events

@@ -8,13 +8,13 @@ Runtime API for inspecting graph structure, execution state, and performance met
 
 ### Features
 
-- Real-time graph structure inspection
-- Execution state monitoring
-- Performance metrics access
-- Node and edge details retrieval
-- Execution path tracking
-- Health checks and status monitoring
-- Custom query capabilities
+* Real-time graph structure inspection
+* Execution state monitoring
+* Performance metrics access
+* Node and edge details retrieval
+* Execution path tracking
+* Health checks and status monitoring
+* Custom query capabilities
 
 ### Constructors
 
@@ -66,8 +66,8 @@ public GraphInspectionResponse GetErrorAnalysis(string executionId)
 
 ### Properties
 
-- `IsDisposed`: Gets whether the API has been disposed
-- `ActiveExecutionCount`: Gets the number of active executions being monitored
+* `IsDisposed`: Gets whether the API has been disposed
+* `ActiveExecutionCount`: Gets the number of active executions being monitored
 
 ## GraphVisualizationEngine
 
@@ -75,17 +75,17 @@ Comprehensive graph visualization engine for serialization and export to multipl
 
 ### Supported Formats
 
-- **DOT (GraphViz)**: For professional graph visualizations
-- **JSON**: For API consumption and data exchange
-- **Mermaid**: For documentation and web-based diagrams
-- **SVG**: For static image exports
+* **DOT (GraphViz)**: For professional graph visualizations
+* **JSON**: For API consumption and data exchange
+* **Mermaid**: For documentation and web-based diagrams
+* **SVG**: For static image exports
 
 ### Features
 
-- Real-time execution path highlighting
-- Performance metrics integration
-- Customizable styling and themes
-- Multi-format export capabilities
+* Real-time execution path highlighting
+* Performance metrics integration
+* Customizable styling and themes
+* Multi-format export capabilities
 
 ### Constructors
 
@@ -451,9 +451,9 @@ if (healthResponse.IsSuccess)
 
 ## See Also
 
-- [Debug and Inspection Guide](../how-to/debug-and-inspection.md) - How to use inspection and debugging features
-- [Metrics and Observability Guide](../how-to/metrics-and-observability.md) - Performance monitoring and metrics
-- [Real-time Visualization Guide](../how-to/real-time-visualization-and-highlights.md) - Live visualization features
-- [GraphVisualizationExample](../examples/graph-visualization.md) - Practical visualization examples
-- [Streaming APIs Reference](./streaming.md) - Real-time execution monitoring
-- [Metrics and Logging Reference](./metrics-logging.md) - Performance metrics and logging
+* [Debug and Inspection Guide](../how-to/debug-and-inspection.md) - How to use inspection and debugging features
+* [Metrics and Observability Guide](../how-to/metrics-and-observability.md) - Performance monitoring and metrics
+* [Real-time Visualization Guide](../how-to/real-time-visualization-and-highlights.md) - Live visualization features
+* [GraphVisualizationExample](../examples/graph-visualization.md) - Practical visualization examples
+* [Streaming APIs Reference](./streaming.md) - Real-time execution monitoring
+* [Metrics and Logging Reference](./metrics-logging.md) - Performance metrics and logging

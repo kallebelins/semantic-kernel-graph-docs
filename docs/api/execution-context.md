@@ -460,8 +460,8 @@ var resourceOptions = new GraphResourceOptions
 
 ## See Also
 
-- [Execution Model](../concepts/execution-model.md) - Core execution concepts and lifecycle
-- [Resource Governance](../how-to/resource-governance-and-concurrency.md) - Resource management and concurrency
-- [Streaming Execution](../concepts/streaming.md) - Real-time execution monitoring
-- [Error Handling](../how-to/error-handling-and-resilience.md) - Error policies and recovery
-- [GraphExecutor API](./graph-executor.md) - Main executor interface
+* [Execution Model](../concepts/execution-model.md) - Core execution concepts and lifecycle
+* [Resource Governance](../how-to/resource-governance-and-concurrency.md) - Resource management and concurrency
+* [Streaming Execution](../concepts/streaming.md) - Real-time execution monitoring
+* [Error Handling](../how-to/error-handling-and-resilience.md) - Error policies and recovery
+* [GraphExecutor API](./graph-executor.md) - Main executor interface

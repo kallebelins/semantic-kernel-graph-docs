@@ -5,35 +5,35 @@ This example demonstrates how to collect, monitor, and analyze performance metri
 ## Objective
 
 Learn how to implement comprehensive metrics and monitoring in graph-based workflows to:
-- Collect real-time performance metrics during graph execution
-- Monitor node execution times, success rates, and resource usage
-- Analyze execution paths and identify performance bottlenecks
-- Export metrics to various monitoring systems and dashboards
-- Implement custom metrics and alerting for production workflows
+* Collect real-time performance metrics during graph execution
+* Monitor node execution times, success rates, and resource usage
+* Analyze execution paths and identify performance bottlenecks
+* Export metrics to various monitoring systems and dashboards
+* Implement custom metrics and alerting for production workflows
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Metrics Concepts](../concepts/metrics.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Metrics Concepts](../concepts/metrics.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Performance Metrics**: Collection and analysis of execution performance data
-- **Node Monitoring**: Real-time monitoring of individual node execution
-- **Execution Path Analysis**: Tracking and analyzing execution flow through graphs
-- **Resource Monitoring**: Monitoring CPU, memory, and other resource usage
-- **Metrics Export**: Exporting metrics to monitoring systems and dashboards
+* **Performance Metrics**: Collection and analysis of execution performance data
+* **Node Monitoring**: Real-time monitoring of individual node execution
+* **Execution Path Analysis**: Tracking and analyzing execution flow through graphs
+* **Resource Monitoring**: Monitoring CPU, memory, and other resource usage
+* **Metrics Export**: Exporting metrics to monitoring systems and dashboards
 
 ### Core Classes
 
-- `GraphPerformanceMetrics`: Core metrics collection and management
-- `NodeExecutionMetrics`: Individual node performance tracking
-- `MetricsDashboard`: Real-time metrics visualization and analysis
-- `GraphMetricsExporter`: Export metrics to external systems
+* `GraphPerformanceMetrics`: Core metrics collection and management
+* `NodeExecutionMetrics`: Individual node performance tracking
+* `MetricsDashboard`: Real-time metrics visualization and analysis
+* `GraphMetricsExporter`: Export metrics to external systems
 
 ## Running the Example
 
@@ -841,14 +841,14 @@ public class AlertRule
 
 ## Related Examples
 
-- [Graph Visualization](./graph-visualization.md): Visual metrics representation
-- [Performance Optimization](./performance-optimization.md): Using metrics for optimization
-- [Streaming Execution](./streaming-execution.md): Real-time metrics streaming
-- [Debug and Inspection](./debug-inspection.md): Metrics for debugging
+* [Graph Visualization](./graph-visualization.md): Visual metrics representation
+* [Performance Optimization](./performance-optimization.md): Using metrics for optimization
+* [Streaming Execution](./streaming-execution.md): Real-time metrics streaming
+* [Debug and Inspection](./debug-inspection.md): Metrics for debugging
 
 ## See Also
 
-- [Metrics and Observability](../concepts/metrics.md): Understanding metrics concepts
-- [Performance Monitoring](../how-to/performance-monitoring.md): Performance monitoring patterns
-- [Debug and Inspection](../how-to/debug-and-inspection.md): Using metrics for debugging
-- [API Reference](../api/): Complete API documentation
+* [Metrics and Observability](../concepts/metrics.md): Understanding metrics concepts
+* [Performance Monitoring](../how-to/performance-monitoring.md): Performance monitoring patterns
+* [Debug and Inspection](../how-to/debug-and-inspection.md): Using metrics for debugging
+* [API Reference](../api/): Complete API documentation

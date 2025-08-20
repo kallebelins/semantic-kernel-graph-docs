@@ -6,11 +6,11 @@ This guide explains how to expose SemanticKernel.Graph functionality through RES
 
 SemanticKernel.Graph provides a comprehensive API layer that enables external systems to:
 
-- **Execute graphs remotely** through REST endpoints with authentication and rate limiting
-- **Stream execution events** in real-time via WebSockets, Server-Sent Events, or HTTP polling
-- **Monitor execution status** and retrieve results asynchronously
-- **Integrate with webhooks** for event-driven architectures
-- **Subscribe to GraphQL subscriptions** for real-time updates and inspection
+* **Execute graphs remotely** through REST endpoints with authentication and rate limiting
+* **Stream execution events** in real-time via WebSockets, Server-Sent Events, or HTTP polling
+* **Monitor execution status** and retrieve results asynchronously
+* **Integrate with webhooks** for event-driven architectures
+* **Subscribe to GraphQL subscriptions** for real-time updates and inspection
 
 ## Core REST API Components
 
@@ -18,11 +18,11 @@ SemanticKernel.Graph provides a comprehensive API layer that enables external sy
 
 The `GraphRestApi` class provides a framework-agnostic service layer that can be adapted to any HTTP framework:
 
-- **Graph Execution**: Execute graphs with parameters and retrieve results
-- **Graph Management**: List, register, and manage graph definitions
-- **Execution Monitoring**: Track execution status and retrieve results
-- **Security**: API key and bearer token authentication
-- **Rate Limiting**: Configurable request throttling and quotas
+* **Graph Execution**: Execute graphs with parameters and retrieve results
+* **Graph Management**: List, register, and manage graph definitions
+* **Execution Monitoring**: Track execution status and retrieve results
+* **Security**: API key and bearer token authentication
+* **Rate Limiting**: Configurable request throttling and quotas
 
 ### API Configuration Options
 
@@ -830,19 +830,19 @@ builder.Services.AddSingleton<IBearerTokenValidator, AzureAdBearerTokenValidator
 ### Common Issues
 
 **WebSocket Connection Failures**
-- Check WebSocket protocol support
-- Verify connection upgrade headers
-- Check firewall and proxy settings
+* Check WebSocket protocol support
+* Verify connection upgrade headers
+* Check firewall and proxy settings
 
 **Streaming Performance Issues**
-- Adjust buffer sizes based on consumer speed
-- Enable compression for large payloads
-- Monitor backpressure indicators
+* Adjust buffer sizes based on consumer speed
+* Enable compression for large payloads
+* Monitor backpressure indicators
 
 **Authentication Problems**
-- Verify API key format and validity
-- Check bearer token expiration and scopes
-- Validate required app roles
+* Verify API key format and validity
+* Check bearer token expiration and scopes
+* Validate required app roles
 
 ### Debugging Tips
 
@@ -853,7 +853,7 @@ builder.Services.AddSingleton<IBearerTokenValidator, AzureAdBearerTokenValidator
 
 ## See Also
 
-- [Streaming Execution](../concepts/streaming.md) - Real-time execution and event streaming
-- [Security and Data Handling](../how-to/security-and-data.md) - API security and authentication
-- [Integration and Extensions](../how-to/integration-and-extensions.md) - Core integration patterns
-- [API Reference](../api/) - Complete API documentation for REST and streaming types
+* [Streaming Execution](../concepts/streaming.md) - Real-time execution and event streaming
+* [Security and Data Handling](../how-to/security-and-data.md) - API security and authentication
+* [Integration and Extensions](../how-to/integration-and-extensions.md) - Core integration patterns
+* [API Reference](../api/) - Complete API documentation for REST and streaming types

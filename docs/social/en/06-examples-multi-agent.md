@@ -17,10 +17,10 @@ var multiAgentGraph = new Graph
 ```
 
 Perfect for:
-- 🏥 Healthcare diagnosis systems
-- 🏗️ Complex project management
-- 🎯 Customer service workflows
-- 🔬 Research collaboration tools
+* 🏥 Healthcare diagnosis systems
+* 🏗️ Complex project management
+* 🎯 Customer service workflows
+* 🔬 Research collaboration tools
 
 **Build your AI team today** → [https://skgraph.dev/](https://skgraph.dev/)
 

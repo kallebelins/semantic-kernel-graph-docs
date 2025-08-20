@@ -5,37 +5,37 @@ This example demonstrates a simple, extensible ReAct (Reasoning → Acting → O
 ## Objective
 
 Learn how to implement ReAct agent patterns in graph-based workflows to:
-- Create a minimal Reason → Act → Observe loop
-- Implement extensible tool registration and discovery
-- Demonstrate intelligent action selection and execution
-- Show how to add new tools without modifying the agent structure
-- Implement parameter validation and intelligent tool matching
+* Create a minimal Reason → Act → Observe loop
+* Implement extensible tool registration and discovery
+* Demonstrate intelligent action selection and execution
+* Show how to add new tools without modifying the agent structure
+* Implement parameter validation and intelligent tool matching
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [ReAct Patterns](../patterns/react.md)
-- Familiarity with [Action Nodes](../concepts/node-types.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [ReAct Patterns](../patterns/react.md)
+* Familiarity with [Action Nodes](../concepts/node-types.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **ReAct Pattern**: Reasoning → Acting → Observing loop for intelligent problem solving
-- **Tool Discovery**: Automatic discovery and registration of available tools
-- **Action Selection**: Intelligent selection of appropriate tools based on context
-- **Parameter Validation**: Validation of tool parameters before execution
-- **Extensibility**: Adding new tools without modifying agent structure
+* **ReAct Pattern**: Reasoning → Acting → Observing loop for intelligent problem solving
+* **Tool Discovery**: Automatic discovery and registration of available tools
+* **Action Selection**: Intelligent selection of appropriate tools based on context
+* **Parameter Validation**: Validation of tool parameters before execution
+* **Extensibility**: Adding new tools without modifying agent structure
 
 ### Core Classes
 
-- `GraphExecutor`: Executor for ReAct agent workflows
-- `FunctionGraphNode`: Nodes for reasoning and observation
-- `ActionGraphNode`: Node for tool execution with auto-discovery
-- `ActionSelectionCriteria`: Criteria for tool selection and filtering
-- `ConditionalEdge`: Graph edges for workflow control
+* `GraphExecutor`: Executor for ReAct agent workflows
+* `FunctionGraphNode`: Nodes for reasoning and observation
+* `ActionGraphNode`: Node for tool execution with auto-discovery
+* `ActionSelectionCriteria`: Criteria for tool selection and filtering
+* `ConditionalEdge`: Graph edges for workflow control
 
 ## Running the Example
 
@@ -456,12 +456,12 @@ var optimizedTools = await optimizedAgent.GetOptimizedToolSetAsync();
 
 The example produces comprehensive output showing:
 
-- 🧑‍💻 User queries and agent reasoning
-- 🤖 Intelligent action selection and tool execution
-- 📊 Tool parameter extraction and validation
-- 🔄 ReAct loop execution (Reason → Act → Observe)
-- ➕ Tool extensibility demonstration
-- ✅ Complete ReAct agent workflow execution
+* 🧑‍💻 User queries and agent reasoning
+* 🤖 Intelligent action selection and tool execution
+* 📊 Tool parameter extraction and validation
+* 🔄 ReAct loop execution (Reason → Act → Observe)
+* ➕ Tool extensibility demonstration
+* ✅ Complete ReAct agent workflow execution
 
 ## Troubleshooting
 
@@ -474,15 +474,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging to trace ReAct loop execution
-- Verify tool registration and discovery in the kernel
-- Check parameter mapping between reasoning and action nodes
-- Monitor action selection criteria and tool matching
+* Enable detailed logging to trace ReAct loop execution
+* Verify tool registration and discovery in the kernel
+* Check parameter mapping between reasoning and action nodes
+* Monitor action selection criteria and tool matching
 
 ## See Also
 
-- [ReAct Patterns](../patterns/react.md)
-- [Action Nodes](../concepts/node-types.md)
-- [Tool Integration](../how-to/tools.md)
-- [Agent Patterns](../patterns/agent-patterns.md)
-- [Function Nodes](../concepts/node-types.md)
+* [ReAct Patterns](../patterns/react.md)
+* [Action Nodes](../concepts/node-types.md)
+* [Tool Integration](../how-to/tools.md)
+* [Agent Patterns](../patterns/agent-patterns.md)
+* [Function Nodes](../concepts/node-types.md)

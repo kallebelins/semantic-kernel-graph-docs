@@ -4,13 +4,13 @@ Human-in-the-Loop (HITL) in SemanticKernel.Graph provides sophisticated mechanis
 
 ## What You'll Learn
 
-- How to implement human approval nodes with configurable conditions
-- Using confidence gates to route execution based on uncertainty levels
-- Configuring multiple interaction channels (Console, Web API, CLI)
-- Setting up SLAs, timeouts, and automatic fallback actions
-- Implementing batch approval systems for efficient processing
-- Comprehensive auditing and tracking of human interactions
-- Best practices for HITL integration in production workflows
+* How to implement human approval nodes with configurable conditions
+* Using confidence gates to route execution based on uncertainty levels
+* Configuring multiple interaction channels (Console, Web API, CLI)
+* Setting up SLAs, timeouts, and automatic fallback actions
+* Implementing batch approval systems for efficient processing
+* Comprehensive auditing and tracking of human interactions
+* Best practices for HITL integration in production workflows
 
 ## Concepts and Techniques
 
@@ -28,10 +28,10 @@ Human-in-the-Loop (HITL) in SemanticKernel.Graph provides sophisticated mechanis
 
 ## Prerequisites
 
-- [First Graph Tutorial](../first-graph-5-minutes.md) completed
-- Basic understanding of graph execution concepts
-- Familiarity with conditional nodes and routing
-- Understanding of confidence scoring and quality metrics
+* [First Graph Tutorial](../first-graph-5-minutes.md) completed
+* Basic understanding of graph execution concepts
+* Familiarity with conditional nodes and routing
+* Understanding of confidence scoring and quality metrics
 
 ## Human Approval Nodes
 
@@ -622,43 +622,43 @@ await executor.ExecuteAsync(arguments, eventStream);
 
 ### Human Approval Design
 
-- **Clear Approval Criteria**: Provide specific, actionable approval requests
-- **Context-Rich Information**: Include relevant data and reasoning for decisions
-- **Multiple Approval Options**: Offer approve/reject/modify choices when appropriate
-- **Conditional Activation**: Only request approval when necessary
-- **Timeout Handling**: Always configure fallback actions for timeouts
+* **Clear Approval Criteria**: Provide specific, actionable approval requests
+* **Context-Rich Information**: Include relevant data and reasoning for decisions
+* **Multiple Approval Options**: Offer approve/reject/modify choices when appropriate
+* **Conditional Activation**: Only request approval when necessary
+* **Timeout Handling**: Always configure fallback actions for timeouts
 
 ### Confidence Gate Configuration
 
-- **Appropriate Thresholds**: Set thresholds based on business risk and quality requirements
-- **Multiple Sources**: Combine multiple confidence indicators for robust evaluation
-- **Learning Mode**: Use learning gates to improve thresholds over time
-- **Uncertainty Analysis**: Enable detailed uncertainty tracking for debugging
-- **Fallback Paths**: Provide clear routing for low-confidence scenarios
+* **Appropriate Thresholds**: Set thresholds based on business risk and quality requirements
+* **Multiple Sources**: Combine multiple confidence indicators for robust evaluation
+* **Learning Mode**: Use learning gates to improve thresholds over time
+* **Uncertainty Analysis**: Enable detailed uncertainty tracking for debugging
+* **Fallback Paths**: Provide clear routing for low-confidence scenarios
 
 ### Channel Selection
 
-- **Development**: Use console channels for testing and development
-- **Production**: Implement web API channels for scalable deployments
-- **User Experience**: Choose channels based on user preferences and workflows
-- **Integration**: Ensure channels integrate with existing approval systems
-- **Monitoring**: Monitor channel availability and performance
+* **Development**: Use console channels for testing and development
+* **Production**: Implement web API channels for scalable deployments
+* **User Experience**: Choose channels based on user preferences and workflows
+* **Integration**: Ensure channels integrate with existing approval systems
+* **Monitoring**: Monitor channel availability and performance
 
 ### Performance and Scalability
 
-- **Batch Processing**: Use batch approval systems for high-volume scenarios
-- **Timeout Optimization**: Balance SLA requirements with user experience
-- **Escalation Chains**: Implement efficient escalation to prevent bottlenecks
-- **Audit Efficiency**: Configure audit logging to minimize performance impact
-- **Resource Management**: Monitor HITL resource usage and optimize accordingly
+* **Batch Processing**: Use batch approval systems for high-volume scenarios
+* **Timeout Optimization**: Balance SLA requirements with user experience
+* **Escalation Chains**: Implement efficient escalation to prevent bottlenecks
+* **Audit Efficiency**: Configure audit logging to minimize performance impact
+* **Resource Management**: Monitor HITL resource usage and optimize accordingly
 
 ### Compliance and Security
 
-- **Audit Trails**: Maintain comprehensive audit logs for all human interactions
-- **User Authentication**: Implement proper user identification and authorization
-- **Data Sanitization**: Sanitize sensitive data in approval requests
-- **Retention Policies**: Configure appropriate data retention for compliance
-- **Access Controls**: Restrict HITL access based on user roles and permissions
+* **Audit Trails**: Maintain comprehensive audit logs for all human interactions
+* **User Authentication**: Implement proper user identification and authorization
+* **Data Sanitization**: Sanitize sensitive data in approval requests
+* **Retention Policies**: Configure appropriate data retention for compliance
+* **Access Controls**: Restrict HITL access based on user roles and permissions
 
 ## Troubleshooting
 
@@ -711,8 +711,8 @@ Console.WriteLine($"  User Satisfaction: {overallMetrics.UserSatisfactionScore:F
 
 ## See Also
 
-- [Conditional Nodes](conditional-nodes-quickstart.md) - Understanding conditional execution and routing
-- [Error Handling and Resilience](error-handling-and-resilience.md) - Managing failures and recovery
-- [State Management](state-quickstart.md) - Persisting HITL state and decisions
-- [Streaming Execution](streaming-quickstart.md) - Real-time monitoring of HITL events
-- [Graph Execution](execution.md) - Understanding the execution lifecycle
+* [Conditional Nodes](conditional-nodes-quickstart.md) - Understanding conditional execution and routing
+* [Error Handling and Resilience](error-handling-and-resilience.md) - Managing failures and recovery
+* [State Management](state-quickstart.md) - Persisting HITL state and decisions
+* [Streaming Execution](streaming-quickstart.md) - Real-time monitoring of HITL events
+* [Graph Execution](execution.md) - Understanding the execution lifecycle

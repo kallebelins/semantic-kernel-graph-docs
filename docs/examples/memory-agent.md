@@ -5,36 +5,36 @@ This example demonstrates how to implement memory-enabled agents in Semantic Ker
 ## Objective
 
 Learn how to implement memory-enabled agents in graph-based workflows to:
-- Create agents with persistent memory and learning capabilities
-- Implement memory storage, retrieval, and management
-- Enable agents to learn from past interactions and experiences
-- Build context-aware and adaptive agent behaviors
-- Implement memory-based decision making and reasoning
+* Create agents with persistent memory and learning capabilities
+* Implement memory storage, retrieval, and management
+* Enable agents to learn from past interactions and experiences
+* Build context-aware and adaptive agent behaviors
+* Implement memory-based decision making and reasoning
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Memory Patterns](../concepts/memory.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Memory Patterns](../concepts/memory.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Memory Storage**: Persistent storage of agent experiences and knowledge
-- **Memory Retrieval**: Intelligent retrieval of relevant memories
-- **Learning Integration**: Incorporating new experiences into memory
-- **Context Awareness**: Using memory for context-aware decision making
-- **Memory Management**: Efficient memory organization and cleanup
+* **Memory Storage**: Persistent storage of agent experiences and knowledge
+* **Memory Retrieval**: Intelligent retrieval of relevant memories
+* **Learning Integration**: Incorporating new experiences into memory
+* **Context Awareness**: Using memory for context-aware decision making
+* **Memory Management**: Efficient memory organization and cleanup
 
 ### Core Classes
 
-- `MemoryAgent`: Base memory-enabled agent implementation
-- `MemoryStore`: Memory storage and retrieval system
-- `MemoryRetriever`: Intelligent memory search and retrieval
-- `LearningIntegrator`: Learning from new experiences
-- `MemoryManager`: Memory lifecycle and optimization
+* `MemoryAgent`: Base memory-enabled agent implementation
+* `MemoryStore`: Memory storage and retrieval system
+* `MemoryRetriever`: Intelligent memory search and retrieval
+* `LearningIntegrator`: Learning from new experiences
+* `MemoryManager`: Memory lifecycle and optimization
 
 ## Running the Example
 
@@ -930,14 +930,14 @@ public class MemoryOptimizationStrategy : IMemoryOptimizationStrategy
 
 ## Related Examples
 
-- [Multi-Agent System](./multi-agent.md): Multi-agent coordination with memory
-- [Graph Metrics](./graph-metrics.md): Memory performance monitoring
-- [State Management](./state-tutorial.md): Memory state persistence
-- [Performance Optimization](./performance-optimization.md): Memory optimization techniques
+* [Multi-Agent System](./multi-agent.md): Multi-agent coordination with memory
+* [Graph Metrics](./graph-metrics.md): Memory performance monitoring
+* [State Management](./state-tutorial.md): Memory state persistence
+* [Performance Optimization](./performance-optimization.md): Memory optimization techniques
 
 ## See Also
 
-- [Memory Patterns](../concepts/memory.md): Understanding memory concepts
-- [Learning and Adaptation](../how-to/learning-adaptation.md): Memory-based learning
-- [Performance Monitoring](../how-to/performance-monitoring.md): Memory performance analysis
-- [API Reference](../api/): Complete API documentation
+* [Memory Patterns](../concepts/memory.md): Understanding memory concepts
+* [Learning and Adaptation](../how-to/learning-adaptation.md): Memory-based learning
+* [Performance Monitoring](../how-to/performance-monitoring.md): Memory performance analysis
+* [API Reference](../api/): Complete API documentation

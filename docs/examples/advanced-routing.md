@@ -5,38 +5,38 @@ This example demonstrates advanced routing capabilities in Semantic Kernel Graph
 ## Objective
 
 Learn how to implement advanced routing strategies in graph-based workflows to:
-- Use semantic routing with embeddings for content-aware decisions
-- Implement similarity-based routing using historical execution patterns
-- Configure probabilistic routing with dynamic weights
-- Enable contextual routing based on execution history and state
-- Implement feedback learning to improve routing decisions over time
+* Use semantic routing with embeddings for content-aware decisions
+* Implement similarity-based routing using historical execution patterns
+* Configure probabilistic routing with dynamic weights
+* Enable contextual routing based on execution history and state
+* Implement feedback learning to improve routing decisions over time
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- **Text embedding service** configured (OpenAI, Azure OpenAI, or local)
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Routing](../concepts/routing.md)
-- Familiarity with [Dynamic Routing](../how-to/advanced-routing.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* **Text embedding service** configured (OpenAI, Azure OpenAI, or local)
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Routing](../concepts/routing.md)
+* Familiarity with [Dynamic Routing](../how-to/advanced-routing.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Semantic Routing**: Content-aware routing using text embeddings and similarity
-- **Similarity Routing**: Routing based on historical execution patterns and outcomes
-- **Probabilistic Routing**: Dynamic routing with weighted probabilities and learning
-- **Contextual Routing**: Routing decisions based on execution context and state
-- **Feedback Learning**: Continuous improvement of routing decisions through feedback
+* **Semantic Routing**: Content-aware routing using text embeddings and similarity
+* **Similarity Routing**: Routing based on historical execution patterns and outcomes
+* **Probabilistic Routing**: Dynamic routing with weighted probabilities and learning
+* **Contextual Routing**: Routing decisions based on execution context and state
+* **Feedback Learning**: Continuous improvement of routing decisions through feedback
 
 ### Core Classes
 
-- `DynamicRoutingEngine`: Advanced routing engine with multiple strategies
-- `ITextEmbeddingGenerationService`: Service for generating text embeddings
-- `IGraphMemoryService`: Service for storing and retrieving routing history
-- `GraphExecutor`: Enhanced executor with advanced routing capabilities
-- `FunctionGraphNode`: Nodes that can be routed using advanced strategies
+* `DynamicRoutingEngine`: Advanced routing engine with multiple strategies
+* `ITextEmbeddingGenerationService`: Service for generating text embeddings
+* `IGraphMemoryService`: Service for storing and retrieving routing history
+* `GraphExecutor`: Enhanced executor with advanced routing capabilities
+* `FunctionGraphNode`: Nodes that can be routed using advanced strategies
 
 ## Running the Example
 
@@ -296,13 +296,13 @@ logger.LogInformation("=== Advanced Routing Demonstration Complete ===");
 
 The example produces comprehensive output showing:
 
-- ✅ Advanced routing graph creation with multiple node types
-- 🔀 Semantic routing decisions based on content analysis
-- 📊 Similarity routing using historical patterns
-- 🎲 Probabilistic routing with dynamic weights
-- 🧠 Contextual routing based on execution context
-- 📈 Feedback learning and continuous improvement
-- 📋 Comprehensive routing analytics and insights
+* ✅ Advanced routing graph creation with multiple node types
+* 🔀 Semantic routing decisions based on content analysis
+* 📊 Similarity routing using historical patterns
+* 🎲 Probabilistic routing with dynamic weights
+* 🧠 Contextual routing based on execution context
+* 📈 Feedback learning and continuous improvement
+* 📋 Comprehensive routing analytics and insights
 
 ## Troubleshooting
 
@@ -315,15 +315,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging to trace routing decisions
-- Monitor similarity scores and confidence levels
-- Check feedback collection and learning progress
-- Verify contextual routing conditions and state
+* Enable detailed logging to trace routing decisions
+* Monitor similarity scores and confidence levels
+* Check feedback collection and learning progress
+* Verify contextual routing conditions and state
 
 ## See Also
 
-- [Advanced Routing](../how-to/advanced-routing.md)
-- [Dynamic Routing](../how-to/dynamic-routing.md)
-- [Graph Concepts](../concepts/graph-concepts.md)
-- [Routing](../concepts/routing.md)
-- [State Management](../concepts/state.md)
+* [Advanced Routing](../how-to/advanced-routing.md)
+* [Dynamic Routing](../how-to/dynamic-routing.md)
+* [Graph Concepts](../concepts/graph-concepts.md)
+* [Routing](../concepts/routing.md)
+* [State Management](../concepts/state.md)

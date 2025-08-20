@@ -26,14 +26,14 @@ The primary state container that wraps `KernelArguments` with additional graph-s
 
 #### Properties
 
-- **`KernelArguments`**: The underlying `KernelArguments` instance
-- **`StateId`**: Unique identifier for this state instance
-- **`Version`**: Current state version for compatibility control
-- **`CreatedAt`**: Timestamp when the state was created
-- **`LastModified`**: Timestamp of the last state modification
-- **`ExecutionHistory`**: Read-only collection of execution steps
-- **`ExecutionStepCount`**: Total number of recorded execution steps
-- **`IsModified`**: Indicates whether the state has been modified since creation
+* **`KernelArguments`**: The underlying `KernelArguments` instance
+* **`StateId`**: Unique identifier for this state instance
+* **`Version`**: Current state version for compatibility control
+* **`CreatedAt`**: Timestamp when the state was created
+* **`LastModified`**: Timestamp of the last state modification
+* **`ExecutionHistory`**: Read-only collection of execution steps
+* **`ExecutionStepCount`**: Total number of recorded execution steps
+* **`IsModified`**: Indicates whether the state has been modified since creation
 
 #### Constructors
 
@@ -205,13 +205,13 @@ Configurable options for controlling serialization behavior.
 
 #### Properties
 
-- **`Indented`**: Whether to use indented formatting
-- **`EnableCompression`**: Whether to enable compression for large states
-- **`IncludeMetadata`**: Whether to include metadata in serialization
-- **`IncludeExecutionHistory`**: Whether to include execution history
-- **`CompressionLevel`**: Compression level to use
-- **`JsonOptions`**: Custom JSON serializer options
-- **`ValidateIntegrity`**: Whether to validate integrity after serialization
+* **`Indented`**: Whether to use indented formatting
+* **`EnableCompression`**: Whether to enable compression for large states
+* **`IncludeMetadata`**: Whether to include metadata in serialization
+* **`IncludeExecutionHistory`**: Whether to include execution history
+* **`CompressionLevel`**: Compression level to use
+* **`JsonOptions`**: Custom JSON serializer options
+* **`ValidateIntegrity`**: Whether to validate integrity after serialization
 
 #### Factory Methods
 
@@ -262,11 +262,11 @@ Represents the state version for compatibility control and migration.
 
 #### Properties
 
-- **`Major`**: Major version number
-- **`Minor`**: Minor version number
-- **`Patch`**: Patch version number
-- **`IsCompatible`**: Indicates if this version is compatible with the current version
-- **`RequiresMigration`**: Indicates if this version requires migration
+* **`Major`**: Major version number
+* **`Minor`**: Minor version number
+* **`Patch`**: Patch version number
+* **`IsCompatible`**: Indicates if this version is compatible with the current version
+* **`RequiresMigration`**: Indicates if this version requires migration
 
 #### Constants
 
@@ -775,31 +775,31 @@ if (needToRestore)
 
 ## Performance Considerations
 
-- **Serialization Caching**: Use `useCache: true` for repeated serialization of the same state
-- **Compression**: Enable compression for large states to reduce storage and transfer costs
-- **Adaptive Compression**: The system automatically adjusts compression thresholds based on observed benefits
-- **Validation**: Use validation sparingly in production; consider caching validation results
-- **Metadata**: Keep metadata lightweight to avoid serialization overhead
+* **Serialization Caching**: Use `useCache: true` for repeated serialization of the same state
+* **Compression**: Enable compression for large states to reduce storage and transfer costs
+* **Adaptive Compression**: The system automatically adjusts compression thresholds based on observed benefits
+* **Validation**: Use validation sparingly in production; consider caching validation results
+* **Metadata**: Keep metadata lightweight to avoid serialization overhead
 
 ## Thread Safety
 
-- **GraphState**: Thread-safe for concurrent reads; external synchronization required for concurrent writes
-- **StateHelpers**: Static methods are thread-safe; use appropriate locking for shared state
-- **Serialization**: Cached serialization is thread-safe with internal locking
+* **GraphState**: Thread-safe for concurrent reads; external synchronization required for concurrent writes
+* **StateHelpers**: Static methods are thread-safe; use appropriate locking for shared state
+* **Serialization**: Cached serialization is thread-safe with internal locking
 
 ## Error Handling
 
-- **Validation**: Always validate state integrity after deserialization
-- **Checksums**: Use checksums to detect state corruption
-- **Transactions**: Implement proper error handling and rollback logic
-- **Migration**: Handle version incompatibilities gracefully with migration logic
+* **Validation**: Always validate state integrity after deserialization
+* **Checksums**: Use checksums to detect state corruption
+* **Transactions**: Implement proper error handling and rollback logic
+* **Migration**: Handle version incompatibilities gracefully with migration logic
 
 ## See Also
 
-- [State Management Guide](../concepts/state.md)
-- [Checkpointing Guide](../how-to/checkpointing.md)
-- [State Quickstart](../state-quickstart.md)
-- [State Tutorial](../state-tutorial.md)
-- [ConditionalEdge](conditional-edge.md)
-- [StateMergeConfiguration](state-merge-configuration.md)
-- [StateMergeConflictPolicy](state-merge-conflict-policy.md)
+* [State Management Guide](../concepts/state.md)
+* [Checkpointing Guide](../how-to/checkpointing.md)
+* [State Quickstart](../state-quickstart.md)
+* [State Tutorial](../state-tutorial.md)
+* [ConditionalEdge](conditional-edge.md)
+* [StateMergeConfiguration](state-merge-configuration.md)
+* [StateMergeConflictPolicy](state-merge-conflict-policy.md)

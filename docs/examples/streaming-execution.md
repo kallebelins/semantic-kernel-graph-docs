@@ -5,37 +5,37 @@ This example demonstrates streaming execution capabilities of the Semantic Kerne
 ## Objective
 
 Learn how to implement streaming execution in graph-based workflows to:
-- Enable real-time event streaming during graph execution
-- Implement event filtering and buffering strategies
-- Support web API streaming for long-running operations
-- Handle connection management and reconnection scenarios
-- Monitor execution progress in real-time
+* Enable real-time event streaming during graph execution
+* Implement event filtering and buffering strategies
+* Support web API streaming for long-running operations
+* Handle connection management and reconnection scenarios
+* Monitor execution progress in real-time
 
 ## Prerequisites
 
-- **.NET 8.0** or later
-- **OpenAI API Key** configured in `appsettings.json`
-- **Semantic Kernel Graph package** installed
-- Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Streaming Execution](../concepts/streaming.md)
-- Familiarity with [Event Streaming](../concepts/events.md)
+* **.NET 8.0** or later
+* **OpenAI API Key** configured in `appsettings.json`
+* **Semantic Kernel Graph package** installed
+* Basic understanding of [Graph Concepts](../concepts/graph-concepts.md) and [Streaming Execution](../concepts/streaming.md)
+* Familiarity with [Event Streaming](../concepts/events.md)
 
 ## Key Components
 
 ### Concepts and Techniques
 
-- **Streaming Execution**: Real-time event streaming during graph execution
-- **Event Filtering**: Selective event processing based on type and content
-- **Buffered Streaming**: Event buffering for batch processing
-- **Web API Streaming**: HTTP streaming for web applications
-- **Connection Management**: Handling disconnections and reconnections
+* **Streaming Execution**: Real-time event streaming during graph execution
+* **Event Filtering**: Selective event processing based on type and content
+* **Buffered Streaming**: Event buffering for batch processing
+* **Web API Streaming**: HTTP streaming for web applications
+* **Connection Management**: Handling disconnections and reconnections
 
 ### Core Classes
 
-- `StreamingGraphExecutor`: Executor with streaming capabilities
-- `GraphExecutionEventStream`: Stream of execution events
-- `StreamingExtensions`: Configuration utilities for streaming
-- `GraphExecutionEvent`: Individual execution events
-- `FunctionGraphNode`: Graph nodes for workflow execution
+* `StreamingGraphExecutor`: Executor with streaming capabilities
+* `GraphExecutionEventStream`: Stream of execution events
+* `StreamingExtensions`: Configuration utilities for streaming
+* `GraphExecutionEvent`: Individual execution events
+* `FunctionGraphNode`: Graph nodes for workflow execution
 
 ## Running the Example
 
@@ -464,13 +464,13 @@ await foreach (var evt in eventStream)
 
 The example produces comprehensive output showing:
 
-- 📡 Basic streaming execution with real-time events
-- 🔍 Event filtering by type and content
-- 📦 Buffered streaming for batch processing
-- 🌐 Web API streaming with SSE format
-- 🔌 Reconnection handling and recovery
-- ⚡ Real-time execution monitoring
-- ✅ Complete streaming workflow execution
+* 📡 Basic streaming execution with real-time events
+* 🔍 Event filtering by type and content
+* 📦 Buffered streaming for batch processing
+* 🌐 Web API streaming with SSE format
+* 🔌 Reconnection handling and recovery
+* ⚡ Real-time execution monitoring
+* ✅ Complete streaming workflow execution
 
 ## Troubleshooting
 
@@ -483,15 +483,15 @@ The example produces comprehensive output showing:
 
 ### Debugging Tips
 
-- Enable detailed logging for streaming operations
-- Monitor event stream health and connection status
-- Verify event filtering and buffering configuration
-- Check reconnection settings and error handling
+* Enable detailed logging for streaming operations
+* Monitor event stream health and connection status
+* Verify event filtering and buffering configuration
+* Check reconnection settings and error handling
 
 ## See Also
 
-- [Streaming Execution](../concepts/streaming.md)
-- [Event Streaming](../concepts/events.md)
-- [Web API Integration](../how-to/exposing-rest-apis.md)
-- [Real-time Monitoring](../how-to/metrics-and-observability.md)
-- [Connection Management](../how-to/connection-management.md)
+* [Streaming Execution](../concepts/streaming.md)
+* [Event Streaming](../concepts/events.md)
+* [Web API Integration](../how-to/exposing-rest-apis.md)
+* [Real-time Monitoring](../how-to/metrics-and-observability.md)
+* [Connection Management](../how-to/connection-management.md)

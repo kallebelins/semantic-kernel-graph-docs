@@ -3,10 +3,10 @@
 You've seen the power of **Semantic Kernel Graph** - now it's time to experience it yourself!
 
 🎯 **What you'll gain:**
-- Build AI workflows in minutes, not days
-- Native .NET performance without compromises
-- Enterprise-grade features from day one
-- Join a thriving developer community
+* Build AI workflows in minutes, not days
+* Native .NET performance without compromises
+* Enterprise-grade features from day one
+* Join a thriving developer community
 
 🚀 **Get started in 3 simple steps:**
 1. **Install** - `dotnet add package SemanticKernel.Graph`
