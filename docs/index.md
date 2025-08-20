@@ -84,13 +84,6 @@ var result = await kernel.GetRequiredService<IGraphExecutor>()
     .ExecuteAsync(graph, arguments);
 ```
 
-### 3. **Explore Examples**
-```bash
-cd examples
-dotnet run -- --list
-dotnet run -- --example chatbot
-```
-
 ## Documentation Structure
 
 ### **Get Started**

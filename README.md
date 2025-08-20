@@ -41,7 +41,6 @@ The framework is built with a modular architecture that separates concerns and e
 ### Getting Started
 - [First Graph in 5 Minutes](docs/first-graph-5-minutes.md) - Quick start guide
 - [Building Your First Graph](docs/how-to/build-a-graph.md) - Step-by-step tutorial
-- [Running Examples](docs/running-examples.md) - Explore working examples
 
 ### Core Concepts
 - [Graph Concepts](docs/concepts/graph-concepts.md) - Understanding the framework

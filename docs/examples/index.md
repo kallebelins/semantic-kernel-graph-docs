@@ -132,12 +132,6 @@ Create or update `appsettings.json` in the examples project:
 }
 ```
 
-### Command Line Options
-
-- `--list`: Display all available examples
-- `--example <name>` or `-e <name>`: Run specific example(s)
-- `--rest-api`: Start REST API server for external integration
-
 ### Example Execution Flow
 
 1. **Setup**: Kernel configuration with graph support
@@ -186,7 +180,6 @@ When contributing new examples:
 
 - Check the [Troubleshooting Guide](../troubleshooting.md)
 - Review [API Reference](../api/) for detailed class documentation
-- Examine test files in `SemanticKernel.Graph.Tests` for usage patterns
 - Open issues on the project repository for specific problems
 
 ## Related Documentation

@@ -92,7 +92,6 @@ patterns/multi-agent.md - Multi-agent coordination patterns
 # =============================================================================
 
 examples/index.md - Overview of all available examples
-examples/running-examples.md - How to run examples and use the CLI
 
 # Core pattern examples
 examples/conditional-nodes.md - Conditional node examples and use cases
