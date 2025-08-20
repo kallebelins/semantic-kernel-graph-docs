@@ -103,8 +103,11 @@ var checkpointId = StateHelpers.CreateCheckpoint(graphState, "manual-checkpoint"
 Console.WriteLine($"Created checkpoint: {checkpointId}");
 
 // The checkpoint is now stored in the state metadata
-var checkpoint = graphState.GetMetadata<StateCheckpoint>($"checkpoint_{checkpointId}");
-Console.WriteLine($"Checkpoint timestamp: {checkpoint.Timestamp}");
+var checkpoint = graphState.GetMetadata<object>($"checkpoint_{checkpointId}");
+if (checkpoint != null)
+{
+    Console.WriteLine("Checkpoint created successfully");
+}
 ```
 
 ### Restoring from Checkpoints
@@ -117,9 +120,8 @@ try
     // Restore state from a specific checkpoint
     var restoredState = StateHelpers.RestoreCheckpoint(graphState, checkpointId);
     
-    // Update your arguments with the restored state
-    arguments.UpdateFromGraphState(restoredState);
-    
+    // Note: UpdateFromGraphState method doesn't exist in current implementation
+    // The restored state can be used for analysis or manual state reconstruction
     Console.WriteLine("State restored successfully");
 }
 catch (InvalidOperationException ex)
@@ -153,7 +155,7 @@ var checkpointingOptions = new CheckpointingOptions
     {
         MaxAge = TimeSpan.FromHours(24),
         MaxCheckpointsPerExecution = 50,
-        MaxTotalStorage = 100 * 1024 * 1024  // 100MB
+        MaxTotalStorageBytes = 100 * 1024 * 1024  // 100MB
     }
 };
 
@@ -231,7 +233,7 @@ var cleanupCount = await checkpointManager.CleanupCheckpointsAsync(
     {
         MaxAge = TimeSpan.FromHours(1),
         MaxCheckpointsPerExecution = 10,
-        MaxTotalStorage = 50 * 1024 * 1024  // 50MB
+        MaxTotalStorageBytes = 50 * 1024 * 1024  // 50MB
     });
 
 Console.WriteLine($"Cleaned up {cleanupCount} old checkpoints");

@@ -93,6 +93,20 @@ using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
 
+// Helper extension class for KernelArguments
+public static class KernelArgumentsExtensions
+{
+    // Helper method to safely get typed values from KernelArguments
+    public static T GetValue<T>(this KernelArguments args, string key, T defaultValue = default!)
+    {
+        if (args.TryGetValue(key, out var value) && value is T typedValue)
+        {
+            return typedValue;
+        }
+        return defaultValue;
+    }
+}
+
 class Program
 {
     static async Task Main(string[] args)
@@ -232,26 +246,26 @@ class Program
         graph.AddNode(summaryNode);
         
         // Connect nodes with conditional logic
-        graph.Connect(inputNode, ageCheckNode);
+        graph.Connect(inputNode.NodeId, ageCheckNode.NodeId);
         
-        // Age check paths
-        graph.Connect(ageCheckNode, vipCheckNode, 
-            edge => edge.When(state => state.GetValue<int>("userAge") >= 18));
-        graph.Connect(ageCheckNode, minorNode, 
-            edge => edge.When(state => state.GetValue<int>("userAge") < 18));
+        // Age check paths - use ConnectWhen for conditional routing
+        graph.ConnectWhen(ageCheckNode.NodeId, vipCheckNode.NodeId, 
+            args => args.GetValue<int>("userAge") >= 18);
+        graph.ConnectWhen(ageCheckNode.NodeId, minorNode.NodeId, 
+            args => args.GetValue<int>("userAge") < 18);
         
         // VIP check paths
-        graph.Connect(vipCheckNode, adultNode, 
-            edge => edge.When(state => state.GetValue<bool>("isVip") == true));
-        graph.Connect(vipCheckNode, vipUpgradeNode, 
-            edge => edge.When(state => state.GetValue<bool>("isVip") == false));
+        graph.ConnectWhen(vipCheckNode.NodeId, adultNode.NodeId, 
+            args => args.GetValue<bool>("isVip") == true);
+        graph.ConnectWhen(vipCheckNode.NodeId, vipUpgradeNode.NodeId, 
+            args => args.GetValue<bool>("isVip") == false);
         
         // Connect all paths to summary
-        graph.Connect(adultNode, summaryNode);
-        graph.Connect(vipUpgradeNode, summaryNode);
-        graph.Connect(minorNode, summaryNode);
+        graph.Connect(adultNode.NodeId, summaryNode.NodeId);
+        graph.Connect(vipUpgradeNode.NodeId, summaryNode.NodeId);
+        graph.Connect(minorNode.NodeId, summaryNode.NodeId);
         
-        graph.SetStartNode(inputNode);
+        graph.SetStartNode(inputNode.NodeId);
 
         // Execute with different user scenarios
         var scenarios = new[]
@@ -271,11 +285,11 @@ class Program
                 ["userAge"] = scenario.Age
             };
             
-            var result = await graph.ExecuteAsync(initialState);
+            var result = await graph.ExecuteAsync(kernel, initialState);
             
             Console.WriteLine($"Path taken: {scenario.ExpectedPath}");
-            Console.WriteLine($"Final summary: {result.GetValue<string>("finalSummary")}");
-            Console.WriteLine($"Access level: {result.GetValue<string>("accessLevel")}");
+            Console.WriteLine($"Final summary: {initialState.GetValue<string>("finalSummary")}");
+            Console.WriteLine($"Access level: {initialState.GetValue<string>("accessLevel")}");
         }
         
         Console.WriteLine("\n✅ Conditional workflow completed successfully!");
@@ -335,10 +349,10 @@ Creates a node that evaluates a condition and routes execution based on the resu
 
 ### 2. **Conditional Edge Routing**
 ```csharp
-graph.Connect(ageCheckNode, vipCheckNode, 
-    edge => edge.When(state => state.GetValue<int>("userAge") >= 18));
+graph.ConnectWhen(ageCheckNode.NodeId, vipCheckNode.NodeId, 
+    args => args.GetValue<int>("userAge") >= 18);
 ```
-Uses `ConditionalEdge` to create dynamic routing based on state conditions.
+Uses `ConnectWhen` to create dynamic routing based on state conditions.
 
 ### 3. **Multiple Execution Paths**
 The graph creates different execution paths:
@@ -396,8 +410,10 @@ var templateCheck = new ConditionalGraphNode(
 var primaryCheck = new ConditionalGraphNode("{{priority}} == 'high'");
 var secondaryCheck = new ConditionalGraphNode("{{priority}} == 'medium'");
 
-graph.Connect(inputNode, primaryCheck, edge => edge.When(state => state.GetValue<string>("priority") == "high"));
-graph.Connect(inputNode, secondaryCheck, edge => edge.When(state => state.GetValue<string>("priority") == "medium"));
+graph.ConnectWhen(inputNode.NodeId, primaryCheck.NodeId, 
+    args => args.GetValue<string>("priority") == "high");
+graph.ConnectWhen(inputNode.NodeId, secondaryCheck.NodeId, 
+    args => args.GetValue<string>("priority") == "medium");
 ```
 
 ## Troubleshooting
@@ -418,7 +434,7 @@ Multiple conditional paths are executing when only one should
 ```
 System.Collections.Generic.KeyNotFoundException: The given key 'missingKey' was not present
 ```
-**Solution**: Use `GetValueOrDefault()` or check with `ContainsKey()` before reading state values.
+**Solution**: Use the helper method with a default value or check with `TryGetValue()` before reading state values.
 
 ### **Template Condition Syntax Errors**
 ```

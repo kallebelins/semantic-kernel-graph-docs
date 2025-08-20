@@ -1,3 +1,7 @@
+# =============================================================================
+# PYTHON (MkDocs Documentation)
+# =============================================================================
+
 # Python virtual environments
 .venv/
 venv/
@@ -27,11 +31,109 @@ wheels/
 *.egg
 MANIFEST
 
+# Python package managers
+.python-version
+Pipfile.lock
+__pypackages__/
+
+# Python testing and coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# =============================================================================
+# .NET (Examples Project)
+# =============================================================================
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio files
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet Packages
+*.nupkg
+# NuGet Symbol Packages
+*.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/[Pp]ackages/repositories.config
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
+
+# =============================================================================
+# DOCUMENTATION (MkDocs)
+# =============================================================================
+
 # MkDocs build output
 site/
 .cache/
+docs/_build/
+docs/build/
+docs/.doctrees/
 
-# IDE and editor files
+# MkDocs backup
+mkdocs.yml.bak
+
+# =============================================================================
+# DEVELOPMENT TOOLS
+# =============================================================================
+
+# IDEs and editors
 .vscode/
 .idea/
 *.swp
@@ -46,6 +148,35 @@ Thumbs.db
 .env.*.local
 *.env
 
+# Local configuration overrides
+local_config.py
+appsettings.local.json
+
+# =============================================================================
+# OPERATING SYSTEM
+# =============================================================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# =============================================================================
+# TEMPORARY FILES
+# =============================================================================
+
 # Logs
 *.log
 logs/
@@ -56,50 +187,23 @@ logs/
 .tmp/
 .temp/
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# =============================================================================
+# GIT
+# =============================================================================
 
 # Git
 .git/
 .gitignore~
 
-# Documentation build artifacts
-docs/_build/
-docs/build/
-docs/.doctrees/
+# =============================================================================
+# MISCELLANEOUS
+# =============================================================================
 
 # Node.js (if using any frontend tools)
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# Coverage reports
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# pipenv
-Pipfile.lock
-
-# PEP 582
-__pypackages__/
 
 # Celery
 celerybeat-schedule
@@ -114,9 +218,3 @@ celerybeat.pid
 
 # Rope project settings
 .ropeproject
-
-# mkdocs.yml backup
-mkdocs.yml.bak
-
-# Local configuration overrides
-local_config.py
