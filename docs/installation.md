@@ -245,6 +245,8 @@ builder.Services.AddKernel(options =>
 var app = builder.Build();
 ```
 
+**Note**: This example requires the ASP.NET Core runtime and the `Microsoft.AspNetCore.App` framework reference. If you're building a console application, you can use the basic configuration examples above instead.
+
 ## Running Examples
 
 The project includes comprehensive examples that demonstrate various features:
@@ -294,18 +296,19 @@ var kernel = builder.Build();
 
 // Create a simple test node
 var testNode = new FunctionGraphNode(
-    kernel.CreateFunctionFromPrompt("Say hello to {{$name}}")
+    kernel.CreateFunctionFromPrompt("Say hello to {{$name}}"),
+    "test-node"
 );
 
 // Create and execute a minimal graph
 var graph = new GraphExecutor("TestGraph");
 graph.AddNode(testNode);
-graph.SetStartNode(testNode);
+graph.SetStartNode(testNode.NodeId);
 
 var state = new KernelArguments { ["name"] = "World" };
-var result = await graph.ExecuteAsync(state);
+var result = await graph.ExecuteAsync(kernel, state);
 
-Console.WriteLine($"Test successful! Result: {result["output"]}");
+Console.WriteLine($"Test successful! Result: {result}");
 ```
 
 ### Expected Output
@@ -315,6 +318,8 @@ If everything is configured correctly, you should see:
 ```
 Test successful! Result: Hello World!
 ```
+
+**Note**: The actual output may vary depending on the LLM model used. If you don't have a valid API key configured, the test will show a warning message instead of executing the graph.
 
 ## Troubleshooting
 

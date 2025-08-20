@@ -32,6 +32,7 @@ class Program
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
+                ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 
@@ -86,6 +87,7 @@ class Program
         await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample();
         await ConditionalNodesTutorialExample.RunAllExamples();
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
+        await InstallationExample.RunAllExamplesAsync();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));
         Console.WriteLine("📋 All examples completed!");
