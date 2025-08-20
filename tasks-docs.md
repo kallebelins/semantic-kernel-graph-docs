@@ -12,7 +12,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 7. [x] first-graph.md
 8. [x] getting-started.md
 9. [x] glossary.md
-10. [ ] index.md
+10. [x] index.md
 11. [ ] installation.md
 12. [ ] metrics-logging-quickstart.md
 13. [ ] react-cot-quickstart.md

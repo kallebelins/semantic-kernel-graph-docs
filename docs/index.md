@@ -74,15 +74,23 @@ dotnet add package SemanticKernel.Graph
 builder.AddGraphSupport();
 var kernel = builder.Build();
 
-var graph = new Graph
-{
-    StartNode = startNode,
-    Nodes = new[] { startNode, processNode, endNode }
-};
+// Create graph executor (not a Graph class)
+var executor = new GraphExecutor("MyGraph", "My first graph");
 
-var result = await kernel.GetRequiredService<IGraphExecutor>()
-    .ExecuteAsync(graph, arguments);
+// Add nodes and edges
+executor.AddNode(startNode);
+executor.AddNode(processNode);
+executor.AddNode(endNode);
+
+executor.SetStartNode(startNode.NodeId);
+executor.AddEdge(ConditionalEdge.CreateUnconditional(startNode, processNode));
+executor.AddEdge(ConditionalEdge.CreateUnconditional(processNode, endNode));
+
+// Execute the graph
+var result = await executor.ExecuteAsync(kernel, arguments);
 ```
+
+> **Important Note**: The SemanticKernel.Graph library uses `GraphExecutor` class, not a `Graph` class. This is different from some other graph libraries. The `GraphExecutor` serves both as the graph definition and execution engine.
 
 ## Documentation Structure
 

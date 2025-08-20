@@ -1,6 +1,7 @@
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
 using Examples;
+using SemanticKernel.Graph.Examples;
 
 namespace Examples;
 
@@ -23,6 +24,7 @@ class Program
             // Define available example options based on task names
             var options = new Dictionary<string, Func<Task>>(StringComparer.OrdinalIgnoreCase)
             {
+                ["index"] = async () => await IndexExample.RunAsync(),
                 ["first-graph"] = async () => await FirstGraphExample.RunAsync(),
                 ["first-graph-5-minutes"] = async () => await FirstGraph5MinutesExample.RunAsync(),
                 ["getting-started"] = async () => await GettingStartedExample.RunAsync(),
@@ -78,11 +80,12 @@ class Program
         Console.WriteLine("🎯 Running all available examples...\n");
 
         // Run all examples
+        await IndexExample.RunAsync();
         await FirstGraphExample.RunAsync();
         await FirstGraph5MinutesExample.RunAsync();
+        await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample();
         await ConditionalNodesTutorialExample.RunAllExamples();
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
-        await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));
         Console.WriteLine("📋 All examples completed!");
