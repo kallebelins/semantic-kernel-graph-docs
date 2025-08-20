@@ -6,7 +6,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 1. [x] changelog.md
 2. [x] checkpointing-quickstart.md
 3. [x] conditional-nodes-quickstart.md
-4. [ ] conditional-nodes-tutorial.md
+4. [x] conditional-nodes-tutorial.md
 5. [ ] faq.md
 6. [ ] first-graph-5-minutes.md
 7. [ ] first-graph.md

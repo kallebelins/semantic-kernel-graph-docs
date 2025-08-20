@@ -1,10 +1,11 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
 using SemanticKernel.Graph.State;
 
-namespace ConditionalNodesQuickstartExample;
+namespace Examples;
 
 /// <summary>
 /// Example demonstrating conditional nodes and edges in SemanticKernel.Graph.
@@ -13,6 +14,22 @@ namespace ConditionalNodesQuickstartExample;
 /// </summary>
 public static class ConditionalNodesQuickstartExample
 {
+    private static string? openAiApiKey;
+    private static string? openAiModel;
+
+    static ConditionalNodesQuickstartExample()
+    {
+        // Load configuration from appsettings.json (optional)
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
+            .Build();
+
+        openAiApiKey = configuration["OpenAI:ApiKey"];
+        openAiModel = configuration["OpenAI:Model"] ?? "gpt-3.5-turbo";
+    }
+
     /// <summary>
     /// Helper method to safely get typed values from KernelArguments.
     /// </summary>
@@ -35,8 +52,14 @@ public static class ConditionalNodesQuickstartExample
     /// </summary>
     /// <param name="kernel">The semantic kernel instance</param>
     /// <returns>Task representing the execution</returns>
-    public static async Task RunConditionalWorkflowExample(Kernel kernel)
+    public static async Task RunConditionalWorkflowExample()
     {
+        // Create kernel with basic configuration
+        var kernel = Kernel.CreateBuilder()
+            .AddOpenAIChatCompletion(openAiModel!, openAiApiKey)
+            .AddGraphSupport()
+            .Build();
+
         // Node 1: Input processing
         var inputNode = new FunctionGraphNode(
             KernelFunctionFactory.CreateFromMethod(

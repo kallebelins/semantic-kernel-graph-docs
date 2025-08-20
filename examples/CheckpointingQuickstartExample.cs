@@ -8,7 +8,7 @@ using SemanticKernel.Graph.Nodes;
 using SemanticKernel.Graph.State;
 using System.ComponentModel;
 
-namespace SemanticKernel.Graph.Examples;
+namespace Examples;
 
 /// <summary>
 /// Comprehensive checkpointing quickstart example demonstrating all major features.
@@ -25,6 +25,7 @@ public static class CheckpointingQuickstartExample
         var configuration = new ConfigurationBuilder()
             .SetBasePath(AppContext.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
             .Build();
 
         openAiApiKey = configuration["OpenAI:ApiKey"];

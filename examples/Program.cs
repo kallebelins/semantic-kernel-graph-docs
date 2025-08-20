@@ -1,34 +1,60 @@
-﻿using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
 
-namespace SemanticKernel.Graph.Examples;
+namespace Examples;
 
 /// <summary>
-/// Main program entry point for running conditional nodes quickstart examples.
+/// Main program entry point for running SemanticKernel.Graph examples.
+/// Supports multiple example options based on task names.
 /// </summary>
 class Program
 {
     /// <summary>
-    /// Main entry point that runs the conditional nodes example.
+    /// Main entry point that runs examples based on command line arguments.
     /// </summary>
-    /// <param name="args">Command line arguments (not used)</param>
+    /// <param name="args">Command line arguments - specify example name to run</param>
     static async Task Main(string[] args)
     {
         try
         {
-            Console.WriteLine("🚀 Starting SemanticKernel.Graph Conditional Nodes Quickstart Example...\n");
-            
-            // Create kernel with basic configuration
-            var builder = Kernel.CreateBuilder();
-            // Note: In a real scenario, you would add your LLM provider here
-            // builder.AddOpenAIChatCompletion("gpt-3.5-turbo", Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
-            builder.AddGraphSupport();
-            var kernel = builder.Build();
+            Console.WriteLine("🚀 Starting SemanticKernel.Graph Examples...\n");
 
-            // Run the conditional nodes example
-            await ConditionalNodesQuickstartExample.ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(kernel);
-            
-            Console.WriteLine("🎉 Conditional nodes example completed successfully!");
+            // Define available example options based on task names
+            var options = new Dictionary<string, Func<Task>>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["conditional-nodes-tutorial"] = async () => await ConditionalNodesTutorialExample.RunAllExamples(),
+                ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
+                ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
+                ["all"] = async () => await RunAllAvailableExamples()
+            };
+
+            // Determine which example to run
+            string exampleToRun = "all"; // Default
+
+            if (args.Length > 0 && !string.IsNullOrWhiteSpace(args[0]))
+            {
+                exampleToRun = args[0];
+            }
+
+            // Check if the requested example exists
+            if (options.TryGetValue(exampleToRun, out var exampleFunc))
+            {
+                Console.WriteLine($"📋 Running example: {exampleToRun}\n");
+                await exampleFunc();
+                Console.WriteLine($"\n🎉 Example '{exampleToRun}' completed successfully!");
+            }
+            else
+            {
+                Console.WriteLine($"❓ Unknown example: {exampleToRun}");
+                Console.WriteLine("\n📚 Available examples:");
+                foreach (var option in options.Keys)
+                {
+                    Console.WriteLine($"  - {option}");
+                }
+                Console.WriteLine("\n💡 Usage: dotnet run [example-name]");
+                Console.WriteLine("💡 Example: dotnet run conditional-workflow");
+                Environment.Exit(1);
+            }
         }
         catch (Exception ex)
         {
@@ -36,5 +62,22 @@ class Program
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
             Environment.Exit(1);
         }
+    }
+
+    /// <summary>
+    /// Runs all available examples
+    /// </summary>
+    /// <returns>Task representing the asynchronous operation</returns>
+    private static async Task RunAllAvailableExamples()
+    {
+        Console.WriteLine("🎯 Running all available examples...\n");
+
+        // Run conditional nodes tutorial examples
+        await ConditionalNodesTutorialExample.RunAllExamples();
+        await CheckpointingQuickstartExample.RunAllExamplesAsync();
+        await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample();
+
+        Console.WriteLine("\n" + "=".PadLeft(50, '='));
+        Console.WriteLine("📋 All examples completed!");
     }
 }
