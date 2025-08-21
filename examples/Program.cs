@@ -32,6 +32,7 @@ class Program
                 ["conditional-nodes-tutorial"] = async () => await ConditionalNodesTutorialExample.RunAllExamples(),
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
+                ["state-quickstart"] = async () => await StateQuickstartExample.RunAsync(),
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
@@ -118,6 +119,7 @@ class Program
         await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample();
         await ConditionalNodesTutorialExample.RunAllExamples();
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
+        await StateQuickstartExample.RunAsync();
         await InstallationExample.RunAllExamplesAsync();
         await MetricsLoggingQuickstartExample.RunBasicExampleAsync();
         await RunReactCotQuickstartExample();

@@ -77,20 +77,20 @@ var stateWithObjects = new KernelArguments
 ```csharp
 // Read simple values
 var name = state["userName"]; // Returns object
-var age = state.GetValue<int>("userAge"); // Returns typed value
-var preferences = state.GetValue<string[]>("preferences");
+var age = state.TryGetValue("userAge", out var ageValue) ? ageValue : 0; // Safe reading
+var preferences = state.TryGetValue("preferences", out var prefValue) ? prefValue : new string[0];
 
 // Safe reading with defaults
-var department = state.GetValueOrDefault("department", "Unknown");
-var score = state.GetValueOrDefault("score", 0);
+var department = state.TryGetValue("department", out var deptValue) ? deptValue : "Unknown";
+var score = state.TryGetValue("score", out var scoreValue) ? scoreValue : 0;
 ```
 
 ### Reading Complex Objects
 
 ```csharp
 // Read complex objects
-var profile = state.GetValue<object>("userProfile");
-var metadata = state.GetValue<Dictionary<string, object>>("metadata");
+var profile = state.TryGetValue("userProfile", out var profileValue) ? profileValue : null;
+var metadata = state.TryGetValue("metadata", out var metadataValue) ? metadataValue : null;
 
 // Check if key exists
 if (state.ContainsKey("userProfile"))
@@ -154,10 +154,6 @@ var createdAt = enhancedState.CreatedAt;
 enhancedState.SetMetadata("source", "user_input");
 enhancedState.SetMetadata("priority", "high");
 
-// Validate state
-var isValid = enhancedState.ValidateState();
-var errors = enhancedState.GetValidationErrors();
-
 // Get execution history
 var history = enhancedState.ExecutionHistory;
 var stepCount = enhancedState.ExecutionStepCount;
@@ -187,12 +183,12 @@ class Program
             KernelFunctionFactory.CreateFromMethod(
                 (KernelArguments args) =>
                 {
-                    var input = args.GetValue<string>("input");
-                    var processed = $"Processed: {input.ToUpper()}";
+                    var input = args.TryGetValue("input", out var inputValue) ? inputValue?.ToString() : "No input";
+                    var processed = $"Processed: {input?.ToUpper()}";
                     
                     // Write to state
                     args["processedInput"] = processed;
-                    args["wordCount"] = input.Split(' ').Length;
+                    args["wordCount"] = input?.Split(' ')?.Length ?? 0;
                     args["timestamp"] = DateTimeOffset.UtcNow;
                     
                     return processed;
@@ -208,8 +204,8 @@ class Program
             KernelFunctionFactory.CreateFromMethod(
                 (KernelArguments args) =>
                 {
-                    var processedInput = args.GetValue<string>("processedInput");
-                    var wordCount = args.GetValue<int>("wordCount");
+                    var processedInput = args.TryGetValue("processedInput", out var processedValue) ? processedValue?.ToString() : "";
+                    var wordCount = args.TryGetValue("wordCount", out var wordCountValue) ? Convert.ToInt32(wordCountValue) : 0;
                     
                     // Perform analysis
                     var sentiment = wordCount > 5 ? "Detailed" : "Brief";
@@ -234,11 +230,11 @@ class Program
                 (KernelArguments args) =>
                 {
                     // Read all state values
-                    var input = args.GetValue<string>("input");
-                    var processed = args.GetValue<string>("processedInput");
-                    var wordCount = args.GetValue<int>("wordCount");
-                    var sentiment = args.GetValue<string>("sentiment");
-                    var complexity = args.GetValue<string>("complexity");
+                    var input = args.TryGetValue("input", out var inputValue) ? inputValue?.ToString() : "No input";
+                    var processed = args.TryGetValue("processedInput", out var processedValue) ? processedValue?.ToString() : "No processed input";
+                    var wordCount = args.TryGetValue("wordCount", out var wordCountValue) ? Convert.ToInt32(wordCountValue) : 0;
+                    var sentiment = args.TryGetValue("sentiment", out var sentimentValue) ? sentimentValue?.ToString() : "No sentiment";
+                    var complexity = args.TryGetValue("complexity", out var complexityValue) ? complexityValue?.ToString() : "No complexity";
                     
                     var summary = $"Input: '{input}' -> Processed: '{processed}' -> " +
                                 $"Word Count: {wordCount}, Sentiment: {sentiment}, Complexity: {complexity}";
@@ -259,11 +255,11 @@ class Program
         graph.AddNode(analysisNode);
         graph.AddNode(summaryNode);
         
-        // Connect nodes in sequence
-        graph.Connect(inputNode, analysisNode);
-        graph.Connect(analysisNode, summaryNode);
+        // Connect nodes in sequence using node names
+        graph.Connect("input_node", "analysis_node");
+        graph.Connect("analysis_node", "summary_node");
         
-        graph.SetStartNode(inputNode);
+        graph.SetStartNode("input_node");
 
         // Execute with initial state
         var initialState = new KernelArguments
@@ -274,15 +270,17 @@ class Program
         Console.WriteLine("=== State Flow Example ===\n");
         Console.WriteLine("Executing graph...");
         
-        var result = await graph.ExecuteAsync(initialState);
+        var result = await graph.ExecuteAsync(kernel, initialState);
         
         Console.WriteLine("\n=== Final State ===");
-        Console.WriteLine($"Input: {result.GetValue<string>("input")}");
-        Console.WriteLine($"Processed: {result.GetValue<string>("processedInput")}");
-        Console.WriteLine($"Word Count: {result.GetValue<int>("wordCount")}");
-        Console.WriteLine($"Sentiment: {result.GetValue<string>("sentiment")}");
-        Console.WriteLine($"Complexity: {result.GetValue<string>("complexity")}");
-        Console.WriteLine($"Summary: {result.GetValue<string>("finalSummary")}");
+        Console.WriteLine($"Input: {initialState.TryGetValue("input", out var input) ? input : "Not found"}");
+        Console.WriteLine($"Processed: {initialState.TryGetValue("processedInput", out var processed) ? processed : "Not found"}");
+        Console.WriteLine($"Word Count: {initialState.TryGetValue("wordCount", out var wordCount) ? wordCount : "Not found"}");
+        Console.WriteLine($"Sentiment: {initialState.TryGetValue("sentiment", out var sentiment) ? sentiment : "Not found"}");
+        Console.WriteLine($"Complexity: {initialState.TryGetValue("complexity", out var complexity) ? complexity : "Not found"}");
+        Console.WriteLine($"Summary: {initialState.TryGetValue("finalSummary", out var summary) ? summary : "Not found"}");
+        
+        Console.WriteLine($"\nFinal Result: {result.GetValueAsString()}");
         
         Console.WriteLine("\n✅ State flow completed successfully!");
     }
@@ -322,6 +320,8 @@ Sentiment: Brief
 Complexity: Low
 Summary: Input: 'Hello world from SemanticKernel.Graph' -> Processed: 'Processed: HELLO WORLD FROM SEMANTICKERNEL.GRAPH' -> Word Count: 5, Sentiment: Brief, Complexity: Low
 
+Final Result: Input: 'Hello world from SemanticKernel.Graph' -> Processed: 'Processed: HELLO WORLD FROM SEMANTICKERNEL.GRAPH' -> Word Count: 5, Sentiment: Brief, Complexity: Low
+
 ✅ State flow completed successfully!
 ```
 
@@ -335,10 +335,10 @@ var state = new KernelArguments { ["userName"] = "Alice" };
 
 ### 2. **State Reading with Type Safety**
 ```csharp
-var age = state.GetValue<int>("userAge");
-var name = state.GetValueOrDefault("name", "Unknown");
+var age = state.TryGetValue("userAge", out var ageValue) ? ageValue : 0;
+var name = state.TryGetValue("name", out var nameValue) ? nameValue : "Unknown";
 ```
-Extension methods provide type-safe reading with fallback values.
+Use `TryGetValue` for safe reading with fallback values.
 
 ### 3. **State Writing and Updates**
 ```csharp
@@ -361,8 +361,8 @@ Each node reads from and writes to the shared state, creating a data pipeline th
 * **State**: Data that flows through your graph, maintained in `KernelArguments`
 * **GraphState**: Enhanced wrapper that adds execution tracking and metadata
 * **State Flow**: Data moves from node to node, with each node reading input and writing output
-* **Extension Methods**: Helper methods that add graph-specific functionality to `KernelArguments`
-* **Type Safety**: Use `GetValue<T>()` for type-safe reading of state values
+* **Safe Reading**: Use `TryGetValue` for safe reading of state values with fallback defaults
+* **Type Safety**: Use proper type checking and conversion when reading state values
 
 ## Common Patterns
 
@@ -401,13 +401,13 @@ state["nodeId"] = "processor_node";
 ```
 System.Collections.Generic.KeyNotFoundException: The given key 'missingKey' was not present
 ```
-**Solution**: Use `GetValueOrDefault()` or check with `ContainsKey()` before reading.
+**Solution**: Use `TryGetValue` or check with `ContainsKey()` before reading.
 
 ### **Type Casting Errors**
 ```
 System.InvalidCastException: Unable to cast object of type 'System.Int32' to type 'System.String'
 ```
-**Solution**: Use `GetValue<T>()` for type-safe reading or verify the expected type.
+**Solution**: Use proper type checking and conversion when reading state values.
 
 ### **State Not Persisting Between Nodes**
 ```
@@ -429,7 +429,6 @@ This tutorial introduces several key concepts:
 * **State**: Data that flows through the graph, maintaining context across execution steps
 * **KernelArguments**: The primary container for state data in Semantic Kernel
 * **GraphState**: Enhanced state wrapper with execution tracking and metadata
-* **Extension Methods**: Helper methods that add graph-specific functionality to existing types
 * **State Flow**: The pattern of data moving from node to node through the graph
 
 ## Prerequisites and Minimum Configuration
@@ -451,5 +450,5 @@ To complete this tutorial, you need:
 
 * **[KernelArguments](../api/core.md#kernel-arguments)**: Core state container
 * **[GraphState](../api/state.md#graph-state)**: Enhanced state wrapper
-* **[KernelArgumentsExtensions](../api/extensions.md#kernel-arguments-extensions)**: State extension methods
+* **[State Extensions](../api/extensions.md)**: State extension methods
 * **[ISerializableState](../api/state.md#iserializable-state)**: State serialization interface
