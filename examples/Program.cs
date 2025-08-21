@@ -3,7 +3,7 @@ using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
 using Examples;
 using SemanticKernel.Graph.Examples;
-using SemanticKernel.Graph.Docs.Examples;
+
 
 namespace Examples;
 
@@ -38,9 +38,10 @@ class Program
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
-                ["react-cot-quickstart"] = async () => await RunReactCotQuickstartExample(),
-                ["streaming-quickstart"] = async () => await RunStreamingQuickstartExample(),
-                ["troubleshooting"] = async () => await RunTroubleshootingExample(),
+                ["react-cot-quickstart"] = async () => await ReactCotQuickstartExample.RunAllExamplesAsync(),
+                ["streaming-quickstart"] = async () => await RunStreamingQuickstartExampleDirectly(),
+                ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
+                ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 
@@ -80,69 +81,13 @@ class Program
         }
     }
 
-    /// <summary>
-    /// Runs the React and Chain of Thought Quickstart example
-    /// </summary>
-    /// <returns>Task representing the asynchronous operation</returns>
-    private static async Task RunReactCotQuickstartExample()
-    {
-        Console.WriteLine("🎯 Running React and Chain of Thought Quickstart Example...\n");
 
-        try
-        {
-            // Create a basic kernel for the example
-            var kernel = Kernel.CreateBuilder()
-                .AddOpenAIChatCompletion("gpt-3.5-turbo", "your-api-key-here")
-                .Build();
-
-            // Create and run the example
-            var example = new ReactCotQuickstartExample(kernel);
-            await example.RunAllExamplesAsync();
-
-            Console.WriteLine("\n✅ React and Chain of Thought Quickstart Example completed successfully!");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ Error in React and Chain of Thought Quickstart Example: {ex.Message}");
-            Console.WriteLine("💡 Note: This example requires a valid OpenAI API key to run properly.");
-        }
-    }
-
-    /// <summary>
-    /// Runs the Troubleshooting example demonstrating error handling and recovery strategies
-    /// </summary>
-    /// <returns>Task representing the asynchronous operation</returns>
-    private static async Task RunTroubleshootingExample()
-    {
-        Console.WriteLine("🎯 Running Troubleshooting Example...\n");
-
-        try
-        {
-            // Create a basic kernel for the example
-            var kernel = Kernel.CreateBuilder()
-                .AddOpenAIChatCompletion("gpt-3.5-turbo", Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "your-api-key-here")
-                .AddGraphSupport()
-                .Build();
-
-            // Create and run the example
-            var example = new TroubleshootingExample(kernel, ConsoleLogger.Instance);
-            await example.RunAsync();
-
-            Console.WriteLine("\n✅ Troubleshooting Example completed successfully!");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ Error in Troubleshooting Example: {ex.Message}");
-            Console.WriteLine("💡 Note: This example requires a valid OpenAI API key to run properly.");
-            Console.WriteLine("💡 Set the OPENAI_API_KEY environment variable or update the code with your key.");
-        }
-    }
 
     /// <summary>
     /// Runs the Streaming Quickstart example demonstrating real-time graph execution monitoring
     /// </summary>
     /// <returns>Task representing the asynchronous operation</returns>
-    private static async Task RunStreamingQuickstartExample()
+    private static async Task RunStreamingQuickstartExampleDirectly()
     {
         Console.WriteLine("🎯 Running Streaming Quickstart Example...\n");
 
@@ -167,6 +112,10 @@ class Program
         }
     }
 
+
+
+
+
     /// <summary>
     /// Runs all available examples
     /// </summary>
@@ -185,9 +134,10 @@ class Program
         await StateQuickstartExample.RunAsync();
         await InstallationExample.RunAllExamplesAsync();
         await MetricsLoggingQuickstartExample.RunBasicExampleAsync();
-        await RunReactCotQuickstartExample();
-        await RunStreamingQuickstartExample();
-        await RunTroubleshootingExample();
+        await ReactCotQuickstartExample.RunAllExamplesAsync();
+        await RunStreamingQuickstartExampleDirectly();
+        await TroubleshootingExample.RunAsync();
+        AdditionalUtilitiesExample.RunAllDemonstrations();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));
         Console.WriteLine("📋 All examples completed!");
@@ -197,7 +147,7 @@ class Program
 /// <summary>
 /// Simple console logger implementation for examples
 /// </summary>
-public class ConsoleLogger : ILogger<TroubleshootingExample>
+public class ConsoleLogger : ILogger
 {
     public static ConsoleLogger Instance { get; } = new ConsoleLogger();
 

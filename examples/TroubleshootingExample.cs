@@ -13,18 +13,18 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SemanticKernel.Graph.Examples
+namespace Examples
 {
     /// <summary>
     /// Demonstrates troubleshooting techniques and error recovery strategies
     /// for common problems in SemanticKernel.Graph applications.
     /// </summary>
-    public class TroubleshootingExample
+    public static class TroubleshootingExample
     {
-        private readonly Kernel _kernel;
-        private readonly ILogger<TroubleshootingExample> _logger;
+        private static Kernel? _kernel;
+        private static ILogger? _logger;
 
-        public TroubleshootingExample(Kernel kernel, ILogger<TroubleshootingExample> logger)
+        private static void Initialize(Kernel kernel, ILogger logger)
         {
             _kernel = kernel ?? throw new ArgumentNullException(nameof(kernel));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -33,9 +33,21 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Runs the troubleshooting examples demonstrating various error scenarios and solutions.
         /// </summary>
-        public async Task RunAsync()
+        public static async Task RunAsync()
         {
-            _logger.LogInformation("Starting Troubleshooting Examples");
+            // Create a basic kernel for the example
+            var kernel = Kernel.CreateBuilder()
+                .AddOpenAIChatCompletion("gpt-3.5-turbo", Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? "your-api-key-here")
+                .AddGraphSupport()
+                .Build();
+
+            // Create a logger
+            var logger = ConsoleLogger.Instance;
+
+            // Initialize the example
+            Initialize(kernel, logger);
+
+            logger.LogInformation("Starting Troubleshooting Examples");
 
             try
             {
@@ -54,11 +66,11 @@ namespace SemanticKernel.Graph.Examples
                 // Example 5: Performance Monitoring and Diagnostics
                 await DemonstratePerformanceMonitoringTroubleshootingAsync();
 
-                _logger.LogInformation("All troubleshooting examples completed successfully");
+                logger.LogInformation("All troubleshooting examples completed successfully");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error running troubleshooting examples");
+                logger.LogError(ex, "Error running troubleshooting examples");
                 throw;
             }
         }
@@ -66,7 +78,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Demonstrates troubleshooting for execution performance issues.
         /// </summary>
-        private async Task DemonstrateExecutionPerformanceTroubleshootingAsync()
+        private static async Task DemonstrateExecutionPerformanceTroubleshootingAsync()
         {
             _logger.LogInformation("=== Execution Performance Troubleshooting ===");
 
@@ -112,7 +124,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Demonstrates troubleshooting for service registration issues.
         /// </summary>
-        private async Task DemonstrateServiceRegistrationTroubleshootingAsync()
+        private static async Task DemonstrateServiceRegistrationTroubleshootingAsync()
         {
             _logger.LogInformation("=== Service Registration Troubleshooting ===");
 
@@ -158,7 +170,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Demonstrates troubleshooting for state and checkpoint problems.
         /// </summary>
-        private async Task DemonstrateStateCheckpointTroubleshootingAsync()
+        private static async Task DemonstrateStateCheckpointTroubleshootingAsync()
         {
             _logger.LogInformation("=== State and Checkpoint Troubleshooting ===");
 
@@ -244,7 +256,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Demonstrates troubleshooting for error recovery and resilience.
         /// </summary>
-        private async Task DemonstrateErrorRecoveryTroubleshootingAsync()
+        private static async Task DemonstrateErrorRecoveryTroubleshootingAsync()
         {
             _logger.LogInformation("=== Error Recovery and Resilience Troubleshooting ===");
 
@@ -291,7 +303,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Demonstrates troubleshooting for performance monitoring and diagnostics.
         /// </summary>
-        private async Task DemonstratePerformanceMonitoringTroubleshootingAsync()
+        private static async Task DemonstratePerformanceMonitoringTroubleshootingAsync()
         {
             _logger.LogInformation("=== Performance Monitoring and Diagnostics Troubleshooting ===");
 
@@ -346,7 +358,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Demonstrates common troubleshooting patterns and solutions.
         /// </summary>
-        public async Task DemonstrateCommonTroubleshootingPatternsAsync()
+        private static async Task DemonstrateCommonTroubleshootingPatternsAsync()
         {
             _logger.LogInformation("=== Common Troubleshooting Patterns ===");
 
@@ -382,7 +394,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Performs a basic system health check.
         /// </summary>
-        private async Task<string> CheckSystemHealthAsync()
+        private static async Task<string> CheckSystemHealthAsync()
         {
             try
             {

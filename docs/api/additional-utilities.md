@@ -60,53 +60,6 @@ var result = await executor.ExecuteWithCircuitBreakerAsync(
 );
 ```
 
-### CheckpointingExtensions
-
-Extension methods for checkpointing and state persistence operations.
-
-```csharp
-public static class CheckpointingExtensions
-{
-    // Create checkpoint with metadata
-    public static async Task<string> CreateCheckpointAsync(
-        this GraphState state,
-        string checkpointName,
-        IDictionary<string, object>? metadata = null)
-    
-    // Restore checkpoint by ID
-    public static async Task<GraphState> RestoreCheckpointAsync(
-        this GraphState state,
-        string checkpointId)
-    
-    // List available checkpoints
-    public static async Task<IReadOnlyList<CheckpointInfo>> ListCheckpointsAsync(
-        this GraphState state)
-    
-    // Delete checkpoint
-    public static async Task DeleteCheckpointAsync(
-        this GraphState state,
-        string checkpointId)
-}
-```
-
-**Example:**
-```csharp
-// Create checkpoint before risky operation
-var checkpointId = await graphState.CreateCheckpointAsync("before_processing", 
-    new Dictionary<string, object> { ["operation"] = "data_processing" });
-
-try
-{
-    // Perform risky operation
-    await ProcessDataAsync();
-}
-catch
-{
-    // Restore to safe state
-    graphState = await graphState.RestoreCheckpointAsync(checkpointId);
-}
-```
-
 ### DynamicRoutingExtensions
 
 Extension methods for dynamic routing and conditional execution patterns.
@@ -140,53 +93,6 @@ var executor = new GraphExecutor("dynamic-graph")
         config.EnableProbabilisticRouting = true;
         config.DefaultRoutingStrategy = "similarity";
     });
-```
-
-### GraphDebuggerExtensions
-
-Extension methods for integrating debugging capabilities with graph execution.
-
-```csharp
-public static class GraphDebuggerExtensions
-{
-    // Execute with debugging enabled
-    public static async Task<(FunctionResult Result, IDebugSession DebugSession)> ExecuteWithDebugAsync(
-        this GraphExecutor executor,
-        Kernel kernel,
-        KernelArguments arguments,
-        DebugExecutionMode debugMode = DebugExecutionMode.StepOver,
-        CancellationToken cancellationToken = default)
-    
-    // Create debug session
-    public static IDebugSession CreateDebugSession(
-        this GraphExecutor executor,
-        GraphExecutionContext context)
-    
-    // Create execution replay
-    public static ExecutionReplay CreateReplay(this IDebugSession debugSession)
-    
-    // Enable debug mode
-    public static GraphExecutor EnableDebugMode(
-        this GraphExecutor executor,
-        DebugExecutionMode mode = DebugExecutionMode.StepOver)
-}
-```
-
-**Example:**
-```csharp
-// Execute with step-by-step debugging
-var (result, debugSession) = await executor.ExecuteWithDebugAsync(
-    kernel, 
-    arguments, 
-    DebugExecutionMode.StepInto
-);
-
-// Create replay for analysis
-var replay = debugSession.CreateReplay();
-foreach (var step in replay.GetExecutionSteps())
-{
-    Console.WriteLine($"Step {step.StepNumber}: {step.NodeName}");
-}
 ```
 
 ### GraphPerformanceExtensions
@@ -306,106 +212,6 @@ logger.LogGraphInfo(executionId, "Graph execution started",
 
 logger.LogNodeInfo(executionId, "node1", "Node execution completed", 
     new Dictionary<string, object> { ["duration"] = "150ms" });
-```
-
-### MultiAgentExtensions
-
-Extension methods for multi-agent coordination and communication.
-
-```csharp
-public static class MultiAgentExtensions
-{
-    // Add multi-agent support
-    public static GraphExecutor WithMultiAgentSupport(
-        this GraphExecutor executor,
-        Action<MultiAgentOptions>? configureOptions = null)
-    
-    // Configure agent coordination
-    public static GraphExecutor ConfigureAgentCoordination(
-        this GraphExecutor executor,
-        IAgentCoordinationStrategy strategy)
-    
-    // Add agent communication
-    public static GraphExecutor AddAgentCommunication(
-        this GraphExecutor executor,
-        IAgentCommunicationChannel channel)
-}
-```
-
-**Example:**
-```csharp
-var executor = new GraphExecutor("multi-agent-graph")
-    .WithMultiAgentSupport(config => 
-    {
-        config.MaxConcurrentAgents = 10;
-        config.EnableLoadBalancing = true;
-        config.DefaultAgentTimeout = TimeSpan.FromMinutes(5);
-    });
-```
-
-### RecoveryExtensions
-
-Extension methods for recovery and replay functionality.
-
-```csharp
-public static class RecoveryExtensions
-{
-    // Enable recovery support
-    public static GraphExecutor WithRecoverySupport(
-        this GraphExecutor executor,
-        Action<RecoveryOptions>? configureOptions = null)
-    
-    // Configure recovery strategies
-    public static GraphExecutor ConfigureRecoveryStrategies(
-        this GraphExecutor executor,
-        IDictionary<string, IRecoveryStrategy> strategies)
-    
-    // Enable replay mode
-    public static GraphExecutor EnableReplayMode(
-        this GraphExecutor executor,
-        ReplayOptions options)
-}
-```
-
-**Example:**
-```csharp
-var executor = new GraphExecutor("recovery-graph")
-    .WithRecoverySupport(config => 
-    {
-        config.EnableAutomaticRecovery = true;
-        config.MaxRecoveryAttempts = 3;
-        config.RecoveryTimeout = TimeSpan.FromMinutes(10);
-    });
-```
-
-### StateExtensions
-
-Extension methods for state management and cloning operations.
-
-```csharp
-public static class StateExtensions
-{
-    // Clone GraphState
-    public static GraphState Clone(this GraphState state)
-    
-    // Merge states
-    public static GraphState MergeFrom(this GraphState state, GraphState other)
-    
-    // Get string representation
-    public static string GetStringValue(this GraphState state, string parameterName)
-}
-```
-
-**Example:**
-```csharp
-// Clone state for parallel processing
-var clonedState = graphState.Clone();
-
-// Merge states
-var mergedState = state1.MergeFrom(state2);
-
-// Get string value with fallback
-var value = graphState.GetStringValue("userInput") ?? "default";
 ```
 
 ### StreamingExtensions
@@ -682,10 +488,6 @@ var executor = new GraphExecutor("advanced-graph")
     .WithPerformanceMetrics(config => 
     {
         config.EnableDetailedMetrics = true;
-    })
-    .WithRecoverySupport(config => 
-    {
-        config.EnableAutomaticRecovery = true;
     });
 ```
 

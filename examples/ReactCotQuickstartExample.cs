@@ -7,25 +7,25 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SemanticKernel.Graph.Examples
+namespace Examples
 {
     /// <summary>
     /// Example demonstrating ReAct (Reasoning + Acting) loops and Chain of Thought reasoning
     /// using SemanticKernel.Graph. This example shows how to build intelligent agents
     /// that can think, act, and learn from their actions.
     /// </summary>
-    public class ReactCotQuickstartExample
+    public static class ReactCotQuickstartExample
     {
-        private readonly Kernel _kernel;
-        private readonly GraphExecutor _simpleReActExecutor;
-        private readonly GraphExecutor _advancedReActExecutor;
-        private readonly GraphExecutor _chainOfThoughtExecutor;
+        private static Kernel? _kernel;
+        private static GraphExecutor? _simpleReActExecutor;
+        private static GraphExecutor? _advancedReActExecutor;
+        private static GraphExecutor? _chainOfThoughtExecutor;
 
         /// <summary>
         /// Initializes the example with a configured kernel and creates the graph executors
         /// </summary>
         /// <param name="kernel">The configured Semantic Kernel instance</param>
-        public ReactCotQuickstartExample(Kernel kernel)
+        private static void Initialize(Kernel kernel)
         {
             _kernel = kernel ?? throw new ArgumentNullException(nameof(kernel));
             
@@ -42,7 +42,7 @@ namespace SemanticKernel.Graph.Examples
         /// Creates a simple ReAct loop with three core components: reasoning, action, and observation
         /// </summary>
         /// <returns>A configured GraphExecutor with a basic ReAct reasoning loop</returns>
-        private GraphExecutor CreateSimpleReActExecutor()
+        private static GraphExecutor CreateSimpleReActExecutor()
         {
             // Create the reasoning node that analyzes user queries and suggests actions
             var reasoningNode = new FunctionGraphNode(
@@ -91,7 +91,7 @@ namespace SemanticKernel.Graph.Examples
         /// Creates an advanced ReAct loop using specialized reasoning nodes and loop control
         /// </summary>
         /// <returns>A configured GraphExecutor with advanced ReAct capabilities</returns>
-        private GraphExecutor CreateAdvancedReActExecutor()
+        private static GraphExecutor CreateAdvancedReActExecutor()
         {
             // Use a function-based reasoning node to avoid LLM dependency
             // Create advanced reasoning node that provides more sophisticated analysis
@@ -137,7 +137,7 @@ namespace SemanticKernel.Graph.Examples
         /// Creates a Chain of Thought executor for step-by-step reasoning
         /// </summary>
         /// <returns>A configured GraphExecutor with Chain of Thought capabilities</returns>
-        private GraphExecutor CreateChainOfThoughtExecutor()
+        private static GraphExecutor CreateChainOfThoughtExecutor()
         {
             // Create a Chain of Thought function that performs step-by-step reasoning
             var cotNode = new FunctionGraphNode(
@@ -337,7 +337,7 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Adds mock actions to the kernel for the ActionGraphNode to discover and execute
         /// </summary>
-        private void AddMockActionsToKernel()
+        private static void AddMockActionsToKernel()
         {
             // Check if plugin already exists to avoid duplicates
             if (_kernel.Plugins.Any(p => p.Name == "react_actions"))
@@ -412,7 +412,7 @@ namespace SemanticKernel.Graph.Examples
         /// </summary>
         /// <param name="userQuery">The user's query to process</param>
         /// <returns>The result of the ReAct loop execution</returns>
-        public async Task<string> RunSimpleReActExampleAsync(string userQuery)
+        private static async Task<string> RunSimpleReActExampleAsync(string userQuery)
         {
             Console.WriteLine($"🤖 Running Simple ReAct Example with query: {userQuery}");
             
@@ -440,7 +440,7 @@ namespace SemanticKernel.Graph.Examples
         /// Demonstrates the advanced ReAct loop execution with business problem solving
         /// </summary>
         /// <returns>The result of the advanced ReAct execution</returns>
-        public async Task<string> RunAdvancedReActExampleAsync()
+        private static async Task<string> RunAdvancedReActExampleAsync()
         {
             Console.WriteLine("🚀 Running Advanced ReAct Example");
             
@@ -471,7 +471,7 @@ namespace SemanticKernel.Graph.Examples
         /// Demonstrates Chain of Thought reasoning for complex problem solving
         /// </summary>
         /// <returns>The result of the Chain of Thought execution</returns>
-        public async Task<string> RunChainOfThoughtExampleAsync()
+        private static async Task<string> RunChainOfThoughtExampleAsync()
         {
             Console.WriteLine("🧠 Running Chain of Thought Example");
             
@@ -501,10 +501,18 @@ namespace SemanticKernel.Graph.Examples
         /// <summary>
         /// Runs all examples to demonstrate the different reasoning approaches
         /// </summary>
-        public async Task RunAllExamplesAsync()
+        public static async Task RunAllExamplesAsync()
         {
             Console.WriteLine("🎯 React and Chain of Thought Quickstart Examples");
             Console.WriteLine(new string('=', 60));
+            
+            // Create a basic kernel for the example
+            var kernel = Kernel.CreateBuilder()
+                .AddOpenAIChatCompletion("gpt-3.5-turbo", "your-api-key-here")
+                .Build();
+            
+            // Initialize the example
+            Initialize(kernel);
             
             // Run simple ReAct example
             await RunSimpleReActExampleAsync("What's the weather like today?");

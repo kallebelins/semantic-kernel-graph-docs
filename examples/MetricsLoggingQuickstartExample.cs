@@ -6,7 +6,7 @@ using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Integration;
 using SemanticKernel.Graph.Nodes;
 
-namespace SemanticKernel.Graph.Docs.Examples;
+namespace Examples;
 
 /// <summary>
 /// Example demonstrating metrics and logging quickstart functionality.
