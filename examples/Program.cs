@@ -42,6 +42,7 @@ class Program
                 ["react-cot-quickstart"] = async () => await ReactCotQuickstartExample.RunAllExamplesAsync(),
                 ["streaming-quickstart"] = async () => await RunStreamingQuickstartExampleDirectly(),
                 ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
+                ["core-api"] = async () => await CoreApiExample.RunAsync(),
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
                 ["all"] = async () => await RunAllAvailableExamples()
             };

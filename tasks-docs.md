@@ -24,7 +24,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 ## docs/api
 19. [x] additional-utilities.md
 20. [x] conditional-edge.md
-21. [ ] core.md
+21. [x] core.md
 22. [ ] dynamic-routing.md
 23. [ ] error-policies.md
 24. [ ] execution-context.md
