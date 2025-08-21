@@ -24,14 +24,11 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.7" />
 		<PackageReference Include="Microsoft.SemanticKernel" Version="1.61.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
+		<PackageReference Include="SemanticKernel.Graph" Version="25.8.191" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\semantic-kernel-graph\src\SemanticKernel.Graph\SemanticKernel.Graph.csproj" />
 	</ItemGroup>
 
 </Project>

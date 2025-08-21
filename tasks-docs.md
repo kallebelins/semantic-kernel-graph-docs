@@ -18,7 +18,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 13. [x] react-cot-quickstart.md
 15. [x] state-quickstart.md
 16. [x] state-tutorial.md
-17. [ ] streaming-quickstart.md
+17. [x] streaming-quickstart.md
 18. [ ] troubleshooting.md
 
 ## docs/api

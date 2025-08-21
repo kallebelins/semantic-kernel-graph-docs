@@ -104,41 +104,55 @@ streamingExecutor.SetStartNode("node1");
 ### Basic Streaming Configuration
 
 ```csharp
-using SemanticKernel.Graph.Extensions;
+using SemanticKernel.Graph.Streaming;
 
 // Create streaming options with defaults
-var options = StreamingExtensions.CreateStreamingOptions();
+var options = new StreamingExecutionOptions();
 
 // Or configure specific options
-var configuredOptions = StreamingExtensions.CreateStreamingOptions()
-    .Configure()
-    .WithBufferSize(20)
-    .WithEventTypes(
+var configuredOptions = new StreamingExecutionOptions
+{
+    BufferSize = 20,
+    EventTypesToEmit = new[]
+    {
         GraphExecutionEventType.ExecutionStarted,
         GraphExecutionEventType.NodeStarted,
         GraphExecutionEventType.NodeCompleted,
         GraphExecutionEventType.ExecutionCompleted
-    )
-    .Build();
+    }
+};
 ```
 
 ### Advanced Streaming Options
 
 ```csharp
-var advancedOptions = StreamingExtensions.CreateStreamingOptions()
-    .Configure()
-    .WithBufferSize(50)
-    .WithEventTypes(
+var advancedOptions = new StreamingExecutionOptions
+{
+        BufferSize = 50,
+    MaxBufferSize = 200,
+    EventTypesToEmit = new[]
+    {
         GraphExecutionEventType.ExecutionStarted,
         GraphExecutionEventType.NodeStarted,
         GraphExecutionEventType.NodeCompleted,
         GraphExecutionEventType.NodeFailed,
         GraphExecutionEventType.ExecutionCompleted,
         GraphExecutionEventType.ExecutionFailed
-    )
-    .WithCompression(true)
-    .WithMaxConcurrentConsumers(5)
-    .Build();
+    },
+    EnableEventCompression = true,
+    CompressionAlgorithm = CompressionAlgorithm.Gzip,
+    CompressionThresholdBytes = 8 * 1024, // 8KB threshold
+    AdaptiveEventCompressionEnabled = true,
+    UseMemoryMappedSerializedBuffer = false,
+    MemoryMappedSerializedThresholdBytes = 64 * 1024, // 64KB threshold
+    MemoryMappedFileSizeBytes = 64L * 1024 * 1024, // 64MB per file
+    MemoryMappedMaxFiles = 16,
+    MemoryMappedBufferDirectory = Path.GetTempPath(),
+    ProducerBatchSize = 1,
+    ProducerFlushInterval = TimeSpan.FromMilliseconds(100),
+    EnableHeartbeat = true,
+    HeartbeatInterval = TimeSpan.FromSeconds(30)
+};
 ```
 
 ## Step 3: Execute and Consume the Stream
@@ -164,16 +178,16 @@ await foreach (var @event in eventStream)
             Console.WriteLine($"   🚀 Execution started with ID: {started.ExecutionId}");
             break;
             
-        case NodeStartedEvent nodeStarted:
-            Console.WriteLine($"   ▶️  Node started: {nodeStarted.NodeName}");
+        case NodeExecutionStartedEvent nodeStarted:
+            Console.WriteLine($"   ▶️  Node started: {nodeStarted.Node.Name}");
             break;
             
-        case NodeCompletedEvent nodeCompleted:
-            Console.WriteLine($"   ✅ Node completed: {nodeCompleted.NodeName} in {nodeCompleted.Duration.TotalMilliseconds:F0}ms");
+        case NodeExecutionCompletedEvent nodeCompleted:
+            Console.WriteLine($"   ✅ Node completed: {nodeCompleted.Node.Name} in {nodeCompleted.ExecutionDuration.TotalMilliseconds:F0}ms");
             break;
             
-        case ExecutionCompletedEvent completed:
-            Console.WriteLine($"   🎯 Execution completed in {completed.Duration.TotalMilliseconds:F0}ms");
+        case GraphExecutionCompletedEvent completed:
+            Console.WriteLine($"   🎯 Execution completed in {completed.TotalDuration.TotalMilliseconds:F0}ms");
             break;
     }
     
@@ -223,13 +237,21 @@ await foreach (var @event in bufferedStream)
 ### Wait for Completion
 
 ```csharp
-// Wait for execution to complete
-var completionResult = await eventStream.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
+// Wait for execution to complete by consuming all events
+var eventCount = 0;
+var startTime = DateTimeOffset.UtcNow;
 
+await foreach (var @event in eventStream)
+{
+    eventCount++;
+    // Process each event
+}
+
+var duration = DateTimeOffset.UtcNow - startTime;
 Console.WriteLine($"\n✅ Execution completed!");
-Console.WriteLine($"   Status: {completionResult.Status}");
-Console.WriteLine($"   Duration: {completionResult.Duration.TotalMilliseconds:F0}ms");
-Console.WriteLine($"   Total Events: {completionResult.TotalEvents}");
+Console.WriteLine($"   Status: Completed");
+Console.WriteLine($"   Duration: {duration.TotalMilliseconds:F0}ms");
+Console.WriteLine($"   Total Events: {eventCount}");
 ```
 
 ## Step 5: Complete Streaming Example
@@ -287,7 +309,7 @@ class Program
         ).StoreResultAs("analysisResult");
 
         var decisionNode = new ConditionalGraphNode(
-            state => state.GetValue<string>("analysis")?.Contains("completed") == true,
+            state => state.KernelArguments.ContainsName("analysis") && state.KernelArguments["analysis"]?.ToString()?.Contains("completed") == true,
             "decision_node",
             "DecisionMaker",
             "Makes routing decision based on analysis"
@@ -323,12 +345,12 @@ class Program
             KernelFunctionFactory.CreateFromMethod(
                 (KernelArguments args) =>
                 {
-                    var startTime = args.GetValue<DateTimeOffset>("startTime");
+                    var startTime = args.ContainsName("startTime") ? (DateTimeOffset)args["startTime"] : DateTimeOffset.UtcNow;
                     var endTime = DateTimeOffset.UtcNow;
                     var duration = endTime - startTime;
                     
                     args["totalDuration"] = duration.TotalMilliseconds;
-                    args["finalResult"] = args.GetValue<string>("result");
+                    args["finalResult"] = args.ContainsName("result") ? args["result"]?.ToString() ?? "" : "";
                     
                     return $"Processing completed in {duration.TotalMilliseconds:F0}ms";
                 },
@@ -347,28 +369,30 @@ class Program
         streamingExecutor.AddNode(summaryNode);
 
         // Connect nodes
-        streamingExecutor.Connect(inputNode, analysisNode);
-        streamingExecutor.Connect(analysisNode, decisionNode);
-        streamingExecutor.Connect(decisionNode, successNode, 
-            edge => edge.When(state => state.GetValue<string>("analysis")?.Contains("completed") == true));
-        streamingExecutor.Connect(decisionNode, fallbackNode, 
-            edge => edge.When(state => !(state.GetValue<string>("analysis")?.Contains("completed") == true)));
-        streamingExecutor.Connect(successNode, summaryNode);
-        streamingExecutor.Connect(fallbackNode, summaryNode);
+        streamingExecutor.Connect("input_node", "analysis_node");
+        streamingExecutor.Connect("analysis_node", "decision_node");
+        streamingExecutor.Connect("decision_node", "success_node");
+        streamingExecutor.Connect("decision_node", "fallback_node");
+        streamingExecutor.Connect("success_node", "summary_node");
+        streamingExecutor.Connect("fallback_node", "summary_node");
 
-        streamingExecutor.SetStartNode(inputNode);
+        streamingExecutor.SetStartNode("input_node");
 
         // Configure streaming options
-        var options = StreamingExtensions.CreateStreamingOptions()
-            .Configure()
-            .WithBufferSize(15)
-            .WithEventTypes(
+        var options = new StreamingExecutionOptions
+        {
+            BufferSize = 15,
+            EnableHeartbeat = true,
+            HeartbeatInterval = TimeSpan.FromSeconds(10),
+            EventTypesToEmit = new[]
+            {
                 GraphExecutionEventType.ExecutionStarted,
                 GraphExecutionEventType.NodeStarted,
                 GraphExecutionEventType.NodeCompleted,
-                GraphExecutionEventType.ExecutionCompleted
-            )
-            .Build();
+                                GraphExecutionEventType.ExecutionCompleted
+            },
+            IncludeStateSnapshots = true
+        };
 
         // Execute with streaming
         var arguments = new KernelArguments();
@@ -392,17 +416,17 @@ class Program
                     Console.WriteLine($"   🚀 Execution ID: {started.ExecutionId}");
                     break;
                     
-                case NodeStartedEvent nodeStarted:
-                    Console.WriteLine($"   ▶️  Node: {nodeStarted.NodeName}");
-                    break;
+                        case NodeExecutionStartedEvent nodeStarted:
+            Console.WriteLine($"   ▶️  Node: {nodeStarted.Node.Name}");
+            break;
+            
+        case NodeExecutionCompletedEvent nodeCompleted:
+            var duration = nodeCompleted.ExecutionDuration.TotalMilliseconds;
+            Console.WriteLine($"   ✅ Node: {nodeCompleted.Node.Name} ({duration:F0}ms)");
+            break;
                     
-                case NodeCompletedEvent nodeCompleted:
-                    var duration = nodeCompleted.Duration.TotalMilliseconds;
-                    Console.WriteLine($"   ✅ Node: {nodeCompleted.NodeName} ({duration:F0}ms)");
-                    break;
-                    
-                case ExecutionCompletedEvent completed:
-                    var totalDuration = completed.Duration.TotalMilliseconds;
+                case GraphExecutionCompletedEvent completed:
+                    var totalDuration = completed.TotalDuration.TotalMilliseconds;
                     Console.WriteLine($"   🎯 Total Duration: {totalDuration:F0}ms");
                     break;
             }
@@ -412,17 +436,17 @@ class Program
         }
 
         // Wait for completion and show results
-        var completionResult = await eventStream.WaitForCompletionAsync(TimeSpan.FromSeconds(30));
+        // Note: WaitForCompletionAsync is handled by consuming the stream until completion
         
         Console.WriteLine($"\n=== Execution Summary ===");
-        Console.WriteLine($"Status: {completionResult.Status}");
-        Console.WriteLine($"Total Events: {completionResult.TotalEvents}");
-        Console.WriteLine($"Duration: {completionResult.Duration.TotalMilliseconds:F0}ms");
+        Console.WriteLine($"Status: Completed");
+        Console.WriteLine($"Total Events: {eventCount}");
+        Console.WriteLine($"Duration: Processing completed");
         
         // Show final state
         var finalState = await streamingExecutor.ExecuteAsync(kernel, arguments);
-        Console.WriteLine($"Final Result: {finalState.GetValue<string>("finalResult")}");
-        Console.WriteLine($"Total Duration: {finalState.GetValue<double>("totalDuration"):F0}ms");
+        Console.WriteLine($"Final Result: {finalState.ContainsName("finalResult") ? finalState["finalResult"]?.ToString() ?? "" : ""}");
+        Console.WriteLine($"Total Duration: {finalState.ContainsName("totalDuration") ? finalState["totalDuration"]?.ToString() ?? "0" : "0"}ms");
         
         Console.WriteLine("\n✅ Streaming execution completed successfully!");
     }
@@ -551,21 +575,31 @@ await foreach (var batch in batchStream)
 ```csharp
 switch (@event)
 {
-    case NodeStartedEvent started:
-        Console.WriteLine($"Node {started.NodeName} started");
+    case NodeExecutionStartedEvent started:
+        Console.WriteLine($"Node {started.Node.Name} started");
         break;
-    case NodeCompletedEvent completed:
-        Console.WriteLine($"Node {completed.NodeName} completed in {completed.Duration}ms");
+    case NodeExecutionCompletedEvent completed:
+        Console.WriteLine($"Node {completed.Node.Name} completed in {completed.ExecutionDuration}ms");
         break;
 }
 ```
 
 ### Wait for Completion
 ```csharp
-var result = await eventStream.WaitForCompletionAsync(TimeSpan.FromSeconds(60));
-if (result.Status == StreamStatus.Completed)
+// Consume all events to wait for completion
+var eventCount = 0;
+var startTime = DateTimeOffset.UtcNow;
+
+await foreach (var @event in eventStream)
 {
-    Console.WriteLine($"Execution completed in {result.Duration}ms");
+    eventCount++;
+    // Process events as needed
+    if (@event is GraphExecutionCompletedEvent)
+    {
+        var duration = DateTimeOffset.UtcNow - startTime;
+        Console.WriteLine($"Execution completed in {duration.TotalMilliseconds:F0}ms");
+        break;
+    }
 }
 ```
 
