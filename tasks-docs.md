@@ -19,7 +19,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 15. [x] state-quickstart.md
 16. [x] state-tutorial.md
 17. [x] streaming-quickstart.md
-18. [ ] troubleshooting.md
+18. [x] troubleshooting.md
 
 ## docs/api
 19. [ ] additional-utilities.md

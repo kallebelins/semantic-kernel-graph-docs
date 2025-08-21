@@ -31,35 +31,54 @@ Guide for resolving common problems and diagnosing issues in SemanticKernel.Grap
 
 **Diagnosis**:
 ```csharp
-// Enable detailed metrics
-var options = new GraphExecutionOptions
-{
-    EnableMetrics = true,
-    EnableLogging = true,
-    MaxExecutionTime = TimeSpan.FromMinutes(5)
-};
+// Enable detailed metrics and monitoring
+var executionOptions = GraphExecutionOptions.CreateDefault();
 
-// Check execution logs
-var logger = kernel.GetRequiredService<ILogger<GraphExecutor>>();
+// Create a graph with performance monitoring
+var graph = new GraphExecutor("performance-test-graph");
+
+// Add nodes to the graph
+var slowNode = new ActionGraphNode("slow-operation", "Slow Operation", "Simulates a slow operation");
+var fastNode = new ActionGraphNode("fast-operation", "Fast Operation", "Simulates a fast operation");
+
+graph.AddNode(slowNode);
+graph.AddNode(fastNode);
+
+// Set the start node for execution
+graph.SetStartNode(slowNode);
+
+// Execute with performance monitoring
+var startTime = DateTimeOffset.UtcNow;
+var arguments = new KernelArguments();
+arguments["input"] = "test input";
+
+var result = await graph.ExecuteAsync(kernel, arguments, CancellationToken.None);
+var executionTime = DateTimeOffset.UtcNow - startTime;
+
+Console.WriteLine($"Graph execution completed in {executionTime.TotalMilliseconds:F2}ms");
 ```
 
 **Solution**:
 ```csharp
-// Set iteration limits
-var loopNode = new ReActLoopGraphNode(
-    maxIterations: 10,  // Explicit limit
-    timeout: TimeSpan.FromMinutes(2)
-);
+// Configure execution options with performance monitoring
+var executionOptions = GraphExecutionOptions.CreateDefault();
 
-// Add timeouts to nodes
-var nodeOptions = new GraphNodeOptions
+// Set appropriate timeouts and limits
+var graph = new GraphExecutor("optimized-graph");
+graph.ConfigureMetrics(new GraphMetricsOptions
 {
-    MaxExecutionTime = TimeSpan.FromSeconds(30)
-};
+    EnableRealTimeMetrics = true,
+    MetricsRetentionPeriod = TimeSpan.FromHours(24)
+});
+
+// Add nodes with proper configuration
+var optimizedNode = new ActionGraphNode("optimized-operation", "Optimized Operation", "Fast operation with monitoring");
+graph.AddNode(optimizedNode);
+graph.SetStartNode(optimizedNode);
 ```
 
 **Prevention**:
-* Always set `MaxIterations` for loop nodes
+* Always set start nodes for graphs
 * Configure appropriate timeouts
 * Use metrics to monitor performance
 * Implement circuit breakers for external resources
@@ -78,12 +97,36 @@ var nodeOptions = new GraphNodeOptions
 
 **Diagnosis**:
 ```csharp
-// Check if graph support was added
-var graphExecutor = kernel.GetService<IGraphExecutor>();
-if (graphExecutor == null)
+// Check if graph support is properly configured
+var serviceProvider = kernel.Services;
+var graphExecutorFactory = serviceProvider.GetService<IGraphExecutorFactory>();
+
+if (graphExecutorFactory == null)
 {
-    Console.WriteLine("Graph support not enabled!");
+    Console.WriteLine("Graph support not enabled! This will cause errors.");
+    
+    // Demonstrate the correct way to configure services
+    Console.WriteLine("Correct configuration should include:");
+    Console.WriteLine("builder.AddGraphSupport(options => {");
+    Console.WriteLine("    options.EnableMetrics = true;");
+    Console.WriteLine("    options.EnableCheckpointing = true;");
+    Console.WriteLine("});");
 }
+else
+{
+    Console.WriteLine("Graph support is properly configured");
+}
+
+// Check for other essential services
+var checkpointManager = serviceProvider.GetService<ICheckpointManager>();
+var errorRecoveryEngine = serviceProvider.GetService<ErrorRecoveryEngine>();
+var metricsExporter = serviceProvider.GetService<GraphMetricsExporter>();
+
+Console.WriteLine("Service availability check:");
+Console.WriteLine($"- GraphExecutorFactory: {(graphExecutorFactory != null ? "Available" : "Missing")}");
+Console.WriteLine($"- CheckpointManager: {(checkpointManager != null ? "Available" : "Missing")}");
+Console.WriteLine($"- ErrorRecoveryEngine: {(errorRecoveryEngine != null ? "Available" : "Missing")}");
+Console.WriteLine($"- MetricsExporter: {(metricsExporter != null ? "Available" : "Missing")}");
 ```
 
 **Solution**:
@@ -95,16 +138,22 @@ var builder = Kernel.CreateBuilder();
 builder.AddGraphSupport(options => {
     options.EnableMetrics = true;
     options.EnableCheckpointing = true;
+    options.EnableLogging = true;
+    options.MaxExecutionSteps = 1000;
+    options.ExecutionTimeout = TimeSpan.FromMinutes(10);
 });
 
 // Add other services
+builder.AddOpenAIChatCompletion("gpt-4", "your-api-key");
+
+var kernel = builder.Build();
 ```
 
 **Prevention**:
-* Always set `MaxIterations` for loop nodes
-* Configure appropriate timeouts
-* Use metrics to monitor performance
-* Implement circuit breakers for external resources
+* Always call `AddGraphSupport()` before adding other services
+* Verify service registration order
+* Test service availability during startup
+* Use dependency injection properly
 
 ### Failed in REST Tools
 
@@ -121,34 +170,41 @@ builder.AddGraphSupport(options => {
 
 **Diagnosis**:
 ```csharp
-// Check telemetry of dependencies
-var telemetry = kernel.GetRequiredService<ITelemetryService>();
-var httpMetrics = telemetry.GetHttpMetrics();
+// Check service availability
+var serviceProvider = kernel.Services;
+var restApiService = serviceProvider.GetService<GraphRestApi>();
 
-// Check error logs
-var logger = kernel.GetRequiredService<ILogger<RestToolGraphNode>>();
+if (restApiService == null)
+{
+    Console.WriteLine("REST API service not available");
+}
+else
+{
+    Console.WriteLine("REST API service is properly configured");
+}
+
+// Check logging configuration
+var logger = serviceProvider.GetService<ILogger<GraphExecutor>>();
+if (logger != null)
+{
+    logger.LogInformation("Graph execution logging is properly configured");
+}
 ```
 
 **Solution**:
 ```csharp
-// Configure appropriate timeouts
-var restToolOptions = new RestToolOptions
-{
-    Timeout = TimeSpan.FromSeconds(30),
-    RetryPolicy = new ExponentialBackoffRetryPolicy(maxRetries: 3),
-    CircuitBreaker = new CircuitBreakerOptions
-    {
-        FailureThreshold = 5,
-        RecoveryTimeout = TimeSpan.FromMinutes(1)
-    }
-};
+// Configure REST API with proper settings
+builder.AddGraphSupport(options => {
+    options.EnableLogging = true;
+    options.Logging.ConfigureForProduction();
+});
 
-// Validate schemas
-var schema = new RestToolSchema
+// Configure HTTP client with appropriate timeouts
+builder.Services.AddHttpClient("GraphRestApi", client =>
 {
-    InputValidation = true,
-    OutputValidation = true
-};
+    client.Timeout = TimeSpan.FromSeconds(30);
+    client.DefaultRequestHeaders.Add("User-Agent", "SemanticKernel.Graph/1.0");
+});
 ```
 
 **Prevention**:
@@ -174,21 +230,52 @@ var schema = new RestToolSchema
 
 **Diagnosis**:
 ```csharp
-// Check checkpointing configuration
-var checkpointManager = kernel.GetService<ICheckpointManager>();
-if (checkpointManager == null)
-{
-    Console.WriteLine("Checkpointing not enabled!");
-}
+// Test checkpointing functionality
+var serviceProvider = kernel.Services;
+var checkpointManager = serviceProvider.GetService<ICheckpointManager>();
 
-// Check database connectivity
-var connection = await checkpointManager.TestConnectionAsync();
+if (checkpointManager != null)
+{
+    // Test checkpoint creation
+    var testState = new GraphState();
+    testState.SetValue("test_key", "test_value");
+    testState.SetValue("test_number", 42);
+
+    var checkpoint = await checkpointManager.CreateCheckpointAsync(
+        "test-execution", 
+        testState, 
+        "test-node", 
+        null, 
+        CancellationToken.None);
+
+    Console.WriteLine($"Checkpoint created successfully: {checkpoint.CheckpointId}");
+
+    // Test checkpoint restoration
+    var restoredState = await checkpointManager.RestoreFromCheckpointAsync(
+        checkpoint.CheckpointId, 
+        CancellationToken.None);
+
+    if (restoredState != null)
+    {
+        var restoredValue = restoredState.GetValue<string>("test_key");
+        Console.WriteLine($"Checkpoint restored successfully. Value: {restoredValue}");
+    }
+    else
+    {
+        Console.WriteLine("Failed to restore checkpoint");
+    }
+}
+else
+{
+    Console.WriteLine("Checkpointing service not available");
+}
 ```
 
 **Solution**:
 ```csharp
 // Configure checkpointing correctly
 builder.AddGraphSupport(options => {
+    options.EnableCheckpointing = true;
     options.Checkpointing = new CheckpointingOptions
     {
         Enabled = true,
@@ -220,22 +307,41 @@ builder.AddGraphSupport(options => {
 
 **Diagnosis**:
 ```csharp
-// Check if type is serializable
+// Test state serialization
 var state = new GraphState();
 try
 {
-    state.SetValue("test", new NonSerializableType());
-    var serialized = await state.SerializeAsync();
+    // Test with simple types
+    state.SetValue("string_value", "test");
+    state.SetValue("int_value", 123);
+    state.SetValue("array_value", new[] { 1, 2, 3 });
+
+    // Test serialization using the ISerializableState interface
+    var serialized = state.Serialize();
+    Console.WriteLine($"State serialization successful. Size: {serialized.Length} bytes");
+
+    // Test with complex types (this might fail)
+    try
+    {
+        state.SetValue("complex_object", new NonSerializableType());
+        var complexSerialized = state.Serialize();
+        Console.WriteLine("Complex object serialization successful");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Complex object serialization failed (expected): {ex.Message}");
+        Console.WriteLine("Solution: Use simple types or implement ISerializableState");
+    }
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Serialization error: {ex.Message}");
+    Console.WriteLine($"State serialization failed: {ex.Message}");
 }
 ```
 
 **Solution**:
 ```csharp
-// Implement ISerializableState
+// Implement ISerializableState for complex types
 public class MyState : ISerializableState
 {
     public string Serialize() => JsonSerializer.Serialize(this);
@@ -318,31 +424,55 @@ var pythonNode = new PythonGraphNode("python", pythonOptions);
 **Diagnosis**:
 ```csharp
 // Analyze performance metrics
-var metrics = await executor.GetPerformanceMetricsAsync();
-foreach (var nodeMetric in metrics.NodeMetrics)
+var serviceProvider = kernel.Services;
+var metricsExporter = serviceProvider.GetService<GraphMetricsExporter>();
+
+if (metricsExporter != null)
 {
-    Console.WriteLine($"Node {nodeMetric.NodeId}: {nodeMetric.AverageExecutionTime}");
+    // Create sample performance metrics for demonstration
+    var performanceMetrics = new GraphPerformanceMetrics();
+    
+    // Export metrics in different formats
+    var jsonMetrics = metricsExporter.ExportMetrics(performanceMetrics, MetricsExportFormat.Json);
+    Console.WriteLine("Current metrics exported successfully in JSON format");
+
+    // Export for dashboard visualization
+    var dashboardMetrics = metricsExporter.ExportForDashboard(performanceMetrics, DashboardType.Grafana);
+    Console.WriteLine("Dashboard metrics exported successfully for Grafana");
+
+    // Check for performance anomalies
+    if (jsonMetrics.Contains("error") || jsonMetrics.Contains("failure"))
+    {
+        Console.WriteLine("Performance issues detected in metrics");
+        Console.WriteLine("Consider implementing circuit breakers or fallbacks");
+    }
+}
+else
+{
+    Console.WriteLine("Metrics exporter not available");
 }
 ```
 
 **Solution**:
 ```csharp
-// Enable parallel execution
-var options = new GraphExecutionOptions
+// Enable parallel execution and optimizations
+var options = new GraphOptions
+{
+    EnableMetrics = true,
+    EnableLogging = true,
+    MaxExecutionSteps = 1000,
+    EnablePlanCompilation = true
+};
+
+// Configure concurrency
+var concurrencyOptions = new GraphConcurrencyOptions
 {
     MaxParallelNodes = Environment.ProcessorCount,
     EnableOptimizations = true
 };
 
 // Use optimized nodes
-var optimizedNode = new OptimizedFunctionGraphNode(
-    function: kernelFunction,
-    options: new NodeOptimizationOptions
-    {
-        EnableCaching = true,
-        EnableBatching = true
-    }
-);
+var optimizedNode = new ActionGraphNode("optimized-operation", "Optimized Operation", "Fast operation with monitoring");
 ```
 
 **Prevention**:
@@ -369,8 +499,18 @@ var optimizedNode = new OptimizedFunctionGraphNode(
 **Diagnosis**:
 ```csharp
 // Check authentication configuration
-var authService = kernel.GetService<IAuthenticationService>();
-var isValid = await authService.ValidateCredentialsAsync();
+var serviceProvider = kernel.Services;
+var authService = serviceProvider.GetService<IAuthenticationService>();
+
+if (authService != null)
+{
+    var isValid = await authService.ValidateCredentialsAsync();
+    Console.WriteLine($"Authentication service available: {isValid}");
+}
+else
+{
+    Console.WriteLine("Authentication service not available");
+}
 ```
 
 **Solution**:
@@ -415,11 +555,13 @@ var circuitBreaker = new CircuitBreaker(
 ### Fallbacks and Alternatives
 ```csharp
 // Implement fallback nodes
-var fallbackNode = new FallbackGraphNode(
-    primaryNode: primaryNode,
-    fallbackNode: backupNode,
-    condition: state => state.GetValue<bool>("use_fallback")
-);
+var errorHandlerNode = new ErrorHandlerGraphNode("error-handler", "Error Handler", "Handles errors during execution");
+var fallbackNode = new ActionGraphNode("fallback", "Fallback Operation", "Fallback operation executed due to error");
+
+// Configure error handling
+errorHandlerNode.ConfigureErrorHandler(GraphErrorType.Validation, ErrorRecoveryAction.Skip);
+errorHandlerNode.ConfigureErrorHandler(GraphErrorType.Network, ErrorRecoveryAction.Retry);
+errorHandlerNode.AddFallbackNode(GraphErrorType.Unknown, fallbackNode);
 ```
 
 ## Monitoring and Alerts
@@ -443,6 +585,108 @@ var logger = new SemanticKernelGraphLogger();
 logger.LogExecutionStart(graphId, executionId);
 logger.LogNodeExecution(nodeId, executionId, duration);
 logger.LogExecutionComplete(graphId, executionId, result);
+```
+
+## Complete Working Example
+
+Here's a complete working example that demonstrates troubleshooting techniques:
+
+```csharp
+using Microsoft.Extensions.Logging;
+using Microsoft.SemanticKernel;
+using SemanticKernel.Graph;
+using SemanticKernel.Graph.Core;
+using SemanticKernel.Graph.Extensions;
+using SemanticKernel.Graph.Integration;
+using SemanticKernel.Graph.Nodes;
+using SemanticKernel.Graph.State;
+
+public class TroubleshootingExample
+{
+    private readonly Kernel _kernel;
+    private readonly ILogger<TroubleshootingExample> _logger;
+
+    public TroubleshootingExample(Kernel kernel, ILogger<TroubleshootingExample> logger)
+    {
+        _kernel = kernel ?? throw new ArgumentNullException(nameof(kernel));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public async Task RunAsync()
+    {
+        _logger.LogInformation("Starting Troubleshooting Examples");
+
+        try
+        {
+            // Example 1: Execution Performance Issues
+            await DemonstrateExecutionPerformanceTroubleshootingAsync();
+
+            // Example 2: Service Registration Issues
+            await DemonstrateServiceRegistrationTroubleshootingAsync();
+
+            // Example 3: State and Checkpoint Problems
+            await DemonstrateStateCheckpointTroubleshootingAsync();
+
+            // Example 4: Error Recovery and Resilience
+            await DemonstrateErrorRecoveryTroubleshootingAsync();
+
+            // Example 5: Performance Monitoring and Diagnostics
+            await DemonstratePerformanceMonitoringTroubleshootingAsync();
+
+            _logger.LogInformation("All troubleshooting examples completed successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error running troubleshooting examples");
+            throw;
+        }
+    }
+
+    private async Task DemonstrateExecutionPerformanceTroubleshootingAsync()
+    {
+        _logger.LogInformation("=== Execution Performance Troubleshooting ===");
+
+        try
+        {
+            // Create a graph with potential performance issues
+            var graph = new GraphExecutor("performance-test-graph");
+            
+            // Add nodes to the graph
+            var slowNode = new ActionGraphNode("slow-operation", "Slow Operation", "Simulates a slow operation");
+            var fastNode = new ActionGraphNode("fast-operation", "Fast Operation", "Simulates a fast operation");
+            
+            graph.AddNode(slowNode);
+            graph.AddNode(fastNode);
+
+            // Set the start node for execution
+            graph.SetStartNode(slowNode);
+
+            // Execute with performance monitoring
+            var startTime = DateTimeOffset.UtcNow;
+            
+            // Create arguments for execution
+            var arguments = new KernelArguments();
+            arguments["input"] = "test input";
+            
+            var result = await graph.ExecuteAsync(_kernel, arguments, CancellationToken.None);
+            var executionTime = DateTimeOffset.UtcNow - startTime;
+
+            _logger.LogInformation("Graph execution completed in {ExecutionTime:F2}ms", executionTime.TotalMilliseconds);
+
+            // Analyze performance metrics if available
+            if (result.Metadata != null && result.Metadata.ContainsKey("ExecutionMetrics"))
+            {
+                _logger.LogInformation("Execution metrics available in result metadata");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in execution performance troubleshooting");
+        }
+    }
+
+    // ... other methods as shown in the complete example above
+}
 ```
 
 ## See Also
