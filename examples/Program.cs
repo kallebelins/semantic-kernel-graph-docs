@@ -35,6 +35,7 @@ class Program
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
+                ["react-cot-quickstart"] = async () => await RunReactCotQuickstartExample(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 
@@ -75,6 +76,34 @@ class Program
     }
 
     /// <summary>
+    /// Runs the React and Chain of Thought Quickstart example
+    /// </summary>
+    /// <returns>Task representing the asynchronous operation</returns>
+    private static async Task RunReactCotQuickstartExample()
+    {
+        Console.WriteLine("🎯 Running React and Chain of Thought Quickstart Example...\n");
+
+        try
+        {
+            // Create a basic kernel for the example
+            var kernel = Kernel.CreateBuilder()
+                .AddOpenAIChatCompletion("gpt-3.5-turbo", "your-api-key-here")
+                .Build();
+
+            // Create and run the example
+            var example = new ReactCotQuickstartExample(kernel);
+            await example.RunAllExamplesAsync();
+
+            Console.WriteLine("\n✅ React and Chain of Thought Quickstart Example completed successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error in React and Chain of Thought Quickstart Example: {ex.Message}");
+            Console.WriteLine("💡 Note: This example requires a valid OpenAI API key to run properly.");
+        }
+    }
+
+    /// <summary>
     /// Runs all available examples
     /// </summary>
     /// <returns>Task representing the asynchronous operation</returns>
@@ -91,6 +120,7 @@ class Program
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
         await InstallationExample.RunAllExamplesAsync();
         await MetricsLoggingQuickstartExample.RunBasicExampleAsync();
+        await RunReactCotQuickstartExample();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));
         Console.WriteLine("📋 All examples completed!");

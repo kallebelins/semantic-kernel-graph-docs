@@ -15,7 +15,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 10. [x] index.md
 11. [x] installation.md
 12. [x] metrics-logging-quickstart.md
-13. [ ] react-cot-quickstart.md
+13. [x] react-cot-quickstart.md
 14. [ ] running-examples.md
 15. [ ] state-quickstart.md
 16. [ ] state-tutorial.md

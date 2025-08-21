@@ -8,7 +8,7 @@ Learn how to implement reasoning and acting patterns in SemanticKernel.Graph usi
 
 **Chain of Thought**: A structured reasoning approach that breaks down complex problems into sequential, validated steps with backtracking capabilities for robust problem-solving.
 
-**Reasoning Nodes**: Specialized nodes like `ReasoningGraphNode` and `ChainOfThoughtGraphNode` that implement different reasoning strategies and can be composed into complex reasoning workflows.
+**Reasoning Nodes**: Specialized nodes like `FunctionGraphNode` (for custom reasoning logic), `ReActLoopGraphNode` (for built-in ReAct loops), and `ChainOfThoughtGraphNode` that implement different reasoning strategies and can be composed into complex reasoning workflows.
 
 ## Prerequisites and Minimum Configuration
 
@@ -18,6 +18,8 @@ Learn how to implement reasoning and acting patterns in SemanticKernel.Graph usi
 * Basic understanding of graph execution and node composition
 
 ## Quick Setup
+
+**Important**: Before creating any ReAct loops, ensure that mock actions are registered with the kernel. This is required for `ActionGraphNode` to discover and execute functions.
 
 ### 1. Create a Simple ReAct Loop
 
@@ -33,17 +35,27 @@ var reasoningNode = new FunctionGraphNode(
     "reasoning",
     "Problem Analysis");
 
-// Create the action execution node
-var actionNode = new ActionGraphNode(
+// Create the action execution node using CreateWithActions to auto-discover kernel functions
+var actionNode = ActionGraphNode.CreateWithActions(
     kernel,
-    "action",
-    "Action Execution");
+    new ActionSelectionCriteria
+    {
+        MinRequiredParameters = 0,
+        MaxRequiredParameters = 5
+    },
+    "action");
+actionNode.ConfigureExecution(ActionSelectionStrategy.Intelligent, enableParameterValidation: true);
 
 // Create the observation node
 var observationNode = new FunctionGraphNode(
     CreateObservationFunction(kernel),
     "observation",
     "Result Analysis");
+
+// Configure nodes to store results for downstream consumption
+reasoningNode.StoreResultAs("reasoning_result");
+// ActionGraphNode automatically stores result as "action_result"
+observationNode.StoreResultAs("final_answer");
 
 // Build the ReAct loop
 var executor = new GraphExecutor("SimpleReAct", "Basic ReAct reasoning loop");
@@ -57,7 +69,75 @@ executor.AddNode(reasoningNode)
 
 ### 2. Implement the Core Functions
 
-Create the reasoning, action, and observation functions:
+Create the reasoning, action, and observation functions. First, ensure mock actions are registered with the kernel:
+
+```csharp
+private void AddMockActionsToKernel()
+{
+    // Check if plugin already exists to avoid duplicates
+    if (kernel.Plugins.Any(p => p.Name == "react_actions"))
+    {
+        return;
+    }
+
+    // Import all functions as a plugin so ActionGraphNode can discover them
+    kernel.ImportPluginFromFunctions("react_actions", "Mock actions for ReAct examples", new[]
+    {
+        // Weather action
+        kernel.CreateFunctionFromMethod(
+            (KernelArguments args) =>
+            {
+                var location = args.GetValueOrDefault("location", "unknown location");
+                return $"The weather in {location} is sunny with 22°C temperature and light breeze.";
+            },
+            functionName: "get_weather",
+            description: "Gets weather information for a specified location"
+        ),
+        // Calculator action
+        kernel.CreateFunctionFromMethod(
+            (KernelArguments args) =>
+            {
+                var expression = args.GetValueOrDefault("expression", "0");
+                return $"Calculation result for '{expression}': 42 (mock result)";
+            },
+            functionName: "calculate",
+            description: "Performs mathematical calculations"
+        ),
+        // Search action
+        kernel.CreateFunctionFromMethod(
+            (KernelArguments args) =>
+            {
+                var query = args.GetValueOrDefault("query", "unknown query");
+                return $"Search results for '{query}': Found 5 relevant articles about the topic.";
+            },
+            functionName: "search",
+            description: "Searches for information on the internet"
+        ),
+        // Generic action for business problems
+        kernel.CreateFunctionFromMethod(
+            (KernelArguments args) =>
+            {
+                var problem = args.GetValueOrDefault("problem", "unknown problem");
+                return $"Analysis of '{problem}': Identified 3 key areas for improvement with cost reduction potential.";
+            },
+            functionName: "analyze_problem",
+            description: "Analyzes business problems and provides insights"
+        ),
+        // Solution evaluation action
+        kernel.CreateFunctionFromMethod(
+            (KernelArguments args) =>
+            {
+                var solution = args.GetValueOrDefault("solution", "unknown solution");
+                return $"Evaluation of '{solution}': Feasible solution with 85% success probability and moderate implementation complexity.";
+            },
+            functionName: "evaluate_solution",
+            description: "Evaluates proposed solutions for feasibility and impact"
+        )
+    });
+}
+```
+
+Now create the reasoning, action, and observation functions:
 
 ```csharp
 private static KernelFunction CreateReasoningFunction(Kernel kernel)
@@ -123,78 +203,139 @@ var answer = result.GetValue<string>() ?? "No answer produced";
 Console.WriteLine($"🤖 Agent: {answer}");
 ```
 
-## Advanced ReAct with ReActLoopGraphNode
+## Advanced ReAct with Custom Functions
 
-### Using the Built-in ReAct Loop Node
+### Using FunctionGraphNode for Advanced Reasoning
 
-Leverage the specialized `ReActLoopGraphNode` for more sophisticated reasoning:
+For self-contained examples that don't require external LLM calls, you can implement advanced reasoning using custom functions:
+
+Here are the implementations for the advanced reasoning and observation functions:
 
 ```csharp
 using SemanticKernel.Graph.Nodes;
 
 // Create specialized reasoning, action, and observation nodes
-var reasoningNode = new ReasoningGraphNode(
-    "reasoning",
-    "Problem Analysis",
-    maxReasoningSteps: 3,
-    domain: "general");
+// Use FunctionGraphNode with custom functions to avoid LLM dependency
+var reasoningNode = new FunctionGraphNode(
+    CreateAdvancedReasoningFunction(kernel),
+    "advanced_reasoning",
+    "Advanced Problem Analysis");
 
-var actionNode = new ActionGraphNode(
+var actionNode = ActionGraphNode.CreateWithActions(
     kernel,
-    "action",
-    "Action Execution");
+    new ActionSelectionCriteria
+    {
+        MinRequiredParameters = 0,
+        MaxRequiredParameters = 5
+    },
+    "advanced_action");
+actionNode.ConfigureExecution(ActionSelectionStrategy.Intelligent, enableParameterValidation: true);
 
 var observationNode = new FunctionGraphNode(
     CreateAdvancedObservationFunction(kernel),
-    "observation",
-    "Result Analysis");
+    "advanced_observation",
+    "Advanced Result Analysis");
 
-// Create the ReAct loop node
-var reactLoopNode = new ReActLoopGraphNode(
-    reasoningNode,
-    actionNode,
-    observationNode,
-    maxIterations: 5,
-    goalAchievementThreshold: 0.8)
-{
-    EarlyTerminationEnabled = true,
-    IterationTimeout = TimeSpan.FromSeconds(30),
-    TotalTimeout = TimeSpan.FromMinutes(5)
-};
+// Configure nodes to store results for downstream consumption
+reasoningNode.StoreResultAs("advanced_reasoning_result");
+observationNode.StoreResultAs("advanced_final_answer");
 
-// Build the executor
+// Build the advanced ReAct loop by connecting the nodes in sequence
 var executor = new GraphExecutor("AdvancedReAct", "Advanced ReAct reasoning agent");
-executor.AddNode(reactLoopNode);
-executor.SetStartNode(reactLoopNode.NodeId);
+executor.AddNode(reasoningNode)
+        .AddNode(actionNode)
+        .AddNode(observationNode)
+        .Connect("advanced_reasoning", "advanced_action")
+        .Connect("advanced_action", "advanced_observation")
+        .SetStartNode("advanced_reasoning");
+```
+
+### Advanced Function Implementations
+
+Here are the implementations for the advanced reasoning and observation functions:
+
+```csharp
+private static KernelFunction CreateAdvancedReasoningFunction(Kernel kernel)
+{
+    return kernel.CreateFunctionFromMethod(
+        (KernelArguments args) =>
+        {
+            var problemTitle = args.GetValueOrDefault("problem_title", "Unknown Problem")?.ToString() ?? "Unknown Problem";
+            var taskDescription = args.GetValueOrDefault("task_description", "No description provided")?.ToString() ?? "No description provided";
+            
+            // Advanced reasoning logic for business problems
+            var suggestedAction = taskDescription.ToLowerInvariant() switch
+            {
+                var desc when desc.Contains("cost") && desc.Contains("reduce") => "analyze_problem",
+                var desc when desc.Contains("budget") => "analyze_problem", 
+                var desc when desc.Contains("performance") => "analyze_problem",
+                var desc when desc.Contains("efficiency") => "analyze_problem",
+                _ => "analyze_problem"
+            };
+
+            // Generate comprehensive reasoning result
+            var reasoning = $"Advanced Analysis of '{problemTitle}':\n" +
+                          $"1. Problem Context: {taskDescription}\n" +
+                          $"2. Strategic Assessment: This appears to be a {(taskDescription.Contains("cost") ? "cost optimization" : "operational improvement")} challenge.\n" +
+                          $"3. Recommended Approach: Systematic analysis with stakeholder consideration.\n" +
+                          $"4. Next Action: {suggestedAction} - Deep dive into root causes and impact analysis.";
+
+            // Store the reasoning results in the arguments for later use
+            args["suggested_action"] = suggestedAction;
+            args["reasoning_result"] = reasoning;
+            args["problem_title"] = problemTitle;
+            args["task_description"] = taskDescription;
+            
+            return reasoning;
+        },
+        functionName: "advanced_reasoning",
+        description: "Performs advanced business problem analysis and strategic reasoning"
+    );
+}
+
+private static KernelFunction CreateAdvancedObservationFunction(Kernel kernel)
+{
+    return kernel.CreateFunctionFromMethod(
+        (KernelArguments args) =>
+        {
+            var actionResult = args.GetValueOrDefault("action_result", "No action result")?.ToString() ?? "No action result";
+            var reasoningResult = args.GetValueOrDefault("advanced_reasoning_result", "No reasoning result")?.ToString() ?? "No reasoning result";
+            
+            // Advanced observation analysis
+            var observation = $"Advanced Result Analysis:\n" +
+                            $"1. Previous Reasoning: {reasoningResult}\n" +
+                            $"2. Action Execution: {actionResult}\n" +
+                            $"3. Strategic Insights: The analysis reveals key improvement opportunities.\n" +
+                            $"4. Recommendations: Implement systematic changes with stakeholder buy-in.\n" +
+                            $"5. Next Steps: Evaluate solution feasibility and create implementation timeline.";
+
+            args["advanced_final_answer"] = observation;
+            return observation;
+        },
+        functionName: "advanced_observation",
+        description: "Performs advanced result analysis and provides strategic recommendations"
+    );
+}
 ```
 
 ### Configure ReAct Loop Behavior
 
-Customize the reasoning loop parameters:
+For advanced ReAct loops using `ReActLoopGraphNode`, you can customize the reasoning loop parameters:
 
 ```csharp
-var reactLoopNode = new ReActLoopGraphNode(
+// Note: This example shows the ReActLoopGraphNode API structure
+// For self-contained examples, consider using the sequential approach shown above
+var reactLoopNode = ReActLoopGraphNode.CreateWithNodes(
     reasoningNode,
     actionNode,
     observationNode,
-    maxIterations: 10,
-    goalAchievementThreshold: 0.9)
-{
-    // Enable early termination when goal is achieved
-    EarlyTerminationEnabled = true,
-    
-    // Set timeouts for iterations and total execution
-    IterationTimeout = TimeSpan.FromSeconds(60),
-    TotalTimeout = TimeSpan.FromMinutes(10),
-    
-    // Configure goal evaluation
-    GoalEvaluationFunction = (context, result) =>
-    {
-        var confidence = result.GetValueOrDefault("confidence", 0.0);
-        var completeness = result.GetValueOrDefault("completeness", 0.0);
-        return (confidence + completeness) / 2.0;
-    }
-};
+    "custom_react_loop")
+    .ConfigureLoop(
+        maxIterations: 10,
+        goalAchievementThreshold: 0.9,
+        enableEarlyTermination: true,
+        iterationTimeout: TimeSpan.FromSeconds(60),
+        totalTimeout: TimeSpan.FromMinutes(10));
 ```
 
 ## Chain of Thought Reasoning
@@ -206,22 +347,76 @@ Implement step-by-step reasoning with the `ChainOfThoughtGraphNode`:
 ```csharp
 using SemanticKernel.Graph.Nodes;
 
-// Create a Chain of Thought node for problem solving
-var cotNode = new ChainOfThoughtGraphNode(
-    ChainOfThoughtType.ProblemSolving,
-    maxSteps: 5,
-    templateEngine: null,  // Use default templates
-    logger: null)
-{
-    BacktrackingEnabled = true,
-    MinimumStepConfidence = 0.6,
-    CachingEnabled = true
-};
+// Create a Chain of Thought function that performs step-by-step reasoning
+var cotNode = new FunctionGraphNode(
+    CreateChainOfThoughtFunction(kernel),
+    "chain_of_thought",
+    "Step-by-step Problem Solving");
+
+// Configure to store the result
+cotNode.StoreResultAs("chain_of_thought_result");
 
 // Build the executor
 var executor = new GraphExecutor("ChainOfThought", "Chain-of-Thought reasoning example");
 executor.AddNode(cotNode);
 executor.SetStartNode(cotNode.NodeId);
+```
+
+### Chain of Thought Function Implementation
+
+Here's the implementation for the Chain of Thought function:
+
+```csharp
+private static KernelFunction CreateChainOfThoughtFunction(Kernel kernel)
+{
+    return kernel.CreateFunctionFromMethod(
+        (KernelArguments args) =>
+        {
+            var problemStatement = args.GetValueOrDefault("problem_statement", "No problem statement")?.ToString() ?? "No problem statement";
+            var context = args.GetValueOrDefault("context", "No context provided")?.ToString() ?? "No context provided";
+            var constraints = args.GetValueOrDefault("constraints", "No constraints specified")?.ToString() ?? "No constraints specified";
+            var expectedOutcome = args.GetValueOrDefault("expected_outcome", "No expected outcome")?.ToString() ?? "No expected outcome";
+            var reasoningDepth = args.GetValueOrDefault("reasoning_depth", 3);
+
+            // Simulate step-by-step reasoning process
+            var reasoningSteps = new List<string>
+            {
+                $"Step 1: Problem Analysis\nAnalyzing the problem: {problemStatement}\nContext: {context}",
+                $"Step 2: Constraint Identification\nConstraints identified: {constraints}",
+                $"Step 3: Solution Development\nExpected outcome: {expectedOutcome}\nDeveloping solution approach...",
+                $"Step 4: Solution Validation\nValidating solution against constraints and requirements...",
+                $"Step 5: Final Recommendation\nProviding comprehensive solution with implementation steps."
+            };
+
+            // Take only the requested number of steps
+            var stepsToUse = reasoningSteps.Take(Math.Min((int)reasoningDepth, reasoningSteps.Count)).ToList();
+            
+            // Generate final answer
+            var finalAnswer = $"Chain of Thought Analysis Complete:\n\n" +
+                             $"Problem: {problemStatement}\n" +
+                             $"Context: {context}\n" +
+                             $"Constraints: {constraints}\n" +
+                             $"Expected Outcome: {expectedOutcome}\n\n" +
+                             $"Reasoning Steps ({stepsToUse.Count}):\n" +
+                             string.Join("\n\n", stepsToUse) +
+                             $"\n\nFinal Recommendation: Implement a systematic approach focusing on stakeholder engagement, " +
+                             $"data-driven analysis, and phased implementation to achieve the desired {expectedOutcome}.";
+
+            // Store the reasoning results in the arguments
+            args["reasoning_steps"] = stepsToUse;
+            args["final_answer"] = finalAnswer;
+            args["problem_statement"] = problemStatement;
+            args["context"] = context;
+            args["constraints"] = constraints;
+            args["expected_outcome"] = expectedOutcome;
+            args["reasoning_depth"] = reasoningDepth;
+            
+            return finalAnswer;
+        },
+        functionName: "chain_of_thought",
+        description: "Performs step-by-step reasoning for complex problem solving"
+    );
+}
 
 // Prepare arguments for reasoning
 var arguments = new KernelArguments
@@ -266,13 +461,13 @@ Your analysis:"
 };
 
 // Create the Chain of Thought node with custom templates
+// Note: This example shows the API structure, but for self-contained examples,
+// consider using FunctionGraphNode with custom reasoning logic
 var cotNode = ChainOfThoughtGraphNode.CreateWithCustomization(
     ChainOfThoughtType.Analysis,
     customTemplates,
     customRules: null,  // Use default validation rules
-    maxSteps: 4,
-    templateEngine: null,
-    logger: null);
+    maxSteps: 4);
 ```
 
 ## Problem-Solving Examples
@@ -291,7 +486,7 @@ var arguments = new KernelArguments
     ["domain"] = "business"
 };
 
-var result = await problemSolver.ExecuteAsync(kernel, arguments);
+var result = await executor.ExecuteAsync(kernel, arguments);
 var solution = result.GetValue<string>() ?? "No solution generated";
 Console.WriteLine($"💡 ReAct Solution: {solution}");
 ```
@@ -310,7 +505,7 @@ var arguments = new KernelArguments
     ["domain"] = "software"
 };
 
-var result = await problemSolver.ExecuteAsync(kernel, arguments);
+var result = await executor.ExecuteAsync(kernel, arguments);
 var solution = result.GetValue<string>() ?? "No solution generated";
 Console.WriteLine($"💻 Technical Solution: {solution}");
 ```
@@ -323,9 +518,11 @@ Monitor your reasoning agents:
 
 ```csharp
 // Get execution statistics
-var executionCount = reactLoopNode.Statistics.ExecutionCount;
-var successRate = reactLoopNode.Statistics.SuccessRate;
-var averageIterations = reactLoopNode.Statistics.AverageIterationsPerExecution;
+// Note: For FunctionGraphNode-based implementations, you can track execution
+// through custom metadata or by implementing your own statistics tracking
+var executionCount = 1; // Example value
+var successRate = 1.0; // Example value
+var averageIterations = 1.0; // Example value
 
 Console.WriteLine($"ReAct Loop Statistics:");
 Console.WriteLine($"  Executions: {executionCount}");
@@ -333,7 +530,9 @@ Console.WriteLine($"  Success Rate: {successRate:P1}");
 Console.WriteLine($"  Avg Iterations: {averageIterations:F1}");
 
 // Chain of Thought statistics
-var cotStats = cotNode.Statistics;
+// Note: For FunctionGraphNode-based implementations, you can track execution
+// through custom metadata or by implementing your own statistics tracking
+var cotStats = new { ExecutionCount = 1, AverageQualityScore = 0.85, AverageStepsUsed = 3.0 }; // Example values
 Console.WriteLine($"Chain of Thought Statistics:");
 Console.WriteLine($"  Executions: {cotStats.ExecutionCount}");
 Console.WriteLine($"  Quality Score: {cotStats.AverageQualityScore:P1}");
@@ -386,13 +585,13 @@ if (metadata.ContainsKey("iterations"))
 
 ## See Also
 
-* **Reference**: [ReActLoopGraphNode](../api/ReActLoopGraphNode.md), [ChainOfThoughtGraphNode](../api/ChainOfThoughtGraphNode.md), [ReasoningGraphNode](../api/ReasoningGraphNode.md)
+* **Reference**: [FunctionGraphNode](../api/FunctionGraphNode.md), [ActionGraphNode](../api/ActionGraphNode.md), [ReActLoopGraphNode](../api/ReActLoopGraphNode.md), [ChainOfThoughtGraphNode](../api/ChainOfThoughtGraphNode.md)
 * **Guides**: [Advanced Reasoning Patterns](../guides/advanced-reasoning.md), [Agent Architecture](../guides/agent-architecture.md)
 * **Examples**: [ReActAgentExample](../examples/react-agent.md), [ChainOfThoughtExample](../examples/chain-of-thought.md), [ReActProblemSolvingExample](../examples/react-problem-solving.md)
 
 ## Reference APIs
 
+* **[FunctionGraphNode](../api/nodes.md#function-graph-node)**: Function execution node for custom logic
+* **[ActionGraphNode](../api/nodes.md#action-graph-node)**: Action execution node with function discovery
 * **[ReActLoopGraphNode](../api/nodes.md#react-loop-graph-node)**: ReAct reasoning loop implementation
 * **[ChainOfThoughtGraphNode](../api/nodes.md#chain-of-thought-graph-node)**: Chain of Thought reasoning node
-* **[ReasoningGraphNode](../api/nodes.md#reasoning-graph-node)**: Base reasoning node interface
-* **[ActionGraphNode](../api/nodes.md#action-graph-node)**: Action execution node
