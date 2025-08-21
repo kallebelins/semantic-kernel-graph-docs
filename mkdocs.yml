@@ -1,6 +1,13 @@
 site_name: Semantic Kernel Graph
 site_description: Documentation for SemanticKernel.Graph, inspired by LangGraph, built with Material for MkDocs
 docs_dir: docs
+site_url: https://skgraph.dev/
+repo_url: https://github.com/kallebelins/semantic-kernel-graph-docs
+repo_name: kallebelins/semantic-kernel-graph-docs
+edit_uri: edit/main/docs/
+site_author: Kallebe Lins
+copyright: Copyright &copy; 2025 Kallebe Lins
+version: 25.8.191
 
 theme:
   name: material
@@ -77,8 +84,8 @@ markdown_extensions:
   - pymdownx.magiclink:
       normalize_issue_symbols: true
       repo_url_shorthand: true
-      user: langchain-ai
-      repo: langgraph
+      user: kallebelins
+      repo: semantic-kernel-graph-docs
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.snippets:
@@ -100,6 +107,8 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/kallebelins/semantic-kernel-graph-docs
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/skgraph-dev/
   analytics:
     provider: google
     property: !ENV GOOGLE_ANALYTICS_KEY
