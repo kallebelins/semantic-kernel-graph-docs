@@ -44,6 +44,7 @@ class Program
                 ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
                 ["core-api"] = async () => await CoreApiExample.RunAsync(),
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
+                ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 
@@ -140,6 +141,7 @@ class Program
         await ReactCotQuickstartExample.RunAllExamplesAsync();
         await RunStreamingQuickstartExampleDirectly();
         await TroubleshootingExample.RunAsync();
+        await DynamicRoutingExample.RunAsync();
         AdditionalUtilitiesExample.RunAllDemonstrations();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));

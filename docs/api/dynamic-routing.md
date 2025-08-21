@@ -387,17 +387,40 @@ public sealed class RoutingAnalytics
 ```csharp
 // Create kernel with dynamic routing
 var kernelBuilder = Kernel.CreateBuilder();
-kernelBuilder.Services.AddLogging(builder => builder.AddConsole());
+kernelBuilder.AddGraphSupport();
+
+// Create graph with dynamic routing enabled (before building kernel)
+var graph = kernelBuilder.CreateGraphWithDynamicRouting("DynamicDemo", "Dynamic routing example");
 
 var kernel = kernelBuilder.Build();
 
-// Create graph with dynamic routing enabled
-var graph = kernelBuilder.CreateGraphWithDynamicRouting("DynamicDemo", "Dynamic routing example");
-
 // Add nodes and connections
-var startNode = new FunctionGraphNode(/* ... */);
-var processNode = new FunctionGraphNode(/* ... */);
-var errorNode = new FunctionGraphNode(/* ... */);
+var startNode = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod(
+        (string input) => $"Processed: {input}",
+        functionName: "ProcessInput",
+        description: "Process the input data"
+    ),
+    "start"
+).StoreResultAs("processed_input");
+
+var processNode = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod(
+        (string processedInput) => $"Final result: {processedInput}",
+        functionName: "ProcessData",
+        description: "Process the input data"
+    ),
+    "process"
+).StoreResultAs("result");
+
+var errorNode = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod(
+        () => "Error handled successfully",
+        functionName: "HandleError",
+        description: "Handle any errors"
+    ),
+    "error"
+).StoreResultAs("error_handled");
 
 graph.AddNode(startNode)
      .AddNode(processNode)
@@ -412,8 +435,18 @@ var result = await graph.ExecuteAsync(kernel, new KernelArguments { ["input"] = 
 
 ```csharp
 // Create advanced routing with embedding and memory services
+// Note: In a real scenario, you would have actual embedding and memory services
+var templateEngine = new HandlebarsGraphTemplateEngine(
+    new GraphTemplateOptions
+    {
+        EnableHandlebars = true,
+        EnableCustomHelpers = true,
+        TemplateCacheSize = 100
+    }
+);
+
 var routingEngine = new DynamicRoutingEngine(
-    templateEngine: new HandlebarsGraphTemplateEngine(),
+    templateEngine: templateEngine,
     options: new DynamicRoutingOptions 
     { 
         EnableCaching = true, 
@@ -421,16 +454,16 @@ var routingEngine = new DynamicRoutingEngine(
         MaxCacheSize = 500,
         CacheExpirationMinutes = 60
     },
-    logger: logger,
-    embeddingService: embeddingService,
-    memoryService: memoryService
+    logger: null,  // Would be actual logger
+    embeddingService: null,  // Would be actual embedding service
+    memoryService: null      // Would be actual memory service
 );
 
 // Configure graph to use advanced routing
 graph.RoutingEngine = routingEngine;
 
 // Execute with advanced routing capabilities
-var result = await graph.ExecuteAsync(kernel, arguments);
+var result = await graph.ExecuteAsync(kernel, new KernelArguments { ["input"] = "test" });
 ```
 
 ### Template-Based Routing
@@ -451,6 +484,7 @@ var routingEngine = new DynamicRoutingEngine(
 );
 
 // Use templates for routing decisions
+// Note: The template will evaluate based on the 'priority' value in the execution context
 graph.ConnectWithTemplate("start", "process", 
     "{{#if (eq priority 'high')}}true{{else}}false{{/if}}", 
     templateEngine, "HighPriorityRoute");

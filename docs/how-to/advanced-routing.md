@@ -291,11 +291,8 @@ graph.RoutingEngine = new DynamicRoutingEngine(
 ### Providing Feedback
 
 ```csharp
-// Get feedback strategy from routing engine
-var feedbackStrategy = routingEngine.GetFeedbackStrategy();
-
-// Provide feedback for a routing decision
-await feedbackStrategy.ProvideFeedbackAsync(
+// Provide feedback for a routing decision directly to the routing engine
+await routingEngine.ProvideFeedbackAsync(
     routingDecisionId: "decision-123",
     new RoutingFeedbackInfo
     {
