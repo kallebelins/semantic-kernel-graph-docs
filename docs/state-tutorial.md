@@ -124,8 +124,9 @@ var graphState = new GraphState(new KernelArguments
 var input = graphState.GetValue<string>("input");
 var metadata = graphState.GetValue<Dictionary<string, object>>("metadata");
 
-// Add execution metadata
-graphState.AddExecutionStep("NodeName", "Processing input", DateTimeOffset.UtcNow);
+        // GraphState automatically tracks execution metadata
+        Console.WriteLine($"State ID: {graphState.StateId}");
+        Console.WriteLine($"Created At: {graphState.CreatedAt}");
 ```
 
 ## State Flow Between Nodes
@@ -160,8 +161,9 @@ class Program
             ")
         ).StoreResultAs("analysis");
 
-        var decisionNode = new ConditionalGraphNode("RouteBySentiment",
-            state => state.GetValueOrDefault("analysis", "").ToString().Contains("positive"));
+        var decisionNode = new ConditionalGraphNode(
+            state => state.GetValue<string>("analysis")?.Contains("positive") == true,
+            name: "RouteBySentiment");
 
         var positiveNode = new FunctionGraphNode(
             kernel.CreateFunctionFromPrompt(@"
@@ -198,15 +200,15 @@ class Program
         graph.AddNode(summaryNode);
 
         // Connect with conditional routing
-        graph.Connect(inputNode, decisionNode);
-        graph.Connect(decisionNode, positiveNode, 
-            edge => edge.When(state => state.GetValueOrDefault("analysis", "").ToString().Contains("positive")));
-        graph.Connect(decisionNode, negativeNode, 
-            edge => edge.When(state => !state.GetValueOrDefault("analysis", "").ToString().Contains("positive")));
-        graph.Connect(positiveNode, summaryNode);
-        graph.Connect(negativeNode, summaryNode);
+        graph.Connect(inputNode.NodeId, decisionNode.NodeId);
+        graph.ConnectWhen(decisionNode.NodeId, positiveNode.NodeId, 
+            args => args.ToGraphState().GetValue<string>("analysis")?.Contains("positive") == true);
+        graph.ConnectWhen(decisionNode.NodeId, negativeNode.NodeId, 
+            args => args.ToGraphState().GetValue<string>("analysis")?.Contains("positive") != true);
+        graph.Connect(positiveNode.NodeId, summaryNode.NodeId);
+        graph.Connect(negativeNode.NodeId, summaryNode.NodeId);
 
-        graph.SetStartNode(inputNode);
+        graph.SetStartNode(inputNode.NodeId);
 
         // Execute with different inputs
         var testInputs = new[]
@@ -221,11 +223,16 @@ class Program
             Console.WriteLine($"\n=== Testing with: {input} ===");
             
             var state = new KernelArguments { ["input"] = input };
-            var result = await graph.ExecuteAsync(state);
+            var result = await graph.ExecuteAsync(kernel, state);
             
-            Console.WriteLine($"Sentiment: {result.GetValueOrDefault("analysis", "No analysis")}");
-            Console.WriteLine($"Response: {result.GetValueOrDefault("response", "No response")}");
-            Console.WriteLine($"Summary: {result.GetValueOrDefault("summary", "No summary")}");
+            // Access results from the state after execution
+            var analysis = state.TryGetValue("analysis", out var analysisValue) ? analysisValue?.ToString() : "No analysis";
+            var response = state.TryGetValue("response", out var responseValue) ? responseValue?.ToString() : "No response";
+            var summary = state.TryGetValue("summary", out var summaryValue) ? summaryValue?.ToString() : "No summary";
+            
+            Console.WriteLine($"Sentiment: {analysis}");
+            Console.WriteLine($"Response: {response}");
+            Console.WriteLine($"Summary: {summary}");
         }
     }
 }
@@ -244,13 +251,13 @@ var state = new KernelArguments
     ["isActive"] = true
 };
 
-// Type-safe retrieval with defaults
-var count = state.GetValueOrDefault<int>("count", 0);
-var name = state.GetValueOrDefault<string>("name", "Unknown");
-var isActive = state.GetValueOrDefault<bool>("isActive", false);
+// Type-safe retrieval with defaults using TryGetValue
+var count = state.TryGetValue("count", out var countValue) && countValue is int countInt ? countInt : 0;
+var name = state.TryGetValue("name", out var nameValue) && nameValue is string nameString ? nameString : "Unknown";
+var isActive = state.TryGetValue("isActive", out var isActiveValue) && isActiveValue is bool isActiveBool ? isActiveBool : false;
 
 // Try to get values with type checking
-if (state.TryGetValue<int>("count", out var safeCount))
+if (state.TryGetValue("count", out var countValue) && countValue is int safeCount)
 {
     Console.WriteLine($"Count is: {safeCount}");
 }
@@ -279,8 +286,8 @@ var validationNode = new FunctionGraphNode(
 var decisionNode = new ConditionalGraphNode("IsValidUser",
     state => 
     {
-        var validation = state.GetValueOrDefault("validation", "");
-        return validation.ToString().Contains("\"isValid\": true");
+        var validation = state.TryGetValue("validation", out var validationValue) ? validationValue?.ToString() : "";
+        return validation.Contains("\"isValid\": true");
     });
 ```
 
@@ -380,9 +387,9 @@ var validationNode = new ConditionalGraphNode("ValidateState",
 
 ### 3. **Use Type-Safe Access**
 ```csharp
-// Use extension methods for safety
-var count = state.GetValueOrDefault<int>("count", 0);
-var name = state.GetValueOrDefault<string>("name", "Unknown");
+// Use TryGetValue for safety
+var count = state.TryGetValue("count", out var countValue) && countValue is int countInt ? countInt : 0;
+var name = state.TryGetValue("name", out var nameValue) && nameValue is string nameString ? nameString : "Unknown";
 ```
 
 ### 4. **Structure Complex State**
@@ -452,7 +459,7 @@ System.Collections.Generic.KeyNotFoundException: The given key 'result' was not 
 ```
 System.InvalidCastException: Unable to cast object of type 'System.String' to type 'System.Int32'.
 ```
-**Solution**: Use type-safe access methods like `GetValueOrDefault<T>()` or validate types before casting.
+**Solution**: Use type-safe access methods like `TryGetValue` with type checking or validate types before casting.
 
 #### State Corruption
 ```

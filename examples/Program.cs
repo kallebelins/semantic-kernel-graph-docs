@@ -33,6 +33,7 @@ class Program
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
                 ["state-quickstart"] = async () => await StateQuickstartExample.RunAsync(),
+                ["state-tutorial"] = async () => await StateTutorialExample.RunAsync(),
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
