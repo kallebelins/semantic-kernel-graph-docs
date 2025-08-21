@@ -338,27 +338,52 @@ if (validation.HasErrors)
 ### Basic Conditional Routing
 
 ```csharp
-// Create nodes
-var startNode = new FunctionGraphNode(startFunction, "start");
-var successNode = new FunctionGraphNode(successFunction, "success");
-var failureNode = new FunctionGraphNode(failureFunction, "failure");
+// Create nodes with functions
+var startNode = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod(
+        (KernelArguments args) => "Start executed",
+        "StartNode",
+        "Start processing"
+    ),
+    "start"
+);
+
+var successNode = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod(
+        (KernelArguments args) => "Success executed",
+        "SuccessNode", 
+        "Handle success case"
+    ),
+    "success"
+);
+
+var failureNode = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod(
+        (KernelArguments args) => "Failure executed",
+        "FailureNode",
+        "Handle failure case"
+    ),
+    "failure"
+);
 
 // Create conditional edges
 var successEdge = new ConditionalEdge(
     startNode, 
     successNode,
-    args => args.ContainsKey("result") && (bool)args["result"]
+    args => args.ContainsKey("result") && (bool)args["result"],
+    "Success Path"
 );
 
 var failureEdge = new ConditionalEdge(
     startNode, 
     failureNode,
-    args => !args.ContainsKey("result") || !(bool)args["result"]
+    args => !args.ContainsKey("result") || !(bool)args["result"],
+    "Failure Path"
 );
 
-// Add to graph
-graph.AddEdge(successEdge);
-graph.AddEdge(failureEdge);
+// Add to executor
+executor.AddEdge(successEdge);
+executor.AddEdge(failureEdge);
 ```
 
 ### Complex State-Based Conditions
@@ -369,8 +394,8 @@ var decisionEdge = new ConditionalEdge(
     actionNode,
     state => 
     {
-        var priority = state.GetValue<int>("priority", 0);
-        var isUrgent = state.GetValue<bool>("isUrgent", false);
+        var priority = state.GetValue<int>("priority");
+        var isUrgent = state.GetValue<bool>("isUrgent");
         var hasPermission = state.GetValue<string>("userRole") == "admin";
         
         return priority > 7 || (isUrgent && hasPermission);
@@ -434,13 +459,13 @@ var mergeEdge = ConditionalEdge.CreateUnconditional(source, target)
 
 ```csharp
 var edge = new ConditionalEdge(sourceNode, targetNode, condition);
-graph.AddEdge(edge);
+executor.AddEdge(edge);
 ```
 
 ### Using ConnectWhen Extension
 
 ```csharp
-graph.ConnectWhen("sourceNode", "targetNode", 
+executor.ConnectWhen("sourceNode", "targetNode", 
     args => args.ContainsKey("condition") && (bool)args["condition"],
     "Conditional Route");
 ```
@@ -448,7 +473,7 @@ graph.ConnectWhen("sourceNode", "targetNode",
 ### Template-Based Routing
 
 ```csharp
-graph.ConnectWithTemplate("sourceNode", "targetNode", 
+executor.ConnectWithTemplate("sourceNode", "targetNode", 
     "{{priority}} > 7 && {{isUrgent}} == true",
     templateEngine,
     "High Priority Urgent Route");

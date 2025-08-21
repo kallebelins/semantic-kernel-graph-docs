@@ -31,6 +31,7 @@ class Program
                 ["first-graph-5-minutes"] = async () => await FirstGraph5MinutesExample.RunAsync(),
                 ["getting-started"] = async () => await GettingStartedExample.RunAsync(),
                 ["conditional-nodes-tutorial"] = async () => await ConditionalNodesTutorialExample.RunAllExamples(),
+                ["conditional-edge"] = async () => await ConditionalEdgeExample.RunAllExamplesAsync(),
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
                 ["state-quickstart"] = async () => await StateQuickstartExample.RunAsync(),
@@ -130,6 +131,7 @@ class Program
         await FirstGraph5MinutesExample.RunAsync();
         await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample();
         await ConditionalNodesTutorialExample.RunAllExamples();
+        await ConditionalEdgeExample.RunAllExamplesAsync();
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
         await StateQuickstartExample.RunAsync();
         await InstallationExample.RunAllExamplesAsync();
