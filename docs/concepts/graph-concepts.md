@@ -290,3 +290,5 @@ var approvalNode = new HumanApprovalGraphNode(
 * [State Management](state.md) - Advanced state handling
 * [Routing Strategies](routing.md) - Dynamic routing techniques
 * [Examples](../examples/) - Practical examples and use cases
+
+**Runnable example**: See `Examples/GraphConceptsExample.cs` in the examples project for runnable snippets mirroring this document. Run with: `dotnet run graph-concepts` from the `semantic-kernel-graph-docs/examples` folder.

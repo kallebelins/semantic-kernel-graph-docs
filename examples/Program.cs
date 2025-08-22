@@ -66,6 +66,8 @@ class Program
                 ["validation-compilation"] = async () => await ValidationCompilationExample.RunAsync(),
                 ["multi-agent"] = async () => await MultiAgentExample.RunAsync(),
                 ["execution-model"] = async () => await ExecutionModelExample.RunAsync(),
+                ["graph-concepts"] = async () => await GraphConceptsExample.RunAsync(),
+                ["execution"] = async () => await ExecutionConceptsExample.RunAsync(),
                 ["checkpointing-concepts"] = async () => await CheckpointingConceptsExample.RunAsync()
             };
 
@@ -166,6 +168,7 @@ class Program
         await TroubleshootingExample.RunAsync();
         await DynamicRoutingExample.RunAsync();
         await ExecutionModelExample.RunAsync();
+        await ExecutionConceptsExample.RunAsync();
         AdditionalUtilitiesExample.RunAllDemonstrations();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));

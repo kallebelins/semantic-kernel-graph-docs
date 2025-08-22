@@ -52,8 +52,8 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 ## docs/concepts
 45. [x] checkpointing.md
 46. [x] execution-model.md
-47. [ ] execution.md
-48. [ ] graph-concepts.md
+47. [x] execution.md
+48. [x] graph-concepts.md
 49. [ ] graphs.md
 50. [x] index.md
 51. [ ] node-types.md
