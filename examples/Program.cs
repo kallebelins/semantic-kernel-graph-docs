@@ -40,6 +40,7 @@ class Program
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
+                ["metrics"] = async () => await MetricsExample.RunAsync(),
                 ["react-cot-quickstart"] = async () => await ReactCotQuickstartExample.RunAllExamplesAsync(),
                 ["streaming-quickstart"] = async () => await RunStreamingQuickstartExample(),
                 ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
