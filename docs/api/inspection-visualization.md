@@ -29,8 +29,7 @@ public GraphInspectionApi(GraphInspectionOptions? options = null, IGraphLogger? 
 ```csharp
 public void RegisterExecution(GraphExecutionContext executionContext, GraphPerformanceMetrics? performanceMetrics = null)
 public void UnregisterExecution(string executionId)
-public void RegisterDebugSession(string executionId, IDebugSession debugSession)
-public void UnregisterDebugSession(string executionId)
+public void RegisterDebugSession(IDebugSession debugSession)
 ```
 
 #### Structure Inspection Endpoints
@@ -52,16 +51,15 @@ public GraphInspectionResponse GetPerformanceHeatmap(string executionId)
 
 ```csharp
 public GraphInspectionResponse GetExecutionStatus(string executionId)
-public GraphInspectionResponse GetExecutionHealth(string executionId)
-public GraphInspectionResponse GetExecutionSummary(string executionId)
+public GraphInspectionResponse GetHealthCheck()
 ```
 
-#### Debug and Analysis Endpoints
+#### Debug and analysis
 
 ```csharp
-public GraphInspectionResponse GetDebugSessionInfo(string executionId)
-public GraphInspectionResponse GetExecutionTrace(string executionId, int maxSteps = 100)
-public GraphInspectionResponse GetErrorAnalysis(string executionId)
+// Use GetGraphStructure, GetNodeDetails and GetActiveExecutions to retrieve
+// detailed structure, node-level information and active execution summaries
+// for debugging and analysis workflows via the inspection API.
 ```
 
 ### Properties

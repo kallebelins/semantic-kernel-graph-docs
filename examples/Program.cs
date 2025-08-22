@@ -51,6 +51,7 @@ class Program
                 ["executors-and-middlewares"] = async () => await ExecutorsAndMiddlewaresExample.RunAsync(),
                 ["extensions-and-options"] = async () => await ExtensionsAndOptionsExample.RunAsync(),
                 ["graph-executor"] = async () => await GraphExecutorExample.RunAsync(),
+                ["inspection-visualization"] = async () => await GraphVisualizationExample.RunAsync(),
                 ["graph-options"] = async () => await GraphOptionsExample.RunAsync(),
                 ["human-in-the-loop"] = async () => await HumanInTheLoopExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples(),
