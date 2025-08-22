@@ -193,7 +193,8 @@ var semanticAnalyzer = new FunctionGraphNode(
     });
 
 // Multi-dimensional routing decision
-var semanticRouter = new ConditionalGraphNode(
+// Decision node that routes based on semantic analysis
+var semanticRoutingDecision = new ConditionalGraphNode(
     "semantic-router",
     "Route based on semantic analysis",
     logger)
@@ -268,7 +269,8 @@ var generalProcessor = new FunctionGraphNode(
 
 // Add nodes to semantic router
 semanticRouter.AddNode(semanticAnalyzer);
-semanticRouter.AddNode(semanticRouter);
+// Add the semantic routing decision node (named semanticRoutingDecision)
+semanticRouter.AddNode(semanticRoutingDecision);
 semanticRouter.AddNode(domainRouter);
 semanticRouter.AddNode(technicalExpert);
 semanticRouter.AddNode(businessProcessor);
@@ -334,8 +336,8 @@ var performanceMonitor = new FunctionGraphNode(
         return $"System health: CPU {cpuUsage}%, Memory {memoryUsage}%, Queue {queueLength}";
     });
 
-// Adaptive routing decision
-var adaptiveRouter = new ConditionalGraphNode(
+// Adaptive routing decision node
+var adaptiveRoutingDecision = new ConditionalGraphNode(
     "adaptive-router",
     "Make adaptive routing decision",
     logger)
@@ -383,7 +385,8 @@ var loadBalancedProcessor = new FunctionGraphNode(
 
 // Add nodes to adaptive router
 adaptiveRouter.AddNode(performanceMonitor);
-adaptiveRouter.AddNode(adaptiveRouter);
+// Add the adaptive routing decision node
+adaptiveRouter.AddNode(adaptiveRoutingDecision);
 adaptiveRouter.AddNode(highPerformanceProcessor);
 adaptiveRouter.AddNode(loadBalancedProcessor);
 
