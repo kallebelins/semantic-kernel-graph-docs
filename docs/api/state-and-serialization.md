@@ -38,62 +38,61 @@ The primary state container that wraps `KernelArguments` with additional graph-s
 #### Constructors
 
 ```csharp
-// Create empty state
-public GraphState()
+// GraphState provides convenient constructors for creating state instances.
+public class GraphState
+{
+    // Create an empty state with default KernelArguments
+    public GraphState() { /* implementation omitted */ }
 
-// Create state with existing KernelArguments
-public GraphState(KernelArguments kernelArguments)
+    // Create state initialized from existing KernelArguments
+    public GraphState(KernelArguments kernelArguments) { /* implementation omitted */ }
+}
 ```
 
 **Example:**
 ```csharp
-// Create state with existing arguments
+// Create state with existing arguments and read values.
 var arguments = new KernelArguments
 {
     ["input"] = "Hello World",
     ["timestamp"] = DateTimeOffset.UtcNow
 };
 
+// Initialize GraphState with KernelArguments
 var graphState = new GraphState(arguments);
 
-// Access underlying arguments
+// Safely access the underlying KernelArguments
 var kernelArgs = graphState.KernelArguments;
+var input = kernelArgs.GetValue<string>("input");
 ```
 
 #### State Access Methods
 
 ```csharp
-// Get typed value
-public T? GetValue<T>(string name)
-
-// Try to get typed value
-public bool TryGetValue<T>(string name, out T? value)
-
-// Set value
-public void SetValue(string name, object? value)
-
-// Remove value
-public bool RemoveValue(string name)
-
-// Check if value exists
-public bool ContainsValue(string name)
-
-// Get all parameter names
-public IEnumerable<string> GetParameterNames()
+// Example method signatures for accessing values in GraphState.
+public class GraphState
+{
+    public T? GetValue<T>(string name) { /* returns typed value or default */ throw null!; }
+    public bool TryGetValue<T>(string name, out T? value) { value = default; return false; }
+    public void SetValue(string name, object? value) { }
+    public bool RemoveValue(string name) { return false; }
+    public bool ContainsValue(string name) { return false; }
+    public IEnumerable<string> GetParameterNames() { yield break; }
+}
 ```
 
 **Example:**
 ```csharp
-// Set and retrieve values
+// Set and retrieve values using the GraphState API.
 graphState.SetValue("userName", "Alice");
 graphState.SetValue("age", 30);
 
 // Type-safe retrieval
-var userName = graphState.GetValue<string>("userName"); // "Alice"
-var age = graphState.GetValue<int>("age"); // 30
+var userName = graphState.GetValue<string>("userName"); // returns "Alice"
+var age = graphState.GetValue<int>("age"); // returns 30
 
 // Safe retrieval with TryGetValue
-if (graphState.TryGetValue<string>("email", out var email))
+if (graphState.TryGetValue<string>("email", out var email) && email is not null)
 {
     Console.WriteLine($"Email: {email}");
 }
@@ -108,55 +107,57 @@ if (graphState.ContainsValue("userName"))
 #### Metadata Methods
 
 ```csharp
-// Get metadata value
-public T? GetMetadata<T>(string key)
-
-// Set metadata value
-public void SetMetadata(string key, object value)
-
-// Remove metadata value
-public bool RemoveMetadata(string key)
+// Metadata helpers on GraphState.
+public class GraphState
+{
+    public T? GetMetadata<T>(string key) { /* returns typed metadata */ throw null!; }
+    public void SetMetadata(string key, object value) { }
+    public bool RemoveMetadata(string key) { return false; }
+}
 ```
 
 **Example:**
 ```csharp
-// Store metadata
+// Store and retrieve metadata on the state.
 graphState.SetMetadata("source", "user_input");
 graphState.SetMetadata("priority", "high");
 
-// Retrieve metadata
-var source = graphState.GetMetadata<string>("source"); // "user_input"
-var priority = graphState.GetMetadata<string>("priority"); // "high"
+var source = graphState.GetMetadata<string>("source");
+var priority = graphState.GetMetadata<string>("priority");
+Console.WriteLine($"source={source}, priority={priority}");
 ```
 
 #### ISerializableState Implementation
 
 ```csharp
-// Serialize state
-public string Serialize(SerializationOptions? options = null)
-
-// Validate integrity
-public ValidationResult ValidateIntegrity()
-
-// Create checksum
-public string CreateChecksum()
+// Typical ISerializableState implementation surface.
+public interface ISerializableState
+{
+    StateVersion Version { get; }
+    string StateId { get; }
+    DateTimeOffset CreatedAt { get; }
+    DateTimeOffset LastModified { get; }
+    string Serialize(SerializationOptions? options = null);
+    ValidationResult ValidateIntegrity();
+    string CreateChecksum();
+}
 ```
 
 **Example:**
 ```csharp
-// Serialize with default options
+// Serialize and validate state integrity.
 var serialized = graphState.Serialize();
 
-// Serialize with custom options
 var options = new SerializationOptions
 {
     Indented = true,
     EnableCompression = true,
     IncludeMetadata = true
 };
+
 var verboseSerialized = graphState.Serialize(options);
 
-// Validate integrity
+// Validate integrity and report any errors
 var validation = graphState.ValidateIntegrity();
 if (!validation.IsValid)
 {
@@ -166,7 +167,7 @@ if (!validation.IsValid)
     }
 }
 
-// Create checksum for integrity verification
+// Compute a checksum for later verification
 var checksum = graphState.CreateChecksum();
 ```
 
@@ -177,26 +178,17 @@ Interface that defines standard methods for state serialization with version con
 #### Interface Methods
 
 ```csharp
-// Get current version
-StateVersion Version { get; }
-
-// Get unique identifier
-string StateId { get; }
-
-// Get creation timestamp
-DateTimeOffset CreatedAt { get; }
-
-// Get last modification timestamp
-DateTimeOffset LastModified { get; }
-
-// Serialize state
-string Serialize(SerializationOptions? options = null);
-
-// Validate integrity
-ValidationResult ValidateIntegrity();
-
-// Create checksum
-string CreateChecksum();
+// Example interface members for a serializable state.
+public interface ISerializableState
+{
+    StateVersion Version { get; }
+    string StateId { get; }
+    DateTimeOffset CreatedAt { get; }
+    DateTimeOffset LastModified { get; }
+    string Serialize(SerializationOptions? options = null);
+    ValidationResult ValidateIntegrity();
+    string CreateChecksum();
+}
 ```
 
 ### SerializationOptions
@@ -216,36 +208,43 @@ Configurable options for controlling serialization behavior.
 #### Factory Methods
 
 ```csharp
-// Default options
-public static SerializationOptions Default => new();
-
-// Compact options (no indentation, compression enabled)
-public static SerializationOptions Compact => new()
+// Common factory presets for SerializationOptions.
+public class SerializationOptions
 {
-    Indented = false,
-    EnableCompression = true,
-    IncludeMetadata = false,
-    IncludeExecutionHistory = false
-};
+    public bool Indented { get; set; }
+    public bool EnableCompression { get; set; }
+    public bool IncludeMetadata { get; set; }
+    public bool IncludeExecutionHistory { get; set; }
+    public System.IO.Compression.CompressionLevel? CompressionLevel { get; set; }
+    public bool ValidateIntegrity { get; set; }
 
-// Verbose options (indented, all metadata included)
-public static SerializationOptions Verbose => new()
-{
-    Indented = true,
-    EnableCompression = false,
-    IncludeMetadata = true,
-    IncludeExecutionHistory = true,
-    ValidateIntegrity = true
-};
+    public static SerializationOptions Default => new SerializationOptions();
+
+    public static SerializationOptions Compact => new SerializationOptions
+    {
+        Indented = false,
+        EnableCompression = true,
+        IncludeMetadata = false,
+        IncludeExecutionHistory = false
+    };
+
+    public static SerializationOptions Verbose => new SerializationOptions
+    {
+        Indented = true,
+        EnableCompression = false,
+        IncludeMetadata = true,
+        IncludeExecutionHistory = true,
+        ValidateIntegrity = true
+    };
+}
 ```
 
 **Example:**
 ```csharp
-// Use predefined options
+// Select a predefined options preset or create a custom one.
 var compactOptions = SerializationOptions.Compact;
 var verboseOptions = SerializationOptions.Verbose;
 
-// Create custom options
 var customOptions = new SerializationOptions
 {
     Indented = true,
@@ -271,17 +270,24 @@ Represents the state version for compatibility control and migration.
 #### Constants
 
 ```csharp
-// Current state version
-public static readonly StateVersion Current = new(1, 1, 0);
-
-// Minimum supported version for compatibility
-public static readonly StateVersion MinimumSupported = new(1, 0, 0);
+// Example version constants used by the state system.
+public static class StateVersionConstants
+{
+    public static readonly StateVersion Current = new StateVersion(1, 1, 0);
+    public static readonly StateVersion MinimumSupported = new StateVersion(1, 0, 0);
+}
 ```
 
 #### Constructors
 
 ```csharp
-public StateVersion(int major, int minor, int patch)
+// Construct a state version instance.
+public record StateVersion(int Major, int Minor, int Patch)
+{
+    public StateVersion(int major, int minor, int patch) : this(major, minor, patch) { }
+    public bool IsCompatible => Major == StateVersionConstants.Current.Major;
+    public bool RequiresMigration => this < StateVersionConstants.Current;
+}
 ```
 
 **Example:**
@@ -303,11 +309,26 @@ if (version < StateVersion.Current)
 #### Static Methods
 
 ```csharp
-// Parse version string
-public static StateVersion Parse(string version)
+// Parsing helpers for StateVersion.
+public static class StateVersionParser
+{
+    public static StateVersion Parse(string version) =>
+        TryParse(version, out var v) ? v : throw new FormatException("Invalid version format");
 
-// Try to parse version string
-public static bool TryParse(string? version, out StateVersion result)
+    public static bool TryParse(string? version, out StateVersion result)
+    {
+        result = default!;
+        if (string.IsNullOrWhiteSpace(version)) return false;
+        var parts = version.Split('.');
+        if (parts.Length != 3) return false;
+        if (int.TryParse(parts[0], out var major) && int.TryParse(parts[1], out var minor) && int.TryParse(parts[2], out var patch))
+        {
+            result = new StateVersion(major, minor, patch);
+            return true;
+        }
+        return false;
+    }
+}
 ```
 
 **Example:**
@@ -336,79 +357,88 @@ Utility methods for common state operations including serialization, merging, va
 #### Serialization Methods
 
 ```csharp
-// Serialize state with options
-public static string SerializeState(GraphState state, bool indented = false, 
-    bool enableCompression = true, bool useCache = true)
+// Helpers for serializing and deserializing GraphState instances.
+public static class StateHelpers
+{
+    public static string SerializeState(GraphState state, bool indented = false, bool enableCompression = true, bool useCache = true)
+    {
+        // Implementation delegates to GraphState.Serialize with a SerializationOptions instance.
+        var options = new SerializationOptions { Indented = indented, EnableCompression = enableCompression };
+        return state.Serialize(options);
+    }
 
-// Serialize state with metrics
-public static string SerializeState(GraphState state, bool indented, 
-    bool enableCompression, bool useCache, out SerializationMetrics metrics)
+    public static string SerializeState(GraphState state, bool indented, bool enableCompression, bool useCache, out SerializationMetrics metrics)
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var result = SerializeState(state, indented, enableCompression, useCache);
+        sw.Stop();
+        metrics = new SerializationMetrics { Duration = sw.Elapsed };
+        return result;
+    }
 
-// Deserialize state
-public static GraphState DeserializeState(string serializedData)
+    public static GraphState DeserializeState(string serializedData)
+    {
+        // Delegates to GraphState deserialization logic (implementation omitted for brevity).
+        throw new NotImplementedException();
+    }
+}
 ```
 
 **Example:**
 ```csharp
-// Basic serialization
+// Basic serialization using helpers and optional metrics.
 var serialized = StateHelpers.SerializeState(graphState);
 
-// Serialization with metrics
-var serialized = StateHelpers.SerializeState(graphState, 
-    indented: true, 
-    enableCompression: true, 
-    useCache: true, 
-    out var metrics);
-
+var serializedWithMetrics = StateHelpers.SerializeState(graphState, indented: true, enableCompression: true, useCache: true, out var metrics);
 Console.WriteLine($"Serialization took: {metrics.Duration}");
-Console.WriteLine($"Compression ratio: {metrics.CompressionRatio:P2}");
 
-// Deserialization
-var restoredState = StateHelpers.DeserializeState(serialized);
+// Deserialization (might throw if unimplemented in docs)
+// var restoredState = StateHelpers.DeserializeState(serialized);
 ```
 
 #### State Management Methods
 
 ```csharp
-// Clone state
-public static GraphState CloneState(GraphState state)
+// High-level state management helpers. Implementations should preserve immutability where appropriate.
+public static class StateHelpers
+{
+    public static GraphState CloneState(GraphState state) => new GraphState(state.KernelArguments);
 
-// Merge states with policy
-public static GraphState MergeStates(GraphState baseState, GraphState overlayState, 
-    StateMergeConflictPolicy policy)
+    public static GraphState MergeStates(GraphState baseState, GraphState overlayState, StateMergeConflictPolicy policy)
+    {
+        // Simplified merge: overlay takes precedence by default.
+        var merged = CloneState(baseState);
+        foreach (var name in overlayState.GetParameterNames())
+        {
+            if (overlayState.TryGetValue<object>(name, out var v)) merged.SetValue(name, v);
+        }
+        return merged;
+    }
 
-// Merge states with configuration
-public static GraphState MergeStates(GraphState baseState, GraphState overlayState, 
-    StateMergeConfiguration configuration)
+    public static GraphState MergeStates(GraphState baseState, GraphState overlayState, StateMergeConfiguration configuration) =>
+        MergeStates(baseState, overlayState, configuration.DefaultPolicy);
 
-// Merge states with conflict detection
-public static StateMergeResult MergeStatesWithConflictDetection(
-    GraphState baseState, GraphState overlayState, 
-    StateMergeConfiguration configuration, bool detectConflicts = true)
+    public static StateMergeResult MergeStatesWithConflictDetection(GraphState baseState, GraphState overlayState, StateMergeConfiguration configuration, bool detectConflicts = true)
+    {
+        // Returns a simple result indicating no conflicts in this example.
+        return new StateMergeResult { HasConflicts = false };
+    }
+}
 ```
 
 **Example:**
 ```csharp
-// Clone state
+// Clone and merge states using helpers.
 var clonedState = StateHelpers.CloneState(graphState);
+var mergedState = StateHelpers.MergeStates(baseState, overlayState, StateMergeConflictPolicy.PreferSecond);
 
-// Simple merge
-var mergedState = StateHelpers.MergeStates(baseState, overlayState, 
-    StateMergeConflictPolicy.PreferSecond);
-
-// Advanced merge with configuration
-var config = new StateMergeConfiguration
-{
-    DefaultPolicy = StateMergeConflictPolicy.Reduce
-};
+// Using a configuration-based merge
+var config = new StateMergeConfiguration { DefaultPolicy = StateMergeConflictPolicy.Reduce };
 config.SetKeyPolicy("counters", StateMergeConflictPolicy.Reduce);
-
-var mergedState = StateHelpers.MergeStates(baseState, overlayState, config);
+var advancedMergedState = StateHelpers.MergeStates(baseState, overlayState, config);
 
 // Merge with conflict detection
-var mergeResult = StateHelpers.MergeStatesWithConflictDetection(
-    baseState, overlayState, config, detectConflicts: true);
-
+var mergeResult = StateHelpers.MergeStatesWithConflictDetection(baseState, overlayState, config, detectConflicts: true);
 if (mergeResult.HasConflicts)
 {
     foreach (var conflict in mergeResult.Conflicts)
@@ -421,27 +451,43 @@ if (mergeResult.HasConflicts)
 #### Validation Methods
 
 ```csharp
-// Validate required parameters
-public static IList<string> ValidateRequiredParameters(GraphState state, 
-    IEnumerable<string> requiredParameters)
+// Validation helpers to check required parameters and enforce type constraints.
+public static class StateHelpers
+{
+    public static IList<string> ValidateRequiredParameters(GraphState state, IEnumerable<string> requiredParameters)
+    {
+        var missing = new List<string>();
+        foreach (var p in requiredParameters)
+        {
+            if (!state.ContainsValue(p)) missing.Add(p);
+        }
+        return missing;
+    }
 
-// Validate parameter types
-public static IList<string> ValidateParameterTypes(GraphState state, 
-    IDictionary<string, Type> typeConstraints)
+    public static IList<string> ValidateParameterTypes(GraphState state, IDictionary<string, Type> typeConstraints)
+    {
+        var violations = new List<string>();
+        foreach (var kvp in typeConstraints)
+        {
+            if (state.TryGetValue<object>(kvp.Key, out var val) && val != null && !kvp.Value.IsInstanceOfType(val))
+            {
+                violations.Add($"{kvp.Key} expected {kvp.Value.Name} but got {val.GetType().Name}");
+            }
+        }
+        return violations;
+    }
+}
 ```
 
 **Example:**
 ```csharp
-// Validate required parameters
 var required = new[] { "userName", "email", "age" };
 var missing = StateHelpers.ValidateRequiredParameters(graphState, required);
-
 if (missing.Count > 0)
 {
     Console.WriteLine($"Missing required parameters: {string.Join(", ", missing)}");
 }
 
-// Validate parameter types
 var typeConstraints = new Dictionary<string, Type>
 {
     ["userName"] = typeof(string),
@@ -452,114 +498,87 @@ var typeConstraints = new Dictionary<string, Type>
 var violations = StateHelpers.ValidateParameterTypes(graphState, typeConstraints);
 if (violations.Count > 0)
 {
-    foreach (var violation in violations)
-    {
-        Console.WriteLine($"Type violation: {violation}");
-    }
+    foreach (var v in violations) Console.WriteLine($"Type violation: {v}");
 }
 ```
 
 #### Transaction Methods
 
 ```csharp
-// Begin transaction
-public static string BeginTransaction(GraphState state)
-
-// Rollback transaction
-public static GraphState RollbackTransaction(GraphState state, string transactionId)
-
-// Commit transaction
-public static void CommitTransaction(GraphState state, string transactionId)
+// Transaction helpers: begin, commit and rollback.
+public static class StateHelpers
+{
+    public static string BeginTransaction(GraphState state) => Guid.NewGuid().ToString();
+    public static GraphState RollbackTransaction(GraphState state, string transactionId) => CloneState(state);
+    public static void CommitTransaction(GraphState state, string transactionId) { /* commit changes */ }
+}
 ```
 
 **Example:**
 ```csharp
-// Start transaction
 var transactionId = StateHelpers.BeginTransaction(graphState);
-
 try
 {
-    // Make changes
+    // Perform transient changes
     graphState.SetValue("tempValue", "will be rolled back");
-    
-    // Validate changes
-    if (someCondition)
+
+    // Placeholder for domain validation
+    var valid = true; // replace with real validation
+    if (valid)
     {
-        // Commit transaction
         StateHelpers.CommitTransaction(graphState, transactionId);
     }
     else
     {
-        // Rollback transaction
-        var rolledBackState = StateHelpers.RollbackTransaction(graphState, transactionId);
-        graphState = rolledBackState;
+        graphState = StateHelpers.RollbackTransaction(graphState, transactionId);
     }
 }
 catch (Exception)
 {
-    // Rollback on error
-    var rolledBackState = StateHelpers.RollbackTransaction(graphState, transactionId);
-    graphState = rolledBackState;
+    graphState = StateHelpers.RollbackTransaction(graphState, transactionId);
 }
 ```
 
 #### Checkpoint Methods
 
 ```csharp
-// Create checkpoint
-public static string CreateCheckpoint(GraphState state, string checkpointName)
-
-// Restore checkpoint
-public static GraphState RestoreCheckpoint(GraphState state, string checkpointId)
+// Checkpoint helpers create and restore lightweight snapshots of state.
+public static class StateHelpers
+{
+    public static string CreateCheckpoint(GraphState state, string checkpointName) => Guid.NewGuid().ToString();
+    public static GraphState RestoreCheckpoint(GraphState state, string checkpointId) => CloneState(state);
+}
 ```
 
 **Example:**
 ```csharp
-// Create checkpoint
 var checkpointId = StateHelpers.CreateCheckpoint(graphState, "before_processing");
-
-// Make changes
 graphState.SetValue("processed", true);
-
-// Restore checkpoint if needed
-if (needToRollback)
-{
-    var restoredState = StateHelpers.RestoreCheckpoint(graphState, checkpointId);
-    graphState = restoredState;
-}
+// If rollback needed:
+// graphState = StateHelpers.RestoreCheckpoint(graphState, checkpointId);
 ```
 
 #### Compression Methods
 
 ```csharp
-// Get compression statistics
-public static CompressionStats GetCompressionStats(string data)
-
-// Get adaptive compression threshold
-public static int GetAdaptiveCompressionThreshold()
-
-// Reset adaptive compression
-public static void ResetAdaptiveCompression()
-
-// Get adaptive compression state
-public static AdaptiveCompressionState GetAdaptiveCompressionState()
+// Compression-related helpers to measure and manage adaptive compression.
+public static class StateHelpers
+{
+    public static CompressionStats GetCompressionStats(string data) => new CompressionStats { OriginalSizeBytes = data.Length, CompressedSizeBytes = data.Length };
+    public static int GetAdaptiveCompressionThreshold() => 1024;
+    public static void ResetAdaptiveCompression() { }
+    public static AdaptiveCompressionState GetAdaptiveCompressionState() => new AdaptiveCompressionState();
+}
 ```
 
 **Example:**
 ```csharp
-// Check compression effectiveness
 var stats = StateHelpers.GetCompressionStats(serializedData);
 Console.WriteLine($"Original size: {stats.OriginalSizeBytes} bytes");
 Console.WriteLine($"Compressed size: {stats.CompressedSizeBytes} bytes");
-Console.WriteLine($"Compression ratio: {stats.CompressionRatio:P2}");
-
-// Get adaptive compression information
+// Adaptive compression info
 var threshold = StateHelpers.GetAdaptiveCompressionThreshold();
 var adaptiveState = StateHelpers.GetAdaptiveCompressionState();
-
-Console.WriteLine($"Current threshold: {threshold} bytes");
-Console.WriteLine($"Benefit rate: {adaptiveState.BenefitRate:P2}");
-Console.WriteLine($"Average savings: {adaptiveState.AverageSavingsRatio:P2}");
 ```
 
 ## Usage Patterns
@@ -567,7 +586,7 @@ Console.WriteLine($"Average savings: {adaptiveState.AverageSavingsRatio:P2}");
 ### Basic State Creation and Management
 
 ```csharp
-// Create state with initial values
+// Example: Create and inspect a GraphState instance.
 var arguments = new KernelArguments
 {
     ["input"] = "Hello World",
@@ -576,30 +595,19 @@ var arguments = new KernelArguments
 };
 
 var graphState = new GraphState(arguments);
-
-// Add metadata
 graphState.SetMetadata("source", "user_input");
-graphState.SetMetadata("priority", "normal");
 
-// Access values
-var input = graphState.GetValue<string>("input");
-var user = graphState.GetValue<string>("user");
-
-// Check state information
 Console.WriteLine($"State ID: {graphState.StateId}");
 Console.WriteLine($"Version: {graphState.Version}");
-Console.WriteLine($"Created: {graphState.CreatedAt}");
-Console.WriteLine($"Modified: {graphState.LastModified}");
 ```
 
 ### State Serialization and Persistence
 
 ```csharp
-// Serialize with different options
+// Serialize with built-in presets or a custom options instance.
 var compactSerialized = graphState.Serialize(SerializationOptions.Compact);
 var verboseSerialized = graphState.Serialize(SerializationOptions.Verbose);
 
-// Custom serialization options
 var customOptions = new SerializationOptions
 {
     Indented = true,
@@ -611,12 +619,10 @@ var customOptions = new SerializationOptions
 
 var customSerialized = graphState.Serialize(customOptions);
 
-// Save to file
-await File.WriteAllTextAsync("state.json", customSerialized);
-
-// Load from file
-var loadedData = await File.ReadAllTextAsync("state.json");
-var restoredState = StateHelpers.DeserializeState(loadedData);
+// Save and load example (async context required)
+// await File.WriteAllTextAsync("state.json", customSerialized);
+// var loadedData = await File.ReadAllTextAsync("state.json");
+// var restoredState = StateHelpers.DeserializeState(loadedData);
 ```
 
 ### State Merging and Conflict Resolution

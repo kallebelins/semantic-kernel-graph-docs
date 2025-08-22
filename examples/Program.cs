@@ -37,6 +37,7 @@ class Program
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
                 ["state-quickstart"] = async () => await StateQuickstartExample.RunAsync(),
                 ["state-tutorial"] = async () => await StateTutorialExample.RunAsync(),
+                ["state-and-serialization"] = async () => await StateAndSerializationExample.RunAsync(),
                 ["faq"] = async () => await FaqExample.RunAllExamplesAsync(),
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
@@ -153,6 +154,7 @@ class Program
         await ConditionalEdgeExample.RunAllExamplesAsync();
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
         await StateQuickstartExample.RunAsync();
+        await StateAndSerializationExample.RunAsync();
         await InstallationExample.RunAllExamplesAsync();
         await MetricsLoggingQuickstartExample.RunBasicExampleAsync();
         await ReactCotQuickstartExample.RunAllExamplesAsync();
