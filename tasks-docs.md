@@ -45,7 +45,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 39. [x] rest-tools.md
 40. [x] server-apis.md
 41. [x] state-and-serialization.md
-42. [ ] streaming.md
+42. [x] streaming.md
 43. [ ] validation-compilation.md
 44. [ ] visualization-realtime.md
 
