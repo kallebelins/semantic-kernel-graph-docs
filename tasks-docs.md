@@ -38,7 +38,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 32. [x] igraph-node.md
 33. [x] inspection-visualization.md
 34. [x] integration.md
-35. [ ] main-node-types.md
+35. [x] main-node-types.md
 36. [ ] metrics.md
 37. [ ] multi-agent.md
 38. [ ] nodes.md

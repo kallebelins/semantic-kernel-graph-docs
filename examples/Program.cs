@@ -44,6 +44,7 @@ class Program
                 ["streaming-quickstart"] = async () => await RunStreamingQuickstartExample(),
                 ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
                 ["core-api"] = async () => await CoreApiExample.RunAsync(),
+                ["main-node-types"] = async () => await MainNodeTypesExample.RunAsync(),
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
                 ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
                 ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),

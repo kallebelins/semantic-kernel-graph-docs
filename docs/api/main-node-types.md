@@ -33,17 +33,18 @@ The following metadata keys enable custom behavior:
 #### Basic Function Wrapping
 
 ```csharp
-// Create a function
+// Create a lightweight kernel function that transforms an input string.
 var function = kernel.CreateFunctionFromMethod(
     (string input) => $"Processed: {input}",
     functionName: "process_input"
 );
 
-// Wrap in a graph node
+// Wrap the kernel function in a FunctionGraphNode and persist the result in state.
 var node = new FunctionGraphNode(function, "process_node")
     .StoreResultAs("processed_result");
 
-// Connect to next node
+// You can connect nodes directly or add them to a GraphExecutor and use graph-level connect
+// Example: connect to another node instance
 node.ConnectTo(nextNode);
 ```
 
@@ -256,17 +257,16 @@ This node implements the full ReAct pattern by orchestrating reasoning, acting, 
 #### Basic Setup
 
 ```csharp
-var reactLoopNode = new ReActLoopGraphNode(
-    nodeId: "react_loop",
-    name: "ReAct Problem Solver"
+// Build an ActionGraphNode that discovers executable actions from the kernel.
+var actionNode = ActionGraphNode.CreateWithActions(
+    kernel,
+    new ActionSelectionCriteria { MinRequiredParameters = 0, MaxRequiredParameters = 5 },
+    "action_node"
 );
 
-// Configure component nodes
-reactLoopNode.ConfigureNodes(
-    reasoningNode,    // Analyze and plan
-    actionNode,       // Execute actions
-    observationNode   // Observe results
-);
+// Create a ReAct loop node and compose reasoning, action and observation nodes.
+var reactLoopNode = new ReActLoopGraphNode(nodeId: "react_loop", name: "react_loop");
+reactLoopNode.ConfigureNodes(reasoningNode, actionNode, observationNode);
 ```
 
 #### Factory Method
@@ -429,10 +429,13 @@ var observationNode = new ObservationGraphNode(
 );
 
 // 2. Create and configure ReAct loop
-var reactLoopNode = new ReActLoopGraphNode(
-    nodeId: "complete_react_workflow"
+var actionNode = ActionGraphNode.CreateWithActions(
+    kernel,
+    new ActionSelectionCriteria { MinRequiredParameters = 0, MaxRequiredParameters = 5 },
+    "action_execution"
 );
 
+var reactLoopNode = new ReActLoopGraphNode(nodeId: "complete_react_workflow", name: "complete_react_workflow");
 reactLoopNode.ConfigureNodes(reasoningNode, actionNode, observationNode);
 
 // 3. Configure loop behavior
@@ -440,9 +443,9 @@ reactLoopNode.SetMetadata("MaxIterations", 5);
 reactLoopNode.SetMetadata("GoalAchievementThreshold", 0.9);
 reactLoopNode.SetMetadata("EarlyTerminationEnabled", true);
 
-// 4. Add to executor
+// 4. Add to executor and set start node (use the node id)
 executor.AddNode(reactLoopNode);
-executor.SetStartNode(reactLoopNode);
+executor.SetStartNode(reactLoopNode.NodeId);
 ```
 
 ### Conditional Routing with Function Nodes
