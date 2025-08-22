@@ -34,7 +34,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 28. [x] graph-executor.md
 29. [x] graph-options.md
 30. [x] human-in-the-loop.md
-31. [ ] igraph-executor.md
+31. [x] igraph-executor.md
 32. [ ] igraph-node.md
 33. [ ] inspection-visualization.md
 34. [ ] integration.md
