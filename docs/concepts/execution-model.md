@@ -48,8 +48,10 @@ Each node follows a consistent lifecycle pattern:
 
 ```csharp
 // Execute lifecycle: Before (middlewares then node hook)
-await InvokeBeforeMiddlewaresAsync(context, execNode);
-await execNode.OnBeforeExecuteAsync(context.Kernel, context.GraphState.KernelArguments, effectiveCt);
+// Await calls use ConfigureAwait(false) for library code to avoid capturing the
+// synchronization context in consumer applications.
+await InvokeBeforeMiddlewaresAsync(context, execNode).ConfigureAwait(false);
+await execNode.OnBeforeExecuteAsync(context.Kernel, context.GraphState.KernelArguments, effectiveCt).ConfigureAwait(false);
 
 // Resource governance: acquire permits
 using var lease = _resourceGovernor != null
@@ -73,11 +75,12 @@ var nodeTracker = _performanceMetrics?.StartNodeTracking(currentNode.NodeId, cur
 
 ```csharp
 // Execute the node
-var result = await execNode.ExecuteAsync(context.Kernel, context.GraphState.KernelArguments, effectiveCt);
+// Use ConfigureAwait(false) so example library code does not capture contexts.
+var result = await execNode.ExecuteAsync(context.Kernel, context.GraphState.KernelArguments, effectiveCt).ConfigureAwait(false);
 
 // Execute lifecycle: After (node hook then middlewares)
-await execNode.OnAfterExecuteAsync(context.Kernel, context.GraphState.KernelArguments, result, effectiveCt);
-await InvokeAfterMiddlewaresAsync(context, execNode, result);
+await execNode.OnAfterExecuteAsync(context.Kernel, context.GraphState.KernelArguments, result, effectiveCt).ConfigureAwait(false);
+await InvokeAfterMiddlewaresAsync(context, execNode, result).ConfigureAwait(false);
 
 // Record successful completion
 context.RecordNodeCompleted(execNode, result);
@@ -94,7 +97,8 @@ RegisterNodeSuccess(execNode.NodeId);
 
 ```csharp
 // Execute lifecycle: Failed
-await currentNode.OnExecutionFailedAsync(context.Kernel, context.GraphState.KernelArguments, ex, context.CancellationToken);
+// Ensure ConfigureAwait(false) on awaited calls.
+await currentNode.OnExecutionFailedAsync(context.Kernel, context.GraphState.KernelArguments, ex, context.CancellationToken).ConfigureAwait(false);
 
 // Record node failure
 context.RecordNodeFailed(currentNode, ex);
@@ -129,8 +133,9 @@ var nextNodes = GetCombinedNextNodes(execNode, result, context.GraphState).ToLis
 if (_routingEngine != null && nextNodes.Count > 0)
 {
     // Use dynamic routing engine for intelligent node selection
+    // Use ConfigureAwait(false) when awaiting in library code examples.
     currentNode = await _routingEngine.SelectNextNodeAsync(nextNodes, execNode,
-        context.GraphState, result, context.CancellationToken);
+        context.GraphState, result, context.CancellationToken).ConfigureAwait(false);
 }
 else
 {
@@ -242,7 +247,7 @@ if (IsNodeQuarantined(currentNode.NodeId))
     var skipCandidates = GetCombinedNextNodes(currentNode, lastResult, context.GraphState).ToList();
     currentNode = await SelectNextNodeAsync(currentNode,
         context.WorkQueue.OrderDeterministically(skipCandidates).ToList(),
-        context, lastResult);
+        context, lastResult).ConfigureAwait(false);
     continue;
 }
 ```

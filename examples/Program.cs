@@ -64,7 +64,9 @@ class Program
                 ["simple-node"] = async () => await ExampleRunners.RunSimpleNodeExample(),
                 ["conditional-node"] = async () => await ExampleRunners.RunConditionalNodeExample(),
                 ["validation-compilation"] = async () => await ValidationCompilationExample.RunAsync(),
-                ["multi-agent"] = async () => await MultiAgentExample.RunAsync()
+                ["multi-agent"] = async () => await MultiAgentExample.RunAsync(),
+                ["execution-model"] = async () => await ExecutionModelExample.RunAsync(),
+                ["checkpointing-concepts"] = async () => await CheckpointingConceptsExample.RunAsync()
             };
 
             // Determine which example to run
@@ -163,6 +165,7 @@ class Program
         await RunStreamingQuickstartExample();
         await TroubleshootingExample.RunAsync();
         await DynamicRoutingExample.RunAsync();
+        await ExecutionModelExample.RunAsync();
         AdditionalUtilitiesExample.RunAllDemonstrations();
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));

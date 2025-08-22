@@ -50,8 +50,8 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 44. [x] visualization-realtime.md  # Code validated: example added at `examples/GraphVisualizationExample.cs`
 
 ## docs/concepts
-45. [ ] checkpointing.md
-46. [ ] execution-model.md
+45. [x] checkpointing.md
+46. [x] execution-model.md
 47. [ ] execution.md
 48. [ ] graph-concepts.md
 49. [ ] graphs.md

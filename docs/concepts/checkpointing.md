@@ -40,9 +40,11 @@ Checkpointing and recovery are essential features in SemanticKernel.Graph that e
 using SemanticKernel.Graph.State;
 
 // Save state to a checkpoint
-var checkpointId = StateHelpers.SaveCheckpoint(graphState, "my-checkpoint");
+var checkpointId = StateHelpers.CreateCheckpoint(graphState, "my-checkpoint");
 
 // Restore state from a checkpoint
+// Note: RestoreCheckpoint expects the checkpoint to be stored in the same
+// state's metadata (CreateCheckpoint stores a checkpoint entry on the provided state).
 var restoredState = StateHelpers.RestoreCheckpoint(graphState, checkpointId);
 
 // Serialize state for storage
@@ -90,19 +92,25 @@ var checkpoints = await checkpointManager.ListCheckpointsAsync("exec-123", limit
 using SemanticKernel.Graph.State;
 
 // Current version information
-var currentVersion = StateVersion.Current;           // "1.1.0"
-var minSupported = StateVersion.MinimumSupported;    // "1.0.0"
+var currentVersion = StateVersion.Current;           // e.g. 1.1.0
+var minSupported = StateVersion.MinimumSupported;    // e.g. 1.0.0
 
 // Check version compatibility
 var stateVersion = graphState.Version;
-var isCompatible = stateVersion.IsCompatible;        // Compatible with current version
-var requiresMigration = stateVersion.RequiresMigration; // Needs migration
+var isCompatible = stateVersion.IsCompatibleWith(StateVersion.Current);
+var requiresMigration = stateVersion.RequiresMigration; // Needs migration when older than current
 
 // Version comparison and parsing
-var version = StateVersion.Parse("1.2.3");
-if (version < StateVersion.Current)
+if (StateVersion.TryParse("1.2.3", out var version))
 {
-    Console.WriteLine("State version is older than current");
+    if (version < StateVersion.Current)
+    {
+        Console.WriteLine("State version is older than current");
+    }
+}
+else
+{
+    Console.WriteLine("Invalid version string");
 }
 ```
 
@@ -111,16 +119,16 @@ if (version < StateVersion.Current)
 Automatic migration handles state format changes:
 
 ```csharp
-// During deserialization, migration is automatic
-var deserializedResult = SerializableStateFactory.Deserialize<GraphState>(
-    serializedData,
-    json => JsonSerializer.Deserialize<GraphState>(json)
-);
-
-if (deserializedResult.WasMigrated)
+// During deserialization, migration may be required. Use StateMigrationManager
+// to migrate serialized state to the current version before deserialization.
+if (StateMigrationManager.IsMigrationNeeded(StateVersion.Parse("1.0.0")))
 {
-    Console.WriteLine($"Migrated from version {deserializedResult.OriginalVersion}");
-    Console.WriteLine($"Migrated to version {deserializedResult.State.Version}");
+    var migratedJson = StateMigrationManager.MigrateToCurrentVersion(serializedData, StateVersion.Parse("1.0.0"));
+    var state = JsonSerializer.Deserialize<GraphState>(migratedJson);
+    if (state != null)
+    {
+        Console.WriteLine($"Deserialized migrated state version: {state.Version}");
+    }
 }
 ```
 
@@ -131,7 +139,8 @@ if (deserializedResult.WasMigrated)
 Configure compression for storage efficiency:
 
 ```csharp
-// Serialization options with compression
+// Serialization options with compression. Use the GraphState.Serialize method
+// which accepts a SerializationOptions instance.
 var options = new SerializationOptions
 {
     EnableCompression = true,           // Enable compression
