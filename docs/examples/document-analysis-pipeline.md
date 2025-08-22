@@ -74,9 +74,12 @@ var documentIngestion = new FunctionGraphNode(
             ["ingestion_timestamp"] = DateTime.UtcNow,
             ["content_length"] = documentContent.Length
         };
-        
+
+        // Store content and metadata on the execution context for downstream nodes
         context.SetValue("document_content", documentContent);
         context.SetValue("document_metadata", metadata);
+        // Also expose the file extension directly to simplify downstream access
+        context.SetValue("file_extension", fileInfo.Extension);
         context.SetValue("processing_status", "ingested");
         
         return $"Document ingested: {fileInfo.Name} ({fileInfo.Length} bytes)";
@@ -112,11 +115,12 @@ var documentClassification = new FunctionGraphNode(
             _ => "general"
         };
         
+        // Persist classification results to the context
         context.SetValue("document_type", documentType);
         context.SetValue("content_category", contentCategory);
         context.SetValue("processing_status", "classified");
-        
-        return $"Document classified as {documentType} ({content_category})";
+
+        return $"Document classified as {documentType} ({contentCategory})";
     });
 
 // Stage 3: Content Analysis
@@ -156,9 +160,10 @@ var contentAnalysis = new FunctionGraphNode(
                 break;
         }
         
+        // Store analysis results and update processing status
         context.SetValue("content_analysis", analysis);
         context.SetValue("processing_status", "analyzed");
-        context.SetValue("analysis_timestamp"] = DateTime.UtcNow);
+        context.SetValue("analysis_timestamp", DateTime.UtcNow);
         
         return $"Content analysis completed for {documentType} document";
     });

@@ -3,6 +3,7 @@ using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
 using Examples;
 using SemanticKernel.Graph.Examples;
+using SemanticKernel.Graph.DocsExamples;
 using SemanticKernel.Graph.State;
 
 
@@ -61,6 +62,7 @@ class Program
                 ["graph-options"] = async () => await GraphOptionsExample.RunAsync(),
                 ["human-in-the-loop"] = async () => await HumanInTheLoopExample.RunAsync(),
                 ["integration"] = async () => await IntegrationExample.RunAsync(),
+                ["document-analysis-pipeline"] = async () => await DocumentAnalysisPipelineDocExample.DemoAsync(),
                 ["all"] = async () => await RunAllAvailableExamples(),
                 ["simple-node"] = async () => await ExampleRunners.RunSimpleNodeExample(),
                 ["conditional-node"] = async () => await ExampleRunners.RunConditionalNodeExample(),
