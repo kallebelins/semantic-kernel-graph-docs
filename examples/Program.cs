@@ -3,6 +3,7 @@ using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
 using Examples;
 using SemanticKernel.Graph.Examples;
+using SemanticKernel.Graph.State;
 
 
 namespace Examples;
@@ -52,7 +53,9 @@ class Program
                 ["graph-executor"] = async () => await GraphExecutorExample.RunAsync(),
                 ["graph-options"] = async () => await GraphOptionsExample.RunAsync(),
                 ["human-in-the-loop"] = async () => await HumanInTheLoopExample.RunAsync(),
-                ["all"] = async () => await RunAllAvailableExamples()
+                ["all"] = async () => await RunAllAvailableExamples(),
+                ["simple-node"] = async () => await ExampleRunners.RunSimpleNodeExample(),
+                ["conditional-node"] = async () => await ExampleRunners.RunConditionalNodeExample()
             };
 
             // Determine which example to run
@@ -153,6 +156,68 @@ class Program
 
         Console.WriteLine("\n" + "=".PadLeft(50, '='));
         Console.WriteLine("📋 All examples completed!");
+    }
+}
+
+// Add demo runners for the new examples.
+static class ExampleRunners
+{
+    /// <summary>
+    /// Runs a minimal demo of SimpleNodeExample to validate compilation and basic behavior.
+    /// </summary>
+    public static async Task RunSimpleNodeExample()
+    {
+        Console.WriteLine("🔧 Running SimpleNodeExample demo...");
+
+        // Create a minimal kernel instance used only to satisfy method signatures.
+        var kernel = Kernel.CreateBuilder().Build();
+
+        // Create kernel arguments and set 'input'
+        var args = new KernelArguments();
+        args["input"] = "hello world";
+
+        var node = new SimpleNodeExample();
+
+        // Validate execution
+        var validation = node.ValidateExecution(args);
+        if (!validation.IsValid)
+        {
+            Console.WriteLine($"Validation failed: {string.Join(", ", validation.Errors)}");
+            return;
+        }
+
+        // Execute node
+        var result = await node.ExecuteAsync(kernel, args);
+        var resultStr = result == null ? string.Empty : result.GetValue<object>()?.ToString() ?? string.Empty;
+        Console.WriteLine($"Execution result: {resultStr}");
+
+        Console.WriteLine("✅ SimpleNodeExample demo completed.");
+    }
+
+    /// <summary>
+    /// Runs a minimal demo of ConditionalNodeExample to validate routing logic.
+    /// </summary>
+    public static async Task RunConditionalNodeExample()
+    {
+        Console.WriteLine("🔧 Running ConditionalNodeExample demo...");
+
+        // Predicate: return true when 'route' argument equals 'yes'
+        Func<KernelArguments, bool> predicate = (ka) => ka.ContainsKey("route") && string.Equals(ka["route"]?.ToString(), "yes", StringComparison.OrdinalIgnoreCase);
+
+        var node = new ConditionalNodeExample("node-1", "conditional-demo", predicate);
+
+        // Add a simple next node (reusing SimpleNodeExample)
+        var next = new SimpleNodeExample();
+        node.AddNextNode(next);
+
+        // Prepare a graph state with KernelArguments
+        var graphState = new GraphState(new KernelArguments { ["route"] = "yes", ["input"] = "conditional input" });
+
+        var nextNodes = node.GetNextNodes(null, graphState);
+        Console.WriteLine($"Next nodes count: {nextNodes.Count()}");
+
+        Console.WriteLine("✅ ConditionalNodeExample demo completed.");
+        await Task.CompletedTask;
     }
 }
 

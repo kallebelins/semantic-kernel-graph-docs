@@ -227,81 +227,108 @@ Task OnExecutionFailedAsync(
 ### Basic Node Implementation
 
 ```csharp
-public class SimpleNode : IGraphNode
+// Minimal, tested example of an IGraphNode implementation used in the examples
+// folder as `SimpleNodeExample.cs`. This class demonstrates safe state access,
+// lightweight validation, and lifecycle hooks. Comments are English-friendly
+// and suitable for readers at any experience level.
+public class SimpleNodeExample : IGraphNode
 {
+    public SimpleNodeExample()
+    {
+        NodeId = Guid.NewGuid().ToString();
+        Name = "SimpleNodeExample";
+        Description = "Processes an 'input' parameter and writes 'output' to the state.";
+        Metadata = new Dictionary<string, object>();
+    }
+
     public string NodeId { get; }
     public string Name { get; }
     public string Description { get; }
     public IReadOnlyDictionary<string, object> Metadata { get; }
     public bool IsExecutable => true;
-    
+
     public IReadOnlyList<string> InputParameters => new[] { "input" };
     public IReadOnlyList<string> OutputParameters => new[] { "output" };
 
-    public async Task<FunctionResult> ExecuteAsync(
-        Kernel kernel, 
-        KernelArguments arguments, 
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// ExecuteAsync processes the required 'input' value and stores a derived
+    /// 'output' value back into the provided KernelArguments. It returns a
+    /// FunctionResult constructed with a small in-memory KernelFunction.
+    /// </summary>
+    public async Task<FunctionResult> ExecuteAsync(Kernel kernel, KernelArguments arguments, CancellationToken cancellationToken = default)
     {
-        var input = arguments.GetValue<string>("input");
+        ArgumentNullException.ThrowIfNull(kernel);
+        ArgumentNullException.ThrowIfNull(arguments);
+
+        // Safely read the 'input' value from the arguments
+        var input = string.Empty;
+        if (arguments.ContainsName("input") && arguments.TryGetValue("input", out var v) && v != null)
+        {
+            input = v.ToString() ?? string.Empty;
+        }
+
         var output = $"Processed: {input}";
-        
+
+        // Store the computed output in the shared arguments so downstream nodes can use it
         arguments["output"] = output;
-        return new FunctionResult(KernelFunctionFactory.CreateFromMethod(() => output), output);
+
+        // Create a small KernelFunction wrapper for the produced value and return it
+        var tempFunction = KernelFunctionFactory.CreateFromMethod(() => output);
+        var functionResult = new FunctionResult(tempFunction, output);
+
+        await Task.CompletedTask; // preserve async signature
+        return functionResult;
     }
 
+    /// <summary>
+    /// ValidateExecution performs a lightweight check to ensure the 'input' parameter exists.
+    /// </summary>
     public ValidationResult ValidateExecution(KernelArguments arguments)
     {
+        ArgumentNullException.ThrowIfNull(arguments);
+
         var result = new ValidationResult();
-        
-        if (!arguments.ContainsKey("input"))
+        if (!arguments.ContainsName("input") || arguments["input"] == null || string.IsNullOrEmpty(arguments["input"]?.ToString()))
         {
-            result.AddError("Required parameter 'input' is missing");
+            result.AddError("Required parameter 'input' is missing or empty");
         }
-        
+
         return result;
     }
 
-    public IEnumerable<IGraphNode> GetNextNodes(
-        FunctionResult? executionResult, 
-        GraphState graphState)
+    /// <summary>
+    /// GetNextNodes returns no successors for this minimal example.
+    /// </summary>
+    public IEnumerable<IGraphNode> GetNextNodes(FunctionResult? executionResult, GraphState graphState)
     {
-        // Return next nodes based on execution result or state
+        ArgumentNullException.ThrowIfNull(graphState);
         return Enumerable.Empty<IGraphNode>();
     }
 
+    /// <summary>
+    /// ShouldExecute checks whether the provided GraphState contains a non-empty 'input'.
+    /// </summary>
     public bool ShouldExecute(GraphState graphState)
     {
-        return graphState.KernelArguments.ContainsKey("input") &&
-               !string.IsNullOrEmpty(graphState.KernelArguments["input"]?.ToString());
+        ArgumentNullException.ThrowIfNull(graphState);
+        return graphState.KernelArguments.ContainsName("input") && !string.IsNullOrEmpty(graphState.KernelArguments["input"]?.ToString());
     }
 
-    public Task OnBeforeExecuteAsync(
-        Kernel kernel, 
-        KernelArguments arguments, 
-        CancellationToken cancellationToken = default)
+    public Task OnBeforeExecuteAsync(Kernel kernel, KernelArguments arguments, CancellationToken cancellationToken = default)
     {
-        // Setup logic here
+        // No-op for this example; use for idempotent setup in real nodes
         return Task.CompletedTask;
     }
 
-    public Task OnAfterExecuteAsync(
-        Kernel kernel, 
-        KernelArguments arguments, 
-        FunctionResult result, 
-        CancellationToken cancellationToken = default)
+    public Task OnAfterExecuteAsync(Kernel kernel, KernelArguments arguments, FunctionResult result, CancellationToken cancellationToken = default)
     {
-        // Cleanup logic here
+        // No-op for this example; use for cleanup or storing extra metadata
         return Task.CompletedTask;
     }
 
-    public Task OnExecutionFailedAsync(
-        Kernel kernel, 
-        KernelArguments arguments, 
-        Exception exception, 
-        CancellationToken cancellationToken = default)
+    public Task OnExecutionFailedAsync(Kernel kernel, KernelArguments arguments, Exception exception, CancellationToken cancellationToken = default)
     {
-        // Error handling logic here
+        // No-op for this example; real implementations should log or compensate
         return Task.CompletedTask;
     }
 }
@@ -310,23 +337,22 @@ public class SimpleNode : IGraphNode
 ### Advanced Node with Conditional Logic
 
 ```csharp
-public class ConditionalNode : IGraphNode
+// Conditional routing node example (tested as `ConditionalNodeExample.cs`).
+// This node does not execute a function itself: it evaluates a predicate over
+// KernelArguments and returns configured successors when the condition is met.
+public class ConditionalNodeExample : IGraphNode
 {
-    private readonly List<IGraphNode> _nextNodes;
+    private readonly List<IGraphNode> _nextNodes = new();
     private readonly Func<KernelArguments, bool> _condition;
 
-    public ConditionalNode(
-        string nodeId, 
-        string name, 
-        Func<KernelArguments, bool> condition)
+    public ConditionalNodeExample(string nodeId, string name, Func<KernelArguments, bool> condition)
     {
-        NodeId = nodeId;
-        Name = name;
+        NodeId = nodeId ?? Guid.NewGuid().ToString();
+        Name = name ?? "ConditionalNodeExample";
         Description = "Conditional routing node";
-        _condition = condition;
-        _nextNodes = new List<IGraphNode>();
         Metadata = new Dictionary<string, object>();
-        IsExecutable = false; // This node doesn't execute, it only routes
+        IsExecutable = false; // This node only routes
+        _condition = condition ?? throw new ArgumentNullException(nameof(condition));
     }
 
     public string NodeId { get; }
@@ -334,49 +360,57 @@ public class ConditionalNode : IGraphNode
     public string Description { get; }
     public IReadOnlyDictionary<string, object> Metadata { get; }
     public bool IsExecutable { get; }
-    
+
     public IReadOnlyList<string> InputParameters => Array.Empty<string>();
     public IReadOnlyList<string> OutputParameters => Array.Empty<string>();
 
-    public Task<FunctionResult> ExecuteAsync(
-        Kernel kernel, 
-        KernelArguments arguments, 
-        CancellationToken cancellationToken = default)
+    /// <summary>
+    /// ExecuteAsync returns a FunctionResult describing that no execution occurred.
+    /// </summary>
+    public Task<FunctionResult> ExecuteAsync(Kernel kernel, KernelArguments arguments, CancellationToken cancellationToken = default)
     {
-        // This node doesn't execute
-        return Task.FromResult(new FunctionResult(
-            KernelFunctionFactory.CreateFromMethod(() => "No execution"), 
-            "No execution"));
+        var result = new FunctionResult(KernelFunctionFactory.CreateFromMethod(() => "No execution"), "No execution");
+        return Task.FromResult(result);
     }
 
+    /// <summary>
+    /// ValidateExecution: always valid for this routing node.
+    /// </summary>
     public ValidationResult ValidateExecution(KernelArguments arguments)
     {
-        return new ValidationResult(); // Always valid
+        ArgumentNullException.ThrowIfNull(arguments);
+        return new ValidationResult();
     }
 
-    public IEnumerable<IGraphNode> GetNextNodes(
-        FunctionResult? executionResult, 
-        GraphState graphState)
+    /// <summary>
+    /// GetNextNodes returns configured successors when the condition evaluates to true.
+    /// </summary>
+    public IEnumerable<IGraphNode> GetNextNodes(FunctionResult? executionResult, GraphState graphState)
     {
+        ArgumentNullException.ThrowIfNull(graphState);
         if (_condition(graphState.KernelArguments))
         {
             return _nextNodes;
         }
-        
+
         return Enumerable.Empty<IGraphNode>();
     }
 
     public bool ShouldExecute(GraphState graphState)
     {
-        return false; // Never execute
+        // This node is a router and therefore does not execute payload logic itself
+        return false;
     }
 
+    /// <summary>
+    /// Adds an unconditional successor for routing when the condition matches.
+    /// </summary>
     public void AddNextNode(IGraphNode node)
     {
+        if (node == null) throw new ArgumentNullException(nameof(node));
         _nextNodes.Add(node);
     }
 
-    // Lifecycle methods with minimal implementation
     public Task OnBeforeExecuteAsync(Kernel kernel, KernelArguments arguments, CancellationToken cancellationToken = default)
         => Task.CompletedTask;
 
