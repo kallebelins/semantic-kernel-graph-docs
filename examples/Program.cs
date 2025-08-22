@@ -73,6 +73,8 @@ class Program
                 ["advanced-patterns"] = async () => await AdvancedPatternsExample.RunAsync(),
                 ["assert-and-suggest"] = async () => await AssertAndSuggestExample.RunAsync(),
                 ["chain-of-thought"] = async () => await ChainOfThoughtExample.RunAsync()
+                ,
+                ["chatbot"] = async () => await ChatbotExample.RunAsync()
             };
 
             // Determine which example to run

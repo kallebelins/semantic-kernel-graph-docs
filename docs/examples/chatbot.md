@@ -47,29 +47,29 @@ This example demonstrates how to build a chatbot with memory using the Semantic 
 This example demonstrates a simple chatbot with conversation context.
 
 ```csharp
-// Create kernel with mock configuration
+// Create a Kernel instance (uses appsettings.json if available)
 var kernel = CreateKernel();
 
-// Create memory service
+// Configure a lightweight memory service for the example
 var memoryOptions = new GraphMemoryOptions
 {
-    EnableVectorSearch = true,
-    EnableSemanticSearch = true,
+    EnableVectorSearch = true,      // enable semantic vector search
+    EnableSemanticSearch = true,    // enable similarity-based search
     DefaultCollectionName = "chatbot-memory"
 };
 var memoryService = new GraphMemoryService(memoryOptions);
 
-// Create chatbot graph
+// Build the chatbot graph executor (see examples/ChatbotExample.cs)
 var chatbot = await CreateBasicChatbotGraphAsync(kernel, memoryService);
 
-// Simulate conversation
+// Simulate a short conversation sequence
 var conversations = new[]
 {
-    "Olá, qual é o seu nome?",
-    "Meu nome é João. E o seu?",
-    "João, você pode me ajudar com matemática?",
-    "Qual é a capital do Brasil?",
-    "Obrigado pela ajuda!"
+    "Hello, what's your name?",
+    "My name is Joao. And yours?",
+    "Joao, can you help me with math?",
+    "What's the capital of Brazil?",
+    "Thanks for the help!"
 };
 
 Console.WriteLine("🤖 Starting conversation simulation...\n");
@@ -93,7 +93,7 @@ foreach (var userMessage in conversations)
     Console.WriteLine($"🤖 Bot: {botResponse}");
     Console.WriteLine();
 
-    // Small delay to simulate real conversation
+    // Small delay to mimic a real chat UI
     await Task.Delay(500);
     turnNumber++;
 }
@@ -104,10 +104,10 @@ foreach (var userMessage in conversations)
 Demonstrates persistent memory across multiple conversations.
 
 ```csharp
-// Create advanced chatbot with long-term memory
+// Create an advanced chatbot graph that uses long-term memory and personality
 var advancedChatbot = await CreateAdvancedChatbotGraphAsync(kernel, memoryService);
 
-// Simulate multiple conversations with the same user
+// Two separate sessions to show memory persistence between conversations
 var conversation1 = new[]
 {
     "Hi, I'm Alex. I'm interested in machine learning.",
@@ -140,7 +140,7 @@ foreach (var message in conversation1)
     Console.WriteLine($"Bot: {response}\n");
 }
 
-// Second conversation (with memory)
+// Second conversation (demonstrating memory recall)
 Console.WriteLine("=== Second Conversation (with Memory) ===");
 foreach (var message in conversation2)
 {
@@ -164,13 +164,13 @@ foreach (var message in conversation2)
 Shows how to maintain context across complex conversation flows.
 
 ```csharp
-// Create contextual chatbot
+// Build a contextual chatbot used for multi-turn planning dialogs
 var contextualChatbot = await CreateContextualChatbotGraphAsync(kernel, memoryService);
 
-// Simulate a complex multi-turn conversation
+// Example: multi-turn vacation planning conversation
 var complexConversation = new[]
 {
-    "I need help planning a vacation to Europe.",
+    "I need help planning a trip to Europe.",
     "I'm interested in history and culture.",
     "My budget is around $5000 for two weeks.",
     "I prefer smaller cities over tourist traps.",
@@ -205,7 +205,7 @@ foreach (var message in complexConversation)
     var result = await contextualChatbot.ExecuteAsync(kernel, arguments);
     var response = result.GetValue<string>();
     
-    // Update context based on conversation
+    // Optionally update local context if the graph returns a richer state
     var updatedContext = result.GetValue<Dictionary<string, object>>("updated_context");
     if (updatedContext != null)
     {
