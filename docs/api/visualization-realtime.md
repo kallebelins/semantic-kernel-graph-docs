@@ -9,7 +9,17 @@ The central component for generating visualizations in multiple formats with adv
 ### Constructor
 
 ```csharp
+/// <summary>
+/// Creates a new <see cref="GraphVisualizationEngine"/> with optional configuration
+/// and an optional logger for diagnostics.
+/// </summary>
+/// <param name="options">Optional visualization options (null uses defaults).</param>
+/// <param name="logger">Optional logger used to emit diagnostic messages.</param>
 public GraphVisualizationEngine(GraphVisualizationOptions? options = null, IGraphLogger? logger = null)
+{
+    // Implementation note: if options is null, the engine should construct default options
+    // to ensure predictable behavior. The logger is optional and may be null in tests.
+}
 ```
 
 **Parameters:**
@@ -24,22 +34,43 @@ public GraphVisualizationEngine(GraphVisualizationOptions? options = null, IGrap
 /// <summary>
 /// Serializes the graph structure to DOT format for GraphViz rendering.
 /// </summary>
+/// <remarks>
+/// The returned string is a complete DOT document. Use <see cref="DotSerializationOptions"/>
+/// to control layout and styling.
+/// </remarks>
 public string SerializeToDot(GraphVisualizationData visualizationData, DotSerializationOptions? options = null)
+{
+    // Validate input and apply default options if necessary.
+    // Implementation produces a DOT formatted string representing nodes and edges.
+    throw new NotImplementedException();
+}
 
 /// <summary>
 /// Serializes the graph structure to JSON format for API consumption.
 /// </summary>
 public string SerializeToJson(GraphVisualizationData visualizationData, JsonSerializationOptions? options = null)
+{
+    // Use a safe serializer with configured options (indentation, camelCase, depth limits).
+    throw new NotImplementedException();
+}
 
 /// <summary>
 /// Generates an enhanced Mermaid diagram with advanced styling and features.
 /// </summary>
 public string GenerateEnhancedMermaidDiagram(GraphVisualizationData visualizationData, MermaidGenerationOptions? options = null)
+{
+    // Convert graph structure into a Mermaid DSL string and apply any custom styles.
+    throw new NotImplementedException();
+}
 
 /// <summary>
 /// Serializes the graph structure to SVG format for web display.
 /// </summary>
 public string SerializeToSvg(GraphVisualizationData visualizationData, SvgSerializationOptions? options = null)
+{
+    // Produce an SVG string; consider performance for large graphs.
+    throw new NotImplementedException();
+}
 ```
 
 **Parameters:**
@@ -172,10 +203,20 @@ Live execution path tracking with visual highlights and real-time updates.
 ### Constructor
 
 ```csharp
+/// <summary>
+/// Initializes a new instance of the <see cref="GraphRealtimeHighlighter"/>,
+/// optionally subscribing to an execution event stream for automatic updates.
+/// </summary>
+/// <param name="eventStream">Optional source of execution events used to drive highlights.</param>
+/// <param name="options">Optional configuration for highlighting behavior.</param>
+/// <param name="logger">Optional logger for diagnostics.</param>
 public GraphRealtimeHighlighter(
     IGraphExecutionEventStream? eventStream = null,
     GraphRealtimeHighlightOptions? options = null,
     IGraphLogger? logger = null)
+{
+    // Subscribe to eventStream if provided and apply options with sensible defaults.
+}
 ```
 
 **Parameters:**
@@ -192,30 +233,47 @@ public GraphRealtimeHighlighter(
 /// Starts highlighting for a specific execution.
 /// </summary>
 public void StartHighlighting(string executionId, GraphVisualizationData visualizationData)
+{
+    // Guard clauses: validate executionId and visualizationData before proceeding.
+}
 
 /// <summary>
 /// Updates the current node for an execution.
 /// </summary>
 public void UpdateCurrentNode(string executionId, IGraphNode currentNode, IReadOnlyList<IGraphNode> executionPath)
+{
+    // Update internal state and raise events to notify subscribers of the change.
+}
 
 /// <summary>
 /// Adds completion highlight for a node.
 /// </summary>
 public void AddNodeCompletionHighlight(string executionId, IGraphNode node, bool success, TimeSpan executionTime)
+{
+    // Record completion metrics and update highlight styles accordingly.
+}
 
 /// <summary>
 /// Stops highlighting for a specific execution.
 /// </summary>
 public void StopHighlighting(string executionId)
+{
+    // Clean up resources and unsubscribe from event streams related to this execution.
+}
 ```
 
 #### Highlighted Visualization Generation
 
 ```csharp
 /// <summary>
-/// Generates highlighted visualization in the specified format.
+/// Generates a string representation of the highlighted visualization for the given
+/// execution and format (Mermaid, JSON, DOT, SVG).
 /// </summary>
 public string GenerateHighlightedVisualization(string executionId, HighlightVisualizationFormat format)
+{
+    // Select formatter based on <paramref name="format"/> and return the generated string.
+    throw new NotImplementedException();
+}
 ```
 
 **Supported Formats:**
@@ -228,7 +286,8 @@ public string GenerateHighlightedVisualization(string executionId, HighlightVisu
 
 ```csharp
 /// <summary>
-/// Event raised when node highlighting changes.
+/// Event raised when node highlighting changes. Subscribers should handle minimal work
+/// and avoid blocking the caller; consider using a background queue for heavy work.
 /// </summary>
 public event EventHandler<NodeHighlightEventArgs>? NodeHighlightChanged;
 
@@ -242,22 +301,43 @@ public event EventHandler<ExecutionPathUpdatedEventArgs>? ExecutionPathUpdated;
 
 #### NodeHighlightStyle
 ```csharp
+/// <summary>
+/// Represents visual styling options applied to a node when highlighted.
+/// All color values are expected to be valid CSS color strings (e.g. hex codes).
+/// </summary>
 public sealed class NodeHighlightStyle
 {
+    /// <summary>Fill color used for the node background.</summary>
     public string FillColor { get; set; } = "#FFFFFF";
+
+    /// <summary>Stroke color used for the node border.</summary>
     public string StrokeColor { get; set; } = "#000000";
+
+    /// <summary>Width of the stroke in pixels.</summary>
     public int StrokeWidth { get; set; } = 1;
+
+    /// <summary>Opacity value between 0.0 (transparent) and 1.0 (opaque).</summary>
     public double Opacity { get; set; } = 1.0;
+
+    /// <summary>Optional CSS border style (e.g. "dashed").</summary>
     public string? BorderStyle { get; set; }
 }
 ```
 
 #### EdgeHighlightStyle
 ```csharp
+/// <summary>
+/// Represents visual styling options applied to an edge when highlighted.
+/// </summary>
 public sealed class EdgeHighlightStyle
 {
+    /// <summary>Stroke color for the edge.</summary>
     public string StrokeColor { get; set; } = "#000000";
+
+    /// <summary>Stroke width in pixels.</summary>
     public int StrokeWidth { get; set; } = 1;
+
+    /// <summary>Opacity value between 0.0 and 1.0.</summary>
     public double Opacity { get; set; } = 1.0;
 }
 ```
@@ -267,6 +347,10 @@ public sealed class EdgeHighlightStyle
 ### GraphVisualizationOptions
 
 ```csharp
+/// <summary>
+/// Global options used by <see cref="GraphVisualizationEngine"/> to control
+/// theme, caching, and performance-related behavior.
+/// </summary>
 public sealed class GraphVisualizationOptions
 {
     public VisualizationTheme Theme { get; set; } = VisualizationTheme.Default;
@@ -283,12 +367,22 @@ public sealed class GraphVisualizationOptions
 ### GraphRealtimeHighlightOptions
 
 ```csharp
+/// <summary>
+/// Options that control the behavior of real-time highlighting, including
+/// update frequency and resource limits.
+/// </summary>
 public sealed class GraphRealtimeHighlightOptions
 {
+    /// <summary>If true, updates will be applied immediately without batching.</summary>
     public bool EnableImmediateUpdates { get; set; } = true;
+
+    /// <summary>Interval used for batched updates when immediate updates are disabled.</summary>
     public TimeSpan UpdateInterval { get; set; } = TimeSpan.FromMilliseconds(100);
+
     public bool EnableAnimations { get; set; } = true;
     public bool EnablePerformanceTracking { get; set; } = true;
+
+    /// <summary>Maximum number of nodes that can be highlighted at the same time.</summary>
     public int MaxHighlightedNodes { get; set; } = 100;
 }
 ```
@@ -297,6 +391,10 @@ public sealed class GraphRealtimeHighlightOptions
 
 #### DotSerializationOptions
 ```csharp
+/// <summary>
+/// Options to customize DOT serialization (GraphViz). Use <see cref="CustomNodeStyles"/>
+/// and <see cref="CustomEdgeStyles"/> to inject additional style directives per type.
+/// </summary>
 public sealed class DotSerializationOptions
 {
     public string GraphName { get; set; } = "SemanticKernelGraph";
@@ -312,6 +410,9 @@ public sealed class DotSerializationOptions
 
 #### JsonSerializationOptions
 ```csharp
+/// <summary>
+/// Options controlling JSON serialization behavior used by the visualization APIs.
+/// </summary>
 public sealed class JsonSerializationOptions
 {
     public bool Indented { get; set; } = true;
@@ -326,6 +427,10 @@ public sealed class JsonSerializationOptions
 
 #### MermaidGenerationOptions
 ```csharp
+/// <summary>
+/// Options for generating Mermaid diagrams. The <see cref="Direction"/> property
+/// controls layout (e.g. "TD" for top-down).
+/// </summary>
 public sealed class MermaidGenerationOptions
 {
     public string Direction { get; set; } = "TD";
@@ -342,6 +447,9 @@ public sealed class MermaidGenerationOptions
 
 #### SvgSerializationOptions
 ```csharp
+/// <summary>
+/// Options to control SVG output size and layout spacing used by the SVG serializer.
+/// </summary>
 public sealed class SvgSerializationOptions
 {
     public int Width { get; set; } = 960;
@@ -359,12 +467,24 @@ public sealed class SvgSerializationOptions
 ### GraphVisualizationData
 
 ```csharp
+/// <summary>
+/// Immutable container representing the data required to render a graph visualization.
+/// </summary>
 public sealed class GraphVisualizationData
 {
+    /// <summary>List of nodes that compose the graph.</summary>
     public IReadOnlyList<IGraphNode> Nodes { get; }
+
+    /// <summary>List of edges connecting nodes.</summary>
     public IReadOnlyList<GraphEdgeInfo> Edges { get; }
+
+    /// <summary>The current node in execution, if any.</summary>
     public IGraphNode? CurrentNode { get; }
+
+    /// <summary>Ordered list representing the execution path.</summary>
     public IReadOnlyList<IGraphNode> ExecutionPath { get; }
+
+    /// <summary>Timestamp indicating when this visualization data was generated.</summary>
     public DateTimeOffset GeneratedAt { get; } = DateTimeOffset.UtcNow;
 }
 ```
@@ -372,12 +492,24 @@ public sealed class GraphVisualizationData
 ### GraphEdgeInfo
 
 ```csharp
+/// <summary>
+/// Lightweight representation of an edge used by the visualization system.
+/// </summary>
 public sealed class GraphEdgeInfo
 {
+    /// <summary>Source node identifier.</summary>
     public string FromNodeId { get; }
+
+    /// <summary>Destination node identifier.</summary>
     public string ToNodeId { get; }
+
+    /// <summary>Optional label for the edge (e.g. condition name).</summary>
     public string? Label { get; }
+
+    /// <summary>Optional condition expression associated with this edge.</summary>
     public string? Condition { get; }
+
+    /// <summary>Indicates whether this edge should be visually highlighted.</summary>
     public bool IsHighlighted { get; set; }
 }
 ```
@@ -386,6 +518,9 @@ public sealed class GraphEdgeInfo
 
 ### HighlightVisualizationFormat
 ```csharp
+/// <summary>
+/// Supported formats for highlighted visualization exports.
+/// </summary>
 public enum HighlightVisualizationFormat
 {
     Mermaid,    // Mermaid diagram format
@@ -397,6 +532,9 @@ public enum HighlightVisualizationFormat
 
 ### DotLayoutDirection
 ```csharp
+/// <summary>
+/// Layout directions used by DOT serializer.
+/// </summary>
 public enum DotLayoutDirection
 {
     TopToBottom,    // TD - Top to bottom layout

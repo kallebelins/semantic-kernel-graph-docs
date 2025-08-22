@@ -48,16 +48,14 @@ var workflow = new MultiAgentWorkflow
         {
             Id = "extract-text",
             Name = "Text Extraction",
-            AgentId = "analysis-agent",
-            RequiredCapabilities = { "text_extraction", "ocr" },
+            RequiredCapabilities = new HashSet<string> { "text_extraction", "ocr" },
             DependsOn = new List<string>()
         },
         new WorkflowTask
         {
             Id = "process-content",
             Name = "Content Processing",
-            AgentId = "processing-agent",
-            RequiredCapabilities = { "text_processing", "nlp" },
+            RequiredCapabilities = new HashSet<string> { "text_processing", "nlp" },
             DependsOn = new List<string> { "extract-text" }
         }
     }
@@ -266,7 +264,7 @@ This static validator performs multiple validation categories including basic pr
 ### State Validation
 
 ```csharp
-var state = new GraphState("validation-test");
+var state = new GraphState();
 
 // Add data to the state
 state.SetValue("user_id", 123);
@@ -323,7 +321,7 @@ else
 
 ```csharp
 // Validate specific aspects of the state
-var state = new GraphState("detailed-validation");
+var state = new GraphState();
 
 // Basic properties validation
 if (string.IsNullOrWhiteSpace(state.StateId))
@@ -392,7 +390,7 @@ public enum StateMergeConflictPolicy
 ### Basic State Merging
 
 ```csharp
-var baseState = new GraphState("base");
+var baseState = new GraphState();
 baseState.SetValue("count", 5);
 baseState.SetValue("settings", new Dictionary<string, object>
 {
@@ -400,7 +398,7 @@ baseState.SetValue("settings", new Dictionary<string, object>
     ["language"] = "en"
 });
 
-var overlayState = new GraphState("overlay");
+var overlayState = new GraphState();
 overlayState.SetValue("count", 10);
 overlayState.SetValue("settings", new Dictionary<string, object>
 {

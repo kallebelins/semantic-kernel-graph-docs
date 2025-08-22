@@ -62,8 +62,9 @@ class Program
                 ["integration"] = async () => await IntegrationExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples(),
                 ["simple-node"] = async () => await ExampleRunners.RunSimpleNodeExample(),
-                ["conditional-node"] = async () => await ExampleRunners.RunConditionalNodeExample()
-                , ["multi-agent"] = async () => await MultiAgentExample.RunAsync()
+                ["conditional-node"] = async () => await ExampleRunners.RunConditionalNodeExample(),
+                ["validation-compilation"] = async () => await ValidationCompilationExample.RunAsync(),
+                ["multi-agent"] = async () => await MultiAgentExample.RunAsync()
             };
 
             // Determine which example to run
@@ -155,6 +156,7 @@ class Program
         await CheckpointingQuickstartExample.RunAllExamplesAsync();
         await StateQuickstartExample.RunAsync();
         await StateAndSerializationExample.RunAsync();
+        await ValidationCompilationExample.RunAsync();
         await InstallationExample.RunAllExamplesAsync();
         await MetricsLoggingQuickstartExample.RunBasicExampleAsync();
         await ReactCotQuickstartExample.RunAllExamplesAsync();

@@ -46,8 +46,8 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 40. [x] server-apis.md
 41. [x] state-and-serialization.md
 42. [x] streaming.md
-43. [ ] validation-compilation.md
-44. [ ] visualization-realtime.md
+43. [x] validation-compilation.md
+44. [x] visualization-realtime.md  # Code validated: example added at `examples/GraphVisualizationExample.cs`
 
 ## docs/concepts
 45. [ ] checkpointing.md
