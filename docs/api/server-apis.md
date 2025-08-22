@@ -314,14 +314,19 @@ Azure AD JWT validator implementation:
 public sealed class AzureAdBearerTokenValidator : IBearerTokenValidator
 {
     public Task<bool> ValidateAsync(
-        string bearerToken, 
-        IEnumerable<string>? requiredScopes = null, 
-        IEnumerable<string>? requiredAppRoles = null, 
+        string bearerToken,
+        IEnumerable<string>? requiredScopes = null,
+        IEnumerable<string>? requiredAppRoles = null,
         CancellationToken cancellationToken = default)
     {
-        // Validates JWT token claims, scopes, and app roles
-        // Performs basic time validity checks (nbf, exp)
-        // Note: Signature validation should be handled by hosting framework
+        // Minimal example implementation for documentation purposes only.
+        // Production implementations MUST validate the JWT signature, issuer, audience,
+        // expiration/nbf claims, and verify that required scopes and app roles are present.
+        if (string.IsNullOrWhiteSpace(bearerToken)) return Task.FromResult(false);
+
+        // TODO: Replace with real JWT validation (e.g., Microsoft.IdentityModel.Tokens + OpenID Connect metadata)
+        // Here we return true to indicate the token is accepted in examples/tests.
+        return Task.FromResult(true);
     }
 }
 ```
@@ -726,7 +731,7 @@ public sealed class EnqueueExecutionRequest
 ```csharp
 using SemanticKernel.Graph.Integration;
 
-// Create REST API with options
+// Create REST API options
 var apiOptions = new GraphRestApiOptions
 {
     ApiKey = "your-api-key",
@@ -736,13 +741,20 @@ var apiOptions = new GraphRestApiOptions
     RequireAuthentication = true
 };
 
-var graphApi = new GraphRestApi(
-    registry: graphRegistry,
-    serviceProvider: serviceProvider,
-    options: apiOptions
-);
+// Prepare a registry and register a minimal GraphExecutor so the API can execute it
+var registry = new InMemoryGraphRegistry(); // Or your IGraphRegistry implementation
+var executor = new SemanticKernel.Graph.Core.GraphExecutor("my-workflow", "Demo workflow");
+var startNode = new SimpleNodeExample();
+executor.AddNode(startNode).SetStartNode(startNode.NodeId);
+await registry.RegisterAsync(executor);
 
-// Execute graph
+// Build or obtain an IServiceProvider that contains a Kernel instance (required by GraphRestApi)
+IServiceProvider serviceProvider = /* resolve or build service provider with Kernel registered */;
+
+// Create GraphRestApi instance
+var graphApi = new GraphRestApi(registry, serviceProvider, apiOptions);
+
+// Execute graph (pass API key when ApiKey is configured)
 var request = new ExecuteGraphRequest
 {
     GraphName = "my-workflow",
@@ -753,7 +765,7 @@ var request = new ExecuteGraphRequest
     }
 };
 
-var response = await graphApi.ExecuteAsync(request);
+var response = await graphApi.ExecuteAsync(request, apiOptions.ApiKey);
 Console.WriteLine($"Execution ID: {response.ExecutionId}");
 ```
 
