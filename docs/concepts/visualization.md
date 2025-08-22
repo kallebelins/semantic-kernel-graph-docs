@@ -34,34 +34,20 @@ Visualization allows you to generate diagrams and export graph structures for do
 
 ### GraphVisualizationEngine
 ```csharp
-var visualizer = new GraphVisualizationEngine(
-    options: new GraphVisualizationOptions
-    {
-        IncludeMetadata = true,
-        ShowExecutionState = true,
-        ExportFormat = VisualizationFormat.DOT
-    }
-);
+// Create a visualization engine instance. The library also exposes overloads
+// that accept options, but the parameterless constructor is sufficient for
+// most doc examples and mirrors `examples/GraphVisualizationExample.cs`.
+using var engine = new GraphVisualizationEngine();
 ```
 
-### VisualGraphDefinition
+### GraphVisualizationData (mapping from runtime graph)
 ```csharp
-var graphDef = new VisualGraphDefinition
-{
-    Nodes = graph.Nodes.Select(n => new VisualNode
-    {
-        Id = n.Id,
-        Label = n.Name,
-        Type = n.GetType().Name,
-        Position = n.Position
-    }),
-    Edges = graph.Edges.Select(e => new VisualEdge
-    {
-        Source = e.Source.Id,
-        Target = e.Target.Id,
-        Label = e.Condition?.ToString()
-    })
-};
+// Build a lightweight visualization payload from the runtime graph and nodes
+var nodes = new List<IGraphNode> { node1, node2 };
+var edges = new List<GraphEdgeInfo> { new GraphEdgeInfo("node1", "node2", "to-node2") };
+
+// GraphVisualizationData is the structure consumed by the engine in examples
+var visualizationData = new GraphVisualizationData(nodes, edges, currentNode: node2, executionPath: nodes);
 ```
 
 ## Visualization Features
@@ -106,14 +92,15 @@ var options = new GraphVisualizationOptions
 
 ### Basic Export
 ```csharp
-// Export to DOT
-var dotContent = await visualizer.ExportAsync(graph, VisualizationFormat.DOT);
+// Using the engine as shown in `examples/GraphVisualizationExample.cs`
+var dot = engine.SerializeToDot(visualizationData, new DotSerializationOptions { GraphName = "VizExample" });
+Console.WriteLine(dot);
 
-// Export to Mermaid
-var mermaidContent = await visualizer.ExportAsync(graph, VisualizationFormat.Mermaid);
+var mermaid = engine.GenerateEnhancedMermaidDiagram(visualizationData, new MermaidGenerationOptions { Direction = "TD" });
+Console.WriteLine(mermaid);
 
-// Export to JSON
-var jsonContent = await visualizer.ExportAsync(graph, VisualizationFormat.JSON);
+var json = engine.SerializeToJson(visualizationData, new JsonSerializationOptions { Indented = true });
+Console.WriteLine(json);
 ```
 
 ### State Visualization

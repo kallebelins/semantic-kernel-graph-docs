@@ -69,17 +69,17 @@ await foreach (var @event in eventStream)
         case GraphExecutionStartedEvent started:
             Console.WriteLine($"Execution started: {started.ExecutionId}");
             break;
-            
-        case NodeStartedEvent nodeStarted:
-            Console.WriteLine($"Node started: {nodeStarted.NodeId}");
+
+        case NodeExecutionStartedEvent nodeStarted:
+            Console.WriteLine($"Node started: {nodeStarted.Node.Name}");
             break;
-            
-        case NodeCompletedEvent nodeCompleted:
-            Console.WriteLine($"Node completed: {nodeCompleted.NodeId} in {nodeCompleted.Duration}ms");
+
+        case NodeExecutionCompletedEvent nodeCompleted:
+            Console.WriteLine($"Node completed: {nodeCompleted.Node.Name} in {nodeCompleted.ExecutionDuration.TotalMilliseconds:F0}ms");
             break;
-            
-        case ExecutionCompletedEvent completed:
-            Console.WriteLine($"Execution completed in {completed.Duration}ms");
+
+        case GraphExecutionCompletedEvent completed:
+            Console.WriteLine($"Execution completed in {completed.TotalDuration.TotalMilliseconds:F0}ms");
             break;
     }
 }
@@ -215,31 +215,31 @@ public class ExecutionMonitor
         {
             switch (@event)
             {
-                case NodeStartedEvent nodeStarted:
-                    startTimes[nodeStarted.NodeId] = nodeStarted.Timestamp;
-                    Console.WriteLine($"🚀 Node started: {nodeStarted.NodeId}");
+                case NodeExecutionStartedEvent nodeStarted:
+                    startTimes[nodeStarted.Node.Name] = nodeStarted.Timestamp;
+                    Console.WriteLine($"🚀 Node started: {nodeStarted.Node.Name}");
                     break;
-                    
-                case NodeCompletedEvent nodeCompleted:
-                    var duration = nodeCompleted.Timestamp - startTimes[nodeCompleted.NodeId];
-                    nodeTimings[nodeCompleted.NodeId] = duration;
-                    Console.WriteLine($"✅ Node completed: {nodeCompleted.NodeId} in {duration.TotalMilliseconds:F0}ms");
+
+                case NodeExecutionCompletedEvent nodeCompleted:
+                    var duration = nodeCompleted.Timestamp - startTimes[nodeCompleted.Node.Name];
+                    nodeTimings[nodeCompleted.Node.Name] = duration;
+                    Console.WriteLine($"✅ Node completed: {nodeCompleted.Node.Name} in {duration.TotalMilliseconds:F0}ms");
                     break;
-                    
-                case NodeFailedEvent nodeFailed:
-                    Console.WriteLine($"❌ Node failed: {nodeFailed.NodeId} - {nodeFailed.ErrorMessage}");
+
+                case NodeExecutionFailedEvent nodeFailed:
+                    Console.WriteLine($"❌ Node failed: {nodeFailed.Node.Name} - {nodeFailed.ErrorMessage}");
                     break;
-                    
-                case ExecutionCompletedEvent completed:
-                    Console.WriteLine($"🎯 Execution completed in {completed.Duration.TotalMilliseconds:F0}ms");
+
+                case GraphExecutionCompletedEvent completed:
+                    Console.WriteLine($"🎯 Execution completed in {completed.TotalDuration.TotalMilliseconds:F0}ms");
                     Console.WriteLine("Node performance summary:");
                     foreach (var timing in nodeTimings)
                     {
                         Console.WriteLine($"  {timing.Key}: {timing.Value.TotalMilliseconds:F0}ms");
                     }
                     break;
-                    
-                case ExecutionFailedEvent failed:
+
+                case GraphExecutionFailedEvent failed:
                     Console.WriteLine($"💥 Execution failed: {failed.ErrorMessage}");
                     break;
             }

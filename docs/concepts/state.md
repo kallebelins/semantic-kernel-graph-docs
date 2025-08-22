@@ -47,6 +47,25 @@ var arguments = new KernelArguments
 
 var graphState = new GraphState(arguments);
 
+// Example: serialize, persist, deserialize and validate
+var serialized = graphState.Serialize(SerializationOptions.Verbose);
+// Persist to file (example path)
+var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "graphstate-example.json");
+File.WriteAllText(path, serialized);
+
+// Read back and deserialize
+var loadedJson = File.ReadAllText(path);
+var deserializedResult = SerializableStateFactory.Deserialize<GraphState>(loadedJson, json => JsonSerializer.Deserialize<GraphState>(json));
+if (deserializedResult.IsSuccessful)
+{
+    var restored = deserializedResult.State;
+    Console.WriteLine($"Restored state id: {restored.StateId}");
+}
+else
+{
+    Console.WriteLine("Failed to deserialize state");
+}
+
 // Access the underlying KernelArguments
 var kernelArgs = graphState.KernelArguments;
 
