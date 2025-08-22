@@ -60,6 +60,7 @@ class Program
                 ["all"] = async () => await RunAllAvailableExamples(),
                 ["simple-node"] = async () => await ExampleRunners.RunSimpleNodeExample(),
                 ["conditional-node"] = async () => await ExampleRunners.RunConditionalNodeExample()
+                , ["multi-agent"] = async () => await MultiAgentExample.RunAsync()
             };
 
             // Determine which example to run

@@ -61,10 +61,10 @@ var analysisAgent = await coordinator.RegisterAgentAsync(
     {
         Name = "Data Analyst",
         Priority = 7,
-        Capabilities = { "text_analysis", "data_extraction", "pattern_recognition" },
-        Specializations = { "nlp", "ml" }
+        Capabilities = new HashSet<string> { "text_analysis", "data_extraction", "pattern_recognition" },
+        Specializations = new HashSet<string> { "nlp", "ml" }
     },
-    initialState: new GraphState { ["agent_type"] = "analyst" }
+    initialState: new GraphState(new KernelArguments { ["agent_type"] = "analyst" })
 );
 
 var processingAgent = await coordinator.RegisterAgentAsync(
@@ -74,7 +74,7 @@ var processingAgent = await coordinator.RegisterAgentAsync(
     {
         Name = "Data Processor",
         Priority = 6,
-        Capabilities = { "data_transformation", "validation", "enrichment" }
+        Capabilities = new HashSet<string> { "data_transformation", "validation", "enrichment" }
     }
 );
 ```
@@ -90,12 +90,13 @@ var workflow = new MultiAgentWorkflow
     Description = "Analyze documents using multiple specialized agents",
     Tasks = new List<WorkflowTask>
     {
+        // Tasks do not embed a specific agent assignment; the coordinator/distributor
+        // assigns tasks based on the workflow's RequiredAgents and configured distribution strategy.
         new WorkflowTask
         {
             Id = "extract-text",
             Name = "Text Extraction",
             Description = "Extract text from documents",
-            AgentId = "analysis-agent-1",
             Priority = 8,
             DependsOn = new List<string>()
         },
@@ -104,7 +105,6 @@ var workflow = new MultiAgentWorkflow
             Id = "process-content",
             Name = "Content Processing",
             Description = "Process extracted content",
-            AgentId = "processing-agent-1",
             Priority = 7,
             DependsOn = new List<string> { "extract-text" }
         }
@@ -120,12 +120,12 @@ var arguments = new KernelArguments
     ["analysis_type"] = "comprehensive"
 };
 
+// Execute the workflow (note the signature: workflow, kernel, arguments)
 var result = await coordinator.ExecuteWorkflowAsync(
-    workflowId: workflow.Id,
-    workflow: workflow,
-    kernel: kernel,
-    arguments: arguments,
-    cancellationToken: CancellationToken.None
+    workflow,
+    kernel,
+    arguments,
+    CancellationToken.None
 );
 ```
 
@@ -208,16 +208,16 @@ var aggregator = new ResultAggregator(options, logger);
 ### Aggregation Strategies
 
 ```csharp
-// Available built-in strategies
+// Available built-in strategies (matches library implementation)
 public enum AggregationStrategy
 {
-    Merge = 0,           // Combine all successful results
-    First = 1,           // Use first successful result
-    Last = 2,            // Use last successful result
-    Random = 3,          // Randomly select a result
-    Weighted = 4,        // Weighted combination based on agent priority
-    Consensus = 5,       // Require consensus among agents
-    Custom = 6           // Custom aggregation logic
+    Merge = 0,    // Combine all successful results
+    Concat = 1,   // Concatenate successful results
+    First = 2,    // Use first successful result
+    Last = 3,     // Use last successful result
+    Majority = 4, // Majority / vote-based aggregation
+    Weighted = 5, // Weighted combination based on agent priority or confidence
+    Consensus = 6 // Require consensus among agents
 }
 
 // Aggregate results using specific strategy
@@ -342,23 +342,24 @@ var connectionPool = new AgentConnectionPool(options);
 var connection1 = new MockAgentConnection("agent-1", "instance-1");
 var connection2 = new MockAgentConnection("agent-1", "instance-2");
 
-connectionPool.RegisterConnection("agent-1", connection1);
-connectionPool.RegisterConnection("agent-1", connection2);
+// The public API on the pool is `Register` and `RentAsync`
+connectionPool.Register("agent-1", connection1);
+connectionPool.Register("agent-1", connection2);
 
 // Rent a connection for use
-var connection = await connectionPool.RentAsync("agent-1", CancellationToken.None);
-if (connection != null)
+var rented = await connectionPool.RentAsync("agent-1", CancellationToken.None);
+if (rented != null)
 {
     try
     {
-        // Use the connection
-        var result = await connection.ExecuteAsync(workItem, cancellationToken);
-        Console.WriteLine($"Execution result: {result}");
+        // Use the connection's Executor to perform the work
+        var execResult = await rented.Executor.ExecuteAsync(kernel, workItem.Arguments, CancellationToken.None);
+        Console.WriteLine($"Execution result: {execResult.GetValue<object>()}");
     }
     finally
     {
-        // Return connection to pool (automatic on dispose)
-        await connection.DisposeAsync();
+        // Return connection resources by disposing the connection when done
+        await rented.DisposeAsync();
     }
 }
 ```
@@ -366,71 +367,63 @@ if (connection != null)
 ### Connection Health and Metrics
 
 ```csharp
-// Check connection health
-var healthyConnections = connectionPool.GetHealthyConnections("agent-1");
-Console.WriteLine($"Healthy connections for agent-1: {healthyConnections.Count}");
+// Inspect registered connection counts (public pool API exposes registration counts)
+var counts = connectionPool.GetRegisteredConnectionCounts();
+Console.WriteLine($"Registered connections for agent-1: {counts.GetValueOrDefault("agent-1", 0)}");
 
-// Get pool statistics
-var poolStats = connectionPool.GetPoolStatistics();
-Console.WriteLine($"Total connections: {poolStats.TotalConnections}");
-Console.WriteLine($"Available connections: {poolStats.AvailableConnections}");
-Console.WriteLine($"Rented connections: {poolStats.RentedConnections}");
-
-// Remove unhealthy connections
-var removedCount = await connectionPool.RemoveUnhealthyConnectionsAsync("agent-1");
-Console.WriteLine($"Removed {removedCount} unhealthy connections");
+// Rent a connection and optionally probe its health via the connection's IsHealthyAsync API
+var rented = await connectionPool.RentAsync("agent-1", CancellationToken.None);
+if (rented != null)
+{
+    try
+    {
+        // Probe health (the pool itself will also use health probes internally)
+        var isHealthy = await rented.IsHealthyAsync(CancellationToken.None);
+        Console.WriteLine($"Rented connection {rented.Endpoint ?? rented.Executor.Name} healthy: {isHealthy}");
+    }
+    finally
+    {
+        await rented.DisposeAsync();
+    }
+}
 ```
 
 ### Connection Interface
 
 ```csharp
+// The pool's public contract for reusable remote connections
 public interface IAgentConnection : IAsyncDisposable
 {
     string AgentId { get; }
-    string ConnectionId { get; }
-    bool IsHealthy { get; }
-    DateTimeOffset LastHealthCheck { get; }
-    
-    Task<FunctionResult> ExecuteAsync(WorkItem workItem, CancellationToken cancellationToken);
-    Task<bool> HealthCheckAsync(CancellationToken cancellationToken);
+    IGraphExecutor Executor { get; }
+    string? Endpoint { get; }
+    Task<bool> IsHealthyAsync(CancellationToken cancellationToken = default);
 }
 
-// Example connection implementation
+// Minimal example connection used for documentation only
 public class MockAgentConnection : IAgentConnection
 {
     public string AgentId { get; }
     public string ConnectionId { get; }
-    public bool IsHealthy { get; private set; } = true;
-    public DateTimeOffset LastHealthCheck { get; private set; } = DateTimeOffset.UtcNow;
+    public IGraphExecutor Executor { get; }
+    public string? Endpoint { get; }
 
-    public MockAgentConnection(string agentId, string connectionId)
+    public MockAgentConnection(string agentId, string connectionId, IGraphExecutor executor, string? endpoint = null)
     {
         AgentId = agentId;
         ConnectionId = connectionId;
+        Executor = executor;
+        Endpoint = endpoint;
     }
 
-    public async Task<FunctionResult> ExecuteAsync(WorkItem workItem, CancellationToken cancellationToken)
+    public async Task<bool> IsHealthyAsync(CancellationToken cancellationToken = default)
     {
-        // Simulate work execution
-        await Task.Delay(100, cancellationToken);
-        
-        return new FunctionResult(
-            function: null,
-            value: $"Executed {workItem.Task.Name} on {AgentId}",
-            culture: null
-        );
-    }
-
-    public async Task<bool> HealthCheckAsync(CancellationToken cancellationToken)
-    {
-        LastHealthCheck = DateTimeOffset.UtcNow;
-        IsHealthy = true; // Simulate health check
-        return IsHealthy;
+        await Task.Delay(10, cancellationToken).ConfigureAwait(false);
+        return true;
     }
 
     public ValueTask DisposeAsync()
     {
-        // Cleanup resources
         return ValueTask.CompletedTask;
     }
 }
