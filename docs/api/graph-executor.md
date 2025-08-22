@@ -375,29 +375,46 @@ Graph mutation events for monitoring and integration:
 ### Basic Graph Construction
 
 ```csharp
+// Create a minimal kernel and lightweight kernel functions used by function nodes
+var kernel = Kernel.CreateBuilder().Build();
+
+var loadFn = KernelFunctionFactory.CreateFromMethod((KernelArguments a) =>
+{
+    // Simulate loading data
+    return "loaded data";
+}, "LoadData");
+
+var processFn = KernelFunctionFactory.CreateFromMethod((KernelArguments a) =>
+{
+    // Simulate processing
+    return "processed data";
+}, "ProcessData");
+
+var saveFn = KernelFunctionFactory.CreateFromMethod((KernelArguments a) =>
+{
+    // Simulate saving
+    return "saved data";
+}, "SaveData");
+
+// Build executor and nodes
 var executor = new GraphExecutor("DataProcessingGraph", "Process and validate data");
 
-// Add nodes
-executor.AddNode(new FunctionGraphNode(LoadDataFunction, "loadData"))
-       .AddNode(new FunctionGraphNode(ProcessDataFunction, "processData"))
-       .AddNode(new ConditionalGraphNode("validate", "Validate processed data"))
-       .AddNode(new FunctionGraphNode(SaveDataFunction, "saveData"));
+executor.AddNode(new FunctionGraphNode(loadFn, "loadData"))
+        .AddNode(new FunctionGraphNode(processFn, "processData"))
+        .AddNode(new ConditionalGraphNode("validate", "Validate processed data"))
+        .AddNode(new FunctionGraphNode(saveFn, "saveData"));
 
-// Connect nodes
+// Connect nodes and set start node
 executor.Connect("loadData", "processData")
-       .Connect("processData", "validate")
-       .Connect("validate", "saveData", "valid")
-       .Connect("validate", "errorHandler", "invalid");
+        .Connect("processData", "validate")
+        .Connect("validate", "saveData", "valid")
+        .Connect("validate", "errorHandler", "invalid");
 
-// Set start node
 executor.SetStartNode("loadData");
 
-// Configure execution
-executor.ConfigureMetrics()
-       .ConfigureConcurrency(new GraphConcurrencyOptions { EnableParallelExecution = true });
-
-// Execute
-var result = await executor.ExecuteAsync(kernel, arguments);
+// Prepare kernel arguments and execute
+var args = new KernelArguments();
+var result = await executor.ExecuteAsync(kernel, args);
 ```
 
 ### Advanced Configuration

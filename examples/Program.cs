@@ -40,7 +40,7 @@ class Program
                 ["installation"] = async () => await InstallationExample.RunAllExamplesAsync(),
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
                 ["react-cot-quickstart"] = async () => await ReactCotQuickstartExample.RunAllExamplesAsync(),
-                ["streaming-quickstart"] = async () => await RunStreamingQuickstartExampleDirectly(),
+                ["streaming-quickstart"] = async () => await RunStreamingQuickstartExample(),
                 ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
                 ["core-api"] = async () => await CoreApiExample.RunAsync(),
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
@@ -49,6 +49,7 @@ class Program
                 ["execution-context"] = async () => await ExecutionContextExample.RunAsync(),
                 ["executors-and-middlewares"] = async () => await ExecutorsAndMiddlewaresExample.RunAsync(),
                 ["extensions-and-options"] = async () => await ExtensionsAndOptionsExample.RunAsync(),
+                ["graph-executor"] = async () => await GraphExecutorExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 
@@ -94,7 +95,7 @@ class Program
     /// Runs the Streaming Quickstart example demonstrating real-time graph execution monitoring
     /// </summary>
     /// <returns>Task representing the asynchronous operation</returns>
-    private static async Task RunStreamingQuickstartExampleDirectly()
+    private static async Task RunStreamingQuickstartExample()
     {
         Console.WriteLine("🎯 Running Streaming Quickstart Example...\n");
 
@@ -143,7 +144,7 @@ class Program
         await InstallationExample.RunAllExamplesAsync();
         await MetricsLoggingQuickstartExample.RunBasicExampleAsync();
         await ReactCotQuickstartExample.RunAllExamplesAsync();
-        await RunStreamingQuickstartExampleDirectly();
+        await RunStreamingQuickstartExample();
         await TroubleshootingExample.RunAsync();
         await DynamicRoutingExample.RunAsync();
         AdditionalUtilitiesExample.RunAllDemonstrations();
