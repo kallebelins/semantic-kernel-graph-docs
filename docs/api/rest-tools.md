@@ -409,13 +409,14 @@ try
     var result = await restNode.ExecuteAsync(kernel, arguments, cancellationToken);
     
     // Check response status
-    var statusCode = result.GetValue<int>("status_code");
+    // The RestToolGraphNode stores HTTP metadata in the FunctionResult.Metadata dictionary.
+    // Read status code and response body from metadata safely.
+    var statusCode = result.Metadata.TryGetValue("status_code", out var scObj) && scObj is int sc ? sc : -1;
     if (statusCode >= 400)
     {
         // Handle error response
-        var errorBody = result.GetValue<string>("response_body");
-        _logger.LogError("API request failed with status {StatusCode}: {ErrorBody}", 
-            statusCode, errorBody);
+        var errorBody = result.Metadata.TryGetValue("response_body", out var ebObj) ? ebObj?.ToString() ?? string.Empty : string.Empty;
+        _logger.LogError("API request failed with status {StatusCode}: {ErrorBody}", statusCode, errorBody);
     }
 }
 catch (HttpRequestException ex)
@@ -647,8 +648,9 @@ var args = new KernelArguments { ["location"] = "London" };
 var result = await graph.ExecuteAsync(kernel, args);
 
 // 5. Process results
-var weatherData = result.GetValue<object>("response_json");
-var statusCode = result.GetValue<int>("status_code");
+// Results are returned in the FunctionResult.Metadata dictionary.
+var weatherData = result.Metadata.TryGetValue("response_json", out var wj) ? wj : null;
+var statusCode = result.Metadata.TryGetValue("status_code", out var ws) && ws is int wsi ? wsi : -1;
 ```
 
 ### E-commerce API Integration

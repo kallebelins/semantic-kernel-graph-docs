@@ -47,6 +47,7 @@ class Program
                 ["core-api"] = async () => await CoreApiExample.RunAsync(),
                 ["main-node-types"] = async () => await MainNodeTypesExample.RunAsync(),
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
+                ["rest-tools"] = async () => await RestToolsExample.RunAsync(),
                 ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
                 ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),
                 ["execution-context"] = async () => await ExecutionContextExample.RunAsync(),
