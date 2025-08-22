@@ -51,7 +51,8 @@ The example below shows how to implement Chain-of-Thought reasoning in your own 
 This example demonstrates basic problem-solving with step-by-step reasoning.
 
 ```csharp
-// Create Chain-of-Thought node for problem solving
+// Create a Chain-of-Thought node configured for problem solving.
+// The node supports backtracking, minimum confidence thresholds and optional caching.
 var cotNode = new ChainOfThoughtGraphNode(
     ChainOfThoughtType.ProblemSolving,
     maxSteps: 5,
@@ -63,23 +64,22 @@ var cotNode = new ChainOfThoughtGraphNode(
     CachingEnabled = true
 };
 
-// Create executor and add node
-var executor = new GraphExecutor("ChainOfThought-ProblemSolving", 
-    "Chain-of-Thought problem solving example", logger);
+// Create a graph executor, register the node and set it as the start node.
+var executor = new GraphExecutor("ChainOfThought-ProblemSolving", "Chain-of-Thought problem solving example", logger);
 executor.AddNode(cotNode);
 executor.SetStartNode(cotNode.NodeId);
 
-// Prepare arguments
+// Prepare input arguments for the Chain-of-Thought execution.
 var arguments = new KernelArguments
 {
-    ["problem_statement"] = "A company needs to reduce operational costs by 20% while maintaining employee satisfaction...",
-    ["context"] = "The company operates in a competitive tech market with high talent retention challenges.",
-    ["constraints"] = "Cannot reduce headcount by more than 5%, must maintain current benefit levels...",
-    ["expected_outcome"] = "A comprehensive cost reduction plan with specific actionable steps",
+    ["problem_statement"] = "A company needs to reduce operational costs by 20% while maintaining employee satisfaction. They have 1000 employees and current annual costs of $50M.",
+    ["context"] = "Competitive tech market with high talent retention challenges.",
+    ["constraints"] = "Cannot reduce headcount by more than 5%; must maintain benefit levels; implement within 6 months.",
+    ["expected_outcome"] = "A concrete cost reduction plan with prioritized actions.",
     ["reasoning_depth"] = 4
 };
 
-// Execute the graph
+// Execute the graph and obtain the final reasoning result.
 var result = await executor.ExecuteAsync(kernel, arguments, CancellationToken.None);
 ```
 
@@ -88,37 +88,43 @@ var result = await executor.ExecuteAsync(kernel, arguments, CancellationToken.No
 Demonstrates custom reasoning templates and validation rules.
 
 ```csharp
-// Create custom template for business analysis
-var analysisTemplate = new ChainOfThoughtTemplate
+// Define a custom analysis template and validation rules for business analysis.
+var customTemplates = new Dictionary<string, string>
 {
-    Name = "BusinessAnalysis",
-    Steps = new[]
-    {
-        "Identify the core business problem",
-        "Analyze current state and constraints",
-        "Generate potential solutions",
-        "Evaluate solutions against criteria",
-        "Recommend optimal approach"
-    },
-    ValidationRules = new[]
-    {
-        "Each step must reference specific data",
-        "Solutions must be actionable",
-        "Recommendations must include implementation steps"
-    }
+    ["step_1"] = @"You are analyzing a complex situation. This is step {{step_number}}.
+
+Situation: {{problem_statement}}
+Context: {{context}}
+
+Start by identifying the key stakeholders and their interests. Who are the main parties involved and what do they care about?
+
+Your analysis:",
+
+    ["analysis_step"] = @"Continue your analysis. This is step {{step_number}} of {{max_steps}}.
+
+Previous analysis:
+{{previous_steps}}
+
+Now examine the following aspect: What are the underlying causes and contributing factors? Look deeper than surface-level observations.
+
+Your analysis:"
 };
 
-// Configure node with custom template
-var analysisNode = new ChainOfThoughtGraphNode(
-    ChainOfThoughtType.Analysis,
-    maxSteps: 6,
-    templateEngine: templateEngine,
-    logger: logger)
+// Create custom validation rules (examples shown later in this document)
+var customRules = new List<IChainOfThoughtValidationRule>
 {
-    CustomTemplate = analysisTemplate,
-    MinimumStepConfidence = 0.7,
-    EnableStepValidation = true
+    new StakeholderAnalysisRule(),
+    new CausalAnalysisRule()
 };
+
+// Create a Chain-of-Thought node using the custom templates and rules.
+var analysisNode = ChainOfThoughtGraphNode.CreateWithCustomization(
+    ChainOfThoughtType.Analysis,
+    customTemplates,
+    customRules,
+    maxSteps: 4,
+    templateEngine: templateEngine,
+    logger: logger);
 ```
 
 ### 3. Decision Making with Backtracking
@@ -126,7 +132,7 @@ var analysisNode = new ChainOfThoughtGraphNode(
 Shows how to implement backtracking when reasoning fails.
 
 ```csharp
-// Configure node with backtracking enabled
+// Configure a decision-making node with backtracking enabled.
 var decisionNode = new ChainOfThoughtGraphNode(
     ChainOfThoughtType.DecisionMaking,
     maxSteps: 4,
@@ -134,13 +140,13 @@ var decisionNode = new ChainOfThoughtGraphNode(
     logger: logger)
 {
     BacktrackingEnabled = true,
-    MaxBacktrackAttempts = 3,
-    BacktrackStrategy = BacktrackStrategy.AlternativeApproach,
+    // Note: MaxBacktrackAttempts and BacktrackStrategy are illustrative
+    // and may be implemented at the validator/backtracking layer.
     MinimumStepConfidence = 0.8
 };
 
-// The node will automatically retry with different approaches
-// when confidence falls below the threshold
+// The node will attempt backtracking when validation confidence falls
+// below the configured threshold (if backtracking support is enabled).
 ```
 
 ### 4. Performance and Cache Demonstration
@@ -148,23 +154,22 @@ var decisionNode = new ChainOfThoughtGraphNode(
 Optimizes reasoning performance with caching and metrics.
 
 ```csharp
-// Enable performance monitoring
+// Create a node with caching and optional performance monitoring enabled.
 var performanceNode = new ChainOfThoughtGraphNode(
     ChainOfThoughtType.ProblemSolving,
     maxSteps: 5,
     templateEngine: templateEngine,
     logger: logger)
 {
-    CachingEnabled = true,
-    CacheExpiration = TimeSpan.FromHours(24),
-    EnablePerformanceMetrics = true,
-    PerformanceThreshold = TimeSpan.FromSeconds(30)
+    CachingEnabled = true
+    // CacheExpiration and performance thresholds are implementation details
+    // available on some node implementations. Use them when supported.
 };
 
-// Monitor performance metrics
+// Print basic node statistics for quick verification.
 Console.WriteLine($"Node Statistics: {cotNode.Statistics.ExecutionCount} executions, " +
-                $"{cotNode.Statistics.AverageQualityScore:P1} avg quality, " +
-                $"{cotNode.Statistics.SuccessRate:P1} success rate");
+                  $"{cotNode.Statistics.AverageQualityScore:P1} avg quality, " +
+                  $"{cotNode.Statistics.SuccessRate:P1} success rate");
 ```
 
 ## Expected Output
@@ -215,16 +220,18 @@ Console.WriteLine($"Node Statistics: {cotNode.Statistics.ExecutionCount} executi
 ### Chain of Thought Settings
 
 ```csharp
-var cotOptions = new ChainOfThoughtOptions
+// Example configuration object representing Chain-of-Thought settings.
+// Not all implementations expose a single options class; many node
+// properties are configured directly on the node instance itself.
+var cotOptions = new
 {
-    MaxSteps = 5,                           // Maximum reasoning steps
-    MinimumStepConfidence = 0.6,            // Confidence threshold
-    EnableBacktracking = true,              // Allow retry on failure
-    MaxBacktrackAttempts = 3,               // Maximum retry attempts
-    BacktrackStrategy = BacktrackStrategy.AlternativeApproach,
-    CachingEnabled = true,                  // Cache successful reasoning
+    MaxSteps = 5,
+    MinimumStepConfidence = 0.6,
+    EnableBacktracking = true,
+    MaxBacktrackAttempts = 3,
+    CachingEnabled = true,
     CacheExpiration = TimeSpan.FromHours(24),
-    EnableStepValidation = true,            // Validate each step
+    EnableStepValidation = true,
     PerformanceThreshold = TimeSpan.FromSeconds(30)
 };
 ```
@@ -281,23 +288,22 @@ PerformanceThreshold = TimeSpan.FromSeconds(60);
 Enable detailed logging for troubleshooting:
 
 ```csharp
-// Enable debug logging
+// Create a console logger for debugging and configure a node to emit
+// detailed reasoning logs (when supported by the node implementation).
 var logger = LoggerFactory.Create(builder =>
 {
     builder.AddConsole();
     builder.SetMinimumLevel(LogLevel.Debug);
 }).CreateLogger<ChainOfThoughtGraphNode>();
 
-// Configure node with debug logging
 var debugNode = new ChainOfThoughtGraphNode(
     ChainOfThoughtType.ProblemSolving,
     maxSteps: 5,
     templateEngine: templateEngine,
     logger: logger)
 {
-    EnableDebugMode = true,
-    LogReasoningSteps = true,
-    LogConfidenceScores = true
+    // These flags are examples; actual property names may vary by version.
+    // Enable detailed logging inside the node implementation where present.
 };
 ```
 
