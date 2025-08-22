@@ -58,7 +58,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 50. [x] index.md
 51. [x] node-types.md
 52. [x] nodes.md
-53. [ ] routing.md
+53. [x] routing.md
 54. [ ] state.md
 55. [ ] streaming.md
 56. [ ] visualization.md

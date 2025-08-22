@@ -29,20 +29,45 @@ Routing determines which node will be executed next using conditional edges or d
 
 ## Main Components
 
-### ConditionalEdge
+### ConditionalEdge / Conditional Routing Node
 ```csharp
-var edge = new ConditionalEdge(
-    sourceNode: nodeA,
-    targetNode: nodeB,
-    condition: state => state.GetValue<int>("counter") > 5
+// Example using the project's conditional routing node implementation
+var conditionalNode = new ConditionalNodeExample(
+    nodeId: "checkStatus",
+    name: "CheckStatus",
+    condition: args => args.Get<int>("status") == 200
 );
+
+// Add next nodes that should be selected when the condition is true
+var successNode = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod(() => "Success", functionName: "SuccessHandler"),
+    "success"
+);
+conditionalNode.AddNextNode(successNode);
 ```
 
 ### DynamicRoutingEngine
 ```csharp
+// Create a template engine (optional) and a dynamic routing engine with options
+var templateEngine = new HandlebarsGraphTemplateEngine(new GraphTemplateOptions
+{
+    EnableHandlebars = true,
+    EnableCustomHelpers = true,
+    TemplateCacheSize = 100
+});
+
 var routingEngine = new DynamicRoutingEngine(
-    strategies: new[] { new SemanticRoutingStrategy() },
-    fallbackStrategy: new DefaultRoutingStrategy()
+    templateEngine: templateEngine,
+    options: new DynamicRoutingOptions
+    {
+        EnableCaching = true,
+        EnableFallback = true,
+        MaxCacheSize = 500,
+        CacheExpirationMinutes = 60
+    },
+    logger: null,
+    embeddingService: null,
+    memoryService: null
 );
 ```
 
@@ -55,53 +80,62 @@ var routingEngine = new DynamicRoutingEngine(
 
 ### Simple Conditional Routing
 ```csharp
-// Routing based on numeric value
-var edge = new ConditionalEdge(
-    sourceNode: processNode,
-    targetNode: successNode,
-    condition: state => state.GetValue<int>("status") == 200
+// Routing based on a numeric value: use a conditional routing node together
+// with normal FunctionGraphNode instances. This mirrors the examples.
+var kernelBuilder = Kernel.CreateBuilder();
+kernelBuilder.AddGraphSupport();
+var kernel = kernelBuilder.Build();
+
+var startNode = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod((string input) => $"Processed: {input}", functionName: "ProcessInput"),
+    "start"
+).StoreResultAs("processed_input");
+
+var conditional = new ConditionalNodeExample("cond", "IsSuccess", args => args.Get<int>("status") == 200);
+var successNode = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod(() => "OK", functionName: "Success"),
+    "success"
 );
 
-var failureEdge = new ConditionalEdge(
-    sourceNode: processNode,
-    targetNode: failureNode,
-    condition: state => state.GetValue<int>("status") != 200
-);
+conditional.AddNextNode(successNode);
+// Add nodes to a GraphExecutor and set the start node to wire this routing.
 ```
 
 ### Template-Based Routing
 ```csharp
-// Routing based on text analysis
-var routingNode = new ConditionalGraphNode(
-    condition: async (state) => {
-        var text = state.GetValue<string>("input");
-        var result = await kernel.InvokeAsync("analyze_sentiment", text);
-        return result.GetValue<string>("sentiment") == "positive";
-    }
-);
+// Template-based routing using the project's template engine (Handlebars example)
+var templateEngine = new HandlebarsGraphTemplateEngine(new GraphTemplateOptions { EnableHandlebars = true });
+var routingEngine = new DynamicRoutingEngine(templateEngine: templateEngine, options: new DynamicRoutingOptions { EnableCaching = true });
+
+var template = "{{#if (eq priority 'high')}}high{{else}}low{{/if}}";
+var context = new KernelArguments { ["priority"] = "high" };
+var rendered = await templateEngine.RenderWithArgumentsAsync(template, context, CancellationToken.None);
+// Use the rendered value to decide which node to route to.
 ```
 
 ### Dynamic Routing
 ```csharp
-// Adaptive routing based on metrics
+// Adaptive routing using the DynamicRoutingEngine. In practice you may
+// combine multiple strategies (performance, load, semantic similarity).
 var dynamicRouter = new DynamicRoutingEngine(
-    strategies: new[] {
-        new PerformanceBasedRoutingStrategy(),
-        new LoadBalancingRoutingStrategy()
-    }
+    options: new DynamicRoutingOptions { EnableCaching = true }
 );
+
+// Real deployments would add or configure strategies such as
+// PerformanceBasedRoutingStrategy or LoadBalancingRoutingStrategy.
 ```
 
 ## Configuration and Options
 
-### GraphRoutingOptions
+### Routing Options
 ```csharp
-var options = new GraphRoutingOptions
+// Use the project's dynamic routing options for configuration
+var options = new DynamicRoutingOptions
 {
-    EnableDynamicRouting = true,
-    MaxRoutingAttempts = 3,
-    RoutingTimeout = TimeSpan.FromSeconds(30),
-    FallbackStrategy = RoutingFallbackStrategy.Random
+    EnableCaching = true,
+    EnableFallback = true,
+    MaxCacheSize = 500,
+    CacheExpirationMinutes = 60
 };
 ```
 
@@ -119,9 +153,10 @@ var options = new GraphRoutingOptions
 
 ### Routing Debugging
 ```csharp
-var debugger = new ConditionalDebugger();
-debugger.EnableRoutingLogging = true;
-debugger.LogRoutingDecisions = true;
+// Enable logging/diagnostics on your routing engine or use the project's
+// debug helpers (if available) to trace decisions.
+// Example: enable verbose logs from the routing engine via your logger
+// or inspect routingEngine internals in tests.
 ```
 
 ## See Also
