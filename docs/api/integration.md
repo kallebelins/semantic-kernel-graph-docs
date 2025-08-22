@@ -210,9 +210,8 @@ Configuration policy for sensitive data sanitization in logs and exports.
 public bool Enabled { get; set; } = true                                    // Enable sanitization
 public SanitizationLevel Level { get; set; } = SanitizationLevel.Basic      // Sanitization aggressiveness
 public string RedactionText { get; set; } = "***REDACTED***"               // Replacement text
-public string[] KeySubstrings { get; set; } = DefaultKeySubstrings         // Sensitive key patterns
+public string[] SensitiveKeySubstrings { get; set; } = DefaultKeySubstrings // Sensitive key patterns
 public bool MaskAuthorizationBearerToken { get; set; } = true               // Mask auth tokens
-public bool PreserveKeyNames { get; set; } = true                          // Keep key names visible
 ```
 
 ### Static Properties
@@ -356,9 +355,8 @@ var graphLogger = new SemanticKernelGraphLogger(
     }
 );
 
-// Use in graph executor
-var graph = new GraphExecutor("LoggedGraph", "Graph with structured logging");
-graph.SetLogger(graphLogger);
+// Use in graph executor (pass the logger via constructor)
+var graph = new GraphExecutor("LoggedGraph", "Graph with structured logging", graphLogger);
 ```
 
 ### Advanced Logging Configuration
@@ -450,8 +448,7 @@ var toolMetadata = new ToolMetadata
     Id = "weather_api",
     Name = "Weather API",
     Description = "Get current weather information",
-    Type = "REST_API",
-    Version = "1.0.0"
+    Type = ToolType.Rest
 };
 
 await toolRegistry.RegisterAsync(toolMetadata, serviceProvider =>
@@ -480,7 +477,7 @@ var policy = new SensitiveDataPolicy
     Level = SanitizationLevel.Basic,
     RedactionText = "***REDACTED***",
     MaskAuthorizationBearerToken = true,
-    KeySubstrings = new[]
+    SensitiveKeySubstrings = new[]
     {
         "password", "secret", "token", "api_key",
         "credit_card", "ssn", "social_security"

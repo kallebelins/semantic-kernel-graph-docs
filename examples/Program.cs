@@ -54,6 +54,7 @@ class Program
                 ["inspection-visualization"] = async () => await GraphVisualizationExample.RunAsync(),
                 ["graph-options"] = async () => await GraphOptionsExample.RunAsync(),
                 ["human-in-the-loop"] = async () => await HumanInTheLoopExample.RunAsync(),
+                ["integration"] = async () => await IntegrationExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples(),
                 ["simple-node"] = async () => await ExampleRunners.RunSimpleNodeExample(),
                 ["conditional-node"] = async () => await ExampleRunners.RunConditionalNodeExample()
