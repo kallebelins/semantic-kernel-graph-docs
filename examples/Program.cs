@@ -68,7 +68,8 @@ class Program
                 ["execution-model"] = async () => await ExecutionModelExample.RunAsync(),
                 ["graph-concepts"] = async () => await GraphConceptsExample.RunAsync(),
                 ["execution"] = async () => await ExecutionConceptsExample.RunAsync(),
-                ["checkpointing-concepts"] = async () => await CheckpointingConceptsExample.RunAsync()
+                ["checkpointing-concepts"] = async () => await CheckpointingConceptsExample.RunAsync(),
+                ["advanced-patterns"] = async () => await AdvancedPatternsExample.RunAsync()
             };
 
             // Determine which example to run

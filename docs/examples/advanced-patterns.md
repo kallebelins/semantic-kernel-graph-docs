@@ -49,46 +49,30 @@ This example demonstrates advanced patterns and optimizations with the Semantic 
 The example starts by creating a graph executor with all advanced patterns enabled.
 
 ```csharp
-// Create executor base using constructor with Kernel
+// Create a GraphExecutor using the provided Kernel and a graph logger.
+// This snippet configures a minimal, safe set of advanced patterns for demos.
 var executor = new GraphExecutor(kernel, graphLogger);
 
-// Configure all advanced patterns
+// Enable the main academic resilience patterns with conservative defaults.
 executor.WithAllAdvancedPatterns(config =>
 {
-    // Academic patterns
+    // Enable academic resilience patterns (circuit breaker, bulkhead, cache-aside).
     config.EnableAcademicPatterns = true;
     config.Academic.EnableCircuitBreaker = true;
     config.Academic.EnableBulkhead = true;
     config.Academic.EnableCacheAside = true;
 
-    // Circuit breaker configuration
+    // Circuit breaker: trip after 3 failures and keep open briefly.
     config.Academic.CircuitBreakerOptions.FailureThreshold = 3;
     config.Academic.CircuitBreakerOptions.OpenTimeout = TimeSpan.FromSeconds(10);
 
-    // Bulkhead configuration
+    // Bulkhead: limit concurrency to avoid resource exhaustion in demos.
     config.Academic.BulkheadOptions.MaxConcurrency = 5;
     config.Academic.BulkheadOptions.AcquisitionTimeout = TimeSpan.FromSeconds(15);
 
-    // Cache-aside configuration
+    // Cache-aside: small in-memory cache for demo purposes.
     config.Academic.CacheAsideOptions.MaxCacheSize = 1000;
     config.Academic.CacheAsideOptions.DefaultTtl = TimeSpan.FromMinutes(10);
-
-    // Advanced optimizations
-    config.EnableAdvancedOptimizations = true;
-    config.OptimizationOptions.OptimizationInterval = TimeSpan.FromMinutes(5);
-    config.OptimizationOptions.HotPathThreshold = 50;
-    config.OptimizationOptions.HighLatencyThreshold = TimeSpan.FromSeconds(1);
-
-    // Machine learning
-    config.EnableMachineLearning = true;
-    config.MLOptions.RetrainingInterval = TimeSpan.FromHours(2);
-    config.MLOptions.EnableIncrementalLearning = true;
-    config.MLOptions.AnomalyThreshold = 2.0;
-
-    // Enterprise integration
-    config.EnableEnterpriseIntegration = true;
-    config.IntegrationOptions.AggregationOptions.MinMessagesForAggregation = 2;
-    config.IntegrationOptions.AggregationOptions.AggregationTimeout = TimeSpan.FromSeconds(30);
 });
 ```
 
@@ -97,16 +81,21 @@ executor.WithAllAdvancedPatterns(config =>
 #### Circuit Breaker Pattern
 
 ```csharp
+// Execute a protected operation via the executor's circuit breaker helper.
+// The operation should be an async delegate; a fallback is executed when the
+// circuit is open or failures occur.
 var circuitBreakerTest = await executor.ExecuteWithCircuitBreakerAsync(
     operation: async () =>
     {
-        await Task.Delay(100); // Simulates operation
-        Console.WriteLine("  ✅ Operation executed successfully");
+        // Simulate some work
+        await Task.Delay(100);
+        Console.WriteLine("Operation executed successfully");
         return "Success";
     },
     fallback: async () =>
     {
-        Console.WriteLine("  🔄 Fallback operation executed");
+        // Minimal fallback implementation for demos
+        Console.WriteLine("Fallback operation executed");
         return "Fallback";
     });
 ```
@@ -114,16 +103,15 @@ var circuitBreakerTest = await executor.ExecuteWithCircuitBreakerAsync(
 #### Bulkhead Pattern
 
 ```csharp
+// Run several operations in parallel using the bulkhead to protect resources.
 var bulkheadTasks = Enumerable.Range(1, 3).Select(async i =>
 {
-    var result = await executor.ExecuteWithBulkheadAsync(
-        operation: async (cancellationToken) =>
-        {
-            await Task.Delay(200, cancellationToken);
-            Console.WriteLine($"  ✅ Bulkhead operation {i} completed");
-            return $"Result-{i}";
-        });
-    return result;
+    return await executor.ExecuteWithBulkheadAsync(async (cancellationToken) =>
+    {
+        await Task.Delay(200, cancellationToken);
+        Console.WriteLine($"Bulkhead operation {i} completed");
+        return $"Result-{i}";
+    });
 });
 
 var bulkheadResults = await Task.WhenAll(bulkheadTasks);
@@ -132,20 +120,24 @@ var bulkheadResults = await Task.WhenAll(bulkheadTasks);
 #### Cache-Aside Pattern
 
 ```csharp
+// Cache-aside pattern: loader is called on cache miss to populate the cache.
 var cacheResult1 = await executor.GetOrSetCacheAsync(
     key: "user_profile_123",
     loader: async () =>
     {
-        await Task.Delay(500); // Simulates database lookup
-        Console.WriteLine("  🔍 Loading from database (cache miss)");
+        // Simulate slow data source (database)
+        await Task.Delay(500);
+        Console.WriteLine("Loading from database (cache miss)");
         return new { UserId = 123, Name = "John Doe", Email = "john@example.com" };
     });
 
+// Second call should be a cache hit and not invoke the loader delegate.
 var cacheResult2 = await executor.GetOrSetCacheAsync(
     key: "user_profile_123",
     loader: async () =>
     {
-        Console.WriteLine("  ⚠️ This should not be called (cache hit expected)");
+        // If this runs in your environment the cache did not work as expected.
+        Console.WriteLine("Loader unexpectedly invoked on supposed cache hit");
         return new { UserId = 123, Name = "John Doe", Email = "john@example.com" };
     });
 ```
@@ -155,35 +147,20 @@ var cacheResult2 = await executor.GetOrSetCacheAsync(
 The example demonstrates performance optimization based on historical metrics.
 
 ```csharp
-// Create metrics and simulate executions
+// Create a small metrics object and simulate executions to produce sample data.
 var metrics = new GraphPerformanceMetrics(new GraphMetricsOptions(), graphLogger);
 
-// Simulate executions to generate data
-for (int i = 0; i < 10; i++)
+for (int i = 0; i < 5; i++)
 {
-    var tracker = metrics.StartNodeTracking($"node_{i % 3}", $"TestNode{i % 3}", $"exec_{i}");
-    await Task.Delay(Random.Shared.Next(50, 200)); // Simulates variable latency
-    metrics.CompleteNodeTracking(tracker, success: Random.Shared.Next(100) < 95);
+    var tracker = metrics.StartNodeTracking($"node_{i % 2}", $"TestNode{i % 2}", $"exec_{i}");
+    await Task.Delay(Random.Shared.Next(50, 150));
+    metrics.CompleteNodeTracking(tracker, success: true);
 }
 
-// Record execution paths
-var paths = new[]
-{
-    new[] { "node_0", "node_1", "node_2" },
-    new[] { "node_0", "node_2" },
-    new[] { "node_1", "node_2" }
-};
-
-foreach (var path in paths)
-{
-    metrics.RecordExecutionPath($"path_{Array.IndexOf(paths, path)}",
-        path, TimeSpan.FromMilliseconds(Random.Shared.Next(100, 500)), true);
-}
-
-// Run optimization analysis
+// Run a lightweight optimization analysis using the simulated metrics.
 var optimizationResult = await executor.OptimizeAsync(metrics);
-Console.WriteLine($"  📊 Analysis completed in {optimizationResult.AnalysisTime.TotalMilliseconds:F2}ms");
-Console.WriteLine($"  🎯 Total optimizations identified: {optimizationResult.TotalOptimizations}");
+Console.WriteLine($"Analysis completed in {optimizationResult.AnalysisTime.TotalMilliseconds:F2}ms");
+Console.WriteLine($"Total optimizations identified: {optimizationResult.TotalOptimizations}");
 ```
 
 ### 4. Machine Learning Optimization
@@ -191,6 +168,7 @@ Console.WriteLine($"  🎯 Total optimizations identified: {optimizationResult.T
 #### Performance Prediction
 
 ```csharp
+// Prepare a small graph configuration for a prediction demo.
 var graphConfig = new GraphConfiguration
 {
     NodeCount = 8,
@@ -200,18 +178,20 @@ var graphConfig = new GraphConfiguration
     ParallelNodeCount = 2
 };
 
+// Request a performance prediction from the executor (requires ML enabled).
 var prediction = await executor.PredictPerformanceAsync(graphConfig);
-Console.WriteLine($"  📈 Predicted latency: {prediction.PredictedLatency.TotalMilliseconds:F2}ms");
-Console.WriteLine($"  🎯 Confidence: {prediction.Confidence:P2}");
-Console.WriteLine($"  💡 Recommendations: {prediction.RecommendedOptimizations.Count}");
+Console.WriteLine($"Predicted latency: {prediction.PredictedLatency.TotalMilliseconds:F2}ms");
+Console.WriteLine($"Confidence: {prediction.Confidence:P2}");
+Console.WriteLine($"Recommended optimizations: {prediction.RecommendedOptimizations.Count}");
 ```
 
 #### Anomaly Detection
 
 ```csharp
+// Example anomaly detection input (simulated metrics).
 var executionMetrics = new GraphExecutionMetrics
 {
-    TotalExecutionTime = TimeSpan.FromMilliseconds(5000), // High anomalous latency
+    TotalExecutionTime = TimeSpan.FromMilliseconds(5000),
     CpuUsage = 85.0,
     MemoryUsage = 75.0,
     ErrorRate = 2.0,
@@ -219,9 +199,9 @@ var executionMetrics = new GraphExecutionMetrics
 };
 
 var anomalyResult = await executor.DetectAnomaliesAsync(executionMetrics);
-Console.WriteLine($"  🎭 Is anomaly: {anomalyResult.IsAnomaly}");
-Console.WriteLine($"  📊 Anomaly score: {anomalyResult.AnomalyScore:F2}");
-Console.WriteLine($"  🔍 Confidence: {anomalyResult.Confidence:P2}");
+Console.WriteLine($"Is anomaly: {anomalyResult.IsAnomaly}");
+Console.WriteLine($"Anomaly score: {anomalyResult.AnomalyScore:F2}");
+Console.WriteLine($"Confidence: {anomalyResult.Confidence:P2}");
 ```
 
 ### 5. Enterprise Integration Patterns
@@ -229,6 +209,7 @@ Console.WriteLine($"  🔍 Confidence: {anomalyResult.Confidence:P2}");
 #### Message Routing
 
 ```csharp
+// Define a simple message routing rule that forwards 'OrderCreated' messages.
 var messageRoute = new IntegrationRoute
 {
     Type = IntegrationRouteType.Message,
@@ -242,11 +223,13 @@ var messageRoute = new IntegrationRoute
 };
 
 var routeId = await executor.ConfigureIntegrationRouteAsync(messageRoute);
+Console.WriteLine($"Route configured with id: {routeId}");
 ```
 
 #### Processing Different Patterns
 
 ```csharp
+// Prepare a few sample enterprise messages for routing demonstration.
 var testMessages = new[]
 {
     new EnterpriseMessage
@@ -255,11 +238,20 @@ var testMessages = new[]
         Priority = MessagePriority.High,
         Payload = new { OrderId = "ORD-001", CustomerId = "CUST-123", Amount = 299.99 },
         Routing = new RoutingProperties { RoutingKey = "orders", Topic = "order-events" }
+    },
+    new EnterpriseMessage
+    {
+        MessageType = "PaymentProcessed",
+        Priority = MessagePriority.Normal,
+        Payload = new { PaymentId = "PAY-001", OrderId = "ORD-001", Status = "Completed" },
+        Routing = new RoutingProperties { RoutingKey = "payments", Topic = "payment-events" }
     }
 };
 
 foreach (var message in testMessages)
 {
+    Console.WriteLine($"Processing message: {message.MessageType}");
+
     // Message Router
     var routerContext = new ProcessingContext
     {
@@ -269,7 +261,8 @@ foreach (var message in testMessages)
     };
 
     var routerResult = await executor.ProcessEnterpriseMessageAsync(message, routerContext);
-    
+    Console.WriteLine($"Message Router: {(routerResult.Success ? "OK" : "FAIL")} ({routerResult.ProcessingTime.TotalMilliseconds:F2}ms)");
+
     // Content-Based Router
     var contentContext = new ProcessingContext
     {
@@ -278,7 +271,8 @@ foreach (var message in testMessages)
     };
 
     var contentResult = await executor.ProcessEnterpriseMessageAsync(message, contentContext);
-    
+    Console.WriteLine($"Content Router: {(contentResult.Success ? "OK" : "FAIL")} ({contentResult.ProcessingTime.TotalMilliseconds:F2}ms)");
+
     // Publish-Subscribe
     var pubSubContext = new ProcessingContext
     {
@@ -288,6 +282,7 @@ foreach (var message in testMessages)
     };
 
     var pubSubResult = await executor.ProcessEnterpriseMessageAsync(message, pubSubContext);
+    Console.WriteLine($"Pub-Sub: {(pubSubResult.Success ? "OK" : "FAIL")} ({pubSubResult.ProcessingTime.TotalMilliseconds:F2}ms)");
 }
 ```
 
@@ -296,31 +291,28 @@ foreach (var message in testMessages)
 The example concludes with comprehensive diagnostics of all patterns.
 
 ```csharp
+// Run the comprehensive diagnostics routine and print a compact report.
 var diagnosticReport = await executor.RunComprehensiveDiagnosticsAsync(metrics);
 
-Console.WriteLine($"\n📋 Diagnostic Report (Generated at {diagnosticReport.Timestamp:HH:mm:ss})");
-Console.WriteLine("=" + new string('=', 50));
+Console.WriteLine($"\nDiagnostic Report (Generated at {diagnosticReport.Timestamp:HH:mm:ss})");
+Console.WriteLine(new string('=', 60));
 
-Console.WriteLine($"✅ Success: {diagnosticReport.Success}");
-Console.WriteLine($"🆔 Executor ID: {diagnosticReport.GraphExecutorId}");
+Console.WriteLine($"Success: {diagnosticReport.Success}");
+Console.WriteLine($"Executor ID: {diagnosticReport.GraphExecutorId}");
 
 if (diagnosticReport.AcademicPatternsStatus != null)
 {
-    Console.WriteLine("\n🎓 Academic Patterns Status:");
     var status = diagnosticReport.AcademicPatternsStatus;
-    Console.WriteLine($"  🔌 Circuit Breaker: {(status.CircuitBreakerConfigured ? "✅" : "❌")}");
-    Console.WriteLine($"  🚧 Bulkhead: {(status.BulkheadConfigured ? "✅" : "❌")}");
-    Console.WriteLine($"  💾 Cache-Aside: {(status.CacheAsideConfigured ? "✅" : "❌")}");
+    Console.WriteLine($"Circuit Breaker configured: {status.CircuitBreakerConfigured}");
+    Console.WriteLine($"Bulkhead configured: {status.BulkheadConfigured}");
+    Console.WriteLine($"Cache-Aside configured: {status.CacheAsideConfigured}");
 }
 
 if (diagnosticReport.OptimizationAnalysis != null)
 {
     var opt = diagnosticReport.OptimizationAnalysis;
-    Console.WriteLine("\n⚡ Optimization Analysis:");
-    Console.WriteLine($"  ⏱️ Analysis Time: {opt.AnalysisTime.TotalMilliseconds:F2}ms");
-    Console.WriteLine($"  🎯 Total Optimizations: {opt.TotalOptimizations}");
-    Console.WriteLine($"  📈 Path Optimizations: {opt.PathOptimizations.Count}");
-    Console.WriteLine($"  🔧 Node Optimizations: {opt.NodeOptimizations.Count}");
+    Console.WriteLine($"Optimization analysis time: {opt.AnalysisTime.TotalMilliseconds:F2}ms");
+    Console.WriteLine($"Total optimizations: {opt.TotalOptimizations}");
 }
 ```
 
