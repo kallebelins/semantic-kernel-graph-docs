@@ -29,8 +29,8 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 23. [x] error-policies.md
 24. [x] execution-context.md
 25. [x] executors-and-middlewares.md
-26. [ ] extensions-and-options.md
-27. [ ] extensions.md
+26. [x] extensions-and-options.md
+27. [x] extensions.md
 28. [ ] graph-executor.md
 29. [ ] graph-options.md
 30. [ ] human-in-the-loop.md
