@@ -41,7 +41,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 35. [x] main-node-types.md
 36. [x] metrics.md
 37. [x] multi-agent.md
-38. [ ] nodes.md
+38. [x] nodes.md
 39. [ ] rest-tools.md
 40. [ ] server-apis.md
 41. [ ] state-and-serialization.md
