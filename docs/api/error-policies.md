@@ -24,26 +24,44 @@ This registry manages error handling policies with versioning, runtime resolutio
 ```csharp
 var registry = new ErrorPolicyRegistry(new ErrorPolicyRegistryOptions());
 
-// Register retry policy for specific error types
-registry.RegisterRetryPolicy(
-    GraphErrorType.Network,
-    new PolicyRule
-    {
-        RecoveryAction = ErrorRecoveryAction.Retry,
-        MaxRetries = 3,
-        RetryDelay = TimeSpan.FromSeconds(1),
-        BackoffMultiplier = 2.0,
-        Priority = 100
-    });
+// Register retry policy for specific error types using PolicyRule
+// (use RegisterPolicyRule so the rule is properly indexed and versioned)
+registry.RegisterPolicyRule(new PolicyRule
+{
+    ContextId = "Examples",
+    ErrorType = GraphErrorType.Network,
+    RecoveryAction = ErrorRecoveryAction.Retry,
+    MaxRetries = 3,
+    RetryDelay = TimeSpan.FromSeconds(1),
+    BackoffMultiplier = 2.0,
+    Priority = 100,
+    Description = "Retry network errors"
+});
 
-// Register circuit breaker policy for a node
+// Register circuit breaker policy for a node using the correct config properties
 registry.RegisterNodeCircuitBreakerPolicy("api-node", new CircuitBreakerPolicyConfig
 {
+    Enabled = true,
     FailureThreshold = 5,
-    RecoveryTimeout = TimeSpan.FromMinutes(1),
-    MonitoringPeriod = TimeSpan.FromMinutes(5)
+    OpenTimeout = TimeSpan.FromMinutes(1),
+    FailureWindow = TimeSpan.FromMinutes(5)
 });
 ```
+
+### Runnable example
+
+The repository contains a tested, runnable example that exercises the snippets in this document:
+
+- Example source: `semantic-kernel-graph-docs/examples/ErrorPoliciesExample.cs`
+- Run the example from the repo root (requires .NET 8):
+
+```bash
+dotnet run --project semantic-kernel-graph-docs/examples/Examples.csproj -- error-policies
+```
+
+This example registers the sample policies, executes an `ErrorHandlerGraphNode` with a simulated
+`HttpRequestException`, and records a sample event in `ErrorMetricsCollector` so you can inspect
+the runtime output and verify the documented behavior.
 
 ### Policy Resolution
 

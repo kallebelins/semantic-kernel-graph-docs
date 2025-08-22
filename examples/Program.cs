@@ -45,6 +45,7 @@ class Program
                 ["core-api"] = async () => await CoreApiExample.RunAsync(),
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
                 ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
+                ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 
