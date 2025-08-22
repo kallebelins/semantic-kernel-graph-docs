@@ -48,6 +48,7 @@ class Program
                 ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),
                 ["execution-context"] = async () => await ExecutionContextExample.RunAsync(),
                 ["executors-and-middlewares"] = async () => await ExecutorsAndMiddlewaresExample.RunAsync(),
+                ["extensions-and-options"] = async () => await ExtensionsAndOptionsExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 

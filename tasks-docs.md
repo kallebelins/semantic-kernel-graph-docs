@@ -28,7 +28,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 22. [x] dynamic-routing.md
 23. [x] error-policies.md
 24. [x] execution-context.md
-25. [ ] executors-and-middlewares.md
+25. [x] executors-and-middlewares.md
 26. [ ] extensions-and-options.md
 27. [ ] extensions.md
 28. [ ] graph-executor.md

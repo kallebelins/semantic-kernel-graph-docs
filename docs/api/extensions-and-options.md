@@ -23,81 +23,77 @@ Extension methods that enhance `KernelArguments` with graph-specific functionali
 #### Graph State Methods
 
 ```csharp
-// Convert to GraphState
+// Convert KernelArguments to a GraphState instance (cached on the arguments)
 public static GraphState ToGraphState(this KernelArguments arguments)
 
-// Get or create GraphState
+// Get or create GraphState from KernelArguments
 public static GraphState GetOrCreateGraphState(this KernelArguments arguments)
 
-// Check if contains GraphState
+// Check if KernelArguments already contain a GraphState
 public static bool HasGraphState(this KernelArguments arguments)
 
-// Set GraphState
+// Set a specific GraphState instance on the KernelArguments
 public static void SetGraphState(this KernelArguments arguments, GraphState graphState)
 ```
 
 **Example:**
 ```csharp
+// Prepare kernel arguments with sample data
 var arguments = new KernelArguments
 {
     ["input"] = "Hello World",
     ["user"] = "Alice"
 };
 
-// Convert to GraphState
+// Convert KernelArguments into a GraphState instance (cached on arguments)
 var graphState = arguments.ToGraphState();
 
-// Check if already has GraphState
+// Safely check and read the GraphState
 if (arguments.HasGraphState())
 {
     var existingState = arguments.GetOrCreateGraphState();
-    Console.WriteLine($"State ID: {existingState.StateId}");
+    Console.WriteLine($"State contains parameters: {string.Join(", ", existingState.GetParameterNames())}");
 }
 ```
 
 #### Execution Tracking Methods
 
 ```csharp
-// Start execution step
-public static void StartExecutionStep(this KernelArguments arguments, string nodeId, 
-    string? description = null)
+// Start a new execution step and return the created ExecutionStep
+public static ExecutionStep StartExecutionStep(this KernelArguments arguments, string nodeId, string functionName)
 
-// Complete execution step
-public static void CompleteExecutionStep(this KernelArguments arguments, string nodeId, 
-    object? result = null, TimeSpan? duration = null)
+// Complete the current execution step (optional result)
+public static void CompleteExecutionStep(this KernelArguments arguments, object? result = null)
 
-// Set execution context
-public static void SetExecutionContext(this KernelArguments arguments, 
-    GraphExecutionContext context)
+// Set the execution context (any object; use GetExecutionContext<T> to read typed)
+public static void SetExecutionContext(this KernelArguments arguments, object context)
 
-// Get execution context
-public static GraphExecutionContext? GetExecutionContext(this KernelArguments arguments)
+// Get the execution context as a specific type T
+public static T? GetExecutionContext<T>(this KernelArguments arguments)
 
-// Set execution priority
-public static void SetExecutionPriority(this KernelArguments arguments, 
-    ExecutionPriority priority)
+// Set execution priority hint used by resource governance
+public static void SetExecutionPriority(this KernelArguments arguments, ExecutionPriority priority)
 
-// Get execution priority
+// Get execution priority hint if set
 public static ExecutionPriority? GetExecutionPriority(this KernelArguments arguments)
 ```
 
 **Example:**
 ```csharp
-// Start tracking execution
-arguments.StartExecutionStep("process_input", "Processing user input");
+// Start tracking an execution step for a specific node/function
+var step = arguments.StartExecutionStep("process_input", "ProcessUserInput");
 
-// Simulate work
-await Task.Delay(100);
+// ... perform work here (sync or async) ...
 
-// Complete step with result
-arguments.CompleteExecutionStep("process_input", "processed", TimeSpan.FromMilliseconds(100));
+// Mark the step as completed with an optional result
+arguments.CompleteExecutionStep(result: new { status = "processed" });
 
-// Set execution priority
+// Set a priority hint used by executors for resource governance
 arguments.SetExecutionPriority(ExecutionPriority.High);
 
-// Get execution context
-var context = arguments.GetExecutionContext();
-if (context != null)
+// Retrieve execution context if it was previously set
+var context = arguments.GetExecutionContext<GraphExecutionContext>();
+if (context is not null)
 {
     Console.WriteLine($"Execution ID: {context.ExecutionId}");
 }
@@ -106,34 +102,28 @@ if (context != null)
 #### Execution ID Management
 
 ```csharp
-// Set execution ID
+// Set an explicit execution identifier to be used by execution context and decorators
 public static void SetExecutionId(this KernelArguments arguments, string executionId)
 
-// Get execution ID
-public static string? GetExecutionId(this KernelArguments arguments)
+// Get explicit execution identifier previously set on the arguments (null when not set)
+public static string? GetExplicitExecutionId(this KernelArguments arguments)
 
-// Generate execution ID
-public static string GenerateExecutionId(this KernelArguments arguments)
-
-// Generate deterministic execution ID
-public static string GenerateDeterministicExecutionId(this KernelArguments arguments, int seed)
+// Ensure a stable execution identifier exists; create deterministic id from seed when provided
+public static string EnsureStableExecutionId(this KernelArguments arguments, int? seed = null)
 ```
 
 **Example:**
 ```csharp
-// Generate unique execution ID
-var executionId = arguments.GenerateExecutionId();
-Console.WriteLine($"Generated ID: {executionId}");
+// Ensure there is a stable execution identifier for correlating logs/traces
+var executionId = arguments.EnsureStableExecutionId();
+Console.WriteLine($"Execution ID: {executionId}");
 
-// Generate deterministic ID for testing
-var deterministicId = arguments.GenerateDeterministicExecutionId(42);
-Console.WriteLine($"Deterministic ID: {deterministicId}");
+// Deterministic id for tests
+var seededId = arguments.EnsureStableExecutionId(seed: 42);
+Console.WriteLine($"Deterministic execution ID: {seededId}");
 
-// Set custom execution ID
+// Overwrite with a custom ID if required
 arguments.SetExecutionId("custom-execution-123");
-
-// Retrieve execution ID
-var currentId = arguments.GetExecutionId();
 ```
 
 #### Debug and Inspection Methods
@@ -180,26 +170,26 @@ arguments.ClearDebugInfo();
 #### Utility Methods
 
 ```csharp
-// Clone arguments
+// Create a deep copy of KernelArguments while preserving GraphState when present
 public static KernelArguments Clone(this KernelArguments arguments)
 
-// Set node cost weight
-public static void SetNodeCostWeight(this KernelArguments arguments, double weight)
+// Set estimated node cost weight (>= 1.0) used as a hint for resource governance
+public static void SetEstimatedNodeCostWeight(this KernelArguments arguments, double costWeight)
 
-// Get node cost weight
-public static double GetNodeCostWeight(this KernelArguments arguments)
+// Get estimated node cost weight or null when not set
+public static double? GetEstimatedNodeCostWeight(this KernelArguments arguments)
 ```
 
 **Example:**
 ```csharp
-// Clone arguments for parallel execution
+// Clone arguments when running parallel branches to avoid shared mutation
 var clonedArgs = arguments.Clone();
 
-// Set cost weight for resource governance
-arguments.SetNodeCostWeight(2.5);
+// Set a cost weight hint to the executor to influence resource governance
+arguments.SetEstimatedNodeCostWeight(2.5);
 
-// Get cost weight
-var weight = arguments.GetNodeCostWeight();
+// Safely retrieve the cost weight
+var weight = arguments.GetEstimatedNodeCostWeight();
 Console.WriteLine($"Node cost weight: {weight}");
 ```
 
