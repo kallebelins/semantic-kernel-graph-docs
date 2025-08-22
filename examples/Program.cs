@@ -47,6 +47,7 @@ class Program
                 ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
                 ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),
                 ["execution-context"] = async () => await ExecutionContextExample.RunAsync(),
+                ["executors-and-middlewares"] = async () => await ExecutorsAndMiddlewaresExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 

@@ -425,17 +425,24 @@ The middleware pipeline executes in the following order:
 public class PerformanceMonitoringMiddleware : IGraphExecutionMiddleware
 {
     public int Order => 100;
-    
-    public async Task OnBeforeNodeAsync(GraphExecutionContext context, IGraphNode node, CancellationToken cancellationToken)
+
+    public Task OnBeforeNodeAsync(GraphExecutionContext context, IGraphNode node, CancellationToken cancellationToken)
     {
-        // Start performance tracking
-        context.StartNodeTimer(node);
+        // Record start timestamp in the execution context properties
+        context.SetProperty($"node:{node.NodeId}:start", DateTimeOffset.UtcNow);
+        return Task.CompletedTask;
     }
-    
-    public async Task OnAfterNodeAsync(GraphExecutionContext context, IGraphNode node, FunctionResult result, CancellationToken cancellationToken)
+
+    public Task OnAfterNodeAsync(GraphExecutionContext context, IGraphNode node, FunctionResult result, CancellationToken cancellationToken)
     {
-        // Record performance metrics
-        context.CompleteNodeTimer(node, result);
+        // Compute elapsed time using the stored start timestamp
+        var startObj = context.GetProperty<object>($"node:{node.NodeId}:start");
+        if (startObj is DateTimeOffset start)
+        {
+            var elapsed = DateTimeOffset.UtcNow - start;
+            Console.WriteLine($"[PERF] Node {node.NodeId} completed in {elapsed.TotalMilliseconds}ms");
+        }
+        return Task.CompletedTask;
     }
 }
 
@@ -443,15 +450,21 @@ public class PerformanceMonitoringMiddleware : IGraphExecutionMiddleware
 public class LoggingMiddleware : IGraphExecutionMiddleware
 {
     public int Order => 200;
-    
-    public async Task OnBeforeNodeAsync(GraphExecutionContext context, IGraphNode node, CancellationToken cancellationToken)
+
+    public Task OnBeforeNodeAsync(GraphExecutionContext context, IGraphNode node, CancellationToken cancellationToken)
     {
-        context.Logger?.LogInformation("Starting node {NodeId}", node.NodeId);
+        // Simple console logging for examples and documentation
+        Console.WriteLine($"[LOG] Starting node {node.NodeId}");
+        return Task.CompletedTask;
     }
-    
-    public async Task OnAfterNodeAsync(GraphExecutionContext context, IGraphNode node, FunctionResult result, CancellationToken cancellationToken)
+
+    public Task OnAfterNodeAsync(GraphExecutionContext context, IGraphNode node, FunctionResult result, CancellationToken cancellationToken)
     {
-        context.Logger?.LogInformation("Completed node {NodeId}", node.NodeId);
+        // Print a concise completion message and include the result value when available
+        var value = "<unavailable>";
+        try { value = result.GetValue<object>()?.ToString() ?? "null"; } catch { }
+        Console.WriteLine($"[LOG] Completed node {node.NodeId} with result: {value}");
+        return Task.CompletedTask;
     }
 }
 ```
@@ -463,34 +476,44 @@ public class LoggingMiddleware : IGraphExecutionMiddleware
 public class ValidationMiddleware : IGraphExecutionMiddleware
 {
     public int Order => 50; // Run early in the pipeline
-    
-    public async Task OnBeforeNodeAsync(GraphExecutionContext context, IGraphNode node, CancellationToken cancellationToken)
+
+    public Task OnBeforeNodeAsync(GraphExecutionContext context, IGraphNode node, CancellationToken cancellationToken)
     {
-        // Validate node inputs
-        var validationResult = await ValidateNodeInputsAsync(node, context.GraphState);
+        // Use the node's built-in validation against KernelArguments
+        var validationResult = node.ValidateExecution(context.GraphState.KernelArguments);
         if (!validationResult.IsValid)
         {
-            throw new ValidationException($"Node {node.NodeId} validation failed: {validationResult.Errors}");
+            throw new ValidationException($"Node {node.NodeId} validation failed: {validationResult.CreateSummary()}");
         }
+        return Task.CompletedTask;
     }
-    
-    public async Task OnAfterNodeAsync(GraphExecutionContext context, IGraphNode node, FunctionResult result, CancellationToken cancellationToken)
+
+    public Task OnAfterNodeAsync(GraphExecutionContext context, IGraphNode node, FunctionResult result, CancellationToken cancellationToken)
     {
-        // Validate node outputs
-        var validationResult = await ValidateNodeOutputsAsync(node, result);
-        if (!validationResult.IsValid)
+        // Basic output sanity check: prefer node-specific validation in real code
+        try
         {
-            context.Logger?.LogWarning("Node {NodeId} output validation failed", node.NodeId);
+            var value = result.GetValue<object>();
+            if (value == null)
+            {
+                Console.WriteLine($"[WARN] Node {node.NodeId} produced null result");
+            }
         }
+        catch
+        {
+            Console.WriteLine($"[WARN] Unable to inspect result for node {node.NodeId}");
+        }
+        return Task.CompletedTask;
     }
-    
-    public async Task OnNodeFailedAsync(GraphExecutionContext context, IGraphNode node, Exception exception, CancellationToken cancellationToken)
+
+    public Task OnNodeFailedAsync(GraphExecutionContext context, IGraphNode node, Exception exception, CancellationToken cancellationToken)
     {
-        // Log validation-related failures
+        // Log validation-related failures to console for examples
         if (exception is ValidationException)
         {
-            context.Logger?.LogError(exception, "Validation failure in node {NodeId}", node.NodeId);
+            Console.WriteLine($"[ERROR] Validation failure in node {node.NodeId}: {exception.Message}");
         }
+        return Task.CompletedTask;
     }
 }
 
