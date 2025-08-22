@@ -348,12 +348,25 @@ conditionalApproval.AddApprovalOption("approve", "Approve Transaction", true)
                   .AddApprovalOption("review", "Request Additional Review", "review");
 
 // Add routing based on approval result
-graph.AddConditionalEdge(conditionalApproval, approvedNode,
-    edge => edge.Condition = "approval_result == true");
-graph.AddConditionalEdge(conditionalApproval, rejectedNode,
-    edge => edge.Condition = "approval_result == false");
-graph.AddConditionalEdge(conditionalApproval, reviewNode,
-    edge => edge.Condition = "approval_result == 'review'");
+// Add conditional routing using executor helpers. Use KernelArguments predicates
+// to evaluate approval_result returned by the approval node.
+graph.ConnectWhen(
+    conditionalApproval.NodeId,
+    approvedNode.NodeId,
+    args => args.TryGetValue("approval_result", out var v) && v is bool b && b,
+    "approval_result_true");
+
+graph.ConnectWhen(
+    conditionalApproval.NodeId,
+    rejectedNode.NodeId,
+    args => args.TryGetValue("approval_result", out var v) && v is bool b && !b,
+    "approval_result_false");
+
+graph.ConnectWhen(
+    conditionalApproval.NodeId,
+    reviewNode.NodeId,
+    args => args.TryGetValue("approval_result", out var v) && v?.ToString() == "review",
+    "approval_result_review");
 ```
 
 ### Confidence Gate
@@ -553,8 +566,13 @@ level3Approval.WithTimeout(TimeSpan.FromHours(24), TimeoutAction.Reject);
 
 // Add to graph with conditional routing
 graph.AddEdge(level1Approval, level2Approval);
-graph.AddConditionalEdge(level2Approval, level3Approval,
-    edge => edge.Condition = "transaction_amount > 100000");
+// Route based on transaction_amount in KernelArguments
+graph.ConnectWhen(
+    level2Approval.NodeId,
+    level3Approval.NodeId,
+    args => args.TryGetValue("transaction_amount", out var v) &&
+            decimal.TryParse(v?.ToString(), out var amt) && amt > 100000m,
+    "transaction_amount_gt_100000");
 ```
 
 ### Confidence-Based Routing
@@ -570,10 +588,18 @@ confidenceGate.ConfidenceSources.Add(new LLMConfidenceSource("llm_confidence"));
 confidenceGate.ConfidenceSources.Add(new ValidationConfidenceSource("validation_score"));
 
 // Add routing based on confidence
-graph.AddConditionalEdge(confidenceGate, highConfidenceNode,
-    edge => edge.Condition = "gate_result == true");
-graph.AddConditionalEdge(confidenceGate, lowConfidenceNode,
-    edge => edge.Condition = "gate_result == false");
+// Route based on gate_result produced by the confidence gate node
+graph.ConnectWhen(
+    confidenceGate.NodeId,
+    highConfidenceNode.NodeId,
+    args => args.TryGetValue("gate_result", out var v) && v is bool bv && bv,
+    "gate_result_true");
+
+graph.ConnectWhen(
+    confidenceGate.NodeId,
+    lowConfidenceNode.NodeId,
+    args => args.TryGetValue("gate_result", out var v) && v is bool bv2 && !bv2,
+    "gate_result_false");
 
 // Configure low confidence path with human approval
 var humanReviewNode = new HumanApprovalGraphNode(
