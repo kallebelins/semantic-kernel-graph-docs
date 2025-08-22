@@ -50,23 +50,24 @@ This example demonstrates validation and suggestion patterns with the Semantic K
 The example creates a simple graph with three main nodes: draft generation, validation, and rewriting.
 
 ```csharp
-// Create a simple graph
+// Create a graph executor that will host the validation workflow.
+// This is a minimal, in-memory graph used for documentation and local testing.
 var graph = new GraphExecutor("AssertAndSuggest", "Validate output and suggest fixes");
 
-// 1) Draft node: simulates an LLM draft that violates constraints
+// 1) Draft node: simulate an LLM draft that intentionally violates constraints.
+// The node stores its produced draft into the graph state under the key "draft_output".
 var draftNode = new FunctionGraphNode(
     KernelFunctionFactory.CreateFromMethod(
         () =>
         {
-            // Intentionally violates constraints: contains "free" and is too long
+            // Intentionally violating draft: promotional terms and an overly long summary
             var draft = "Title: Super Gadget Pro Max\n" +
                         "Summary: This is a free, absolutely unbeatable gadget with unlimited features, " +
                         "best in class performance, and a comprehensive set of accessories included for everyone right now.";
             return draft;
         },
         functionName: "generate_draft",
-        description: "Generates an initial draft (simulated LLM output)"
-    ),
+        description: "Generates an initial draft (simulated LLM output)"),
     nodeId: "draft",
     description: "Draft generation")
     .StoreResultAs("draft_output");
@@ -77,34 +78,22 @@ var draftNode = new FunctionGraphNode(
 The validation node checks content against business constraints and generates suggestions.
 
 ```csharp
-// 2) Validate node: asserts constraints and emits suggestions into state
+// 2) Validate node: inspects the draft, asserts constraints, and emits suggestions into state.
+// It writes the validation result flags and textual suggestions into KernelArguments for downstream nodes.
 var validateNode = new FunctionGraphNode(
-    KernelFunctionFactory.CreateFromMethod(
-        (KernelArguments args) =>
-        {
-            var text = args.TryGetValue("draft_output", out var o) ? o?.ToString() ?? string.Empty : string.Empty;
-            var (valid, errors, suggestions) = ValidateConstraints(text);
+    KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+    {
+        var text = args.TryGetValue("draft_output", out var o) ? o?.ToString() ?? string.Empty : string.Empty;
+        var (valid, errors, suggestions) = ValidateConstraints(text);
 
-            args["assert_valid"] = valid;
-            if (!valid)
-            {
-                args["assert_errors"] = string.Join(" | ", errors);
-                args["suggestions"] = string.Join(" | ", suggestions);
-            }
-            else
-            {
-                args["assert_errors"] = string.Empty;
-                args["suggestions"] = string.Empty;
-            }
+        // Store boolean validity and serialized messages in the shared arguments
+        args["assert_valid"] = valid;
+        args["assert_errors"] = string.Join(" | ", errors ?? Array.Empty<string>());
+        args["suggestions"] = string.Join(" | ", suggestions ?? Array.Empty<string>());
 
-            return valid ? "valid" : "invalid";
-        },
-        functionName: "validate_output",
-        description: "Validates output against constraints and provides suggestions"
-    ),
-    nodeId: "validate",
-    description: "Validation")
-    .StoreResultAs("validation_result");
+        return valid ? "valid" : "invalid";
+    }, functionName: "validate_output", description: "Validates output and provides suggestions"),
+    nodeId: "validate", description: "Validation").StoreResultAs("validation_result");
 ```
 
 ### 3. Implementing Content Rewriting
@@ -112,27 +101,22 @@ var validateNode = new FunctionGraphNode(
 The rewrite node applies suggestions to produce corrected content.
 
 ```csharp
-// 3) Rewrite node: applies suggestions to produce a corrected version
+// 3) Rewrite node: applies suggestions and writes the corrected draft back into state.
+// After applying fixes, it re-runs validation to update the validity flag.
 var rewriteNode = new FunctionGraphNode(
-    KernelFunctionFactory.CreateFromMethod(
-        (KernelArguments args) =>
-        {
-            var text = args.TryGetValue("draft_output", out var o) ? o?.ToString() ?? string.Empty : string.Empty;
-            var suggestions = args.TryGetValue("suggestions", out var s) ? s?.ToString() ?? string.Empty : string.Empty;
-            var fixedText = ApplySuggestions(text);
-            args["rewritten_output"] = fixedText;
+    KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+    {
+        var text = args.TryGetValue("draft_output", out var o) ? o?.ToString() ?? string.Empty : string.Empty;
+        var fixedText = ApplySuggestions(text);
+        args["rewritten_output"] = fixedText;
 
-            // Re-validate to demonstrate closure of the loop
-            var (valid, errors, _) = ValidateConstraints(fixedText);
-            args["assert_valid"] = valid;
-            args["assert_errors"] = valid ? string.Empty : string.Join(" | ", errors);
-            return fixedText;
-        },
-        functionName: "rewrite_with_suggestions",
-        description: "Produces a corrected rewrite using the suggestions"
-    ),
-    nodeId: "rewrite",
-    description: "Rewrite");
+        // Re-validate the corrected text to update assert_valid/assert_errors
+        var (valid, errors, _) = ValidateConstraints(fixedText);
+        args["assert_valid"] = valid;
+        args["assert_errors"] = valid ? string.Empty : string.Join(" | ", errors ?? Array.Empty<string>());
+        return fixedText;
+    }, functionName: "rewrite_with_suggestions", description: "Produces a corrected rewrite"),
+    nodeId: "rewrite", description: "Rewrite");
 ```
 
 ### 4. Content Presentation and Results
@@ -140,47 +124,44 @@ var rewriteNode = new FunctionGraphNode(
 The present node displays the final results and validation status.
 
 ```csharp
-// 4) Present node: renders the final result
+// 4) Present node: prints the original draft, any validation errors, suggestions, and the rewritten text.
 var presentNode = new FunctionGraphNode(
-    KernelFunctionFactory.CreateFromMethod(
-        (KernelArguments args) =>
+    KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+    {
+        var original = args.TryGetValue("draft_output", out var o) ? o?.ToString() ?? string.Empty : string.Empty;
+        var rewritten = args.TryGetValue("rewritten_output", out var r) ? r?.ToString() ?? string.Empty : string.Empty;
+        var errors = args.TryGetValue("assert_errors", out var e) ? e?.ToString() ?? string.Empty : string.Empty;
+        var suggestions = args.TryGetValue("suggestions", out var s) ? s?.ToString() ?? string.Empty : string.Empty;
+        var finalValid = args.TryGetValue("assert_valid", out var v) && v is bool b && b;
+
+        Console.WriteLine("\n📋 Content Validation Results:");
+        Console.WriteLine(new string('=', 60));
+
+        Console.WriteLine("\n📝 Original Draft:");
+        Console.WriteLine(original);
+
+        if (!string.IsNullOrEmpty(errors))
         {
-            var original = args.TryGetValue("draft_output", out var o) ? o?.ToString() ?? string.Empty : string.Empty;
-            var rewritten = args.TryGetValue("rewritten_output", out var r) ? r?.ToString() ?? string.Empty : string.Empty;
-            var errors = args.TryGetValue("assert_errors", out var e) ? e?.ToString() ?? string.Empty : string.Empty;
-            var suggestions = args.TryGetValue("suggestions", out var s) ? s?.ToString() ?? string.Empty : string.Empty;
-            var finalValid = args.TryGetValue("assert_valid", out var v) && v is bool b && b;
+            Console.WriteLine("\n❌ Validation Errors:");
+            Console.WriteLine(errors);
+        }
 
-            Console.WriteLine("\n📋 Content Validation Results:");
-            Console.WriteLine("=" + new string('=', 40));
+        if (!string.IsNullOrEmpty(suggestions))
+        {
+            Console.WriteLine("\n💡 Suggestions:");
+            Console.WriteLine(suggestions);
+        }
 
-            Console.WriteLine("\n📝 Original Draft:");
-            Console.WriteLine(original);
-
-            if (!string.IsNullOrEmpty(errors))
-            {
-                Console.WriteLine("\n❌ Validation Errors:");
-                Console.WriteLine(errors);
-            }
-
-            if (!string.IsNullOrEmpty(suggestions))
-            {
-                Console.WriteLine("\n💡 Suggestions:");
-                Console.WriteLine(suggestions);
-            }
-
+        if (!string.IsNullOrWhiteSpace(rewritten))
+        {
             Console.WriteLine("\n✅ Corrected Version:");
             Console.WriteLine(rewritten);
+        }
 
-            Console.WriteLine($"\n🎯 Final Validation: {(finalValid ? "PASSED" : "FAILED")}");
-
-            return "Content validation and correction completed";
-        },
-        functionName: "present_results",
-        description: "Presents validation results and corrected content"
-    ),
-    nodeId: "present",
-    description: "Results Presentation");
+        Console.WriteLine($"\n🎯 Final Validation: {(finalValid ? "PASSED" : "FAILED")}");
+        return "Content validation and correction completed";
+    }, functionName: "present_results", description: "Presents validation results"),
+    nodeId: "present", description: "Results Presentation");
 ```
 
 ### 5. Graph Assembly and Execution
@@ -188,19 +169,20 @@ var presentNode = new FunctionGraphNode(
 The nodes are connected to form a validation workflow.
 
 ```csharp
-// Assemble the graph
+// Assemble the graph and wire the nodes together. Use clear, deterministic routing
+// so the documentation example remains easy to follow.
 graph.AddNode(draftNode);
 graph.AddNode(validateNode);
 graph.AddNode(rewriteNode);
 graph.AddNode(presentNode);
 
-// Connect the workflow
-graph.Connect(draftNode.NodeId, validateNode.NodeId);
-graph.Connect(validateNode.NodeId, rewriteNode.NodeId);
-graph.Connect(rewriteNode.NodeId, presentNode.NodeId);
-
-// Set the start node
-graph.SetStartNode(draftNode.NodeId);
+// Routing: draft -> validate
+graph.ConnectWhen(draftNode.NodeId, validateNode.NodeId, _ => true);
+// If validation succeeds go straight to present
+graph.ConnectWhen(validateNode.NodeId, presentNode.NodeId, ka => ka.TryGetValue("assert_valid", out var v) && v is bool vb && vb);
+// Otherwise rewrite then present
+graph.ConnectWhen(validateNode.NodeId, rewriteNode.NodeId, ka => !(ka.TryGetValue("assert_valid", out var v) && v is bool vb2 && vb2));
+graph.ConnectWhen(rewriteNode.NodeId, presentNode.NodeId, _ => true);
 
 // Execute the validation workflow
 var args = new KernelArguments();
@@ -214,38 +196,39 @@ The example implements specific business constraints for content validation.
 ```csharp
 private static (bool valid, string[] errors, string[] suggestions) ValidateConstraints(string text)
 {
+    // Return collections with clear messages. Keep logic simple and deterministic for docs.
     var errors = new List<string>();
     var suggestions = new List<string>();
 
-    // Constraint 1: No promotional language
+    if (string.IsNullOrWhiteSpace(text))
+    {
+        errors.Add("Content is empty");
+        suggestions.Add("Provide a draft containing a Title and Summary lines");
+        return (false, errors.ToArray(), suggestions.ToArray());
+    }
+
+    // Promotional language checks
     if (text.Contains("free", StringComparison.OrdinalIgnoreCase) ||
         text.Contains("unlimited", StringComparison.OrdinalIgnoreCase) ||
         text.Contains("best in class", StringComparison.OrdinalIgnoreCase))
     {
         errors.Add("Contains promotional language");
-        suggestions.Add("Remove promotional terms like 'free', 'unlimited', 'best in class'");
+        suggestions.Add("Remove promotional terms like 'free', 'unlimited', or 'best in class'");
     }
 
-    // Constraint 2: Length limits
-    if (text.Length > 200)
+    // Length limit (documentation example uses a generous threshold)
+    if (text.Length > 500)
     {
-        errors.Add("Content too long");
-        suggestions.Add("Keep content concise, under 200 characters");
+        errors.Add($"Content too long ({text.Length} characters)");
+        suggestions.Add("Keep content concise, consider shortening the Summary");
     }
 
-    // Constraint 3: No urgency language
+    // Urgency language
     if (text.Contains("right now", StringComparison.OrdinalIgnoreCase) ||
         text.Contains("immediately", StringComparison.OrdinalIgnoreCase))
     {
         errors.Add("Contains urgency language");
-        suggestions.Add("Remove urgency terms like 'right now', 'immediately'");
-    }
-
-    // Constraint 4: Professional tone
-    if (text.Contains("absolutely unbeatable", StringComparison.OrdinalIgnoreCase))
-    {
-        errors.Add("Unprofessional tone");
-        suggestions.Add("Use professional, factual language");
+        suggestions.Add("Avoid urgency words such as 'right now' or 'immediately'");
     }
 
     return (errors.Count == 0, errors.ToArray(), suggestions.ToArray());
@@ -259,25 +242,22 @@ The rewrite logic applies suggestions to correct content.
 ```csharp
 private static string ApplySuggestions(string text)
 {
-    var corrected = text;
+    if (string.IsNullOrWhiteSpace(text)) return string.Empty;
 
-    // Apply suggestion 1: Remove promotional language
-    corrected = corrected.Replace("free", "premium", StringComparison.OrdinalIgnoreCase);
+    // Deterministic, rule-based corrections used for documentation purposes.
+    var corrected = text.Replace("free", "premium", StringComparison.OrdinalIgnoreCase);
     corrected = corrected.Replace("unlimited", "comprehensive", StringComparison.OrdinalIgnoreCase);
     corrected = corrected.Replace("best in class", "high-quality", StringComparison.OrdinalIgnoreCase);
 
-    // Apply suggestion 2: Reduce length
-    if (corrected.Length > 200)
-    {
-        corrected = corrected.Substring(0, 197) + "...";
-    }
-
-    // Apply suggestion 3: Remove urgency language
+    // Remove urgency terms
     corrected = corrected.Replace("right now", "available", StringComparison.OrdinalIgnoreCase);
     corrected = corrected.Replace("immediately", "promptly", StringComparison.OrdinalIgnoreCase);
 
-    // Apply suggestion 4: Professional tone
-    corrected = corrected.Replace("absolutely unbeatable", "highly competitive", StringComparison.OrdinalIgnoreCase);
+    // Truncate long content to keep examples concise
+    if (corrected.Length > 500)
+    {
+        corrected = corrected.Substring(0, 497) + "...";
+    }
 
     return corrected;
 }

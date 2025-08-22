@@ -71,6 +71,8 @@ class Program
                 ["execution"] = async () => await ExecutionConceptsExample.RunAsync(),
                 ["checkpointing-concepts"] = async () => await CheckpointingConceptsExample.RunAsync(),
                 ["advanced-patterns"] = async () => await AdvancedPatternsExample.RunAsync()
+                ,
+                ["assert-and-suggest"] = async () => await AssertAndSuggestExample.RunAsync()
             };
 
             // Determine which example to run
