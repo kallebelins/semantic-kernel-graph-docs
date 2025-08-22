@@ -69,8 +69,8 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 59. [x] assert-and-suggest.md
 60. [x] chain-of-thought.md
 61. [x] chatbot.md
-62. [ ] checkpointing.md
-63. [ ] conditional-nodes.md
+62. [x] checkpointing.md
+63. [x] conditional-nodes.md
 64. [ ] document-analysis-pipeline.md
 65. [ ] dynamic-routing.md
 66. [ ] execution-guide.md
