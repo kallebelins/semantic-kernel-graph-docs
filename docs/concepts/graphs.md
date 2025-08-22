@@ -255,3 +255,11 @@ logger.LogGraphValidation(graph.Id, validationResult);
 * `GraphExecutor`: Main graph executor
 * `GraphDocumentationGenerator`: Automatic documentation generator
 * `GraphPerformanceMetrics`: Execution performance metrics
+
+### Example
+
+The documented snippets are available as a runnable C# example in the `examples` project. You can run the `graph-concepts` example via the Examples project to verify the snippets execute as shown:
+
+```bash
+dotnet run --project semantic-kernel-graph-docs/examples/Examples.csproj -- graph-concepts
+```

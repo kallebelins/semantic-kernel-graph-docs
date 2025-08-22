@@ -54,10 +54,10 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 46. [x] execution-model.md
 47. [x] execution.md
 48. [x] graph-concepts.md
-49. [ ] graphs.md
+49. [x] graphs.md
 50. [x] index.md
-51. [ ] node-types.md
-52. [ ] nodes.md
+51. [x] node-types.md
+52. [x] nodes.md
 53. [ ] routing.md
 54. [ ] state.md
 55. [ ] streaming.md

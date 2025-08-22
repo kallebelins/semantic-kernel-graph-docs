@@ -14,12 +14,15 @@ Nodes are the fundamental components of a graph, each encapsulating a specific u
 
 ### Function Nodes
 ```csharp
-// Encapsulates a Semantic Kernel function
-var functionNode = new FunctionGraphNode(
-    function: kernel.GetFunction("analyze_document"),
-    name: "analyze_document",
-    description: "Analyzes the content of a document"
+// Encapsulates a Semantic Kernel function using a lightweight in-memory function
+var processFunction = kernel.CreateFunctionFromMethod(
+    (string input) => $"Processed: {input}",
+    functionName: "process_input"
 );
+
+// Wrap the kernel function and store the result in graph state
+var functionNode = new FunctionGraphNode(processFunction, "process_node")
+    .StoreResultAs("processed_result");
 ```
 
 **Characteristics**:
@@ -30,14 +33,11 @@ var functionNode = new FunctionGraphNode(
 
 ### Conditional Nodes
 ```csharp
-// Node that makes decisions based on conditions
+// Node that makes decisions based on conditions using graph state
 var conditionalNode = new ConditionalGraphNode(
-    condition: async (state) => {
-        var score = state.GetValue<double>("confidence");
-        return score > 0.8;
-    },
-    name: "confidence_gate",
-    description: "Filters results by confidence level"
+    condition: state => state.ContainsValue("processed_result") &&
+                        !string.IsNullOrEmpty(state.GetValue<string>("processed_result")),
+    name: "quality_check"
 );
 ```
 
@@ -49,13 +49,10 @@ var conditionalNode = new ConditionalGraphNode(
 
 ### Reasoning Nodes
 ```csharp
-// Node that implements reasoning patterns
+// Node that implements reasoning patterns (simplified example)
 var reasoningNode = new ReasoningGraphNode(
-    kernel: kernel,
-    prompt: "Analyze the problem and suggest a solution",
-    maxSteps: 5,
-    name: "problem_solver",
-    description: "Solves problems using step-by-step reasoning"
+    reasoningPrompt: "Analyze the processed result and decide next steps.",
+    name: "reasoning_node"
 );
 ```
 
@@ -67,14 +64,9 @@ var reasoningNode = new ReasoningGraphNode(
 
 ### Loop Nodes
 ```csharp
-// Node that implements controlled iterations
-var loopNode = new ReActLoopGraphNode(
-    kernel: kernel,
-    objective: "Classify all documents",
-    maxIterations: 10,
-    name: "document_classifier",
-    description: "Iteratively classifies documents"
-);
+// Node that implements controlled iterations; compose reasoning, actions and observations
+var reactLoopNode = new ReActLoopGraphNode(nodeId: "react_loop", name: "react_loop");
+reactLoopNode.ConfigureNodes(reasoningNode, actionNode, observationNode);
 ```
 
 **Characteristics**:
@@ -85,11 +77,10 @@ var loopNode = new ReActLoopGraphNode(
 
 ### Observation Nodes
 ```csharp
-// Node that observes and records information
+// Node that observes and records information (prompt-driven in examples)
 var observationNode = new ObservationGraphNode(
-    observer: new ConsoleObserver(),
-    name: "console_logger",
-    description: "Records observations in console"
+    observationPrompt: "Analyze the action result and say if the goal was achieved.",
+    name: "observation_node"
 );
 ```
 
