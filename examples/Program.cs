@@ -51,6 +51,7 @@ class Program
                 ["rest-tools"] = async () => await RestToolsExample.RunAsync(),
                 ["server-apis"] = async () => await ServerApisExample.RunAsync(),
                 ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
+                ["advanced-routing"] = async () => await AdvancedRoutingExample.RunAsync(),
                 ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),
                 ["execution-context"] = async () => await ExecutionContextExample.RunAsync(),
                 ["executors-and-middlewares"] = async () => await ExecutorsAndMiddlewaresExample.RunAsync(),

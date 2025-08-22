@@ -51,38 +51,39 @@ This example demonstrates advanced routing and decision-making with the Semantic
 The example starts by creating a graph optimized for demonstrating advanced routing scenarios.
 
 ```csharp
+// Create a graph using a Kernel-aware constructor
 var graph = new GraphExecutor(kernel, logger: null);
 
-// Create nodes that simulate different types of decision points
+// Create nodes that simulate different types of decision points using Kernel functions
 var startNode = new FunctionGraphNode(
-    CreateAnalysisFunction(kernel, "Analyze the input and determine the best processing approach"),
+    kernel.CreateFunctionFromMethod((string input) => $"Analyzed: {input}", functionName: "Analyze", description: "Analyze the input"),
     nodeId: "start",
-    description: "Analyzes input and determines processing path");
+    description: "Analyzes input and determines processing path").StoreResultAs("analysis");
 
 var semanticNode = new FunctionGraphNode(
-    CreateProcessingFunction(kernel, "Apply semantic processing and understanding"),
+    kernel.CreateFunctionFromMethod((string input) => $"Semantic processed: {input}", functionName: "SemanticProcess", description: "Semantic processing"),
     nodeId: "semantic",
-    description: "Processes content using semantic understanding and natural language analysis");
+    description: "Processes content using semantic understanding and natural language analysis").StoreResultAs("semantic_out");
 
 var statisticalNode = new FunctionGraphNode(
-    CreateProcessingFunction(kernel, "Apply statistical processing and analysis"),
+    kernel.CreateFunctionFromMethod((string input) => $"Stat result: {input}", functionName: "StatProcess", description: "Statistical processing"),
     nodeId: "statistical",
-    description: "Processes content using statistical methods and numerical analysis");
+    description: "Processes content using statistical methods and numerical analysis").StoreResultAs("stat_out");
 
 var hybridNode = new FunctionGraphNode(
-    CreateProcessingFunction(kernel, "Apply hybrid semantic and statistical processing"),
+    kernel.CreateFunctionFromMethod((string input) => $"Hybrid processed: {input}", functionName: "HybridProcess", description: "Hybrid processing"),
     nodeId: "hybrid",
-    description: "Combines semantic and statistical approaches for comprehensive analysis");
+    description: "Combines semantic and statistical approaches for comprehensive analysis").StoreResultAs("hybrid_out");
 
 var errorHandlerNode = new FunctionGraphNode(
-    CreateErrorHandlerFunction(kernel),
+    kernel.CreateFunctionFromMethod(() => "Handled error", functionName: "HandleError", description: "Error handler"),
     nodeId: "error",
-    description: "Handles errors and provides fallback processing");
+    description: "Handles errors and provides fallback processing").StoreResultAs("error_out");
 
 var summaryNode = new FunctionGraphNode(
-    CreateSummaryFunction(kernel),
+    kernel.CreateFunctionFromMethod((string input) => $"Summary: {input}", functionName: "Summary", description: "Generates final summary and results"),
     nodeId: "summary",
-    description: "Generates final summary and results");
+    description: "Generates final summary and results").StoreResultAs("summary");
 
 // Add nodes to graph
 graph.AddNode(startNode);
@@ -93,11 +94,11 @@ graph.AddNode(errorHandlerNode);
 graph.AddNode(summaryNode);
 graph.SetStartNode(startNode.NodeId);
 
-// Create edges that will benefit from advanced routing
-graph.ConnectWhen(startNode.NodeId, semanticNode.NodeId, state => ContainsTextContent(new GraphState(state)));
-graph.ConnectWhen(startNode.NodeId, statisticalNode.NodeId, state => ContainsNumericalContent(new GraphState(state)));
-graph.ConnectWhen(startNode.NodeId, hybridNode.NodeId, state => ContainsComplexContent(new GraphState(state)));
-graph.ConnectWhen(startNode.NodeId, errorHandlerNode.NodeId, state => HasErrors(new GraphState(state)));
+// Create conditional edges. Note: ConnectWhen expects a predicate over KernelArguments.
+graph.ConnectWhen(startNode.NodeId, semanticNode.NodeId, ka => ka.ContainsKey("input") && ka["input"]?.ToString()?.Contains("semantic", StringComparison.OrdinalIgnoreCase) == true);
+graph.ConnectWhen(startNode.NodeId, statisticalNode.NodeId, ka => ka.ContainsKey("input") && ka["input"]?.ToString()?.Contains("stat", StringComparison.OrdinalIgnoreCase) == true);
+graph.ConnectWhen(startNode.NodeId, hybridNode.NodeId, ka => ka.ContainsKey("input") && ka["input"]?.ToString()?.Contains("hybrid", StringComparison.OrdinalIgnoreCase) == true);
+graph.ConnectWhen(startNode.NodeId, errorHandlerNode.NodeId, ka => ka.ContainsKey("error") && ka["error"]?.ToString() == "true");
 
 // All processing nodes can go to summary
 graph.Connect(semanticNode.NodeId, summaryNode.NodeId);
@@ -201,7 +202,9 @@ for (int i = 0; i < 10; i++)
     var feedback = new RoutingFeedback
     {
         ExecutionId = result.ExecutionId,
-        RouteSelected = result.RouteTaken,
+        // The FunctionResult does not expose routing metadata directly. Use the function output
+        // or a dedicated graph state key to capture route information in a real integration.
+        RouteSelected = result.GetValue<object>()?.ToString() ?? string.Empty,
         Success = Random.Shared.Next(100) < 85, // 85% success rate
         Performance = TimeSpan.FromMilliseconds(Random.Shared.Next(100, 500))
     };
@@ -236,9 +239,9 @@ foreach (var context in contexts)
     logger.LogInformation("Executing with context: {Context}", context);
     var result = await graph.ExecuteAsync(kernel, args);
     
-    // Show how context influenced routing
-    logger.LogInformation("Route taken: {Route} based on context {Context}", 
-        result.RouteTaken, context);
+    // Show how context influenced routing (FunctionResult doesn't expose a route field)
+    logger.LogInformation("Route taken (inferred): {Route} based on context {Context}",
+        result.GetValue<object>()?.ToString() ?? string.Empty, context);
 }
 ```
 
@@ -265,7 +268,8 @@ for (int i = 0; i < 20; i++)
     var feedback = new RoutingFeedback
     {
         ExecutionId = result.ExecutionId,
-        RouteSelected = result.RouteTaken,
+        // Use the function output as a fallback for route identification in the docs example
+        RouteSelected = result.GetValue<object>()?.ToString() ?? string.Empty,
         Success = Random.Shared.Next(100) < 90, // 90% success rate
         Performance = TimeSpan.FromMilliseconds(Random.Shared.Next(50, 300)),
         UserSatisfaction = Random.Shared.Next(1, 6) // 1-5 scale
