@@ -46,6 +46,7 @@ class Program
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
                 ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
                 ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),
+                ["execution-context"] = async () => await ExecutionContextExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 

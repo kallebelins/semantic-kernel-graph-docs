@@ -385,67 +385,112 @@ public sealed class GraphResourceOptions
 
 ## Usage Examples
 
-### Basic Execution Context
+Below are compact, runnable C# snippets that match the implementation in the examples
+folder. Each snippet is commented to be accessible to readers at any level.
+
+### Basic Execution Context (runnable)
 
 ```csharp
-// Create execution context
-var graphState = arguments.GetOrCreateGraphState();
-var context = new GraphExecutionContext(kernel, graphState, cancellationToken);
+// Minimal runnable example that creates a kernel with graph support,
+// builds a tiny graph and consumes streaming execution events.
+using Microsoft.SemanticKernel;
+using SemanticKernel.Graph.Extensions;
+using SemanticKernel.Graph.Nodes;
+using SemanticKernel.Graph.Streaming;
 
-// Monitor execution progress
-Console.WriteLine($"Execution {context.ExecutionId} started at {context.StartTime}");
-Console.WriteLine($"Current status: {context.Status}");
-Console.WriteLine($"Nodes executed: {context.NodesExecuted}");
+// Build kernel and enable graph features
+var kernel = Kernel.CreateBuilder()
+    .AddGraphSupport()
+    .Build();
 
-// Check execution limits
-if (context.ExecutionOptions.MaxExecutionSteps > 0)
+// Create a streaming executor that emits events during execution
+var executor = new StreamingGraphExecutor("ExecutionContextDemo", "Demo of execution context");
+
+// Create three simple nodes: start -> work -> end
+var startNode = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod(() => "start", "start_fn", "Start node"),
+    "start", "Start Node");
+
+var workNode = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+    {
+        // Demonstrate storing a property in the execution arguments
+        args["processedAt"] = DateTimeOffset.UtcNow;
+        return "work-done";
+    }, "work_fn", "Work node"),
+    "work", "Work Node").StoreResultAs("workResult");
+
+var endNode = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod(() => "end", "end_fn", "End node"),
+    "end", "End Node");
+
+// Assemble and configure the graph
+executor.AddNode(startNode);
+executor.AddNode(workNode);
+executor.AddNode(endNode);
+executor.Connect("start", "work");
+executor.Connect("work", "end");
+executor.SetStartNode("start");
+
+// Initial execution arguments/state
+var arguments = new KernelArguments { ["input"] = "sample-input" };
+
+// Consume events produced by the streaming executor in real-time
+await foreach (var evt in executor.ExecuteStreamAsync(kernel, arguments))
 {
-    Console.WriteLine($"Max steps: {context.ExecutionOptions.MaxExecutionSteps}");
+    Console.WriteLine($"Event: {evt.EventType} at {evt.Timestamp:HH:mm:ss.fff}");
 }
-if (context.ExecutionOptions.ExecutionTimeout > TimeSpan.Zero)
+
+// Inspect final state after execution
+Console.WriteLine("\n=== Final State ===");
+foreach (var kvp in arguments)
 {
-    Console.WriteLine($"Timeout: {context.ExecutionOptions.ExecutionTimeout}");
+    Console.WriteLine($"  {kvp.Key}: {kvp.Value}");
 }
 ```
 
 ### Setting Execution Priority
 
 ```csharp
-// Set high priority for critical operations
+// Use KernelArguments helpers to set execution-level and per-node priorities
 arguments.SetExecutionPriority(ExecutionPriority.High);
-
-// Set specific node priorities
 arguments.SetNodePriority("dataProcessing", ExecutionPriority.Critical);
 arguments.SetNodePriority("logging", ExecutionPriority.Low);
 ```
 
-### Monitoring Execution Events
+### Monitoring Execution Events (pattern)
 
 ```csharp
-// Subscribe to execution events
-eventStream.EventEmitted += (sender, @event) =>
+// The streaming executor yields strongly-typed event instances.
+// This pattern shows how to react to important lifecycle events.
+await foreach (var evt in eventStream)
 {
-    switch (@event)
+    switch (evt)
     {
-        case NodeExecutionStartedEvent started:
-            Console.WriteLine($"Node {started.Node.Name} started executing");
+        case GraphExecutionStartedEvent started:
+            Console.WriteLine($"Execution started: {started.ExecutionId}");
             break;
-            
+
+        case NodeExecutionStartedEvent nodeStarted:
+            Console.WriteLine($"Node started: {nodeStarted.Node.Name}");
+            break;
+
         case NodeExecutionCompletedEvent completed:
-            Console.WriteLine($"Node {completed.Node.Name} completed in {completed.ExecutionDuration}");
+            Console.WriteLine($"Node completed: {completed.Node.Name} in {completed.ExecutionDuration.TotalMilliseconds:F0}ms");
             break;
-            
+
         case NodeExecutionFailedEvent failed:
-            Console.WriteLine($"Node {failed.Node.Name} failed: {failed.Exception.Message}");
+            Console.WriteLine($"Node failed: {failed.Node.Name} - {failed.Exception.Message}");
             break;
     }
-};
+}
 ```
 
 ### Resource-Aware Execution
 
 ```csharp
-// Configure resource governance
+// Configure resource governance options for the executor to honor
+// CPU/memory quotas and prioritization.
 var resourceOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
@@ -454,9 +499,21 @@ var resourceOptions = new GraphResourceOptions
     DefaultPriority = ExecutionPriority.Normal
 };
 
-// The executor will automatically manage resource allocation
-// based on node costs and priorities
+// Executors that integrate with a resource governor will use these
+// options to acquire/release permits automatically per node execution.
 ```
+
+### Runnable example source
+
+The documentation snippets above are exercised by a fully runnable example included in the `examples` folder. Use the example to reproduce the behavior shown here locally.
+
+**Run the example**:
+
+```bash
+dotnet run --project semantic-kernel-graph-docs/examples/Examples.csproj -- execution-context
+```
+
+**Source file**: `semantic-kernel-graph-docs/examples/ExecutionContextExample.cs` (runnable and tested)
 
 ## See Also
 
