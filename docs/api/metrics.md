@@ -50,23 +50,29 @@ Completes node execution tracking and records metrics.
 #### GetNodeMetrics
 
 ```csharp
-public NodeExecutionMetrics? GetNodeMetrics(string nodeId)
+// The metrics collector exposes a NodeMetrics dictionary. Example usage:
+if (metrics.NodeMetrics.TryGetValue(nodeId, out var nodeMetrics))
+{
+    // nodeMetrics is a NodeExecutionMetrics instance
+}
+else
+{
+    // Not found
+}
 ```
 
-Retrieves metrics for a specific node.
-
-**Parameters:**
-* `nodeId`: Node identifier
-
-**Returns:** Node metrics or null if not found
+Retrieves metrics for a specific node from the `NodeMetrics` property.
 
 #### GetPerformanceSummary
 
 ```csharp
-public GraphPerformanceSummary GetPerformanceSummary()
+public GraphPerformanceSummary GetPerformanceSummary(TimeSpan timeWindow)
 ```
 
-Generates a comprehensive performance summary with aggregated statistics.
+Generates a comprehensive performance summary for the specified `timeWindow` with aggregated statistics.
+
+**Parameters:**
+- `timeWindow`: Time window to analyze (e.g. `TimeSpan.FromMinutes(5)`) 
 
 **Returns:** Performance summary with key metrics
 
@@ -123,15 +129,17 @@ Records a single execution with its outcome and timing.
 #### GetPercentiles
 
 ```csharp
-public Dictionary<string, TimeSpan> GetPercentiles(params int[] percentiles)
+// NodeExecutionMetrics provides a GetPercentile method for a single percentile.
+// Example: get P95 execution time for a node
+var p95 = nodeMetrics.GetPercentile(95);
 ```
 
-Calculates execution time percentiles (P50, P95, P99, etc.).
+Calculates a single execution time percentile (e.g. P50, P95, P99) for the node.
 
 **Parameters:**
-* `percentiles`: Array of percentile values (0-100)
+- `percentile`: Percentile value (0-100)
 
-**Returns:** Dictionary mapping percentile to execution time
+**Returns:** Execution time at the requested percentile as a TimeSpan
 
 ## OpenTelemetry Meter Integration
 
@@ -227,6 +235,7 @@ var options = new StreamingExecutionOptions
     MetricsMeterName = "MyApp.GraphExecution"
 };
 
+// executor may be an IStreamingGraphExecutor (e.g. StreamingGraphExecutor)
 var stream = executor.ExecuteStreamAsync(kernel, args, options);
 ```
 
@@ -306,8 +315,8 @@ var metrics = new GraphPerformanceMetrics(metricsOptions);
 ### Execution Path Analysis
 
 ```csharp
-var pathMetrics = metrics.GetPathMetrics("path_signature");
-if (pathMetrics != null)
+// GraphPerformanceMetrics exposes a PathMetrics dictionary. Example lookup:
+if (metrics.PathMetrics.TryGetValue("path_signature", out var pathMetrics))
 {
     var avgTime = pathMetrics.AverageExecutionTime;
     var successRate = pathMetrics.SuccessRate;
@@ -327,8 +336,8 @@ if (pathMetrics != null)
 
 ```csharp
 var exporter = new GraphMetricsExporter();
-var jsonMetrics = exporter.ExportToJson(metrics);
-var prometheusMetrics = exporter.ExportToPrometheus(metrics);
+var jsonMetrics = exporter.ExportMetrics(metrics, MetricsExportFormat.Json, TimeSpan.FromHours(1));
+var prometheusMetrics = exporter.ExportMetrics(metrics, MetricsExportFormat.Prometheus, TimeSpan.FromHours(1));
 ```
 
 ### Dashboard Integration
