@@ -50,6 +50,7 @@ class Program
                 ["executors-and-middlewares"] = async () => await ExecutorsAndMiddlewaresExample.RunAsync(),
                 ["extensions-and-options"] = async () => await ExtensionsAndOptionsExample.RunAsync(),
                 ["graph-executor"] = async () => await GraphExecutorExample.RunAsync(),
+                ["graph-options"] = async () => await GraphOptionsExample.RunAsync(),
                 ["all"] = async () => await RunAllAvailableExamples()
             };
 

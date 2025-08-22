@@ -66,25 +66,32 @@ public sealed class GraphOptions
 ### Usage Example
 
 ```csharp
-var options = new GraphOptions
-{
-    EnableLogging = true,
-    EnableMetrics = true,
-    MaxExecutionSteps = 500,
-    ValidateGraphIntegrity = true,
-    ExecutionTimeout = TimeSpan.FromMinutes(5),
-    EnablePlanCompilation = true
-};
+// Prefer registering GraphOptions through the kernel builder so the DI container
+// exposes options to the execution context and other services.
+var kernel = Kernel.CreateBuilder()
+    .AddGraphSupport(opts =>
+    {
+        opts.EnableLogging = true;
+        opts.EnableMetrics = true;
+        opts.MaxExecutionSteps = 500;
+        opts.ValidateGraphIntegrity = true;
+        opts.ExecutionTimeout = TimeSpan.FromMinutes(5);
+        opts.EnablePlanCompilation = true;
 
-// Configure logging options
-options.Logging.MinimumLevel = LogLevel.Debug;
-options.Logging.EnableStructuredLogging = true;
-options.Logging.EnableCorrelationIds = true;
+        // Configure logging sub-options
+        opts.Logging.MinimumLevel = LogLevel.Debug;
+        opts.Logging.EnableStructuredLogging = true;
+        opts.Logging.EnableCorrelationIds = true;
 
-// Configure interop options
-options.Interop.EnableImporters = true;
-options.Interop.EnableExporters = true;
-options.Interop.EnablePythonBridge = false;
+        // Configure interoperability
+        opts.Interop.EnableImporters = true;
+        opts.Interop.EnableExporters = true;
+        opts.Interop.EnablePythonBridge = false;
+    })
+    .Build();
+
+// When an execution starts, the runtime takes a snapshot of the live GraphOptions
+// via GraphExecutionOptions.From(graphOptions) so per-execution immutability is preserved.
 ```
 
 ## Module Activation Options
@@ -882,37 +889,43 @@ All configuration options are immutable once execution begins. This ensures:
 ### Configuration Per Execution
 
 ```csharp
-// Each execution gets its own configuration snapshot
-var executor1 = new GraphExecutor("graph1", new GraphOptions 
-{ 
-    MaxExecutionSteps = 100,
-    EnableLogging = true 
-});
+// Prefer creating executors from a kernel so they inherit the registered GraphOptions
+// from the host's DI container. The executor will capture a per-execution snapshot
+// internally so options are immutable during a run.
+var kernel = Kernel.CreateBuilder()
+    .AddGraphSupport(opts => { opts.MaxExecutionSteps = 100; opts.EnableLogging = true; })
+    .Build();
 
-var executor2 = new GraphExecutor("graph2", new GraphOptions 
-{ 
-    MaxExecutionSteps = 1000,
-    EnableLogging = false 
-});
+var executor1 = new GraphExecutor(kernel); // picks up GraphOptions from kernel services
 
-// Executions run independently with their configurations
+// Create a second kernel with different settings to demonstrate independent snapshots
+var kernel2 = Kernel.CreateBuilder()
+    .AddGraphSupport(opts => { opts.MaxExecutionSteps = 1000; opts.EnableLogging = false; })
+    .Build();
+
+var executor2 = new GraphExecutor(kernel2);
+
+// Executions run independently with their captured configurations
 var result1 = await executor1.ExecuteAsync(kernel, arguments1);
-var result2 = await executor2.ExecuteAsync(kernel, arguments2);
+var result2 = await executor2.ExecuteAsync(kernel2, arguments2);
 ```
 
 ### Runtime Configuration Validation
 
 ```csharp
-// Configuration is validated at execution start
-var options = new GraphOptions
-{
-    MaxExecutionSteps = -1, // Invalid
-    ExecutionTimeout = TimeSpan.Zero // Invalid
-};
+// Configuration is validated at execution start. When using kernel-based executors,
+// ensure options are registered via AddGraphSupport so the runtime can snapshot and validate.
+var kernel = Kernel.CreateBuilder()
+    .AddGraphSupport(opts =>
+    {
+        opts.MaxExecutionSteps = -1; // Invalid
+        opts.ExecutionTimeout = TimeSpan.Zero; // Invalid
+    })
+    .Build();
 
 try
 {
-    var executor = new GraphExecutor("graph", options);
+    var executor = new GraphExecutor(kernel);
     var result = await executor.ExecuteAsync(kernel, arguments);
 }
 catch (ArgumentException ex)
@@ -938,15 +951,28 @@ var options = new GraphOptions()
 ### Environment-Based Configuration
 
 ```csharp
-// Load configuration from environment variables
-var options = new GraphOptions();
-options.LoadFromEnvironment();
+// If your hosting environment exposes configuration (IConfiguration), prefer binding
+// settings into GraphOptions and then register via AddGraphSupport. A lightweight
+// environment-only override can also be implemented by reading env vars and applying
+// them before registering options in DI.
+var builder = Kernel.CreateBuilder();
 
-// Environment variables:
-// SKG_ENABLE_LOGGING=true
-// SKG_MAX_EXECUTION_STEPS=1000
-// SKG_EXECUTION_TIMEOUT=00:10:00
-// SKG_ENABLE_METRICS=true
+// Example: apply environment overrides manually
+var envOptions = new GraphOptions();
+var envMax = Environment.GetEnvironmentVariable("SKG_MAX_EXECUTION_STEPS");
+if (int.TryParse(envMax, out var maxSteps)) envOptions.MaxExecutionSteps = maxSteps;
+if (bool.TryParse(Environment.GetEnvironmentVariable("SKG_ENABLE_LOGGING"), out var logEnabled)) envOptions.EnableLogging = logEnabled;
+if (bool.TryParse(Environment.GetEnvironmentVariable("SKG_ENABLE_METRICS"), out var m)) envOptions.EnableMetrics = m;
+// Register resolved options with the kernel builder
+builder.AddGraphSupport(opts =>
+{
+    // Copy resolved values into the options instance used by the host
+    opts.EnableLogging = envOptions.EnableLogging;
+    opts.EnableMetrics = envOptions.EnableMetrics;
+    opts.MaxExecutionSteps = envOptions.MaxExecutionSteps;
+});
+
+var kernel = builder.Build();
 ```
 
 ### Configuration Inheritance
