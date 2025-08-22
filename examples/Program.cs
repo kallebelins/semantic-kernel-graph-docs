@@ -70,10 +70,8 @@ class Program
                 ["graph-concepts"] = async () => await GraphConceptsExample.RunAsync(),
                 ["execution"] = async () => await ExecutionConceptsExample.RunAsync(),
                 ["checkpointing-concepts"] = async () => await CheckpointingConceptsExample.RunAsync(),
-                ["advanced-patterns"] = async () => await AdvancedPatternsExample.RunAsync()
-                ,
-                ["assert-and-suggest"] = async () => await AssertAndSuggestExample.RunAsync()
-                ,
+                ["advanced-patterns"] = async () => await AdvancedPatternsExample.RunAsync(),
+                ["assert-and-suggest"] = async () => await AssertAndSuggestExample.RunAsync(),
                 ["chain-of-thought"] = async () => await ChainOfThoughtExample.RunAsync()
             };
 
