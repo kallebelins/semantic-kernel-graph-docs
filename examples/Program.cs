@@ -76,7 +76,8 @@ class Program
                 ["assert-and-suggest"] = async () => await AssertAndSuggestExample.RunAsync(),
                 ["chain-of-thought"] = async () => await ChainOfThoughtExample.RunAsync(),
                 ["chatbot"] = async () => await ChatbotExample.RunAsync(),
-                ["execution-guide"] = async () => await ExecutionGuideExample.RunAsync()
+                ["execution-guide"] = async () => await ExecutionGuideExample.RunAsync(),
+                ["logging"] = async () => await LoggingExample.RunAllAsync()
             };
 
             // Determine which example to run

@@ -49,7 +49,7 @@ This example demonstrates basic logging setup and configuration.
 
 ```csharp
 // Create kernel with mock configuration
-var kernel = CreateKernel();
+var kernel = Kernel.CreateBuilder().Build();
 
 // Create logging-enabled workflow
 var loggingWorkflow = new GraphExecutor("LoggingWorkflow", "Basic logging configuration", logger);
