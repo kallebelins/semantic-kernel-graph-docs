@@ -50,21 +50,31 @@ This example demonstrates multi-agent coordination and workflow orchestration wi
 The example starts by creating a coordinator with custom configuration options.
 
 ```csharp
-// Create multi-agent coordinator with custom options
+// Create coordinator options used to configure multi-agent behavior.
+// Comments explain each setting so readers can adapt them safely.
 var options = new MultiAgentOptions
 {
+    // Maximum number of agents that may run concurrently.
     MaxConcurrentAgents = 5,
+
+    // Overall timeout for coordination operations.
     CoordinationTimeout = TimeSpan.FromMinutes(10),
+
+    // Configuration for shared state handling between agents.
     SharedStateOptions = new SharedStateOptions
     {
         ConflictResolutionStrategy = ConflictResolutionStrategy.Merge,
         AllowOverwrite = true
     },
+
+    // How work is distributed among agents (role-based, round-robin, etc.).
     WorkDistributionOptions = new WorkDistributionOptions
     {
         DistributionStrategy = WorkDistributionStrategy.RoleBased,
         EnablePrioritization = true
     },
+
+    // How results from multiple agents are aggregated.
     ResultAggregationOptions = new ResultAggregationOptions
     {
         DefaultAggregationStrategy = AggregationStrategy.Consensus,
@@ -72,6 +82,9 @@ var options = new MultiAgentOptions
     }
 };
 
+// Create the coordinator instance using the options above. The loggerFactory
+// symbol is assumed to be available in the surrounding example application
+// (it's shown elsewhere in the docs). Use a real ILoggerFactory in production.
 using var coordinator = new MultiAgentCoordinator(options,
     new SemanticKernelGraphLogger(loggerFactory.CreateLogger<SemanticKernelGraphLogger>(), new GraphOptions()));
 ```
@@ -81,12 +94,14 @@ using var coordinator = new MultiAgentCoordinator(options,
 #### Creating Specialized Agents
 
 ```csharp
-// Create specialized agents
+// Create and register specialized agents used by this example. Each helper
+// method returns an AgentInstance already registered with the coordinator.
 var analysisAgent = await CreateAnalysisAgentAsync(coordinator, kernel, loggerFactory);
 var processingAgent = await CreateProcessingAgentAsync(coordinator, kernel, loggerFactory);
 var reportingAgent = await CreateReportingAgentAsync(coordinator, kernel, loggerFactory);
 
-// Prepare input data
+// Prepare kernel arguments that will be passed to the workflow. Use explicit
+// keys so downstream functions can retrieve values safely.
 var arguments = new KernelArguments
 {
     ["input_text"] = "The quick brown fox jumps over the lazy dog. This is a sample text for analysis.",
@@ -94,7 +109,8 @@ var arguments = new KernelArguments
     ["output_format"] = "detailed_report"
 };
 
-// Execute simple workflow with automatic distribution
+// Execute a small workflow with automatic distribution and merge aggregation.
+// The coordinator will dispatch tasks to the registered agents as required.
 var result = await coordinator.ExecuteSimpleWorkflowAsync(
     kernel,
     arguments,
@@ -106,23 +122,31 @@ var result = await coordinator.ExecuteSimpleWorkflowAsync(
 #### Agent Creation Example
 
 ```csharp
-private static async Task<AgentInstance> CreateAnalysisAgentAsync(MultiAgentCoordinator coordinator,
-    Kernel kernel, ILoggerFactory loggerFactory)
+private static async Task<AgentInstance> CreateAnalysisAgentAsync(
+    MultiAgentCoordinator coordinator,
+    Kernel kernel,
+    ILoggerFactory loggerFactory)
 {
-    // Create graph executor for analysis tasks
-    var executor = new GraphExecutor("Analysis Graph", "Specialized in text analysis",
+    // Create a GraphExecutor configured for analysis tasks. The GraphExecutor
+    // is a lightweight example executor used in examples; replace with a real
+    // executor implementation in production code.
+    var executor = new GraphExecutor(
+        "Analysis Graph",
+        "Specialized in text analysis",
         new SemanticKernelGraphLogger(loggerFactory.CreateLogger<SemanticKernelGraphLogger>(), new GraphOptions()));
 
-    // Add analysis nodes
+    // Create a single analysis node that wraps a Kernel function. We set
+    // storage and metadata to guide downstream agents and relax strict prompt
+    // validation for examples.
     var analysisNode = new FunctionGraphNode(CreateAnalysisFunction(kernel), "analyze-text", "Text Analysis");
-    // Ensure downstream agents receive the analysis output and relax validation for prompts
     analysisNode.StoreResultAs("input");
     analysisNode.SetMetadata("StrictValidation", false);
 
     executor.AddNode(analysisNode);
     executor.SetStartNode(analysisNode.NodeId);
 
-    // Register agent with coordinator
+    // Register the agent with the coordinator. Capabilities help the
+    // coordinator select suitable agents for tasks.
     var agent = await coordinator.RegisterAgentAsync(
         agentId: "analysis-agent",
         name: "Text Analysis Agent",
@@ -145,7 +169,9 @@ private static async Task<AgentInstance> CreateAnalysisAgentAsync(MultiAgentCoor
 The advanced workflow uses a builder pattern with explicit task definitions.
 
 ```csharp
-// Create complex workflow using builder pattern
+// Build a complex workflow using the coordinator's fluent builder. The
+// builder allows declaring required agents, tasks, parameters, and
+// aggregation strategies in a readable way.
 var workflow = coordinator.CreateWorkflow("advanced-analysis", "Advanced Text Analysis Workflow")
     .WithDescription("Comprehensive text analysis using multiple specialized agents")
     .RequireAgents("analysis-agent", "processing-agent", "reporting-agent")
@@ -172,6 +198,8 @@ var workflow = coordinator.CreateWorkflow("advanced-analysis", "Advanced Text An
     .WithMetadata("complexity", "high")
     .Build();
 
+// Prepare arguments for the workflow. Keep keys explicit and documented so
+// tasks can read them without ambiguity.
 var arguments = new KernelArguments
 {
     ["document_content"] = GetSampleDocument(),
@@ -179,6 +207,7 @@ var arguments = new KernelArguments
     ["output_preferences"] = "json_structured"
 };
 
+// Execute the workflow and await the aggregated result.
 var result = await coordinator.ExecuteWorkflowAsync(workflow, kernel, arguments);
 ```
 
@@ -187,26 +216,26 @@ var result = await coordinator.ExecuteWorkflowAsync(workflow, kernel, arguments)
 The health monitoring scenario tracks agent status and system performance.
 
 ```csharp
-// Get all registered agents
+// Retrieve all registered agents for monitoring and diagnostics.
 var agents = coordinator.GetAllAgents();
 logger.LogInformation($"Monitoring {agents.Count} agents...");
 
-// Perform health checks
+// Iterate agents and perform synchronous and asynchronous health checks.
 foreach (var agent in agents)
 {
+    // Get cached or computed health status for quick inspection.
     var healthStatus = agent.GetHealthStatus(coordinator);
     logger.LogInformation($"Agent {agent.AgentId}: {healthStatus?.Status ?? HealthStatus.Unknown}");
 
-    // Perform manual health check
+    // Perform an explicit health check which may perform network or runtime checks.
     var healthCheck = await agent.PerformHealthCheckAsync(coordinator);
-    logger.LogInformation($"  Health Check: {(healthCheck.Success ? "✅ Passed" : "❌ Failed")} " +
-                        $"(Response: {healthCheck.ResponseTime.TotalMilliseconds:F2}ms)");
+    logger.LogInformation($"  Health Check: {(healthCheck.Success ? "Passed" : "Failed")} " +
+                        $"(Response: {healthCheck.ResponseTime.TotalMilliseconds:F2} ms)");
 }
 
-// Display system metrics
+// Log aggregated system health metrics from the coordinator's monitor.
 var healthMonitor = coordinator.HealthMonitor;
-logger.LogInformation($"System Health: {healthMonitor.HealthyAgentCount}/{healthMonitor.MonitoredAgentCount} agents healthy " +
-                    $"({healthMonitor.SystemHealthRatio:P})");
+logger.LogInformation($"System Health: {healthMonitor.HealthyAgentCount}/{healthMonitor.MonitoredAgentCount} agents healthy ({healthMonitor.SystemHealthRatio:P})");
 ```
 
 ### 5. Agent Function Creation
@@ -214,15 +243,20 @@ logger.LogInformation($"System Health: {healthMonitor.HealthyAgentCount}/{health
 The example creates specialized functions for different agent types.
 
 ```csharp
+// Create a lightweight KernelFunction used in examples to perform analysis.
+// The function reads arguments, performs a small deterministic computation,
+// stores results back into the arguments, and returns a human-friendly message.
 private static KernelFunction CreateAnalysisFunction(Kernel kernel)
 {
     return KernelFunctionFactory.CreateFromMethod(
         (KernelArguments args) =>
         {
+            // Safely read the input text and analysis type from arguments.
             var input = args.TryGetValue("input_text", out var i) ? i?.ToString() ?? string.Empty : string.Empty;
             var analysisType = args.TryGetValue("analysis_type", out var a) ? a?.ToString() ?? "basic" : "basic";
 
-            // Simulate analysis processing
+            // Simulate a simple analysis result. In real scenarios replace with
+            // calls to LLMs or other processing components.
             var analysisResult = new
             {
                 TextLength = input.Length,
@@ -232,6 +266,7 @@ private static KernelFunction CreateAnalysisFunction(Kernel kernel)
                 Confidence = 0.95
             };
 
+            // Store the result so downstream tasks can use it.
             args["analysis_result"] = analysisResult;
             return $"Analysis completed: {analysisResult.WordCount} words, {analysisResult.Insights.Length} insights";
         },
@@ -240,14 +275,16 @@ private static KernelFunction CreateAnalysisFunction(Kernel kernel)
     );
 }
 
+// Create a processing function that consumes the analysis result and prepares
+// a richer processed result for reporting or aggregation.
 private static KernelFunction CreateProcessingFunction(Kernel kernel)
 {
     return KernelFunctionFactory.CreateFromMethod(
         (KernelArguments args) =>
         {
             var analysisResult = args.TryGetValue("analysis_result", out var ar) ? ar : null;
-            
-            // Simulate processing
+
+            // Simulate enhancement of insights and metadata tagging.
             var processedResult = new
             {
                 ProcessedAt = DateTime.UtcNow,
@@ -256,6 +293,7 @@ private static KernelFunction CreateProcessingFunction(Kernel kernel)
                 Metadata = new { Source = "analysis_agent", Version = "1.0" }
             };
 
+            // Store processed result for later tasks.
             args["processed_result"] = processedResult;
             return $"Processing completed: {processedResult.EnhancedInsights.Length} enhanced insights";
         },
@@ -270,14 +308,17 @@ private static KernelFunction CreateProcessingFunction(Kernel kernel)
 The example includes comprehensive result logging for workflow execution.
 
 ```csharp
+// Helper to log a WorkflowExecutionResult in a concise, human-friendly way.
+// This function shows success, timing, agents involved, aggregated result and
+// a sample of errors if present.
 private static void LogWorkflowResult(WorkflowExecutionResult result, ILogger logger)
 {
-    logger.LogInformation("\n📊 Workflow Execution Results:");
-    logger.LogInformation($"  ✅ Success: {result.Success}");
-    logger.LogInformation($"  🆔 Execution ID: {result.ExecutionId}");
-    logger.LogInformation($"  ⏱️ Duration: {result.Duration.TotalMilliseconds:F2}ms");
-    logger.LogInformation($"  🤖 Agents Used: {result.AgentsUsed.Count}");
-    
+    logger.LogInformation("\nWorkflow Execution Results:");
+    logger.LogInformation($"  Success: {result.Success}");
+    logger.LogInformation($"  Execution ID: {result.ExecutionId}");
+    logger.LogInformation($"  Duration: {result.Duration.TotalMilliseconds:F2} ms");
+    logger.LogInformation($"  Agents Used: {result.AgentsUsed.Count}");
+
     foreach (var agent in result.AgentsUsed)
     {
         logger.LogInformation($"    - {agent.AgentId}: {agent.Status}");
@@ -285,12 +326,12 @@ private static void LogWorkflowResult(WorkflowExecutionResult result, ILogger lo
 
     if (result.AggregatedResult != null)
     {
-        logger.LogInformation($"  📋 Aggregated Result: {result.AggregatedResult}");
+        logger.LogInformation($"  Aggregated Result: {result.AggregatedResult}");
     }
 
     if (result.Errors.Any())
     {
-        logger.LogInformation($"  ❌ Errors: {result.Errors.Count}");
+        logger.LogInformation($"  Errors (showing up to 3): {result.Errors.Count}");
         foreach (var error in result.Errors.Take(3))
         {
             logger.LogInformation($"    - {error}");
