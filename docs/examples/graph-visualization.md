@@ -45,378 +45,125 @@ This example demonstrates graph visualization and export capabilities with the S
 
 ### 1. Basic Graph Visualization
 
-This example demonstrates basic graph export and visualization capabilities.
+This example demonstrates basic graph export and visualization capabilities. The snippet below is a minimal, self-contained sample that mirrors the tested example in `semantic-kernel-graph-docs/examples/GraphVisualizationExample.cs`.
 
 ```csharp
-// Create kernel with mock configuration
-var kernel = CreateKernel();
+// Create a minimal kernel instance for APIs that require it.
+var kernel = Kernel.CreateBuilder().Build();
 
-// Create visualization-enabled workflow
-var visualizationWorkflow = new GraphExecutor("VisualizationWorkflow", "Basic graph visualization", logger);
+// Create two simple function nodes using a factory helper.
+// These functions are trivial and return static strings for demonstration.
+var fn1 = KernelFunctionFactory.CreateFromMethod(() => "node1-output", "Fn1");
+var fn2 = KernelFunctionFactory.CreateFromMethod(() => "node2-output", "Fn2");
 
-// Configure visualization options
-var visualizationOptions = new GraphVisualizationOptions
-{
-    EnableDOTExport = true,
-    EnableJSONExport = true,
-    EnableMermaidExport = true,
-    EnableRealTimeHighlights = true,
-    EnableExecutionOverlays = true,
-    ExportPath = "./graph-exports"
-};
+var node1 = new FunctionGraphNode(fn1, "node1", "Node 1");
+var node2 = new FunctionGraphNode(fn2, "node2", "Node 2");
 
-visualizationWorkflow.ConfigureVisualization(visualizationOptions);
+// Build visualization data manually for demonstration purposes.
+var nodes = new List<IGraphNode> { node1, node2 };
+var edges = new List<GraphEdgeInfo> { new GraphEdgeInfo("node1", "node2", "to-node2") };
+var visualizationData = new GraphVisualizationData(nodes, edges, currentNode: node2, executionPath: nodes);
 
-// Sample processing nodes
-var inputProcessor = new FunctionGraphNode(
-    "input-processor",
-    "Process input data",
-    async (context) =>
-    {
-        var inputData = context.GetValue<string>("input_data");
-        var processedData = $"Processed: {inputData}";
-        
-        context.SetValue("processed_data", processedData);
-        context.SetValue("processing_step", "input_processed");
-        
-        return processedData;
-    });
+// Create the engine and produce outputs in several formats.
+using var engine = new GraphVisualizationEngine();
 
-var dataTransformer = new FunctionGraphNode(
-    "data-transformer",
-    "Transform processed data",
-    async (context) =>
-    {
-        var processedData = context.GetValue<string>("processed_data");
-        var transformedData = $"Transformed: {processedData.ToUpper()}";
-        
-        context.SetValue("transformed_data", transformedData);
-        context.SetValue("processing_step", "data_transformed");
-        
-        return transformedData;
-    });
+// DOT (Graphviz) output
+var dot = engine.SerializeToDot(visualizationData, new DotSerializationOptions { GraphName = "VizExample" });
+Console.WriteLine("--- DOT Output ---");
+Console.WriteLine(dot);
 
-var outputGenerator = new FunctionGraphNode(
-    "output-generator",
-    "Generate final output",
-    async (context) =>
-    {
-        var transformedData = context.GetValue<string>("transformed_data");
-        var finalOutput = $"Final Output: {transformedData}";
-        
-        context.SetValue("final_output", finalOutput);
-        context.SetValue("processing_step", "output_generated");
-        
-        return finalOutput;
-    });
+// Mermaid output
+var mermaid = engine.GenerateEnhancedMermaidDiagram(visualizationData, new MermaidGenerationOptions { Direction = "TD" });
+Console.WriteLine("--- Mermaid Output ---");
+Console.WriteLine(mermaid);
 
-// Add nodes to workflow
-visualizationWorkflow.AddNode(inputProcessor);
-visualizationWorkflow.AddNode(dataTransformer);
-visualizationWorkflow.AddNode(outputGenerator);
+// JSON output (pretty-printed)
+var json = engine.SerializeToJson(visualizationData, new JsonSerializationOptions { Indented = true });
+Console.WriteLine("--- JSON Output ---");
+Console.WriteLine(json);
 
-// Set start node
-visualizationWorkflow.SetStartNode(inputProcessor.NodeId);
-
-// Export graph in different formats
-Console.WriteLine("📊 Exporting graph in different formats...");
-
-// DOT format export
-var dotExport = await visualizationWorkflow.ExportToDOTAsync();
-Console.WriteLine($"   DOT Export: {dotExport.Length} characters");
-File.WriteAllText("./graph-exports/workflow.dot", dotExport);
-
-// JSON format export
-var jsonExport = await visualizationWorkflow.ExportToJSONAsync();
-Console.WriteLine($"   JSON Export: {jsonExport.Length} characters");
-File.WriteAllText("./graph-exports/workflow.json", jsonExport);
-
-// Mermaid format export
-var mermaidExport = await visualizationWorkflow.ExportToMermaidAsync();
-Console.WriteLine($"   Mermaid Export: {mermaidExport.Length} characters");
-File.WriteAllText("./graph-exports/workflow.mmd", mermaidExport);
-
-// Test visualization workflow
-var testData = new[]
-{
-    "Sample data 1",
-    "Sample data 2",
-    "Sample data 3"
-};
-
-foreach (var data in testData)
-{
-    var arguments = new KernelArguments
-    {
-        ["input_data"] = data
-    };
-
-    Console.WriteLine($"🧪 Testing visualization workflow: {data}");
-    var result = await visualizationWorkflow.ExecuteAsync(kernel, arguments);
-    
-    var processingStep = result.GetValue<string>("processing_step");
-    var finalOutput = result.GetValue<string>("final_output");
-    
-    Console.WriteLine($"   Processing Step: {processingStep}");
-    Console.WriteLine($"   Final Output: {finalOutput}");
-    Console.WriteLine();
-}
+// Note: This snippet is intentionally minimal. For a runnable, fully-commented example,
+// see `semantic-kernel-graph-docs/examples/GraphVisualizationExample.cs` in the repository.
 ```
 
 ### 2. Real-Time Execution Visualization
 
-Demonstrates real-time visualization with execution highlights and overlays.
+This snippet shows a simplified real-time visualization flow using a real-time highlighter. The purpose is to demonstrate the pattern; the runnable, fully-commented implementation is available in the docs examples project.
 
 ```csharp
-// Create real-time visualization workflow
-var realTimeVisualizationWorkflow = new GraphExecutor("RealTimeVisualizationWorkflow", "Real-time execution visualization", logger);
-
-// Configure real-time visualization
-var realTimeVisualizationOptions = new GraphVisualizationOptions
+// Create the real-time highlighter (null used for an optional transport/logger in this snippet).
+var highlightOptions = new GraphRealtimeHighlightOptions
 {
-    EnableRealTimeHighlights = true,
-    EnableExecutionOverlays = true,
-    EnableLiveUpdates = true,
+    EnableImmediateUpdates = false,
     UpdateInterval = TimeSpan.FromMilliseconds(500),
-    EnableExecutionTracking = true,
-    EnableNodeStateHighlighting = true,
-    ExportPath = "./real-time-exports"
+    EnableAnimations = true
 };
 
-realTimeVisualizationWorkflow.ConfigureVisualization(realTimeVisualizationOptions);
+using var highlighter = new GraphRealtimeHighlighter(null, highlightOptions, logger);
 
-// Real-time data processor
-var realTimeProcessor = new FunctionGraphNode(
-    "real-time-processor",
-    "Process data with real-time visualization",
-    async (context) =>
-    {
-        var inputData = context.GetValue<string>("input_data");
-        var iteration = context.GetValue<int>("iteration", 0);
-        
-        // Simulate processing with delays
-        await Task.Delay(Random.Shared.Next(100, 300));
-        
-        var processedData = $"Real-time processed: {inputData} (iteration {iteration + 1})";
-        
-        context.SetValue("processed_data", processedData);
-        context.SetValue("iteration", iteration + 1);
-        context.SetValue("processing_timestamp", DateTime.UtcNow);
-        context.SetValue("node_state", "completed");
-        
-        return processedData;
-    });
+// Start a highlighting session for a fake execution id and pre-built visualization data.
+var executionId = Guid.NewGuid().ToString();
+highlighter.StartHighlighting(executionId, visualizationData, new ExecutionHighlightStyle());
 
-// Real-time visualizer
-var realTimeVisualizer = new FunctionGraphNode(
-    "real-time-visualizer",
-    "Update real-time visualization",
-    async (context) =>
-    {
-        var processedData = context.GetValue<string>("processed_data");
-        var iteration = context.GetValue<int>("iteration");
-        var timestamp = context.GetValue<DateTime>("processing_timestamp");
-        var nodeState = context.GetValue<string>("node_state");
-        
-        // Update real-time visualization
-        var visualizationUpdate = new Dictionary<string, object>
-        {
-            ["current_iteration"] = iteration,
-            ["last_processed_data"] = processedData,
-            ["last_timestamp"] = timestamp,
-            ["node_states"] = new Dictionary<string, string>
-            {
-                ["real-time-processor"] = nodeState,
-                ["real-time-visualizer"] = "active"
-            },
-            ["execution_progress"] = (double)iteration / 10.0, // Assuming 10 iterations
-            ["visualization_updated"] = true
-        };
-        
-        context.SetValue("visualization_update", visualizationUpdate);
-        
-        // Export current state
-        var currentDOT = await realTimeVisualizationWorkflow.ExportToDOTAsync();
-        var currentJSON = await realTimeVisualizationWorkflow.ExportToJSONAsync();
-        
-        File.WriteAllText($"./real-time-exports/iteration_{iteration}.dot", currentDOT);
-        File.WriteAllText($"./real-time-exports/iteration_{iteration}.json", currentJSON);
-        
-        return $"Visualization updated for iteration {iteration}";
-    });
+// Subscribe to a couple of events to observe progress (handlers should be lightweight).
+highlighter.NodeExecutionStarted += (_, e) => Console.WriteLine($"Node started: {e.Node.NodeId}");
+highlighter.NodeExecutionCompleted += (_, e) => Console.WriteLine($"Node completed: {e.Node.NodeId}");
 
-// Add nodes to real-time workflow
-realTimeVisualizationWorkflow.AddNode(realTimeProcessor);
-realTimeVisualizationWorkflow.AddNode(realTimeVisualizer);
-
-// Set start node
-realTimeVisualizationWorkflow.SetStartNode(realTimeProcessor.NodeId);
-
-// Test real-time visualization
-Console.WriteLine("🎬 Starting real-time visualization...");
-Console.WriteLine("   Visualization will update every 500ms");
-Console.WriteLine("   Exports will be saved to ./real-time-exports/");
-
-var realTimeArguments = new KernelArguments
+// Simulate progress: in a real system you would call UpdateCurrentNode/AddNodeCompletionHighlight.
+for (var i = 0; i < 3; i++)
 {
-    ["input_data"] = "Real-time test data",
-    ["iteration"] = 0
-};
-
-// Run real-time visualization for several iterations
-for (int i = 0; i < 5; i++)
-{
-    var result = await realTimeVisualizationWorkflow.ExecuteAsync(kernel, realTimeArguments);
-    
-    var visualizationUpdate = result.GetValue<Dictionary<string, object>>("visualization_update");
-    var iteration = result.GetValue<int>("iteration");
-    
-    if (visualizationUpdate != null)
-    {
-        Console.WriteLine($"   Iteration {iteration}: " +
-                         $"Data: {visualizationUpdate["last_processed_data"]}, " +
-                         $"Progress: {visualizationUpdate["execution_progress"]:P0}");
-    }
-    
-    // Update arguments for next iteration
-    realTimeArguments["iteration"] = iteration;
-    
-    await Task.Delay(1000); // Wait 1 second between iterations
+    // Simulate some work and updates
+    await Task.Delay(300);
+    Console.WriteLine($"Simulated iteration {i + 1}");
 }
 
-Console.WriteLine("✅ Real-time visualization completed");
+// Produce highlighted exports
+var highlightedMermaid = highlighter.GenerateHighlightedVisualization(executionId, HighlightVisualizationFormat.Mermaid);
+var highlightedJson = highlighter.GenerateHighlightedVisualization(executionId, HighlightVisualizationFormat.Json);
+
+// Persist or print the results
+Console.WriteLine("--- Highlighted Mermaid ---");
+Console.WriteLine(highlightedMermaid);
+Console.WriteLine("--- Highlighted JSON ---");
+Console.WriteLine(highlightedJson);
+
+// Stop the highlighting session when done
+highlighter.StopHighlighting(executionId);
 ```
 
 ### 3. Interactive Graph Inspection
 
-Shows how to implement interactive graph inspection and debugging capabilities.
+This snippet demonstrates a simplified interactive inspection pattern. In practice, the inspection API provides richer capabilities; see the docs example for a tested implementation.
 
 ```csharp
-// Create interactive inspection workflow
-var interactiveInspectionWorkflow = new GraphExecutor("InteractiveInspectionWorkflow", "Interactive graph inspection", logger);
-
-// Configure interactive inspection
-var interactiveInspectionOptions = new GraphVisualizationOptions
+// Create an inspection API instance (options are illustrative).
+var inspectionOptions = new GraphInspectionOptions
 {
-    EnableInteractiveInspection = true,
-    EnableBreakpoints = true,
-    EnableExecutionPause = true,
-    EnableStepThrough = true,
-    EnableStateInspection = true,
-    EnableNodeInspection = true,
-    ExportPath = "./interactive-exports"
+    EnableDetailedNodeInspection = true,
+    EnablePerformanceMetrics = true,
+    EnableRealtimeMonitoring = true
 };
 
-interactiveInspectionWorkflow.ConfigureVisualization(interactiveInspectionOptions);
+using var inspectionApi = new GraphInspectionApi(inspectionOptions, logger);
 
-// Interactive processing node
-var interactiveProcessor = new FunctionGraphNode(
-    "interactive-processor",
-    "Process with interactive inspection",
-    async (context) =>
-    {
-        var inputData = context.GetValue<string>("input_data");
-        var inspectionMode = context.GetValue<string>("inspection_mode", "normal");
-        
-        // Check for breakpoint
-        if (inspectionMode == "breakpoint")
-        {
-            context.SetValue("breakpoint_hit", true);
-            context.SetValue("breakpoint_data", inputData);
-            context.SetValue("node_state", "paused");
-            
-            // Simulate breakpoint pause
-            await Task.Delay(2000);
-        }
-        
-        var processedData = $"Interactive processed: {inputData}";
-        
-        context.SetValue("processed_data", processedData);
-        context.SetValue("processing_step", "interactive_processed");
-        context.SetValue("node_state", "completed");
-        
-        return processedData;
-    });
+// Health check example
+var health = inspectionApi.GetHealthCheck();
+Console.WriteLine($"Inspection API health: {(health.IsSuccess ? "OK" : "FAIL")}");
 
-// Interactive inspector
-var interactiveInspector = new FunctionGraphNode(
-    "interactive-inspector",
-    "Provide interactive inspection capabilities",
-    async (context) =>
-    {
-        var processedData = context.GetValue<string>("processed_data");
-        var inspectionMode = context.GetValue<string>("inspection_mode");
-        var breakpointHit = context.GetValue<bool>("breakpoint_hit", false);
-        
-        // Interactive inspection logic
-        var inspectionResults = new Dictionary<string, object>
-        {
-            ["node_id"] = "interactive-processor",
-            ["input_data"] = context.GetValue<string>("input_data"),
-            ["processed_data"] = processedData,
-            ["inspection_mode"] = inspectionMode,
-            ["breakpoint_hit"] = breakpointHit,
-            ["node_state"] = context.GetValue<string>("node_state"),
-            ["execution_time"] = DateTime.UtcNow,
-            ["inspection_available"] = true
-        };
-        
-        if (breakpointHit)
-        {
-            inspectionResults["breakpoint_data"] = context.GetValue<string>("breakpoint_data");
-            inspectionResults["pause_duration"] = "2 seconds";
-        }
-        
-        context.SetValue("inspection_results", inspectionResults);
-        
-        return $"Interactive inspection completed for {inspectionMode} mode";
-    });
-
-// Add nodes to interactive workflow
-interactiveInspectionWorkflow.AddNode(interactiveProcessor);
-interactiveInspectionWorkflow.AddNode(interactiveInspector);
-
-// Set start node
-interactiveInspectionWorkflow.SetStartNode(interactiveProcessor.NodeId);
-
-// Test interactive inspection
-var inspectionTestScenarios = new[]
+// Get active executions (returns a result wrapper in the real API)
+var active = inspectionApi.GetActiveExecutions();
+if (active.IsSuccess)
 {
-    new { Data = "Normal processing", Mode = "normal" },
-    new { Data = "Breakpoint processing", Mode = "breakpoint" },
-    new { Data = "Step-through processing", Mode = "step" }
-};
-
-foreach (var scenario in inspectionTestScenarios)
-{
-    var arguments = new KernelArguments
-    {
-        ["input_data"] = scenario.Data,
-        ["inspection_mode"] = scenario.Mode
-    };
-
-    Console.WriteLine($"🔍 Testing interactive inspection: {scenario.Data}");
-    Console.WriteLine($"   Inspection Mode: {scenario.Mode}");
-    
-    var result = await interactiveInspectionWorkflow.ExecuteAsync(kernel, arguments);
-    
-    var inspectionResults = result.GetValue<Dictionary<string, object>>("inspection_results");
-    var breakpointHit = result.GetValue<bool>("breakpoint_hit", false);
-    
-    if (inspectionResults != null)
-    {
-        Console.WriteLine($"   Node State: {inspectionResults["node_state"]}");
-        Console.WriteLine($"   Breakpoint Hit: {breakpointHit}");
-        
-        if (breakpointHit)
-        {
-            Console.WriteLine($"   Breakpoint Data: {inspectionResults["breakpoint_data"]}");
-            Console.WriteLine($"   Pause Duration: {inspectionResults["pause_duration"]}");
-        }
-    }
-    
-    Console.WriteLine();
+    Console.WriteLine($"Active executions retrieved: {active.Data}");
 }
+
+// Inspect graph structure for a given execution id (illustrative).
+var executionId = Guid.NewGuid().ToString();
+// var structureJson = inspectionApi.GetGraphStructure(executionId, InspectionFormat.Json);
+// Console.WriteLine(structureJson);
+
+// Note: interactive breakpoints and step-through are best demonstrated
+// with the full example at `semantic-kernel-graph-docs/examples/GraphVisualizationExample.cs`.
 ```
 
 ### 4. Advanced Visualization Features
