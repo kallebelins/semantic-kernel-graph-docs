@@ -75,7 +75,8 @@ class Program
                 ["chatbot"] = async () => await ChatbotExample.RunAsync(),
                 ["execution-guide"] = async () => await ExecutionGuideExample.RunAsync(),
                 ["logging"] = async () => await LoggingExample.RunAllAsync(),
-                ["loop-nodes"] = async () => await LoopNodesExample.RunAsync()
+                ["loop-nodes"] = async () => await LoopNodesExample.RunAsync(),
+                ["memory-agent"] = async () => await MemoryAgentExample.RunAsync()
             };
 
             // Determine which example to run

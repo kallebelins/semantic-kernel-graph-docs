@@ -79,7 +79,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 69. [x] index.md
 70. [x] logging.md
 71. [x] loop-nodes.md
-72. [ ] memory-agent.md
+72. [x] memory-agent.md
 73. [ ] multi-agent.md
 74. [ ] multi-hop-rag-retry.md
 75. [ ] optimizers-and-few-shot.md

@@ -49,163 +49,77 @@ This example demonstrates memory-enabled agents with the Semantic Kernel Graph p
 This example demonstrates basic memory agent creation and operation.
 
 ```csharp
-// Create kernel with mock configuration
-var kernel = CreateKernel();
+// Minimal runnable memory agent example (documentation mirrors the runnable file in examples/MemoryAgentExample.cs)
+// Create a local kernel for the demo
+var kernel = Kernel.CreateBuilder().Build();
 
-// Create basic memory agent workflow
-var memoryAgentWorkflow = new GraphExecutor("MemoryAgentWorkflow", "Basic memory agent implementation", logger);
+// Simple in-memory store used by the example (see examples/MemoryAgentExample.cs for full implementation)
+var memoryStore = new InMemoryMemoryStore();
 
-// Configure memory agent options
-var memoryAgentOptions = new MemoryAgentOptions
+// Create a graph executor backed by the kernel
+var workflow = new GraphExecutor(kernel);
+
+// Create a kernel function that performs retrieval, processing and storage
+var memoryFn = kernel.CreateFunctionFromMethod(async (KernelArguments args) =>
 {
-    EnableMemoryStorage = true,
-    EnableMemoryRetrieval = true,
-    EnableLearning = true,
-    EnableContextAwareness = true,
-    MemoryRetentionDays = 30,
-    MaxMemorySize = 1000,
-    EnableMemoryCompression = true
-};
+    var userInput = args.GetValueOrDefault("user_input")?.ToString() ?? "";
+    var sessionId = args.GetValueOrDefault("session_id")?.ToString() ?? Guid.NewGuid().ToString();
 
-memoryAgentWorkflow.ConfigureMemoryAgent(memoryAgentOptions);
+    // Retrieve relevant memories (token-overlap heuristic)
+    var relevant = await memoryStore.RetrieveAsync(userInput, sessionId);
 
-// Memory agent node
-var memoryAgent = new MemoryAgent(
-    "memory-agent",
-    "Agent with memory capabilities",
-    async (context) =>
+    // Build a simple response
+    var response = $"Echo: {userInput} (found {relevant.Count} memories)";
+
+    // Store a new memory entry
+    var entry = new MemoryEntry
     {
-        var userInput = context.GetValue<string>("user_input", "Hello");
-        var sessionId = context.GetValue<string>("session_id", Guid.NewGuid().ToString());
-        var timestamp = DateTime.UtcNow;
-        
-        // Retrieve relevant memories
-        var relevantMemories = await RetrieveRelevantMemories(userInput, sessionId);
-        
-        // Process input with memory context
-        var response = await ProcessWithMemory(userInput, relevantMemories, context);
-        
-        // Store new experience in memory
-        var newMemory = new MemoryEntry
-        {
-            Id = Guid.NewGuid().ToString(),
-            Content = userInput,
-            Response = response,
-            SessionId = sessionId,
-            Timestamp = timestamp,
-            Tags = ExtractTags(userInput),
-            Importance = CalculateImportance(userInput, response)
-        };
-        
-        await StoreMemory(newMemory);
-        
-        // Update agent state
-        context.SetValue("agent_response", response);
-        context.SetValue("memories_retrieved", relevantMemories.Count);
-        context.SetValue("new_memory_stored", true);
-        context.SetValue("memory_entry_id", newMemory.Id);
-        context.SetValue("processing_timestamp", timestamp);
-        
-        return response;
-    });
-
-// Memory retriever node
-var memoryRetriever = new FunctionGraphNode(
-    "memory-retriever",
-    "Retrieve and analyze memories",
-    async (context) =>
-    {
-        var userInput = context.GetValue<string>("user_input");
-        var sessionId = context.GetValue<string>("session_id");
-        var memoriesRetrieved = context.GetValue<int>("memories_retrieved");
-        
-        // Analyze memory patterns
-        var memoryAnalysis = await AnalyzeMemoryPatterns(sessionId);
-        
-        // Generate memory insights
-        var memoryInsights = new Dictionary<string, object>
-        {
-            ["total_memories"] = memoryAnalysis.TotalMemories,
-            ["relevant_memories"] = memoriesRetrieved,
-            ["memory_patterns"] = memoryAnalysis.Patterns,
-            ["learning_progress"] = memoryAnalysis.LearningProgress,
-            ["context_relevance"] = memoryAnalysis.ContextRelevance
-        };
-        
-        context.SetValue("memory_analysis", memoryAnalysis);
-        context.SetValue("memory_insights", memoryInsights);
-        
-        return $"Memory analysis completed: {memoriesRetrieved} relevant memories found";
-    });
-
-// Learning integrator node
-var learningIntegrator = new FunctionGraphNode(
-    "learning-integrator",
-    "Integrate new experiences into learning",
-    async (context) =>
-    {
-        var userInput = context.GetValue<string>("user_input");
-        var agentResponse = context.GetValue<string>("agent_response");
-        var memoryEntryId = context.GetValue<string>("memory_entry_id");
-        var memoryAnalysis = context.GetValue<MemoryAnalysis>("memory_analysis");
-        
-        // Integrate new experience
-        var learningResult = await IntegrateExperience(userInput, agentResponse, memoryEntryId);
-        
-        // Update learning metrics
-        var updatedLearningMetrics = new Dictionary<string, object>
-        {
-            ["experience_integrated"] = true,
-            ["learning_score"] = learningResult.LearningScore,
-            ["knowledge_growth"] = learningResult.KnowledgeGrowth,
-            ["adaptation_level"] = learningResult.AdaptationLevel,
-            ["integration_timestamp"] = DateTime.UtcNow
-        };
-        
-        context.SetValue("learning_result", learningResult);
-        context.SetValue("updated_learning_metrics", updatedLearningMetrics);
-        
-        return $"Learning integration completed: Score {learningResult.LearningScore:F2}";
-    });
-
-// Add nodes to workflow
-memoryAgentWorkflow.AddNode(memoryAgent);
-memoryAgentWorkflow.AddNode(memoryRetriever);
-memoryAgentWorkflow.AddNode(learningIntegrator);
-
-// Set start node
-memoryAgentWorkflow.SetStartNode(memoryAgent.NodeId);
-
-// Test basic memory agent
-Console.WriteLine("🧠 Testing basic memory agent...");
-
-var testInputs = new[]
-{
-    "What is machine learning?",
-    "Tell me about neural networks",
-    "How does deep learning work?",
-    "Explain reinforcement learning"
-};
-
-foreach (var input in testInputs)
-{
-    var arguments = new KernelArguments
-    {
-        ["user_input"] = input,
-        ["session_id"] = "test-session-001"
+        Id = Guid.NewGuid().ToString(),
+        Content = userInput,
+        Response = response,
+        SessionId = sessionId,
+        Timestamp = DateTime.UtcNow,
+        Tags = new List<string> { "doc-example" },
+        Importance = 0.5
     };
 
-    Console.WriteLine($"   Input: {input}");
-    var result = await memoryAgentWorkflow.ExecuteAsync(kernel, arguments);
-    
-    var agentResponse = result.GetValue<string>("agent_response");
-    var memoriesRetrieved = result.GetValue<int>("memories_retrieved");
-    var newMemoryStored = result.GetValue<bool>("new_memory_stored");
-    
-    Console.WriteLine($"   Response: {agentResponse}");
-    Console.WriteLine($"   Memories Retrieved: {memoriesRetrieved}");
-    Console.WriteLine($"   New Memory Stored: {newMemoryStored}");
-    Console.WriteLine();
+    await memoryStore.StoreAsync(entry);
+
+    // Persist results in graph state
+    var state = args.GetOrCreateGraphState();
+    state.SetValue("agent_response", response);
+    state.SetValue("memories_retrieved", relevant.Count);
+    state.SetValue("new_memory_stored", true);
+    state.SetValue("memory_entry_id", entry.Id);
+
+    // Return a compact payload (response + diagnostics)
+    const char DELIM = '\u0001';
+    return $"{response}{DELIM}{relevant.Count}{DELIM}true";
+}, functionName: "doc_memory_agent_fn", description: "Documentation memory agent function");
+
+var memoryAgent = new FunctionGraphNode(memoryFn, "memory-agent");
+workflow.AddNode(memoryAgent);
+workflow.SetStartNode(memoryAgent.NodeId);
+
+Console.WriteLine("[doc] 🧠 Testing memory agent...\n");
+
+var testInputs = new[] { "What is machine learning?", "Tell me about neural networks", "How does deep learning work?" };
+foreach (var input in testInputs)
+{
+    var args = new KernelArguments { ["user_input"] = input, ["session_id"] = "doc-session-001" };
+    Console.WriteLine($"[doc] Input: {input}");
+
+    var result = await workflow.ExecuteAsync(kernel, args);
+    var raw = result.GetValue<string>() ?? string.Empty;
+    const char DELIM = '\u0001';
+    var parts = raw.Split(DELIM);
+    var agentResponse = parts.Length > 0 ? parts[0] : string.Empty;
+    var memoriesRetrieved = parts.Length > 1 && int.TryParse(parts[1], out var m) ? m : 0;
+    var newMemoryStored = parts.Length > 2 && bool.TryParse(parts[2], out var b) ? b : false;
+
+    Console.WriteLine($"[doc] Response: {agentResponse}");
+    Console.WriteLine($"[doc] Memories Retrieved: {memoriesRetrieved}");
+    Console.WriteLine($"[doc] New Memory Stored: {newMemoryStored}\n");
 }
 ```
 
@@ -214,65 +128,45 @@ foreach (var input in testInputs)
 Demonstrates advanced memory retrieval with semantic search and context awareness.
 
 ```csharp
-// Create advanced memory retrieval workflow
-var advancedMemoryWorkflow = new GraphExecutor("AdvancedMemoryWorkflow", "Advanced memory retrieval", logger);
+// Advanced retrieval — this snippet shows an orchestration pattern. Replace these placeholder functions
+// with real semantic search / ranking implementations when integrating with a vector store or LLM.
+var advancedMemoryWorkflow = new GraphExecutor("AdvancedMemoryWorkflow", logger: ConsoleLogger.Instance);
 
-// Configure advanced memory options
-var advancedMemoryOptions = new AdvancedMemoryOptions
-{
-    EnableSemanticSearch = true,
-    EnableContextualRetrieval = true,
-    EnableMemoryRanking = true,
-    EnableMemoryClustering = true,
-    SemanticSearchThreshold = 0.7,
-    ContextRelevanceWeight = 0.6,
-    TemporalRelevanceWeight = 0.4
-};
-
-advancedMemoryWorkflow.ConfigureAdvancedMemory(advancedMemoryOptions);
-
-// Semantic memory searcher
+// Semantic memory searcher (placeholder)
 var semanticMemorySearcher = new FunctionGraphNode(
     "semantic-memory-searcher",
     "Perform semantic search in memory",
     async (context) =>
     {
-        var query = context.GetValue<string>("query");
-        var contextInfo = context.GetValue<Dictionary<string, object>>("context_info");
+        var query = context.GetValue<string>("query") ?? string.Empty;
+        var contextInfo = context.GetValue<Dictionary<string, object>>("context_info") ?? new Dictionary<string, object>();
         var searchDepth = context.GetValue<int>("search_depth", 3);
-        
-        // Perform semantic search
+
+        // NOTE: Replace PerformSemanticSearch with your vector-store or embedding-based search.
         var semanticResults = await PerformSemanticSearch(query, contextInfo, searchDepth);
-        
-        // Rank results by relevance
+
+        // Rank and cluster (placeholder helpers)
         var rankedResults = await RankMemoryResults(semanticResults, contextInfo);
-        
-        // Cluster related memories
         var clusteredResults = await ClusterRelatedMemories(rankedResults);
-        
-        // Update search results
+
         context.SetValue("semantic_results", semanticResults);
         context.SetValue("ranked_results", rankedResults);
         context.SetValue("clustered_results", clusteredResults);
         context.SetValue("search_completed", true);
-        
+
         return $"Semantic search completed: {semanticResults.Count} results found";
     });
 
-// Context-aware memory analyzer
 var contextAwareAnalyzer = new FunctionGraphNode(
     "context-aware-analyzer",
     "Analyze memories with context awareness",
     async (context) =>
     {
-        var query = context.GetValue<string>("query");
-        var rankedResults = context.GetValue<List<RankedMemory>>("ranked_results");
-        var contextInfo = context.GetValue<Dictionary<string, object>>("context_info");
-        
-        // Analyze context relevance
+        var rankedResults = context.GetValue<List<RankedMemory>>("ranked_results") ?? new List<RankedMemory>();
+        var contextInfo = context.GetValue<Dictionary<string, object>>("context_info") ?? new Dictionary<string, object>();
+
         var contextAnalysis = await AnalyzeContextRelevance(rankedResults, contextInfo);
-        
-        // Generate contextual insights
+
         var contextualInsights = new Dictionary<string, object>
         {
             ["context_relevance_scores"] = contextAnalysis.RelevanceScores,
@@ -280,27 +174,24 @@ var contextAwareAnalyzer = new FunctionGraphNode(
             ["contextual_recommendations"] = contextAnalysis.Recommendations,
             ["context_confidence"] = contextAnalysis.Confidence
         };
-        
+
         context.SetValue("context_analysis", contextAnalysis);
         context.SetValue("contextual_insights", contextualInsights);
-        
+
         return $"Context analysis completed: Confidence {contextAnalysis.Confidence:F2}";
     });
 
-// Memory synthesis node
 var memorySynthesizer = new FunctionGraphNode(
     "memory-synthesizer",
     "Synthesize memories into coherent response",
     async (context) =>
     {
-        var query = context.GetValue<string>("query");
-        var clusteredResults = context.GetValue<List<MemoryCluster>>("clustered_results");
-        var contextualInsights = context.GetValue<Dictionary<string, object>>("contextual_insights");
-        
-        // Synthesize memories
+        var query = context.GetValue<string>("query") ?? string.Empty;
+        var clusteredResults = context.GetValue<List<MemoryCluster>>("clustered_results") ?? new List<MemoryCluster>();
+        var contextualInsights = context.GetValue<Dictionary<string, object>>("contextual_insights") ?? new Dictionary<string, object>();
+
         var synthesizedResponse = await SynthesizeMemories(query, clusteredResults, contextualInsights);
-        
-        // Generate memory summary
+
         var memorySummary = new Dictionary<string, object>
         {
             ["synthesized_response"] = synthesizedResponse.Response,
@@ -309,63 +200,42 @@ var memorySynthesizer = new FunctionGraphNode(
             ["synthesis_method"] = synthesizedResponse.Method,
             ["synthesis_timestamp"] = DateTime.UtcNow
         };
-        
+
         context.SetValue("synthesized_response", synthesizedResponse);
         context.SetValue("memory_summary", memorySummary);
-        
+
         return $"Memory synthesis completed: {synthesizedResponse.MemorySources.Count} sources used";
     });
 
-// Add nodes to advanced workflow
 advancedMemoryWorkflow.AddNode(semanticMemorySearcher);
 advancedMemoryWorkflow.AddNode(contextAwareAnalyzer);
 advancedMemoryWorkflow.AddNode(memorySynthesizer);
-
-// Set start node
 advancedMemoryWorkflow.SetStartNode(semanticMemorySearcher.NodeId);
 
-// Test advanced memory retrieval
 Console.WriteLine("🔍 Testing advanced memory retrieval...");
 
-var advancedQueries = new[]
-{
-    "Explain the relationship between AI and machine learning",
-    "What are the latest developments in neural networks?",
-    "How do different learning algorithms compare?"
-};
-
-foreach (var query in advancedQueries)
+var advancedQueries = new[] { "Explain the relationship between AI and machine learning", "What are the latest developments in neural networks?", "How do different learning algorithms compare?" };
+foreach (var q in advancedQueries)
 {
     var arguments = new KernelArguments
     {
-        ["query"] = query,
-        ["context_info"] = new Dictionary<string, object>
-        {
-            ["user_level"] = "intermediate",
-            ["domain"] = "artificial_intelligence",
-            ["preferred_depth"] = "detailed"
-        },
+        ["query"] = q,
+        ["context_info"] = new Dictionary<string, object> { ["user_level"] = "intermediate", ["domain"] = "artificial_intelligence" },
         ["search_depth"] = 5
     };
 
-    Console.WriteLine($"   Query: {query}");
+    Console.WriteLine($"   Query: {q}");
     var result = await advancedMemoryWorkflow.ExecuteAsync(kernel, arguments);
-    
+
     var searchCompleted = result.GetValue<bool>("search_completed");
     var memorySummary = result.GetValue<Dictionary<string, object>>("memory_summary");
-    
     if (searchCompleted && memorySummary != null)
     {
-        var confidenceScore = memorySummary["confidence_score"];
-        var memorySources = memorySummary["memory_sources"];
-        var synthesisMethod = memorySummary["synthesis_method"];
-        
         Console.WriteLine($"   Search Completed: {searchCompleted}");
-        Console.WriteLine($"   Confidence Score: {confidenceScore}");
-        Console.WriteLine($"   Memory Sources: {memorySources}");
-        Console.WriteLine($"   Synthesis Method: {synthesisMethod}");
+        Console.WriteLine($"   Confidence Score: {memorySummary["confidence_score"]}");
+        Console.WriteLine($"   Memory Sources: {memorySummary["memory_sources"]}");
+        Console.WriteLine($"   Synthesis Method: {memorySummary["synthesis_method"]}");
     }
-    
     Console.WriteLine();
 }
 ```
