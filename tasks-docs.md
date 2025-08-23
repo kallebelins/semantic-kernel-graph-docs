@@ -73,7 +73,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 63. [x] conditional-nodes.md
 64. [x] document-analysis-pipeline.md
 65. [x] dynamic-routing.md
-66. [ ] execution-guide.md
+66. [x] execution-guide.md
 67. [ ] graph-metrics.md
 68. [ ] graph-visualization.md
 69. [ ] index.md

@@ -178,17 +178,27 @@ curl -X POST http://localhost:5000/graphs/execute \
 Graphs are automatically registered when the server starts:
 
 ```csharp
-// Create and register a sample graph
-var echoFunc = KernelFunctionFactory.CreateFromMethod(
-    (string input) => $"echo:{input}",
+// Create and register a sample graph using the KernelFunction API
+// Create a minimal Kernel instance (no external AI providers) for local execution
+var kernel = Kernel.CreateBuilder().Build();
+
+// Register an echo function with the Kernel and get a KernelFunction reference
+var echoFunction = kernel.CreateFunctionFromMethod(
+    (KernelArguments args) =>
+    {
+        var input = args["input"]?.ToString() ?? string.Empty;
+        return $"echo:{input}";
+    },
     functionName: "echo",
     description: "Echoes the input string");
 
-var echoNode = new FunctionGraphNode(echoFunc, nodeId: "echo");
+// Create a FunctionGraphNode from the KernelFunction and register it in a GraphExecutor
+var echoNode = new FunctionGraphNode(echoFunction, nodeId: "echo");
 var graph = new GraphExecutor("sample-graph", "Simple echo graph");
 graph.AddNode(echoNode).SetStartNode("echo");
 
-await factory.RegisterAsync(graph);
+// If you have a graph factory or registry available, register the graph
+// await factory.RegisterAsync(graph);
 ```
 
 ## Advanced Usage

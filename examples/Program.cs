@@ -74,9 +74,9 @@ class Program
                 ["checkpointing-concepts"] = async () => await CheckpointingConceptsExample.RunAsync(),
                 ["advanced-patterns"] = async () => await AdvancedPatternsExample.RunAsync(),
                 ["assert-and-suggest"] = async () => await AssertAndSuggestExample.RunAsync(),
-                ["chain-of-thought"] = async () => await ChainOfThoughtExample.RunAsync()
-                ,
-                ["chatbot"] = async () => await ChatbotExample.RunAsync()
+                ["chain-of-thought"] = async () => await ChainOfThoughtExample.RunAsync(),
+                ["chatbot"] = async () => await ChatbotExample.RunAsync(),
+                ["execution-guide"] = async () => await ExecutionGuideExample.RunAsync()
             };
 
             // Determine which example to run
