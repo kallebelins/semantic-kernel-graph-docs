@@ -48,105 +48,38 @@ This example demonstrates metrics collection and performance monitoring with the
 This example demonstrates basic metrics collection during graph execution.
 
 ```csharp
-// Create kernel with mock configuration
-var kernel = CreateKernel();
+// Create development-friendly metrics options (short intervals for demos)
+var options = GraphMetricsOptions.CreateDevelopmentOptions();
+options.EnableResourceMonitoring = false; // keep the demo deterministic
 
-// Create metrics-enabled workflow
-var metricsWorkflow = new GraphExecutor("MetricsWorkflow", "Basic metrics collection", logger);
+// Create the metrics collector using the options
+using var metrics = new GraphPerformanceMetrics(options);
 
-// Configure metrics collection
-var metricsOptions = new GraphMetricsOptions
+// Simulate a few node executions and record metrics for each
+for (int i = 0; i < 5; i++)
 {
-    EnableNodeMetrics = true,
-    EnableExecutionMetrics = true,
-    EnableResourceMetrics = true,
-    MetricsCollectionInterval = TimeSpan.FromMilliseconds(100),
-    EnableRealTimeMetrics = true
-};
+    var execId = $"exec-{i}";
 
-metricsWorkflow.ConfigureMetrics(metricsOptions);
+    // Start tracking a node execution
+    var tracker = metrics.StartNodeTracking($"node-{i}", $"node-name-{i}", execId);
 
-// Sample processing node with metrics
-var sampleProcessor = new FunctionGraphNode(
-    "sample-processor",
-    "Process sample data with metrics",
-    async (context) =>
-    {
-        var startTime = DateTime.UtcNow;
-        var inputData = context.GetValue<string>("input_data");
-        
-        // Simulate processing
-        await Task.Delay(Random.Shared.Next(100, 500));
-        
-        var result = $"Processed: {inputData}";
-        var processingTime = DateTime.UtcNow - startTime;
-        
-        // Record custom metrics
-        context.SetValue("processing_time_ms", processingTime.TotalMilliseconds);
-        context.SetValue("input_size", inputData.Length);
-        context.SetValue("processing_result", result);
-        
-        return result;
-    });
+    // Simulate work
+    await Task.Delay(10 + i * 5);
 
-// Metrics collection node
-var metricsCollector = new FunctionGraphNode(
-    "metrics-collector",
-    "Collect and aggregate metrics",
-    async (context) =>
-    {
-        var processingTime = context.GetValue<double>("processing_time_ms");
-        var inputSize = context.GetValue<int>("input_size");
-        
-        // Collect execution metrics
-        var executionMetrics = new Dictionary<string, object>
-        {
-            ["total_processing_time"] = processingTime,
-            ["average_input_size"] = inputSize,
-            ["execution_count"] = 1,
-            ["success_rate"] = 1.0,
-            ["timestamp"] = DateTime.UtcNow
-        };
-        
-        context.SetValue("execution_metrics", executionMetrics);
-        
-        return "Metrics collected successfully";
-    });
-
-// Add nodes to workflow
-metricsWorkflow.AddNode(sampleProcessor);
-metricsWorkflow.AddNode(metricsCollector);
-
-// Set start node
-metricsWorkflow.SetStartNode(sampleProcessor.NodeId);
-
-// Test metrics collection
-var testData = new[]
-{
-    "Sample data 1",
-    "Sample data 2",
-    "Sample data 3"
-};
-
-foreach (var data in testData)
-{
-    var arguments = new KernelArguments
-    {
-        ["input_data"] = data
-    };
-
-    Console.WriteLine($"📊 Testing metrics collection: {data}");
-    var result = await metricsWorkflow.ExecuteAsync(kernel, arguments);
-    
-    var processingTime = result.GetValue<double>("processing_time_ms");
-    var inputSize = result.GetValue<int>("input_size");
-    var executionMetrics = result.GetValue<Dictionary<string, object>>("execution_metrics");
-    
-    Console.WriteLine($"   Processing Time: {processingTime:F2} ms");
-    Console.WriteLine($"   Input Size: {inputSize} characters");
-    Console.WriteLine($"   Metrics Collected: {executionMetrics.Count} metrics");
-    Console.WriteLine();
+    // Mark completion and record an execution path for analysis
+    metrics.CompleteNodeTracking(tracker, success: true, result: null);
+    metrics.RecordExecutionPath(execId, new[] { tracker.NodeId }, TimeSpan.FromMilliseconds(10 + i * 5), success: true);
 }
+
+// Export a preview using the metrics exporter
+using var exporter = new GraphMetricsExporter();
+var json = exporter.ExportMetrics(metrics, MetricsExportFormat.Json, TimeSpan.FromMinutes(10));
+Console.WriteLine("\n--- JSON Export Preview ---\n");
+Console.WriteLine(json.Substring(0, Math.Min(800, json.Length)));
+
+var prometheus = exporter.ExportMetrics(metrics, MetricsExportFormat.Prometheus, TimeSpan.FromMinutes(10));
+Console.WriteLine("\n--- Prometheus Export Preview ---\n");
+Console.WriteLine(prometheus.Substring(0, Math.Min(800, prometheus.Length)));
 ```
 
 ### 2. Advanced Performance Monitoring
@@ -154,137 +87,30 @@ foreach (var data in testData)
 Demonstrates comprehensive performance monitoring with detailed metrics collection.
 
 ```csharp
-// Create advanced metrics workflow
-var advancedMetricsWorkflow = new GraphExecutor("AdvancedMetricsWorkflow", "Advanced performance monitoring", logger);
+// Create development options and a metrics collector suitable for profiling demos
+var options = GraphMetricsOptions.CreateDevelopmentOptions();
+using var metrics = new GraphPerformanceMetrics(options);
 
-// Configure advanced metrics
-var advancedMetricsOptions = new GraphMetricsOptions
+// Simulate an expensive operation and record detailed timing information
+var execId = "advanced-exec-1";
+var tracker = metrics.StartNodeTracking("performance-node", "performance-node", execId);
+var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+// Simulate CPU-bound work with occasional awaits to avoid blocking the thread pool
+int iterations = 10_000;
+long result = 0;
+for (int i = 0; i < iterations; i++)
 {
-    EnableNodeMetrics = true,
-    EnableExecutionMetrics = true,
-    EnableResourceMetrics = true,
-    EnableCustomMetrics = true,
-    EnablePerformanceProfiling = true,
-    MetricsCollectionInterval = TimeSpan.FromMilliseconds(50),
-    EnableRealTimeMetrics = true,
-    EnableMetricsPersistence = true,
-    MetricsStoragePath = "./metrics-data"
-};
-
-advancedMetricsWorkflow.ConfigureMetrics(advancedMetricsOptions);
-
-// Performance-intensive node
-var performanceNode = new FunctionGraphNode(
-    "performance-node",
-    "Performance-intensive processing",
-    async (context) =>
-    {
-        var startTime = DateTime.UtcNow;
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        
-        var inputData = context.GetValue<string>("input_data");
-        var complexity = context.GetValue<int>("complexity_level");
-        
-        // Simulate complex processing
-        var iterations = complexity * 1000;
-        var result = 0;
-        
-        for (int i = 0; i < iterations; i++)
-        {
-            result += i * i;
-            if (i % 100 == 0)
-            {
-                await Task.Delay(1); // Simulate async work
-            }
-        }
-        
-        stopwatch.Stop();
-        var processingTime = DateTime.UtcNow - startTime;
-        
-        // Record detailed metrics
-        context.SetValue("processing_time_ms", processingTime.TotalMilliseconds);
-        context.SetValue("stopwatch_time_ms", stopwatch.ElapsedMilliseconds);
-        context.SetValue("iterations", iterations);
-        context.SetValue("result_value", result);
-        context.SetValue("complexity_level", complexity);
-        context.SetValue("cpu_usage", GetCurrentCpuUsage());
-        context.SetValue("memory_usage", GetCurrentMemoryUsage());
-        
-        return $"Processed {iterations} iterations in {processingTime.TotalMilliseconds:F2} ms";
-    });
-
-// Metrics analyzer node
-var metricsAnalyzer = new FunctionGraphNode(
-    "metrics-analyzer",
-    "Analyze collected metrics",
-    async (context) =>
-    {
-        var processingTime = context.GetValue<double>("processing_time_ms");
-        var stopwatchTime = context.GetValue<long>("stopwatch_time_ms");
-        var iterations = context.GetValue<int>("iterations");
-        var complexity = context.GetValue<int>("complexity_level");
-        var cpuUsage = context.GetValue<double>("cpu_usage");
-        var memoryUsage = context.GetValue<double>("memory_usage");
-        
-        // Calculate performance metrics
-        var throughput = iterations / (processingTime / 1000.0); // iterations per second
-        var efficiency = (double)stopwatchTime / processingTime.TotalMilliseconds;
-        var resourceIntensity = (cpuUsage + memoryUsage) / 2.0;
-        
-        var analysis = new Dictionary<string, object>
-        {
-            ["throughput_ops_per_sec"] = throughput,
-            ["efficiency_ratio"] = efficiency,
-            ["resource_intensity"] = resourceIntensity,
-            ["performance_score"] = CalculatePerformanceScore(throughput, efficiency, resourceIntensity),
-            ["bottleneck_analysis"] = AnalyzeBottlenecks(processingTime, cpuUsage, memoryUsage),
-            ["optimization_suggestions"] = GenerateOptimizationSuggestions(throughput, efficiency, resourceIntensity)
-        };
-        
-        context.SetValue("performance_analysis", analysis);
-        
-        return $"Performance analysis completed. Score: {analysis["performance_score"]:F2}";
-    });
-
-// Add nodes to advanced workflow
-advancedMetricsWorkflow.AddNode(performanceNode);
-advancedMetricsWorkflow.AddNode(metricsAnalyzer);
-
-// Set start node
-advancedMetricsWorkflow.SetStartNode(performanceNode.NodeId);
-
-// Test advanced performance monitoring
-var performanceTestScenarios = new[]
-{
-    new { Data = "Low complexity task", Complexity = 1 },
-    new { Data = "Medium complexity task", Complexity = 5 },
-    new { Data = "High complexity task", Complexity = 10 }
-};
-
-foreach (var scenario in performanceTestScenarios)
-{
-    var arguments = new KernelArguments
-    {
-        ["input_data"] = scenario.Data,
-        ["complexity_level"] = scenario.Complexity
-    };
-
-    Console.WriteLine($"🚀 Testing performance monitoring: {scenario.Data}");
-    Console.WriteLine($"   Complexity Level: {scenario.Complexity}");
-    
-    var result = await advancedMetricsWorkflow.ExecuteAsync(kernel, arguments);
-    
-    var processingTime = result.GetValue<double>("processing_time_ms");
-    var iterations = result.GetValue<int>("iterations");
-    var performanceAnalysis = result.GetValue<Dictionary<string, object>>("performance_analysis");
-    
-    Console.WriteLine($"   Processing Time: {processingTime:F2} ms");
-    Console.WriteLine($"   Iterations: {iterations:N0}");
-    Console.WriteLine($"   Throughput: {performanceAnalysis["throughput_ops_per_sec"]:F0} ops/sec");
-    Console.WriteLine($"   Performance Score: {performanceAnalysis["performance_score"]:F2}");
-    Console.WriteLine($"   Bottleneck: {performanceAnalysis["bottleneck_analysis"]}");
-    Console.WriteLine();
+    result += i * i;
+    if (i % 1000 == 0) await Task.Delay(1); // cooperative pause to keep responsiveness
 }
+
+stopwatch.Stop();
+metrics.CompleteNodeTracking(tracker, success: true, result: result);
+
+// Use exporter to inspect metrics after the simulated workload
+using var exporter = new GraphMetricsExporter();
+Console.WriteLine(exporter.ExportMetrics(metrics, MetricsExportFormat.Json, TimeSpan.FromMinutes(10)));
 ```
 
 ### 3. Real-Time Metrics Dashboard
@@ -292,154 +118,29 @@ foreach (var scenario in performanceTestScenarios)
 Shows how to implement real-time metrics visualization and monitoring.
 
 ```csharp
-// Create real-time metrics workflow
-var realTimeMetricsWorkflow = new GraphExecutor("RealTimeMetricsWorkflow", "Real-time metrics dashboard", logger);
+// Demonstrate basic real-time sampling using the metrics collector's resource sampling
+var options = GraphMetricsOptions.CreateDevelopmentOptions();
+options.EnableResourceMonitoring = true;
+using var metrics = new GraphPerformanceMetrics(options);
 
-// Configure real-time metrics
-var realTimeMetricsOptions = new GraphMetricsOptions
-{
-    EnableNodeMetrics = true,
-    EnableExecutionMetrics = true,
-    EnableResourceMetrics = true,
-    EnableRealTimeMetrics = true,
-    EnableMetricsStreaming = true,
-    MetricsCollectionInterval = TimeSpan.FromMilliseconds(100),
-    EnableMetricsDashboard = true,
-    DashboardUpdateInterval = TimeSpan.FromMilliseconds(500)
-};
-
-realTimeMetricsWorkflow.ConfigureMetrics(realTimeMetricsOptions);
-
-// Real-time data generator
-var dataGenerator = new FunctionGraphNode(
-    "data-generator",
-    "Generate real-time data for metrics",
-    async (context) =>
-    {
-        var iteration = context.GetValue<int>("iteration", 0);
-        var baseValue = context.GetValue<double>("base_value", 100.0);
-        
-        // Generate varying data
-        var randomFactor = Random.Shared.NextDouble() * 0.4 + 0.8; // 0.8 to 1.2
-        var currentValue = baseValue * randomFactor;
-        
-        // Simulate processing
-        await Task.Delay(Random.Shared.Next(50, 200));
-        
-        context.SetValue("iteration", iteration + 1);
-        context.SetValue("current_value", currentValue);
-        context.SetValue("random_factor", randomFactor);
-        context.SetValue("generation_timestamp", DateTime.UtcNow);
-        
-        return $"Generated value: {currentValue:F2} (iteration {iteration + 1})";
-    });
-
-// Real-time metrics processor
-var realTimeProcessor = new FunctionGraphNode(
-    "real-time-processor",
-    "Process real-time metrics",
-    async (context) =>
-    {
-        var currentValue = context.GetValue<double>("current_value");
-        var iteration = context.GetValue<int>("iteration");
-        var timestamp = context.GetValue<DateTime>("generation_timestamp");
-        
-        // Calculate real-time statistics
-        var values = context.GetValue<List<double>>("value_history", new List<double>());
-        values.Add(currentValue);
-        
-        var average = values.Average();
-        var min = values.Min();
-        var max = values.Max();
-        var trend = CalculateTrend(values);
-        
-        var realTimeMetrics = new Dictionary<string, object>
-        {
-            ["current_value"] = currentValue,
-            ["average_value"] = average,
-            ["min_value"] = min,
-            ["max_value"] = max,
-            ["trend"] = trend,
-            ["total_iterations"] = iteration,
-            ["last_update"] = timestamp,
-            ["value_history"] = values.TakeLast(100).ToList() // Keep last 100 values
-        };
-        
-        context.SetValue("value_history", values);
-        context.SetValue("real_time_metrics", realTimeMetrics);
-        
-        return $"Real-time metrics updated. Average: {average:F2}, Trend: {trend}";
-    });
-
-// Metrics dashboard updater
-var dashboardUpdater = new FunctionGraphNode(
-    "dashboard-updater",
-    "Update metrics dashboard",
-    async (context) =>
-    {
-        var realTimeMetrics = context.GetValue<Dictionary<string, object>>("real_time_metrics");
-        var iteration = context.GetValue<int>("iteration");
-        
-        // Update dashboard
-        UpdateMetricsDashboard(realTimeMetrics);
-        
-        // Check for alerts
-        var alerts = CheckMetricsAlerts(realTimeMetrics);
-        if (alerts.Any())
-        {
-            context.SetValue("active_alerts", alerts);
-            Console.WriteLine($"🚨 Alerts detected: {string.Join(", ", alerts)}");
-        }
-        
-        context.SetValue("dashboard_updated", true);
-        context.SetValue("last_dashboard_update", DateTime.UtcNow);
-        
-        return $"Dashboard updated. Iteration {iteration}, {alerts.Count} active alerts";
-    });
-
-// Add nodes to real-time workflow
-realTimeMetricsWorkflow.AddNode(dataGenerator);
-realTimeMetricsWorkflow.AddNode(realTimeProcessor);
-realTimeMetricsWorkflow.AddNode(dashboardUpdater);
-
-// Set start node
-realTimeMetricsWorkflow.SetStartNode(dataGenerator.NodeId);
-
-// Test real-time metrics
-Console.WriteLine("📊 Starting real-time metrics collection...");
-Console.WriteLine("   Dashboard will update every 500ms");
-Console.WriteLine("   Press any key to stop...");
-
-var realTimeArguments = new KernelArguments
-{
-    ["iteration"] = 0,
-    ["base_value"] = 100.0
-};
-
-// Run real-time metrics for a few iterations
+// Simulate a stream of short executions and display sampled CPU/memory
 for (int i = 0; i < 10; i++)
 {
-    var result = await realTimeMetricsWorkflow.ExecuteAsync(kernel, realTimeArguments);
-    
-    var realTimeMetrics = result.GetValue<Dictionary<string, object>>("real_time_metrics");
-    var dashboardUpdated = result.GetValue<bool>("dashboard_updated");
-    
-    if (realTimeMetrics != null)
-    {
-        Console.WriteLine($"   Iteration {realTimeMetrics["total_iterations"]}: " +
-                         $"Current: {realTimeMetrics["current_value"]:F2}, " +
-                         $"Avg: {realTimeMetrics["average_value"]:F2}, " +
-                         $"Trend: {realTimeMetrics["trend"]}");
-    }
-    
-    // Update arguments for next iteration
-    realTimeArguments["iteration"] = result.GetValue<int>("iteration");
-    realTimeArguments["base_value"] = result.GetValue<double>("current_value");
-    
-    await Task.Delay(1000); // Wait 1 second between iterations
+    var execId = $"rt-{i}";
+    var tracker = metrics.StartNodeTracking("data-generator", "data-generator", execId);
+
+    // Simulate some processing latency
+    await Task.Delay(Random.Shared.Next(50, 200));
+
+    metrics.CompleteNodeTracking(tracker, success: true);
+
+    // Read current sampled system metrics (collector updates them periodically)
+    Console.WriteLine($"Iteration {i + 1}: CPU={metrics.CurrentCpuUsage:F1}% Memory={metrics.CurrentAvailableMemoryMB:F0} MB");
+
+    await Task.Delay(500); // throttle updates for the demo
 }
 
-Console.WriteLine("✅ Real-time metrics collection completed");
+Console.WriteLine("✅ Real-time sampling demo completed");
 ```
 
 ### 4. Metrics Export and Integration
@@ -447,123 +148,23 @@ Console.WriteLine("✅ Real-time metrics collection completed");
 Demonstrates exporting metrics to external monitoring systems and dashboards.
 
 ```csharp
-// Create metrics export workflow
-var metricsExportWorkflow = new GraphExecutor("MetricsExportWorkflow", "Metrics export and integration", logger);
+// Export example using the metrics exporter directly
+using var exporter = new GraphMetricsExporter(new GraphMetricsExportOptions { IndentedOutput = true });
 
-// Configure metrics export
-var exportMetricsOptions = new GraphMetricsOptions
-{
-    EnableNodeMetrics = true,
-    EnableExecutionMetrics = true,
-    EnableResourceMetrics = true,
-    EnableMetricsExport = true,
-    EnableMetricsPersistence = true,
-    MetricsStoragePath = "./exported-metrics",
-    ExportFormats = new[] { "json", "csv", "prometheus" },
-    ExportInterval = TimeSpan.FromSeconds(5)
-};
+// Export JSON
+var jsonExport = exporter.ExportMetrics(metrics, MetricsExportFormat.Json, TimeSpan.FromMinutes(10));
+Console.WriteLine("--- JSON Export ---");
+Console.WriteLine(jsonExport);
 
-metricsExportWorkflow.ConfigureMetrics(exportMetricsOptions);
+// Export CSV
+var csvExport = exporter.ExportMetrics(metrics, MetricsExportFormat.Csv, TimeSpan.FromMinutes(10));
+Console.WriteLine("--- CSV Export ---");
+Console.WriteLine(csvExport.Split('\n').Take(20)); // preview first lines
 
-// Metrics aggregator
-var metricsAggregator = new FunctionGraphNode(
-    "metrics-aggregator",
-    "Aggregate metrics for export",
-    async (context) =>
-    {
-        var executionCount = context.GetValue<int>("execution_count", 0);
-        var totalProcessingTime = context.GetValue<double>("total_processing_time", 0.0);
-        var successCount = context.GetValue<int>("success_count", 0);
-        var errorCount = context.GetValue<int>("error_count", 0);
-        
-        // Aggregate metrics
-        var aggregatedMetrics = new Dictionary<string, object>
-        {
-            ["execution_count"] = executionCount,
-            ["total_processing_time_ms"] = totalProcessingTime,
-            ["success_count"] = successCount,
-            ["error_count"] = errorCount,
-            ["success_rate"] = executionCount > 0 ? (double)successCount / executionCount : 0.0,
-            ["average_processing_time_ms"] = executionCount > 0 ? totalProcessingTime / executionCount : 0.0,
-            ["error_rate"] = executionCount > 0 ? (double)errorCount / executionCount : 0.0,
-            ["aggregation_timestamp"] = DateTime.UtcNow,
-            ["metrics_version"] = "1.0.0"
-        };
-        
-        context.SetValue("aggregated_metrics", aggregatedMetrics);
-        
-        return $"Metrics aggregated: {executionCount} executions, {successCount} successes, {errorCount} errors";
-    });
-
-// Metrics exporter
-var metricsExporter = new FunctionGraphNode(
-    "metrics-exporter",
-    "Export metrics to external systems",
-    async (context) =>
-    {
-        var aggregatedMetrics = context.GetValue<Dictionary<string, object>>("aggregated_metrics");
-        
-        // Export to different formats
-        var exportResults = new Dictionary<string, string>();
-        
-        // JSON export
-        var jsonExport = await ExportToJson(aggregatedMetrics);
-        exportResults["json"] = jsonExport;
-        
-        // CSV export
-        var csvExport = await ExportToCsv(aggregatedMetrics);
-        exportResults["csv"] = csvExport;
-        
-        // Prometheus export
-        var prometheusExport = await ExportToPrometheus(aggregatedMetrics);
-        exportResults["prometheus"] = prometheusExport;
-        
-        // Export to monitoring systems
-        var monitoringExport = await ExportToMonitoringSystems(aggregatedMetrics);
-        exportResults["monitoring"] = monitoringExport;
-        
-        context.SetValue("export_results", exportResults);
-        context.SetValue("export_timestamp", DateTime.UtcNow);
-        
-        return $"Metrics exported to {exportResults.Count} formats";
-    });
-
-// Add nodes to export workflow
-metricsExportWorkflow.AddNode(metricsAggregator);
-metricsExportWorkflow.AddNode(metricsExporter);
-
-// Set start node
-metricsExportWorkflow.SetStartNode(metricsAggregator.NodeId);
-
-// Test metrics export
-var exportTestData = new[]
-{
-    new { Executions = 10, ProcessingTime = 1500.0, Successes = 9, Errors = 1 },
-    new { Executions = 25, ProcessingTime = 3200.0, Successes = 24, Errors = 1 },
-    new { Executions = 50, ProcessingTime = 7500.0, Successes = 48, Errors = 2 }
-};
-
-foreach (var data in exportTestData)
-{
-    var arguments = new KernelArguments
-    {
-        ["execution_count"] = data.Executions,
-        ["total_processing_time"] = data.ProcessingTime,
-        ["success_count"] = data.Successes,
-        ["error_count"] = data.Errors
-    };
-
-    Console.WriteLine($"📤 Testing metrics export: {data.Executions} executions");
-    var result = await metricsExportWorkflow.ExecuteAsync(kernel, arguments);
-    
-    var aggregatedMetrics = result.GetValue<Dictionary<string, object>>("aggregated_metrics");
-    var exportResults = result.GetValue<Dictionary<string, string>>("export_results");
-    
-    Console.WriteLine($"   Success Rate: {aggregatedMetrics["success_rate"]:P1}");
-    Console.WriteLine($"   Average Time: {aggregatedMetrics["average_processing_time_ms"]:F2} ms");
-    Console.WriteLine($"   Export Formats: {string.Join(", ", exportResults.Keys)}");
-    Console.WriteLine();
-}
+// Export Prometheus
+var promExport = exporter.ExportMetrics(metrics, MetricsExportFormat.Prometheus, TimeSpan.FromMinutes(10));
+Console.WriteLine("--- Prometheus Export ---");
+Console.WriteLine(promExport);
 ```
 
 ## Expected Output
