@@ -27,32 +27,32 @@ public class FirstGraph5MinutesExample
 
             // 3. Build and configure the graph
             var graph = new GraphExecutor("MyFirstGraph", "A simple greeting workflow");
-            
+
             graph.AddNode(greetingNode);
             graph.AddNode(followUpNode);
-            
+
             // Connect nodes in sequence
             graph.Connect(greetingNode.NodeId, followUpNode.NodeId);
-            
+
             // Set the starting point
             graph.SetStartNode(greetingNode.NodeId);
 
             // 4. Execute the graph
             var initialState = new KernelArguments { ["name"] = "Developer" };
-            
+
             Console.WriteLine("Executing graph...");
             var result = await graph.ExecuteAsync(kernel, initialState);
-            
+
             Console.WriteLine("\n=== Results ===");
-            
+
             // Get results from the graph state
             var graphState = initialState.GetOrCreateGraphState();
             var greeting = graphState.GetValue<string>("greeting") ?? "No greeting";
             var followup = graphState.GetValue<string>("followup") ?? "No follow-up";
-            
+
             Console.WriteLine($"Greeting: {greeting}");
             Console.WriteLine($"Follow-up: {followup}");
-            
+
             Console.WriteLine("\n✅ Graph executed successfully!");
         }
         catch (Exception ex)

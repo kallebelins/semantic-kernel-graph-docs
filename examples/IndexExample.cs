@@ -1,10 +1,9 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
 
-namespace SemanticKernel.Graph.Examples;
+namespace Examples;
 
 /// <summary>
 /// Example demonstrating the correct way to create and execute graphs
@@ -38,7 +37,7 @@ public static class IndexExample
 
             Console.WriteLine("🚀 Executing graph...");
             var result = await graphExecutor.ExecuteAsync(kernel, arguments);
-            
+
             var output = result.GetValue<string>() ?? "No output received";
             Console.WriteLine($"✅ Graph execution completed!");
             Console.WriteLine($"📤 Output: {output}\n");

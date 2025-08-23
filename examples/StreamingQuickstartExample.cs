@@ -1,10 +1,9 @@
 using Microsoft.SemanticKernel;
-using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
 using SemanticKernel.Graph.Streaming;
 
-namespace SemanticKernel.Graph.Examples;
+namespace Examples;
 
 /// <summary>
 /// Streaming Quickstart Example demonstrating real-time graph execution monitoring.
@@ -22,7 +21,7 @@ public static class StreamingQuickstartExample
     public static async Task RunAsync(Kernel kernel)
     {
         Console.WriteLine("=== Streaming Quickstart Example ===\n");
-        
+
         // Run all streaming examples
         await BasicStreamingSetupAsync(kernel);
         await EventFilteringAsync(kernel);
@@ -45,7 +44,7 @@ public static class StreamingQuickstartExample
         // Add function nodes with simulated work
         var node1 = new FunctionGraphNode(
             KernelFunctionFactory.CreateFromMethod(
-                () => 
+                () =>
                 {
                     Thread.Sleep(1000); // Simulate work
                     return "Hello from node 1";
@@ -59,7 +58,7 @@ public static class StreamingQuickstartExample
 
         var node2 = new FunctionGraphNode(
             KernelFunctionFactory.CreateFromMethod(
-                () => 
+                () =>
                 {
                     Thread.Sleep(1500); // Simulate work
                     return "Hello from node 2";
@@ -73,7 +72,7 @@ public static class StreamingQuickstartExample
 
         var node3 = new FunctionGraphNode(
             KernelFunctionFactory.CreateFromMethod(
-                () => 
+                () =>
                 {
                     Thread.Sleep(800); // Simulate work
                     return "Hello from node 3";
@@ -120,27 +119,27 @@ public static class StreamingQuickstartExample
         await foreach (var @event in eventStream)
         {
             Console.WriteLine($"📡 Event: {@event.EventType} at {@event.Timestamp:HH:mm:ss.fff}");
-            
+
             // Handle different event types
             switch (@event)
             {
                 case GraphExecutionStartedEvent started:
                     Console.WriteLine($"   🚀 Execution started with ID: {started.ExecutionId}");
                     break;
-                    
+
                 case NodeExecutionStartedEvent nodeStarted:
                     Console.WriteLine($"   ▶️  Node started: {nodeStarted.Node.Name}");
                     break;
-                    
+
                 case NodeExecutionCompletedEvent nodeCompleted:
                     Console.WriteLine($"   ✅ Node completed: {nodeCompleted.Node.Name} in {nodeCompleted.ExecutionDuration.TotalMilliseconds:F0}ms");
                     break;
-                    
+
                 case GraphExecutionCompletedEvent completed:
                     Console.WriteLine($"   🎯 Execution completed in {completed.TotalDuration.TotalMilliseconds:F0}ms");
                     break;
             }
-            
+
             // Add small delay to demonstrate real-time nature
             await Task.Delay(100);
         }
@@ -213,10 +212,10 @@ public static class StreamingQuickstartExample
                 KernelFunctionFactory.CreateFromMethod(() => $"Node {i} result", $"node{i}_function", $"Node {i} function"),
                 $"node{i}", $"Node {i}");
             executor.AddNode(node);
-            
+
             if (i > 1)
             {
-                executor.Connect($"node{i-1}", $"node{i}");
+                executor.Connect($"node{i - 1}", $"node{i}");
             }
         }
         executor.SetStartNode("node1");
@@ -286,10 +285,10 @@ public static class StreamingQuickstartExample
                     var startTime = args.ContainsName("startTime") ? (DateTimeOffset)args["startTime"] : DateTimeOffset.UtcNow;
                     var endTime = DateTimeOffset.UtcNow;
                     var duration = endTime - startTime;
-                    
+
                     args["totalDuration"] = duration.TotalMilliseconds;
                     args["finalResult"] = "Processing completed successfully";
-                    
+
                     return $"Processing completed in {duration.TotalMilliseconds:F0}ms";
                 },
                 "CreateSummary",
@@ -339,30 +338,30 @@ public static class StreamingQuickstartExample
         {
             eventCount++;
             var timestamp = @event.Timestamp.ToString("HH:mm:ss.fff");
-            
+
             Console.WriteLine($"[{timestamp}] #{eventCount} {@event.EventType}");
-            
+
             switch (@event)
             {
                 case GraphExecutionStartedEvent started:
                     Console.WriteLine($"   🚀 Execution ID: {started.ExecutionId}");
                     break;
-                    
+
                 case NodeExecutionStartedEvent nodeStarted:
                     Console.WriteLine($"   ▶️  Node: {nodeStarted.Node.Name}");
                     break;
-                    
+
                 case NodeExecutionCompletedEvent nodeCompleted:
                     var duration = nodeCompleted.ExecutionDuration.TotalMilliseconds;
                     Console.WriteLine($"   ✅ Node: {nodeCompleted.Node.Name} ({duration:F0}ms)");
                     break;
-                    
+
                 case GraphExecutionCompletedEvent completed:
                     var totalDuration = completed.TotalDuration.TotalMilliseconds;
                     Console.WriteLine($"   🎯 Total Duration: {totalDuration:F0}ms");
                     break;
             }
-            
+
             // Small delay for readability
             await Task.Delay(100);
         }

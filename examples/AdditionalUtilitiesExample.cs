@@ -1,12 +1,8 @@
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
-using SemanticKernel.Graph.State;
 using SemanticKernel.Graph.Integration;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using SemanticKernel.Graph.State;
 
 namespace Examples;
 
@@ -50,7 +46,7 @@ public static class AdditionalUtilitiesExample
         try
         {
             // Configure executor with academic patterns
-            var advancedExecutor = _executor.WithAcademicPatterns(config => 
+            var advancedExecutor = _executor.WithAcademicPatterns(config =>
             {
                 config.EnableCircuitBreaker = true;
                 config.EnableBulkhead = true;
@@ -173,12 +169,12 @@ public static class AdditionalUtilitiesExample
                 var executionId = Guid.NewGuid().ToString();
 
                 // Log graph-level information
-                logger.LogGraphInfo(executionId, "Graph execution started", 
+                logger.LogGraphInfo(executionId, "Graph execution started",
                     new Dictionary<string, object> { ["nodeCount"] = 5 });
                 Console.WriteLine("Graph info logged");
 
                 // Log node-level information
-                logger.LogNodeInfo(executionId, "node1", "Node execution completed", 
+                logger.LogNodeInfo(executionId, "node1", "Node execution completed",
                     new Dictionary<string, object> { ["duration"] = "150ms" });
                 Console.WriteLine("Node info logged");
 
@@ -419,7 +415,7 @@ public static class AdditionalUtilitiesExample
         {
             // Create kernel with module activation
             var builder = Kernel.CreateBuilder()
-                .AddGraphModules(options => 
+                .AddGraphModules(options =>
                 {
                     options.EnableStreaming = true;
                     options.EnableCheckpointing = true;
@@ -511,7 +507,7 @@ public static class AdditionalUtilitiesExample
         {
             // Create executor with multiple advanced patterns
             var advancedExecutor = new GraphExecutor("advanced-graph")
-                .WithAcademicPatterns(config => 
+                .WithAcademicPatterns(config =>
                 {
                     config.EnableCircuitBreaker = true;
                     config.EnableBulkhead = true;

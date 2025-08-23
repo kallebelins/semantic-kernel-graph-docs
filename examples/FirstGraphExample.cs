@@ -2,7 +2,6 @@ using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
-using SemanticKernel.Graph.State;
 
 namespace Examples;
 
@@ -87,7 +86,7 @@ public class FirstGraphExample
     /// </summary>
     /// <param name="kernel">The configured kernel instance</param>
     /// <returns>A tuple containing all created nodes</returns>
-    private static (FunctionGraphNode greetingNode, ConditionalGraphNode decisionNode, FunctionGraphNode followUpNode) 
+    private static (FunctionGraphNode greetingNode, ConditionalGraphNode decisionNode, FunctionGraphNode followUpNode)
         CreateGraphNodes(Kernel kernel)
     {
         Console.WriteLine("Step 2: Creating graph nodes...");
@@ -107,7 +106,7 @@ public class FirstGraphExample
         // This node evaluates whether the greeting is substantial enough to continue
         // Note: The condition function receives GraphState, not KernelArguments
         var decisionNode = new ConditionalGraphNode(
-            (state) => state.ContainsValue("greeting") && 
+            (state) => state.ContainsValue("greeting") &&
                       state.GetValue<string>("greeting")?.Length > 20,
             "decision_node"
         );
@@ -162,7 +161,7 @@ public class FirstGraphExample
         // This creates a conditional edge that only executes when the greeting is substantial
         // Note: The condition function receives KernelArguments, not GraphState
         graph.ConnectWhen(decisionNode.NodeId, followUpNode.NodeId,
-            args => args.ContainsKey("greeting") && 
+            args => args.ContainsKey("greeting") &&
                     args["greeting"]?.ToString()?.Length > 20);
 
         // Connect decision node to end when condition is not met
@@ -200,7 +199,7 @@ public class FirstGraphExample
 
         // Display the execution results
         Console.WriteLine("\n=== Execution Results ===");
-        
+
         // Extract and display the greeting result from the final state
         // The result is a FunctionResult, but the actual data is stored in the arguments
         var greeting = initialState.GetValueOrDefault("greeting", "No greeting generated");

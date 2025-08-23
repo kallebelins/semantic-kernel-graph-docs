@@ -151,7 +151,7 @@ public class GettingStartedExample
 
         // Display the execution results
         Console.WriteLine("\n=== Execution Results ===");
-        
+
         // Extract and display the output result from the final state
         if (state.ContainsKey("output"))
         {

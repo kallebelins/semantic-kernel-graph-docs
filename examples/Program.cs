@@ -1,9 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
-using Examples;
-using SemanticKernel.Graph.Examples;
-using SemanticKernel.Graph.DocsExamples;
 using SemanticKernel.Graph.State;
 
 
@@ -77,7 +74,8 @@ class Program
                 ["chain-of-thought"] = async () => await ChainOfThoughtExample.RunAsync(),
                 ["chatbot"] = async () => await ChatbotExample.RunAsync(),
                 ["execution-guide"] = async () => await ExecutionGuideExample.RunAsync(),
-                ["logging"] = async () => await LoggingExample.RunAllAsync()
+                ["logging"] = async () => await LoggingExample.RunAllAsync(),
+                ["loop-nodes"] = async () => await LoopNodesExample.RunAsync()
             };
 
             // Determine which example to run

@@ -1,5 +1,3 @@
-using System;
-using System.Net.Http;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;

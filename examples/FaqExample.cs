@@ -1,6 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
@@ -62,7 +60,7 @@ public class FaqExample
             // Demonstrate that the kernel has graph capabilities
             var services = kernelBuilder.Services;
             var graphOptions = services.FirstOrDefault(s => s.ServiceType == typeof(GraphOptions));
-            
+
             if (graphOptions != null)
             {
                 Console.WriteLine("✅ Graph options service registered");

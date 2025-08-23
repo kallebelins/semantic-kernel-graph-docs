@@ -1,10 +1,7 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
-using SemanticKernel.Graph.State;
 
 namespace Examples;
 

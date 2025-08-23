@@ -1,11 +1,8 @@
-using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
-using SemanticKernel.Graph;
 using SemanticKernel.Graph.Core;
-using SemanticKernel.Graph.Execution;
 using SemanticKernel.Graph.Extensions;
-using System;
-using System.Threading;
+
+namespace Examples;
 
 /// <summary>
 /// Example demonstrating how to configure and use GraphOptions in a GraphExecutor.

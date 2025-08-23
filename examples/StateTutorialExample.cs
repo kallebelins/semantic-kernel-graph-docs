@@ -246,9 +246,9 @@ public class StateTutorialExample
 
         // Connect with conditional routing
         graph.Connect(inputNode.NodeId, decisionNode.NodeId);
-        graph.ConnectWhen(decisionNode.NodeId, positiveNode.NodeId, 
+        graph.ConnectWhen(decisionNode.NodeId, positiveNode.NodeId,
             args => args.ToGraphState().GetValue<string>("analysis")?.Contains("positive") == true);
-        graph.ConnectWhen(decisionNode.NodeId, negativeNode.NodeId, 
+        graph.ConnectWhen(decisionNode.NodeId, negativeNode.NodeId,
             args => args.ToGraphState().GetValue<string>("analysis")?.Contains("positive") != true);
         graph.Connect(positiveNode.NodeId, summaryNode.NodeId);
         graph.Connect(negativeNode.NodeId, summaryNode.NodeId);
@@ -268,15 +268,15 @@ public class StateTutorialExample
         foreach (var input in testInputs)
         {
             Console.WriteLine($"\n=== Testing with: {input} ===");
-            
+
             var state = new KernelArguments { ["input"] = input };
             var result = await graph.ExecuteAsync(kernel, state);
-            
+
             // Access results using safe methods from the state
             var analysis = state.TryGetValue("analysis", out var analysisValue) ? analysisValue?.ToString() : "No analysis";
             var response = state.TryGetValue("response", out var responseValue) ? responseValue?.ToString() : "No response";
             var summary = state.TryGetValue("summary", out var summaryValue) ? summaryValue?.ToString() : "No summary";
-            
+
             Console.WriteLine($"✅ Sentiment: {analysis}");
             Console.WriteLine($"✅ Response: {response}");
             Console.WriteLine($"✅ Summary: {summary}");
@@ -332,14 +332,14 @@ public class StateTutorialExample
 
         // Demonstrate validation logic using GraphState
         var validationNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 // Check required fields exist and have valid types
-                var hasValidName = state.TryGetValue<string>("name", out var userName) && 
+                var hasValidName = state.TryGetValue<string>("name", out var userName) &&
                                  !string.IsNullOrWhiteSpace(userName);
-                var hasValidAge = state.TryGetValue<int>("age", out var userAge) && 
+                var hasValidAge = state.TryGetValue<int>("age", out var userAge) &&
                                 userAge > 0 && userAge < 150;
-                var hasValidScore = state.TryGetValue<double>("score", out var userScore) && 
+                var hasValidScore = state.TryGetValue<double>("score", out var userScore) &&
                                   userScore >= 0.0 && userScore <= 100.0;
 
                 return hasValidName && hasValidAge && hasValidScore;

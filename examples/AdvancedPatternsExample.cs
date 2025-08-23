@@ -1,11 +1,10 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Integration;
 
-namespace SemanticKernel.Graph.Examples;
+namespace Examples;
 
 /// <summary>
 /// Advanced Patterns example adapted for documentation runnable sample.

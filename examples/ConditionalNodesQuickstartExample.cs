@@ -3,7 +3,6 @@ using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
-using SemanticKernel.Graph.State;
 
 namespace Examples;
 
@@ -67,12 +66,12 @@ public static class ConditionalNodesQuickstartExample
                 {
                     var age = args.GetValue<int>("userAge");
                     var name = args.GetValue<string>("userName");
-                    
+
                     // Add some analysis
                     var isVip = age > 25 && name.Length > 5;
                     args["isVip"] = isVip;
                     args["ageGroup"] = age < 18 ? "minor" : age < 65 ? "adult" : "senior";
-                    
+
                     return $"Processed user: {name}, Age: {age}, VIP: {isVip}";
                 },
                 "ProcessUser",
@@ -105,11 +104,11 @@ public static class ConditionalNodesQuickstartExample
                     var name = args.GetValue<string>("userName");
                     var age = args.GetValue<int>("userAge");
                     var isVip = args.GetValue<bool>("isVip");
-                    
+
                     var access = isVip ? "Premium" : "Standard";
                     args["accessLevel"] = access;
                     args["contentType"] = "adult";
-                    
+
                     return $"Welcome {name}! You have {access} access to adult content.";
                 },
                 "AdultAccess",
@@ -125,10 +124,10 @@ public static class ConditionalNodesQuickstartExample
                 {
                     var name = args.GetValue<string>("userName");
                     var age = args.GetValue<int>("userAge");
-                    
+
                     args["upgradeSuggested"] = true;
                     args["upgradeReason"] = "Age and activity qualify for VIP";
-                    
+
                     return $"Hello {name}! Based on your age ({age}), you might qualify for VIP status.";
                 },
                 "VipUpgrade",
@@ -144,11 +143,11 @@ public static class ConditionalNodesQuickstartExample
                 {
                     var name = args.GetValue<string>("userName");
                     var age = args.GetValue<int>("userAge");
-                    
+
                     args["accessLevel"] = "restricted";
                     args["contentType"] = "family";
                     args["restrictionReason"] = "Age requirement not met";
-                    
+
                     return $"Hello {name}! You're {age} years old. This content requires you to be 18 or older.";
                 },
                 "MinorAccess",
@@ -166,10 +165,10 @@ public static class ConditionalNodesQuickstartExample
                     var age = args.GetValue<int>("userAge");
                     var accessLevel = args.GetValue<string>("accessLevel");
                     var contentType = args.GetValue<string>("contentType");
-                    
+
                     var summary = $"User: {name}, Age: {age}, Access: {accessLevel}, Content: {contentType}";
                     args["finalSummary"] = summary;
-                    
+
                     return summary;
                 },
                 "CreateSummary",
@@ -180,7 +179,7 @@ public static class ConditionalNodesQuickstartExample
 
         // Build and configure the graph
         var graph = new GraphExecutor("ConditionalWorkflowExample", "Demonstrates conditional routing based on user characteristics");
-        
+
         graph.AddNode(inputNode);
         graph.AddNode(ageCheckNode);
         graph.AddNode(vipCheckNode);
@@ -188,27 +187,27 @@ public static class ConditionalNodesQuickstartExample
         graph.AddNode(vipUpgradeNode);
         graph.AddNode(minorNode);
         graph.AddNode(summaryNode);
-        
+
         // Connect nodes with conditional logic
         graph.Connect(inputNode.NodeId, ageCheckNode.NodeId);
-        
+
         // Age check paths - use ConnectWhen for conditional routing
-        graph.ConnectWhen(ageCheckNode.NodeId, vipCheckNode.NodeId, 
+        graph.ConnectWhen(ageCheckNode.NodeId, vipCheckNode.NodeId,
             args => args.GetValue<int>("userAge") >= 18);
-        graph.ConnectWhen(ageCheckNode.NodeId, minorNode.NodeId, 
+        graph.ConnectWhen(ageCheckNode.NodeId, minorNode.NodeId,
             args => args.GetValue<int>("userAge") < 18);
-        
+
         // VIP check paths
-        graph.ConnectWhen(vipCheckNode.NodeId, adultNode.NodeId, 
+        graph.ConnectWhen(vipCheckNode.NodeId, adultNode.NodeId,
             args => args.GetValue<bool>("isVip") == true);
-        graph.ConnectWhen(vipCheckNode.NodeId, vipUpgradeNode.NodeId, 
+        graph.ConnectWhen(vipCheckNode.NodeId, vipUpgradeNode.NodeId,
             args => args.GetValue<bool>("isVip") == false);
-        
+
         // Connect all paths to summary
         graph.Connect(adultNode.NodeId, summaryNode.NodeId);
         graph.Connect(vipUpgradeNode.NodeId, summaryNode.NodeId);
         graph.Connect(minorNode.NodeId, summaryNode.NodeId);
-        
+
         graph.SetStartNode(inputNode.NodeId);
 
         // Execute with different user scenarios
@@ -222,15 +221,15 @@ public static class ConditionalNodesQuickstartExample
         foreach (var scenario in scenarios)
         {
             Console.WriteLine($"\n=== Testing: {scenario.Name}, Age {scenario.Age} ===");
-            
+
             var initialState = new KernelArguments
             {
                 ["userName"] = scenario.Name,
                 ["userAge"] = scenario.Age
             };
-            
+
             var result = await graph.ExecuteAsync(kernel, initialState);
-            
+
             Console.WriteLine($"Path taken: {scenario.ExpectedPath}");
             Console.WriteLine($"Final summary: {initialState.GetValue<string>("finalSummary")}");
             Console.WriteLine($"Access level: {initialState.GetValue<string>("accessLevel")}");

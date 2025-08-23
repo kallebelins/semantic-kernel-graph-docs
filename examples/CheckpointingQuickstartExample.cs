@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
@@ -41,16 +40,16 @@ public static class CheckpointingQuickstartExample
 
         // Run basic checkpointing example
         await RunBasicCheckpointingExampleAsync();
-        
+
         // Run manual checkpoint management example
         await RunManualCheckpointManagementExampleAsync();
-        
+
         // Run advanced configuration example
         await RunAdvancedConfigurationExampleAsync();
-        
+
         // Run recovery example
         await RunRecoveryExampleAsync();
-        
+
         // Run monitoring example
         await RunMonitoringExampleAsync();
 
@@ -171,7 +170,7 @@ public static class CheckpointingQuickstartExample
         {
             // Restore state from the manual checkpoint
             var restoredState = StateHelpers.RestoreCheckpoint(graphState, checkpointId);
-            
+
             // Update arguments with the restored state
             // Note: UpdateFromGraphState method doesn't exist, so we'll just log the restoration
             Console.WriteLine("✅ State restored successfully from manual checkpoint");
@@ -208,10 +207,10 @@ public static class CheckpointingQuickstartExample
             CreateErrorCheckpoints = true,  // Save state on errors
             EnableAutoCleanup = true,
             FailOnCheckpointError = false,  // Continue execution even if checkpointing fails
-            
+
             // Define critical nodes that always trigger checkpoints
             CriticalNodes = new HashSet<string> { "process", "validate", "output" },
-            
+
             // Configure retention policy
             RetentionPolicy = new CheckpointRetentionPolicy
             {
@@ -285,7 +284,7 @@ public static class CheckpointingQuickstartExample
             // Find the latest checkpoint for recovery
             var executionId = executor.LastExecutionId ?? arguments.GetOrCreateGraphState().StateId;
             var checkpoints = await executor.GetExecutionCheckpointsAsync(executionId);
-            
+
             if (checkpoints.Count > 0)
             {
                 lastCheckpointId = checkpoints.First().CheckpointId;
@@ -367,10 +366,10 @@ public static class CheckpointingQuickstartExample
         foreach (var executionId in executionIds)
         {
             var checkpoints = await executor.GetExecutionCheckpointsAsync(executionId);
-            
+
             Console.WriteLine($"\n📊 Execution {executionId}:");
             Console.WriteLine($"  Checkpoints: {checkpoints.Count}");
-            
+
             foreach (var checkpoint in checkpoints.OrderBy(c => c.SequenceNumber))
             {
                 Console.WriteLine($"    {checkpoint.CheckpointId}: " +
@@ -383,7 +382,7 @@ public static class CheckpointingQuickstartExample
         // Manual cleanup demonstration
         Console.WriteLine("\n🧹 Performing manual cleanup...");
         var checkpointManager = kernel.Services.GetRequiredService<ICheckpointManager>();
-        
+
         var cleanupCount = await checkpointManager.CleanupCheckpointsAsync(
             retentionPolicy: new CheckpointRetentionPolicy
             {

@@ -169,7 +169,7 @@ public static class MetricsLoggingQuickstartExample
             builder.AddConsole().SetMinimumLevel(LogLevel.Information));
 
         var graphLogger = new SemanticKernelGraphLogger(
-            loggerFactory.CreateLogger("MyGraph"), 
+            loggerFactory.CreateLogger("MyGraph"),
             new GraphOptions { EnableLogging = true });
 
         // The logger automatically tracks execution context and correlation
@@ -186,11 +186,11 @@ public static class MetricsLoggingQuickstartExample
         graphLogger.LogNodeInfo(executionId, nodeId, "Node processing started");
 
         // Log performance metrics
-        graphLogger.LogPerformance(executionId, "execution_time", 150.5, "ms", 
+        graphLogger.LogPerformance(executionId, "execution_time", 150.5, "ms",
             new Dictionary<string, string> { ["node_type"] = "function" });
 
         Console.WriteLine("Logging examples completed. Check console output for log messages.");
-        
+
         return Task.CompletedTask;
     }
 
@@ -208,7 +208,7 @@ public static class MetricsLoggingQuickstartExample
             Console.WriteLine($"Success Rate: {summary.SuccessRate:F1}%");
             Console.WriteLine($"Average Execution Time: {summary.AverageExecutionTime.TotalMilliseconds:F2}ms");
             Console.WriteLine($"Throughput: {summary.Throughput:F2} executions/second");
-            
+
             // Check system health
             var isHealthy = summary.IsHealthy();
             Console.WriteLine($"System Health: {(isHealthy ? "🟢 HEALTHY" : "🔴 NEEDS ATTENTION")}");
@@ -228,7 +228,7 @@ public static class MetricsLoggingQuickstartExample
             {
                 var node = kvp.Value;
                 var rating = node.GetPerformanceClassification();
-                
+
                 Console.WriteLine($"{node.NodeName.Substring(0, Math.Min(14, node.NodeName.Length)),-15} " +
                                  $"{node.TotalExecutions,-12} " +
                                  $"{node.AverageExecutionTime.TotalMilliseconds,-12:F2}ms " +
@@ -254,7 +254,7 @@ public static class MetricsLoggingQuickstartExample
             }
             Console.WriteLine();
         }
-        
+
         return Task.CompletedTask;
     }
 

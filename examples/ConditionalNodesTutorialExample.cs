@@ -3,7 +3,6 @@ using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
-using System.Text.Json;
 
 namespace Examples;
 
@@ -57,7 +56,7 @@ public static class ConditionalNodesTutorialExample
 
         // 2. Complexity-based routing - routes requests based on complexity level
         var isSimpleNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var analysis = state.GetValue<string>("analysis") ?? "";
                 return analysis.Contains("\"complexity\": \"simple\"");
@@ -66,7 +65,7 @@ public static class ConditionalNodesTutorialExample
         );
 
         var isModerateNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var analysis = state.GetValue<string>("analysis") ?? "";
                 return analysis.Contains("\"complexity\": \"moderate\"");
@@ -75,7 +74,7 @@ public static class ConditionalNodesTutorialExample
         );
 
         var isComplexNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var analysis = state.GetValue<string>("analysis") ?? "";
                 return analysis.Contains("\"complexity\": \"complex\"");
@@ -120,7 +119,7 @@ public static class ConditionalNodesTutorialExample
 
         // 6. Urgency check - determines if a request requires immediate attention
         var urgencyCheck = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var analysis = state.GetValue<string>("analysis") ?? "";
                 return analysis.Contains("\"urgency\": \"high\"");
@@ -170,29 +169,29 @@ public static class ConditionalNodesTutorialExample
         graph.Connect(inputNode, isSimpleNode);
         graph.Connect(inputNode, isModerateNode);
         graph.Connect(inputNode, isComplexNode);
-        
+
         // Complexity-based routing connections
-        graph.ConnectWhen(isSimpleNode.NodeId, simpleHandler.NodeId, 
+        graph.ConnectWhen(isSimpleNode.NodeId, simpleHandler.NodeId,
             args => isSimpleNode.Condition(args.GetOrCreateGraphState()));
-        graph.ConnectWhen(isModerateNode.NodeId, moderateHandler.NodeId, 
+        graph.ConnectWhen(isModerateNode.NodeId, moderateHandler.NodeId,
             args => isModerateNode.Condition(args.GetOrCreateGraphState()));
-        graph.ConnectWhen(isComplexNode.NodeId, complexHandler.NodeId, 
+        graph.ConnectWhen(isComplexNode.NodeId, complexHandler.NodeId,
             args => isComplexNode.Condition(args.GetOrCreateGraphState()));
-        
+
         // All paths converge to urgency check
         graph.Connect(simpleHandler, urgencyCheck);
         graph.Connect(moderateHandler, urgencyCheck);
         graph.Connect(complexHandler, urgencyCheck);
-        
+
         // Urgency-based routing
-        graph.ConnectWhen(urgencyCheck.NodeId, highUrgencyHandler.NodeId, 
+        graph.ConnectWhen(urgencyCheck.NodeId, highUrgencyHandler.NodeId,
             args => urgencyCheck.Condition(args.GetOrCreateGraphState()));
-        graph.ConnectWhen(urgencyCheck.NodeId, responseFormatter.NodeId, 
+        graph.ConnectWhen(urgencyCheck.NodeId, responseFormatter.NodeId,
             args => !urgencyCheck.Condition(args.GetOrCreateGraphState()));
-        
+
         // High urgency path continues to response formatter
         graph.Connect(highUrgencyHandler, responseFormatter);
-        
+
         // Set the starting node
         graph.SetStartNode(inputNode.NodeId);
 
@@ -208,14 +207,14 @@ public static class ConditionalNodesTutorialExample
         foreach (var request in testRequests)
         {
             Console.WriteLine($"\n--- Testing: {request} ---");
-            
+
             var state = new KernelArguments { ["customerRequest"] = request };
             var result = await graph.ExecuteAsync(kernel, state);
-            
+
             // Access the result values from the arguments
             var analysis = state.GetValueOrDefault("analysis", "No analysis");
             var formattedResponse = state.GetValueOrDefault("formattedResponse", "No response");
-            
+
             Console.WriteLine($"Analysis: {analysis}");
             Console.WriteLine($"Response: {formattedResponse}");
         }
@@ -232,7 +231,7 @@ public static class ConditionalNodesTutorialExample
 
         // Create a simple conditional node that checks sentiment
         var isPositiveNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var sentiment = state.GetValue<string>("sentiment") ?? "neutral";
                 return sentiment.ToLower().Contains("positive");
@@ -265,22 +264,22 @@ public static class ConditionalNodesTutorialExample
 
         // Connect with conditional routing
         graph.Connect(inputNode, isPositiveNode);
-        graph.ConnectWhen(isPositiveNode.NodeId, positiveResponseNode.NodeId, 
+        graph.ConnectWhen(isPositiveNode.NodeId, positiveResponseNode.NodeId,
             args => isPositiveNode.Condition(args.GetOrCreateGraphState()));
-        graph.ConnectWhen(isPositiveNode.NodeId, negativeResponseNode.NodeId, 
+        graph.ConnectWhen(isPositiveNode.NodeId, negativeResponseNode.NodeId,
             args => !isPositiveNode.Condition(args.GetOrCreateGraphState()));
 
         graph.SetStartNode(inputNode.NodeId);
 
         // Test the basic conditional logic
         var testInputs = new[] { "I love this product!", "This is terrible", "It's okay" };
-        
+
         foreach (var input in testInputs)
         {
             Console.WriteLine($"\nInput: {input}");
             var state = new KernelArguments { ["input"] = input };
             var result = await graph.ExecuteAsync(kernel, state);
-            
+
             // Access the result values from the arguments
             var output = state.GetValueOrDefault("output", "No output");
             Console.WriteLine($"Output: {output}");
@@ -314,7 +313,7 @@ public static class ConditionalNodesTutorialExample
 
         // Create conditional nodes for different actions
         var shouldContinueNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var decision = state.GetValue<string>("decision") ?? "";
                 return decision.Contains("continue");
@@ -323,7 +322,7 @@ public static class ConditionalNodesTutorialExample
         );
 
         var shouldEscalateNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var decision = state.GetValue<string>("decision") ?? "";
                 return decision.Contains("escalate");
@@ -332,7 +331,7 @@ public static class ConditionalNodesTutorialExample
         );
 
         var shouldRetryNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var decision = state.GetValue<string>("decision") ?? "";
                 return decision.Contains("retry");
@@ -341,7 +340,7 @@ public static class ConditionalNodesTutorialExample
         );
 
         var shouldAbortNode = new ConditionalGraphNode(
-            state => 
+            state =>
             {
                 var decision = state.GetValue<string>("decision") ?? "";
                 return decision.Contains("abort");
@@ -385,15 +384,15 @@ public static class ConditionalNodesTutorialExample
         graph.Connect(decisionNode, shouldEscalateNode);
         graph.Connect(decisionNode, shouldRetryNode);
         graph.Connect(decisionNode, shouldAbortNode);
-        
+
         // Route to appropriate handlers based on decision
-        graph.ConnectWhen(shouldContinueNode.NodeId, continueHandler.NodeId, 
+        graph.ConnectWhen(shouldContinueNode.NodeId, continueHandler.NodeId,
             args => shouldContinueNode.Condition(args.GetOrCreateGraphState()));
-        graph.ConnectWhen(shouldEscalateNode.NodeId, escalateHandler.NodeId, 
+        graph.ConnectWhen(shouldEscalateNode.NodeId, escalateHandler.NodeId,
             args => shouldEscalateNode.Condition(args.GetOrCreateGraphState()));
-        graph.ConnectWhen(shouldRetryNode.NodeId, retryHandler.NodeId, 
+        graph.ConnectWhen(shouldRetryNode.NodeId, retryHandler.NodeId,
             args => shouldRetryNode.Condition(args.GetOrCreateGraphState()));
-        graph.ConnectWhen(shouldAbortNode.NodeId, abortHandler.NodeId, 
+        graph.ConnectWhen(shouldAbortNode.NodeId, abortHandler.NodeId,
             args => shouldAbortNode.Condition(args.GetOrCreateGraphState()));
 
         graph.SetStartNode(decisionNode.NodeId);
@@ -410,18 +409,18 @@ public static class ConditionalNodesTutorialExample
         foreach (var scenario in testScenarios)
         {
             Console.WriteLine($"\n--- Scenario: {scenario.context} ---");
-            var state = new KernelArguments 
-            { 
+            var state = new KernelArguments
+            {
                 ["context"] = scenario.context,
                 ["currentState"] = scenario.currentState
             };
-            
+
             var result = await graph.ExecuteAsync(kernel, state);
-            
+
             // Access the result values from the arguments
             var decision = state.GetValueOrDefault("decision", "No decision");
             var action = state.GetValueOrDefault("action", "No action");
-            
+
             Console.WriteLine($"Decision: {decision}");
             Console.WriteLine($"Action: {action}");
         }
@@ -442,10 +441,10 @@ public static class ConditionalNodesTutorialExample
 
         // Create a comprehensive conditional workflow example
         await RunConditionalWorkflowExample(kernel);
-        
+
         // Demonstrate basic conditional patterns
         await RunBasicConditionalPatterns(kernel);
-        
+
         // Show advanced conditional edge patterns
         await RunAdvancedConditionalEdgePatterns(kernel);
     }

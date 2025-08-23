@@ -1,12 +1,9 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.SemanticKernel;
-using SemanticKernel.Graph;
 using SemanticKernel.Graph.Core;
-using SemanticKernel.Graph.Execution;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
+
+namespace Examples;
 
 /// <summary>
 /// Example demonstrating a minimal Human-in-the-Loop approval flow using

@@ -1,10 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
-using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Examples;
 

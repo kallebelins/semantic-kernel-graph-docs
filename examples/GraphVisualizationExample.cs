@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
-using SemanticKernel.Graph.State;
-using SemanticKernel.Graph.Nodes;
 using SemanticKernel.Graph.Debug;
+using SemanticKernel.Graph.Nodes;
 
 namespace Examples;
 

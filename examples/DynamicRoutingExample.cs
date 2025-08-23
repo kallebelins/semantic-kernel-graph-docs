@@ -1,10 +1,8 @@
-using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Integration;
 using SemanticKernel.Graph.Nodes;
-using SemanticKernel.Graph.State;
 
 namespace Examples;
 
@@ -140,9 +138,9 @@ public static class DynamicRoutingExample
             // For this example, we'll create the routing engine without them
             var routingEngine = new DynamicRoutingEngine(
                 templateEngine: null,
-                options: new DynamicRoutingOptions 
-                { 
-                    EnableCaching = true, 
+                options: new DynamicRoutingOptions
+                {
+                    EnableCaching = true,
                     EnableFallback = true,
                     MaxCacheSize = 500,
                     CacheExpirationMinutes = 60
@@ -193,7 +191,7 @@ public static class DynamicRoutingExample
             // Test template rendering
             var template = "{{#if (eq priority 'high')}}true{{else}}false{{/if}}";
             var context = new KernelArguments { ["priority"] = "high" };
-            
+
             try
             {
                 var result = await templateEngine.RenderWithArgumentsAsync(template, context, CancellationToken.None);
@@ -223,9 +221,9 @@ public static class DynamicRoutingExample
         {
             // Create routing engine with metrics enabled
             var routingEngine = new DynamicRoutingEngine(
-                options: new DynamicRoutingOptions 
-                { 
-                    EnableCaching = true, 
+                options: new DynamicRoutingOptions
+                {
+                    EnableCaching = true,
                     EnableFallback = true,
                     MaxCacheSize = 1000,
                     CacheExpirationMinutes = 30
@@ -258,9 +256,9 @@ public static class DynamicRoutingExample
         {
             // Create routing engine with fallback enabled
             var routingEngine = new DynamicRoutingEngine(
-                options: new DynamicRoutingOptions 
-                { 
-                    EnableCaching = true, 
+                options: new DynamicRoutingOptions
+                {
+                    EnableCaching = true,
                     EnableFallback = true,
                     MaxCacheSize = 100,
                     CacheExpirationMinutes = 15
@@ -303,7 +301,7 @@ public static class DynamicRoutingExample
         {
             // Test the exact code from the documentation
             Console.WriteLine("Testing Basic Dynamic Routing Setup from documentation...");
-            
+
             // Create kernel with dynamic routing (exact code from docs)
             var kernelBuilder = Kernel.CreateBuilder();
             kernelBuilder.AddGraphSupport();

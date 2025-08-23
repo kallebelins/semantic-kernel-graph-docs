@@ -49,143 +49,44 @@ This example demonstrates loop control and iteration patterns with the Semantic 
 This example demonstrates basic loop creation and control.
 
 ```csharp
-// Create kernel with mock configuration
-var kernel = CreateKernel();
+// Minimal while-loop example using the documented loop node API.
+// This snippet is compatible with the examples project and can be executed as a self-contained demo.
 
-// Create basic loop workflow
-var basicLoopWorkflow = new GraphExecutor("BasicLoopWorkflow", "Basic loop implementation", logger);
+// Create a lightweight kernel for local execution
+var kernel = Kernel.CreateBuilder().Build();
 
-// Configure loop options
-var loopOptions = new LoopOptions
+// Create a graph state and initialize counters
+var state = new SemanticKernel.Graph.State.GraphState();
+state.SetValue("counter", 0);
+state.SetValue("max_count", 5);
+
+// Create a WhileLoopGraphNode with a simple condition that reads from the GraphState
+var whileLoop = new SemanticKernel.Graph.Nodes.WhileLoopGraphNode(
+    condition: s => s.GetValue<int>("counter") < s.GetValue<int>("max_count"),
+    maxIterations: 100,
+    nodeId: "basic_while_loop",
+    name: "basic_while_loop",
+    description: "Increments counter until max_count"
+);
+
+// Create a KernelFunction that increments the captured GraphState counter
+var incrementFn = KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
 {
-    MaxIterations = 10,
-    EnableLoopMonitoring = true,
-    EnablePerformanceMetrics = true,
-    EnableStatePersistence = true,
-    LoopTimeout = TimeSpan.FromMinutes(5)
-};
+    var current = state.GetValue<int>("counter");
+    state.SetValue("counter", current + 1);
+    return $"counter={current + 1}";
+}, "doc_increment", "Increment counter");
 
-basicLoopWorkflow.ConfigureLoop(loopOptions);
+var incrementNode = new SemanticKernel.Graph.Nodes.FunctionGraphNode(incrementFn, "increment_node");
 
-// Loop control node
-var loopController = new LoopGraphNode(
-    "loop-controller",
-    "Control loop execution",
-    async (context) =>
-    {
-        var currentIteration = context.GetValue<int>("iteration", 0);
-        var maxIterations = context.GetValue<int>("max_iterations", 10);
-        var shouldContinue = context.GetValue<bool>("should_continue", true);
-        
-        // Check loop conditions
-        var canContinue = currentIteration < maxIterations && shouldContinue;
-        
-        // Update loop state
-        context.SetValue("can_continue", canContinue);
-        context.SetValue("loop_complete", !canContinue);
-        context.SetValue("current_iteration", currentIteration);
-        context.SetValue("max_iterations", maxIterations);
-        
-        if (canContinue)
-        {
-            context.SetValue("next_iteration", currentIteration + 1);
-        }
-        
-        return $"Loop iteration {currentIteration} - Continue: {canContinue}";
-    });
+// Add the increment node to the loop and execute
+whileLoop.AddLoopNode(incrementNode);
 
-// Loop processing node
-var loopProcessor = new FunctionGraphNode(
-    "loop-processor",
-    "Process data in loop iteration",
-    async (context) =>
-    {
-        var currentIteration = context.GetValue<int>("current_iteration");
-        var inputData = context.GetValue<string>("input_data", "default");
-        
-        // Simulate processing
-        await Task.Delay(Random.Shared.Next(100, 300));
-        
-        var processedData = $"Processed iteration {currentIteration}: {inputData}";
-        var processingResult = $"Result_{currentIteration}_{DateTime.UtcNow:HHmmss}";
-        
-        // Update state
-        context.SetValue("processed_data", processedData);
-        context.SetValue("processing_result", processingResult);
-        context.SetValue("processing_timestamp", DateTime.UtcNow);
-        context.SetValue("iteration_complete", true);
-        
-        return processedData;
-    });
+Console.WriteLine("🔄 Testing basic while-loop implementation...");
+var iterations = await whileLoop.ExecuteAsync(kernel, state.KernelArguments);
 
-// Loop state manager
-var loopStateManager = new FunctionGraphNode(
-    "loop-state-manager",
-    "Manage loop state and prepare for next iteration",
-    async (context) =>
-    {
-        var currentIteration = context.GetValue<int>("current_iteration");
-        var processedData = context.GetValue<string>("processed_data");
-        var processingResult = context.GetValue<string>("processing_result");
-        var canContinue = context.GetValue<bool>("can_continue");
-        
-        // Prepare for next iteration
-        if (canContinue)
-        {
-            var nextIteration = currentIteration + 1;
-            context.SetValue("iteration", nextIteration);
-            context.SetValue("iteration_data", $"Data for iteration {nextIteration}");
-            context.SetValue("should_continue", true);
-        }
-        else
-        {
-            context.SetValue("should_continue", false);
-            context.SetValue("final_result", $"Loop completed after {currentIteration} iterations");
-        }
-        
-        // Update loop summary
-        var loopSummary = new Dictionary<string, object>
-        {
-            ["total_iterations"] = currentIteration,
-            ["last_processed_data"] = processedData,
-            ["last_processing_result"] = processingResult,
-            ["loop_complete"] = !canContinue,
-            ["completion_timestamp"] = DateTime.UtcNow
-        };
-        
-        context.SetValue("loop_summary", loopSummary);
-        
-        return $"State updated for iteration {currentIteration}";
-    });
-
-// Add nodes to workflow
-basicLoopWorkflow.AddNode(loopController);
-basicLoopWorkflow.AddNode(loopProcessor);
-basicLoopWorkflow.AddNode(loopStateManager);
-
-// Set start node
-basicLoopWorkflow.SetStartNode(loopController.NodeId);
-
-// Test basic loop
-Console.WriteLine("🔄 Testing basic loop implementation...");
-
-var loopArguments = new KernelArguments
-{
-    ["iteration"] = 0,
-    ["max_iterations"] = 5,
-    ["input_data"] = "Sample loop data",
-    ["should_continue"] = true
-};
-
-var result = await basicLoopWorkflow.ExecuteAsync(kernel, loopArguments);
-
-var loopSummary = result.GetValue<Dictionary<string, object>>("loop_summary");
-var totalIterations = result.GetValue<int>("total_iterations");
-var loopComplete = result.GetValue<bool>("loop_complete");
-
-Console.WriteLine($"   Total Iterations: {totalIterations}");
-Console.WriteLine($"   Loop Complete: {loopComplete}");
-Console.WriteLine($"   Summary Keys: {string.Join(", ", loopSummary.Keys)}");
+Console.WriteLine($"   Total Iterations: {iterations}");
+Console.WriteLine($"   Final counter: {state.GetValue<int>("counter")}");
 ```
 
 ### 2. ReAct Loop Pattern
@@ -210,101 +111,36 @@ var reActLoopOptions = new ReActLoopOptions
 
 reActLoopWorkflow.ConfigureReActLoop(reActLoopOptions);
 
-// ReAct reasoning node
-var reActReasoning = new ReActLoopGraphNode(
+// ReAct reasoning node (KernelFunction wrapper). Replace body with real reasoning logic as needed.
+var reActReasoning = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+    {
+        // Example: read inputs from args and return a reasoning summary string.
+        // Replace with actual reasoning implementation that updates graph state when running inside executor.
+        return "Reasoning completed";
+    }, "react_reasoning_fn", "Perform reasoning step"),
     "react-reasoning",
-    "Perform reasoning step in ReAct loop",
-    async (context) =>
-    {
-        var currentIteration = context.GetValue<int>("iteration", 0);
-        var problem = context.GetValue<string>("problem", "Solve a complex problem");
-        var previousActions = context.GetValue<List<string>>("previous_actions", new List<string>());
-        var currentState = context.GetValue<string>("current_state", "initial");
-        
-        // Simulate reasoning process
-        await Task.Delay(Random.Shared.Next(200, 500));
-        
-        var reasoning = $"Reasoning step {currentIteration + 1}: Analyze current state '{currentState}' and plan next action";
-        var nextAction = $"Action_{currentIteration + 1}";
-        var confidence = Random.Shared.Next(70, 95);
-        
-        // Update reasoning state
-        context.SetValue("reasoning_step", reasoning);
-        context.SetValue("next_action", nextAction);
-        context.SetValue("reasoning_confidence", confidence);
-        context.SetValue("reasoning_complete", true);
-        
-        return $"Reasoning completed: {reasoning}";
-    });
+    "Perform reasoning step in ReAct loop");
 
-// ReAct action node
+// ReAct action node (KernelFunction wrapper). Replace body with action execution logic.
 var reActAction = new FunctionGraphNode(
+    KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+    {
+        // Execute action based on reasoning outputs (placeholder)
+        return "Action executed";
+    }, "react_action_fn", "Execute action"),
     "react-action",
-    "Execute action based on reasoning",
-    async (context) =>
-    {
-        var currentIteration = context.GetValue<int>("iteration");
-        var nextAction = context.GetValue<string>("next_action");
-        var reasoningConfidence = context.GetValue<int>("reasoning_confidence");
-        
-        // Simulate action execution
-        await Task.Delay(Random.Shared.Next(300, 800));
-        
-        var actionResult = $"Executed {nextAction} with confidence {reasoningConfidence}%";
-        var actionSuccess = reasoningConfidence > 80;
-        var newState = actionSuccess ? $"State_{currentIteration + 1}" : $"Error_State_{currentIteration + 1}";
-        
-        // Update action state
-        context.SetValue("action_result", actionResult);
-        context.SetValue("action_success", actionSuccess);
-        context.SetValue("new_state", newState);
-        context.SetValue("action_complete", true);
-        
-        return actionResult;
-    });
+    "Execute action based on reasoning");
 
-// ReAct loop controller
+// ReAct controller node (KernelFunction wrapper). Implement loop control logic here.
 var reActController = new FunctionGraphNode(
-    "react-controller",
-    "Control ReAct loop execution and determine continuation",
-    async (context) =>
+    KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
     {
-        var currentIteration = context.GetValue<int>("iteration");
-        var maxIterations = context.GetValue<int>("max_iterations", 8);
-        var actionSuccess = context.GetValue<bool>("action_success");
-        var newState = context.GetValue<string>("new_state");
-        var problem = context.GetValue<string>("problem");
-        
-        // Determine if loop should continue
-        var shouldContinue = currentIteration < maxIterations && actionSuccess && !newState.StartsWith("Error");
-        var goalAchieved = newState.Contains("Final") || newState.Contains("Solution");
-        
-        // Update loop control state
-        context.SetValue("should_continue", shouldContinue);
-        context.SetValue("goal_achieved", goalAchieved);
-        context.SetValue("loop_complete", !shouldContinue || goalAchieved);
-        
-        if (shouldContinue && !goalAchieved)
-        {
-            context.SetValue("next_iteration", currentIteration + 1);
-            context.SetValue("current_state", newState);
-        }
-        
-        // Update ReAct summary
-        var reActSummary = new Dictionary<string, object>
-        {
-            ["iteration"] = currentIteration,
-            ["action_success"] = actionSuccess,
-            ["new_state"] = newState,
-            ["should_continue"] = shouldContinue,
-            ["goal_achieved"] = goalAchieved,
-            ["loop_complete"] = !shouldContinue || goalAchieved
-        };
-        
-        context.SetValue("react_summary", reActSummary);
-        
-        return $"ReAct loop control: Continue={shouldContinue}, Goal={goalAchieved}";
-    });
+        // Determine continuation / goal achieved based on action outputs (placeholder)
+        return "Controller evaluated";
+    }, "react_controller_fn", "Control ReAct loop"),
+    "react-controller",
+    "Control ReAct loop execution and determine continuation");
 
 // Add nodes to ReAct workflow
 reActLoopWorkflow.AddNode(reActReasoning);

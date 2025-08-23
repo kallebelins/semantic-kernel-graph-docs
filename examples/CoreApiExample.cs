@@ -3,9 +3,6 @@ using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
 using SemanticKernel.Graph.State;
-using SemanticKernel.Graph.Execution;
-using SemanticKernel.Graph.Integration.Policies;
-using SemanticKernel.Graph.Integration;
 
 namespace Examples;
 

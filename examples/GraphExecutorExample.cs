@@ -1,8 +1,8 @@
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Nodes;
-using SemanticKernel.Graph.State;
-using System.Threading;
+
+namespace Examples;
 
 // Minimal runnable example demonstrating how to construct a GraphExecutor,
 // add function nodes, connect them, set a start node and execute the graph.

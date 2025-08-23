@@ -227,14 +227,14 @@ public class StateQuickstartExample
             var sentiment = initialState.TryGetValue("sentiment", out var sentimentValue) ? sentimentValue : "Not found";
             var complexity = initialState.TryGetValue("complexity", out var complexityValue) ? complexityValue : "Not found";
             var summary = initialState.TryGetValue("finalSummary", out var summaryValue) ? summaryValue : "Not found";
-            
+
             Console.WriteLine($"Input: {input}");
             Console.WriteLine($"Processed: {processed}");
             Console.WriteLine($"Word Count: {wordCount}");
             Console.WriteLine($"Sentiment: {sentiment}");
             Console.WriteLine($"Complexity: {complexity}");
             Console.WriteLine($"Summary: {summary}");
-            
+
             Console.WriteLine($"\nFinal Result: {result.GetValueAsString()}");
 
             Console.WriteLine("\n✅ State flow completed successfully!");
@@ -274,7 +274,7 @@ public class StateQuickstartExample
     /// Creates nodes that demonstrate state flow between execution steps.
     /// </summary>
     /// <returns>A tuple containing all created nodes</returns>
-    private static (FunctionGraphNode inputNode, FunctionGraphNode analysisNode, FunctionGraphNode summaryNode) 
+    private static (FunctionGraphNode inputNode, FunctionGraphNode analysisNode, FunctionGraphNode summaryNode)
         CreateStateFlowNodes()
     {
         // Node 1: Input processing
@@ -284,12 +284,12 @@ public class StateQuickstartExample
                 {
                     var input = args.TryGetValue("input", out var inputValue) ? inputValue?.ToString() : "No input";
                     var processed = $"Processed: {input?.ToUpper()}";
-                    
+
                     // Write to state
                     args["processedInput"] = processed;
                     args["wordCount"] = input?.Split(' ')?.Length ?? 0;
                     args["timestamp"] = DateTimeOffset.UtcNow;
-                    
+
                     return processed;
                 },
                 "ProcessInput",
@@ -305,16 +305,16 @@ public class StateQuickstartExample
                 {
                     var processedInput = args.TryGetValue("processedInput", out var processedValue) ? processedValue?.ToString() : "";
                     var wordCount = args.TryGetValue("wordCount", out var wordCountValue) ? Convert.ToInt32(wordCountValue) : 0;
-                    
+
                     // Perform analysis
                     var sentiment = wordCount > 5 ? "Detailed" : "Brief";
                     var complexity = wordCount > 10 ? "High" : "Low";
-                    
+
                     // Write analysis to state
                     args["sentiment"] = sentiment;
                     args["complexity"] = complexity;
                     args["analysisComplete"] = true;
-                    
+
                     return $"Analysis: {sentiment} content with {complexity} complexity";
                 },
                 "AnalyzeContent",
@@ -334,10 +334,10 @@ public class StateQuickstartExample
                     var wordCount = args.TryGetValue("wordCount", out var wordCountValue) ? Convert.ToInt32(wordCountValue) : 0;
                     var sentiment = args.TryGetValue("sentiment", out var sentimentValue) ? sentimentValue?.ToString() : "No sentiment";
                     var complexity = args.TryGetValue("complexity", out var complexityValue) ? complexityValue?.ToString() : "No complexity";
-                    
+
                     var summary = $"Input: '{input}' -> Processed: '{processed}' -> " +
                                 $"Word Count: {wordCount}, Sentiment: {sentiment}, Complexity: {complexity}";
-                    
+
                     args["finalSummary"] = summary;
                     return summary;
                 },
@@ -358,21 +358,21 @@ public class StateQuickstartExample
     /// <param name="summaryNode">The summary node</param>
     /// <returns>A configured graph executor</returns>
     private static GraphExecutor BuildStateFlowGraph(
-        FunctionGraphNode inputNode, 
-        FunctionGraphNode analysisNode, 
+        FunctionGraphNode inputNode,
+        FunctionGraphNode analysisNode,
         FunctionGraphNode summaryNode)
     {
         var graph = new GraphExecutor("StateFlowExample", "Demonstrates state flow between nodes");
-        
+
         // Add all nodes to the graph
         graph.AddNode(inputNode);
         graph.AddNode(analysisNode);
         graph.AddNode(summaryNode);
-        
+
         // Connect nodes in sequence using node names
         graph.Connect("input_node", "analysis_node");
         graph.Connect("analysis_node", "summary_node");
-        
+
         // Set the starting node
         graph.SetStartNode("input_node");
 

@@ -1,11 +1,8 @@
-using Microsoft.SemanticKernel;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Builder;
-using SemanticKernel.Graph.Extensions;
-using SemanticKernel.Graph;
-using SemanticKernel.Graph.Nodes;
+using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
+using SemanticKernel.Graph.Extensions;
+using SemanticKernel.Graph.Nodes;
 
 namespace Examples;
 
@@ -27,22 +24,22 @@ public class InstallationExample
         {
             // Test 1: Basic OpenAI Configuration
             await TestOpenAIConfigurationAsync();
-            
+
             // Test 2: Azure OpenAI Configuration
             await TestAzureOpenAIConfigurationAsync();
-            
+
             // Test 3: Configuration File Setup
             await TestConfigurationFileSetupAsync();
-            
+
             // Test 4: Basic Project Setup
             await TestBasicProjectSetupAsync();
-            
+
             // Test 5: Advanced Configuration
             await TestAdvancedConfigurationAsync();
-            
+
             // Test 6: Dependency Injection Setup (commented out due to framework dependencies)
             // await TestDependencyInjectionSetupAsync();
-            
+
             // Test 7: Verification Test
             await TestVerificationAsync();
 
@@ -62,11 +59,11 @@ public class InstallationExample
     private static Task TestOpenAIConfigurationAsync()
     {
         Console.WriteLine("📋 Test 1: Basic OpenAI Configuration");
-        
+
         try
         {
             var builder = Kernel.CreateBuilder();
-            
+
             // Test the exact code from documentation
             builder.AddOpenAIChatCompletion(
                 modelId: Environment.GetEnvironmentVariable("OPENAI_MODEL_NAME") ?? "gpt-4",
@@ -85,7 +82,7 @@ public class InstallationExample
             Console.WriteLine($"❌ OpenAI configuration failed: {ex.Message}");
             throw;
         }
-        
+
         return Task.CompletedTask;
     }
 
@@ -96,11 +93,11 @@ public class InstallationExample
     private static Task TestAzureOpenAIConfigurationAsync()
     {
         Console.WriteLine("📋 Test 2: Azure OpenAI Configuration");
-        
+
         try
         {
             var builder = Kernel.CreateBuilder();
-            
+
             // Test the exact code from documentation
             builder.AddAzureOpenAIChatCompletion(
                 deploymentName: Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? throw new InvalidOperationException("AZURE_OPENAI_DEPLOYMENT_NAME not found"),
@@ -120,7 +117,7 @@ public class InstallationExample
             Console.WriteLine($"❌ Azure OpenAI configuration failed: {ex.Message}");
             throw;
         }
-        
+
         return Task.CompletedTask;
     }
 
@@ -131,7 +128,7 @@ public class InstallationExample
     private static Task TestConfigurationFileSetupAsync()
     {
         Console.WriteLine("📋 Test 3: Configuration File Setup");
-        
+
         try
         {
             // Test the exact code from documentation
@@ -159,7 +156,7 @@ public class InstallationExample
             Console.WriteLine($"❌ Configuration file setup failed: {ex.Message}");
             throw;
         }
-        
+
         return Task.CompletedTask;
     }
 
@@ -170,7 +167,7 @@ public class InstallationExample
     private static Task TestBasicProjectSetupAsync()
     {
         Console.WriteLine("📋 Test 4: Basic Project Setup");
-        
+
         try
         {
             var configuration = new ConfigurationBuilder()
@@ -183,7 +180,7 @@ public class InstallationExample
 
             // Configure your LLM provider
             builder.AddOpenAIChatCompletion(
-                "gpt-4", 
+                "gpt-4",
                 configuration["OpenAI:ApiKey"] ?? Environment.GetEnvironmentVariable("OPENAI_API_KEY")
             );
 
@@ -202,7 +199,7 @@ public class InstallationExample
             Console.WriteLine($"❌ Basic project setup failed: {ex.Message}");
             throw;
         }
-        
+
         return Task.CompletedTask;
     }
 
@@ -213,20 +210,20 @@ public class InstallationExample
     private static Task TestAdvancedConfigurationAsync()
     {
         Console.WriteLine("📋 Test 5: Advanced Configuration");
-        
+
         try
         {
             var builder = Kernel.CreateBuilder();
-            
+
             // Test the exact code from documentation
             builder.AddGraphSupport(options =>
             {
                 // Enable logging
                 options.EnableLogging = true;
-                
+
                 // Enable performance metrics
                 options.EnableMetrics = true;
-                
+
                 // Configure execution limits
                 options.MaxExecutionSteps = 100;
                 options.ExecutionTimeout = TimeSpan.FromMinutes(5);
@@ -251,7 +248,7 @@ public class InstallationExample
             Console.WriteLine($"❌ Advanced configuration failed: {ex.Message}");
             throw;
         }
-        
+
         return Task.CompletedTask;
     }
 
@@ -273,7 +270,7 @@ public class InstallationExample
     private static async Task TestVerificationAsync()
     {
         Console.WriteLine("📋 Test 7: Verification Test");
-        
+
         try
         {
             // Test the exact code from documentation

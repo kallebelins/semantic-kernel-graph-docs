@@ -1,10 +1,8 @@
 using Microsoft.SemanticKernel;
-using SemanticKernel.Graph;
 using SemanticKernel.Graph.Core;
+using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.Nodes;
 using SemanticKernel.Graph.State;
-using SemanticKernel.Graph.Extensions;
-using System.Text.Json;
 
 namespace Examples;
 
@@ -131,7 +129,7 @@ public static class ConditionalEdgeExample
                 var priority = state.GetValue<int>("priority");
                 var isUrgent = state.GetValue<bool>("isUrgent");
                 var hasPermission = state.GetValue<string>("userRole") == "admin";
-                
+
                 return priority > 7 || (isUrgent && hasPermission);
             },
             name: "High Priority or Urgent Admin Route"
@@ -266,11 +264,11 @@ public static class ConditionalEdgeExample
         Console.WriteLine($"   Merge configuration: {mergeEdge.MergeConfiguration?.DefaultPolicy}");
 
         // Example 2: Detailed merge configuration
-        var detailedConfig = new StateMergeConfiguration 
-        { 
-            DefaultPolicy = StateMergeConflictPolicy.Reduce 
+        var detailedConfig = new StateMergeConfiguration
+        {
+            DefaultPolicy = StateMergeConflictPolicy.Reduce
         };
-        
+
         var detailedEdge = ConditionalEdge.CreateUnconditional(sourceNode, targetNode)
             .WithMergeConfiguration(detailedConfig);
 
@@ -290,7 +288,7 @@ public static class ConditionalEdgeExample
 
         // Example 5: Custom key merger
         var customMergerEdge = ConditionalEdge.CreateUnconditional(sourceNode, targetNode)
-            .WithCustomKeyMerger("counters", (baseVal, overlayVal) => 
+            .WithCustomKeyMerger("counters", (baseVal, overlayVal) =>
             {
                 var baseCount = baseVal as int? ?? 0;
                 var overlayCount = overlayVal as int? ?? 0;
@@ -310,10 +308,10 @@ public static class ConditionalEdgeExample
             .WithMergePolicy(StateMergeConflictPolicy.Reduce)
             .WithKeyMergePolicy("counters", StateMergeConflictPolicy.Reduce)
             .WithTypeMergePolicy(typeof(List<string>), StateMergeConflictPolicy.Reduce)
-            .WithCustomKeyMerger("userData", (baseVal, overlayVal) => 
+            .WithCustomKeyMerger("userData", (baseVal, overlayVal) =>
             {
                 // Custom merge logic for user data
-                if (baseVal is Dictionary<string, object> baseDict && 
+                if (baseVal is Dictionary<string, object> baseDict &&
                     overlayVal is Dictionary<string, object> overlayDict)
                 {
                     var merged = new Dictionary<string, object>(baseDict);
@@ -404,12 +402,12 @@ public static class ConditionalEdgeExample
         var decisionEdge = new ConditionalEdge(
             decisionNode,
             actionNode,
-            state => 
+            state =>
             {
                 var priority = state.GetValue<int>("priority", 0);
                 var isUrgent = state.GetValue<bool>("isUrgent", false);
                 var hasPermission = state.GetValue<string>("userRole") == "admin";
-                
+
                 return priority > 7 || (isUrgent && hasPermission);
             },
             name: "High Priority or Urgent Admin Route"
@@ -599,7 +597,7 @@ public static class ConditionalEdgeExample
         Console.WriteLine($"✅ Added direct edge: {directEdge.Name}");
 
         // Example 2: Using ConnectWhen extension
-        executor.ConnectWhen("process", "end", 
+        executor.ConnectWhen("process", "end",
             args => args.ContainsKey("processed") && (bool)args["processed"],
             "Process Complete Route");
 
@@ -715,7 +713,7 @@ public static class ConditionalEdgeExample
 
         Console.WriteLine($"\n🧪 Testing workflow execution:");
         Console.WriteLine($"   Input priority: {testArgs.GetValue<int>("priority")}");
-        
+
         try
         {
             // Create a mock kernel for testing
