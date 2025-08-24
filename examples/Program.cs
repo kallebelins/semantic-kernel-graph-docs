@@ -78,7 +78,8 @@ class Program
                 ["loop-nodes"] = async () => await LoopNodesExample.RunAsync(),
                 ["memory-agent"] = async () => await MemoryAgentExample.RunAsync(),
                 ["multi-hop-rag-retry"] = async () => await MultiHopRagRetryExample.RunAsync(),
-                ["optimizers-and-few-shot"] = async () => await OptimizersAndFewShotExample.RunAsync()
+                ["optimizers-and-few-shot"] = async () => await OptimizersAndFewShotExample.RunAsync(),
+                ["plugin-system"] = async () => await PluginSystemExample.RunExampleAsync()
             };
 
             // Determine which example to run

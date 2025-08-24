@@ -50,10 +50,13 @@ This example demonstrates the plugin system and dynamic loading with the Semanti
 
 ### 1. Plugin Registry Setup
 
-The example starts by creating a comprehensive plugin registry.
+This minimal snippet shows the registry creation used by the runnable example `PluginSystemExample`.
 
 ```csharp
-// Create plugin registry
+// Create a logger factory for examples
+using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
+
+// Create plugin registry with conservative limits and a typed logger
 var registry = new PluginRegistry(new PluginRegistryOptions
 {
     MaxPlugins = 100,
@@ -61,342 +64,122 @@ var registry = new PluginRegistry(new PluginRegistryOptions
     EnablePeriodicCleanup = true
 }, loggerFactory.CreateLogger<PluginRegistry>());
 
-// Register several plugins with different metadata
-await RegisterSamplePluginsAsync(registry, logger);
-
-// Demonstrate search functionality
-await DemonstratePluginSearchAsync(registry, logger);
-
-// Show analytics
+// Basic marketplace analytics snapshot (async call)
 var analytics = await registry.GetMarketplaceAnalyticsAsync();
-Console.WriteLine($"📊 Marketplace Analytics:");
-Console.WriteLine($"   Total plugins: {analytics.TotalPlugins}");
-Console.WriteLine($"   Active plugins: {analytics.ActivePlugins}");
-Console.WriteLine($"   Categories: {string.Join(", ", analytics.PluginsByCategory.Keys)}");
+Console.WriteLine($"Marketplace total plugins: {analytics.TotalPlugins}");
 ```
 
 ### 2. Plugin Registration
 
-The example demonstrates comprehensive plugin registration with metadata.
+Register plugins with minimal metadata and a factory that produces the runtime node.
 
 ```csharp
-private static async Task RegisterSamplePluginsAsync(IPluginRegistry registry, ILogger logger)
+// Minimal plugin metadata
+var metadata = new PluginMetadata
 {
-    // Register a semantic search plugin
-    var searchMetadata = new PluginMetadata
-    {
-        Id = "semantic-search-v1",
-        Name = "Semantic Search Engine",
-        Description = "Advanced semantic search with vector embeddings",
-        Version = new PluginVersion(1, 2, 0),
-        Author = "Graph Team",
-        Category = PluginCategory.Cognitive,
-        Tags = { "search", "semantic", "ai", "embeddings" },
-        Dependencies = { "vector-db", "embedding-service" },
-        License = "MIT",
-        Repository = "https://github.com/semantic-kernel-graph/plugins",
-        Documentation = "https://docs.semantic-kernel-graph.com/plugins/semantic-search",
-        PerformanceMetrics = new PluginPerformanceMetrics
-        {
-            AverageLatency = TimeSpan.FromMilliseconds(150),
-            ThroughputPerSecond = 100,
-            MemoryUsageMB = 50,
-            CpuUsagePercent = 15
-        }
-    };
+    Id = "test-plugin",
+    Name = "Test Plugin",
+    Description = "A simple test plugin used by examples",
+    Version = new PluginVersion(1, 0, 0),
+    Category = PluginCategory.General
+};
 
-    var searchPlugin = new SemanticSearchPlugin();
-    await registry.RegisterPluginAsync(searchMetadata, searchPlugin);
-    logger.LogInformation("✅ Registered semantic search plugin");
-
-    // Register a data processing plugin
-    var dataMetadata = new PluginMetadata
-    {
-        Id = "data-processor-v1",
-        Name = "Data Processing Pipeline",
-        Description = "High-performance data processing with parallel execution",
-        Version = new PluginVersion(2, 0, 1),
-        Author = "Data Team",
-        Category = PluginCategory.DataProcessing,
-        Tags = { "data", "processing", "pipeline", "parallel" },
-        Dependencies = { "data-source", "processing-engine" },
-        License = "Apache-2.0",
-        PerformanceMetrics = new PluginPerformanceMetrics
-        {
-            AverageLatency = TimeSpan.FromMilliseconds(300),
-            ThroughputPerSecond = 50,
-            MemoryUsageMB = 100,
-            CpuUsagePercent = 25
-        }
-    };
-
-    var dataPlugin = new DataProcessingPlugin();
-    await registry.RegisterPluginAsync(dataMetadata, dataPlugin);
-    logger.LogInformation("✅ Registered data processing plugin");
+// Register with a factory that creates the graph node instance when requested
+var result = await registry.RegisterPluginAsync(metadata, serviceProvider => new TestPluginNode());
+if (!result.IsSuccess)
+{
+    Console.WriteLine($"Failed to register plugin: {result.ErrorMessage}");
 }
 ```
 
 ### 3. Plugin Search and Discovery
 
-The registry provides advanced search and discovery capabilities.
+Use the registry search API to find plugins matching simple criteria.
 
 ```csharp
-private static async Task DemonstratePluginSearchAsync(IPluginRegistry registry, ILogger logger)
+// Find plugins in a specific category
+var found = await registry.SearchPluginsAsync(new PluginSearchCriteria
 {
-    Console.WriteLine("\n🔍 Plugin Search Demonstration:");
+    Category = PluginCategory.General
+});
 
-    // Search by category
-    var cognitivePlugins = await registry.SearchPluginsAsync(new PluginSearchCriteria
-    {
-        Category = PluginCategory.Cognitive,
-        MinVersion = new PluginVersion(1, 0, 0)
-    });
-
-    Console.WriteLine($"  Cognitive plugins: {cognitivePlugins.Count}");
-    foreach (var plugin in cognitivePlugins.Take(3))
-    {
-        Console.WriteLine($"    - {plugin.Metadata.Name} v{plugin.Metadata.Version}");
-    }
-
-    // Search by tags
-    var searchPlugins = await registry.SearchPluginsAsync(new PluginSearchCriteria
-    {
-        Tags = { "search", "semantic" },
-        MaxLatency = TimeSpan.FromMilliseconds(200)
-    });
-
-    Console.WriteLine($"  Fast search plugins: {searchPlugins.Count}");
-    foreach (var plugin in searchPlugins)
-    {
-        Console.WriteLine($"    - {plugin.Metadata.Name} ({plugin.Metadata.PerformanceMetrics.AverageLatency.TotalMilliseconds}ms)");
-    }
-
-    // Search by performance criteria
-    var highPerformancePlugins = await registry.SearchPluginsAsync(new PluginSearchCriteria
-    {
-        MinThroughput = 50,
-        MaxMemoryUsageMB = 100
-    });
-
-    Console.WriteLine($"  High-performance plugins: {highPerformancePlugins.Count}");
+Console.WriteLine($"Found plugins: {found.Count}");
+foreach (var p in found.Take(10))
+{
+    Console.WriteLine($" - {p.Name} ({p.Id}) v{p.Version}");
 }
 ```
 
 ### 4. Custom Plugin Creation
 
-The example demonstrates creating custom plugins with advanced capabilities.
+Create a small custom plugin node that implements `IGraphNode`. The example project includes `TestPluginNode` used by the `PluginSystemExample`.
+
+The runnable example demonstrates registering a plugin with a factory and creating an instance via the registry. Prefer creating reusable node classes in library code and keeping examples small and self-contained.
 
 ```csharp
-private static async Task DemonstrateCustomPluginCreationAsync(ILogger logger, ILoggerFactory loggerFactory)
-{
-    Console.WriteLine("\n🔧 2. Custom Plugin Creation");
-    Console.WriteLine("-------------------------------");
-
-    // Create a custom analytics plugin
-    var analyticsPlugin = new CustomAnalyticsPlugin();
-    var analyticsMetadata = new PluginMetadata
-    {
-        Id = "custom-analytics-v1",
-        Name = "Custom Analytics Engine",
-        Description = "Advanced analytics with custom algorithms",
-        Version = new PluginVersion(1, 0, 0),
-        Author = "Analytics Team",
-        Category = PluginCategory.Analytics,
-        Tags = { "analytics", "custom", "algorithms" }
-    };
-
-    // Register the custom plugin
-    var registry = new PluginRegistry(new PluginRegistryOptions(), loggerFactory.CreateLogger<PluginRegistry>());
-    await registry.RegisterPluginAsync(analyticsMetadata, analyticsPlugin);
-
-    // Test the custom plugin
-    var result = await analyticsPlugin.ExecuteAsync(new KernelArguments
-    {
-        ["data"] = "sample data for analysis",
-        ["algorithm"] = "custom_algorithm_v1"
-    });
-
-    Console.WriteLine($"  Custom plugin result: {result}");
-    registry.Dispose();
-}
-
-// Custom plugin implementation
-public class CustomAnalyticsPlugin : CustomPluginNode
-{
-    public override string Name => "Custom Analytics";
-    public override string Description => "Advanced analytics with custom algorithms";
-
-    public override async Task<object> ExecuteAsync(KernelArguments arguments)
-    {
-        var data = arguments.TryGetValue("data", out var d) ? d?.ToString() ?? string.Empty : string.Empty;
-        var algorithm = arguments.TryGetValue("algorithm", out var a) ? a?.ToString() ?? string.Empty : string.Empty;
-
-        // Simulate custom analytics processing
-        await Task.Delay(100); // Simulate processing time
-
-        var result = new
-        {
-            InputData = data,
-            Algorithm = algorithm,
-            ProcessedAt = DateTime.UtcNow,
-            Insights = new[] { "Custom insight 1", "Custom insight 2" },
-            Confidence = 0.95
-        };
-
-        return result;
-    }
-}
+// Example node factory used above: serviceProvider => new TestPluginNode()
+// TestPluginNode implements IGraphNode and returns a simple FunctionResult.
 ```
 
 ### 5. Advanced Plugin Conversion
 
-The system can automatically convert Semantic Kernel plugins to graph nodes.
+The codebase may include a `PluginConverter` implementation; if not, convert kernel plugins to graph nodes by creating metadata via `PluginMetadata.FromKernelPlugin` and implementing a node wrapper. The example project focuses on registry and execution; conversion utilities are optional and should be implemented in library code when required.
 
 ```csharp
-private static async Task DemonstrateAdvancedPluginConversionAsync(ILogger logger, ILoggerFactory loggerFactory)
-{
-    Console.WriteLine("\n🔄 3. Advanced Plugin Conversion");
-    Console.WriteLine("----------------------------------");
-
-    var converter = new PluginConverter(loggerFactory.CreateLogger<PluginConverter>());
-
-    // Convert a Semantic Kernel plugin to a graph node
-    var kernel = Kernel.CreateBuilder().Build();
-    var semanticPlugin = kernel.ImportPluginFromObject(new SemanticKernelPlugin());
-
-    var convertedNode = await converter.ConvertPluginToNodeAsync(semanticPlugin, "converted-semantic");
-    
-    Console.WriteLine($"  Converted plugin: {convertedNode.NodeId}");
-    Console.WriteLine($"  Node type: {convertedNode.GetType().Name}");
-
-    // Test the converted node
-    var executor = new GraphExecutor("Conversion Test", "Testing converted plugin");
-    executor.AddNode(convertedNode);
-    executor.SetStartNode(convertedNode.NodeId);
-
-    var result = await executor.ExecuteAsync(kernel, new KernelArguments
-    {
-        ["input"] = "test input for converted plugin"
-    });
-
-    Console.WriteLine($"  Conversion test result: {result}");
-}
-
-// Sample Semantic Kernel plugin for conversion
-public class SemanticKernelPlugin
-{
-    [KernelFunction, Description("Process input with semantic understanding")]
-    public string ProcessInput([Description("Input text to process")] string input)
-    {
-        return $"Processed: {input.ToUpperInvariant()}";
-    }
-}
+// Example: Create metadata from a kernel plugin
+var kernel = Kernel.CreateBuilder().Build();
+// var kernelPlugin = kernel.ImportPluginFromObject(new SomeKernelPlugin());
+// var metadata = PluginMetadata.FromKernelPlugin(kernelPlugin);
+// registry.RegisterPluginAsync(metadata, sp => new ConvertedKernelNode(kernelPlugin));
 ```
 
 ### 6. Plugin Debugging and Profiling
 
-The system provides comprehensive debugging and profiling tools.
+The library provides a `PluginDebugger` that integrates with the `IPluginRegistry` to collect execution traces, generate reports and run lightweight profiling. The example below uses the public APIs available in the codebase (`PluginDebugger`, `IPluginDebugSession`) and keeps the flow minimal and reproducible.
 
 ```csharp
-private static async Task DemonstratePluginDebuggingAsync(ILogger logger, ILoggerFactory loggerFactory)
+// Create debugger and registry (use existing loggerFactory from examples)
+var registry = new PluginRegistry(new PluginRegistryOptions(), loggerFactory.CreateLogger<PluginRegistry>());
+var debugger = new PluginDebugger(registry, null, loggerFactory.CreateLogger<PluginDebugger>());
+
+// Register or ensure a plugin with id 'test-plugin' exists in the registry before debugging
+// registry.RegisterPluginAsync(metadata, sp => new TestPluginNode());
+
+// Start a debug session for the plugin
+var session = await debugger.StartDebugSessionAsync("test-plugin", new PluginDebugConfiguration
 {
-    Console.WriteLine("\n🐛 4. Plugin Debugging and Profiling");
-    Console.WriteLine("-------------------------------------");
+    EnableTracing = true,
+    EnableProfiling = false,
+    LogExecutionSteps = true
+});
 
-    var debugger = new PluginDebugger(loggerFactory.CreateLogger<PluginDebugger>());
-    var registry = new PluginRegistry(new PluginRegistryOptions(), loggerFactory.CreateLogger<PluginRegistry>());
+// Capture a lightweight execution trace using the session
+var trace = await session.TraceExecutionAsync(new KernelArguments { ["input"] = "debug test input" });
+Console.WriteLine($"Trace captured: {trace.Steps.Count} steps for plugin {trace.PluginId}");
 
-    // Register a plugin for debugging
-    var testPlugin = new TestPlugin();
-    var testMetadata = new PluginMetadata
-    {
-        Id = "test-plugin-v1",
-        Name = "Test Plugin",
-        Description = "Plugin for debugging demonstration",
-        Version = new PluginVersion(1, 0, 0)
-    };
+// Generate a debug report (includes session summaries and optional execution history)
+var report = await debugger.GenerateDebugReportAsync("test-plugin");
+Console.WriteLine($"Debug report generated for {report.PluginName} at {report.GeneratedAt}");
 
-    await registry.RegisterPluginAsync(testMetadata, testPlugin);
+// Optionally profile resource usage for the plugin (simulated profile duration)
+var profile = await debugger.ProfilePluginResourceUsageAsync("test-plugin", new PluginProfilingOptions { Duration = TimeSpan.FromSeconds(1) });
+Console.WriteLine($"Profile: peak memory {profile.PeakMemoryUsage} MB, peak CPU {profile.PeakCpuUsage}%");
 
-    // Enable debugging for the plugin
-    debugger.EnableDebugging(testPlugin.Id);
-
-    // Run with debugging enabled
-    var debugResult = await debugger.ExecuteWithDebuggingAsync(testPlugin, new KernelArguments
-    {
-        ["input"] = "debug test input"
-    });
-
-    Console.WriteLine($"  Debug execution result: {debugResult.Result}");
-    Console.WriteLine($"  Debug info: {debugResult.DebugInfo.Count} debug points");
-
-    // Get profiling information
-    var profiling = await debugger.GetProfilingInfoAsync(testPlugin.Id);
-    Console.WriteLine($"  Profiling: {profiling.ExecutionCount} executions, " +
-                     $"avg time: {profiling.AverageExecutionTime.TotalMilliseconds:F2}ms");
-
-    registry.Dispose();
-}
-
-// Test plugin for debugging
-public class TestPlugin : CustomPluginNode
-{
-    public override string Name => "Test Plugin";
-    public override string Description => "Plugin for debugging demonstration";
-
-    public override async Task<object> ExecuteAsync(KernelArguments arguments)
-    {
-        var input = arguments.TryGetValue("input", out var i) ? i?.ToString() ?? string.Empty : string.Empty;
-        
-        // Simulate some processing
-        await Task.Delay(50);
-        
-        return $"Test result: {input} processed at {DateTime.UtcNow:HH:mm:ss}";
-    }
-}
+// Dispose session when finished
+session.Dispose();
 ```
 
 ### 7. Plugin Marketplace Analytics
 
-The marketplace provides comprehensive analytics and discovery features.
+The `PluginRegistry` provides a simple analytics snapshot that is suitable for documentation examples. For richer marketplace features implement a separate service that aggregates registry statistics and marketplace metadata.
 
 ```csharp
-private static async Task DemonstratePluginMarketplaceAsync(ILogger logger, ILoggerFactory loggerFactory)
+// Use the registry analytics helper to get a quick overview
+var analytics = await registry.GetMarketplaceAnalyticsAsync();
+Console.WriteLine($"Total plugins: {analytics.TotalPlugins}");
+foreach (var kv in analytics.PluginsByCategory)
 {
-    Console.WriteLine("\n🏪 5. Plugin Marketplace Analytics");
-    Console.WriteLine("-----------------------------------");
-
-    var marketplace = new PluginMarketplace(loggerFactory.CreateLogger<PluginMarketplace>());
-    var registry = new PluginRegistry(new PluginRegistryOptions(), loggerFactory.CreateLogger<PluginRegistry>());
-
-    // Register multiple plugins for marketplace analysis
-    await RegisterMarketplacePluginsAsync(registry, logger);
-
-    // Get marketplace analytics
-    var analytics = await marketplace.GetAnalyticsAsync();
-    
-    Console.WriteLine($"📊 Marketplace Overview:");
-    Console.WriteLine($"   Total plugins: {analytics.TotalPlugins}");
-    Console.WriteLine($"   Active plugins: {analytics.ActivePlugins}");
-    Console.WriteLine($"   Total downloads: {analytics.TotalDownloads}");
-    Console.WriteLine($"   Average rating: {analytics.AverageRating:F2}/5.0");
-
-    // Category breakdown
-    Console.WriteLine($"\n📂 Category Breakdown:");
-    foreach (var category in analytics.PluginsByCategory)
-    {
-        Console.WriteLine($"   {category.Key}: {category.Value.Count} plugins");
-    }
-
-    // Top plugins by rating
-    var topPlugins = await marketplace.GetTopPluginsAsync(5, SortBy.Rating);
-    Console.WriteLine($"\n⭐ Top Rated Plugins:");
-    foreach (var plugin in topPlugins)
-    {
-        Console.WriteLine($"   {plugin.Metadata.Name}: {plugin.Rating:F1}/5.0 ({plugin.DownloadCount} downloads)");
-    }
-
-    registry.Dispose();
+    Console.WriteLine($"  {kv.Key}: {kv.Value}");
 }
 ```
 
