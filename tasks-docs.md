@@ -82,7 +82,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 72. [x] memory-agent.md
 73. [x] multi-agent.md
 74. [x] multi-hop-rag-retry.md
-75. [ ] optimizers-and-few-shot.md
+75. [x] optimizers-and-few-shot.md
 76. [ ] plugin-system.md
 77. [ ] react-agent.md
 78. [ ] react-problem-solving.md

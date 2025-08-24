@@ -50,6 +50,11 @@ This example demonstrates prompt optimization and few-shot learning with the Sem
 The example starts by building a minimal graph with few-shot prompt functions.
 
 ```csharp
+// Create a minimal kernel for the example (no external API keys required for local docs)
+var kernel = Kernel.CreateBuilder()
+    .AddGraphSupport()
+    .Build();
+
 // Build a minimal graph with few-shot prompt functions
 var executor = new GraphExecutor("FewShotWithOptimizers", "Few-shot prompting with optimization engines");
 
@@ -80,6 +85,7 @@ The executor is configured with advanced optimization and machine learning capab
 executor.WithAdvancedOptimizations();
 executor.WithMachineLearningOptimization(options =>
 {
+    // Enable incremental learning for lightweight local simulations
     options.EnableIncrementalLearning = true;
 });
 ```
@@ -91,14 +97,17 @@ The classification function uses few-shot examples to categorize user requests.
 ```csharp
 private static KernelFunction CreateFewShotClassifierFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    // Create a lightweight kernel function that classifies input using simple
+    // few-shot examples and keyword heuristics. This function stores the
+    // classification result into the graph state under the key "category".
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
             var input = args.TryGetValue("input", out var i) ? i?.ToString() ?? string.Empty : string.Empty;
-            
-            // Few-shot examples for classification
-            var examples = @"
-Examples:
+
+            // Few-shot examples (documented for illustration; the function uses
+            // keyword heuristics below). Keep examples concise for clarity.
+            var examples = @"Examples:
 Input: 'Summarize this article about distributed systems in simple terms.'
 Category: summarization
 
@@ -107,16 +116,9 @@ Category: translation
 
 Input: 'Classify the sentiment of: I love how responsive this app is!'
 Category: sentiment_analysis
+";
 
-Input: 'Explain quantum computing in simple terms.'
-Category: explanation
-
-Input: 'Generate a creative story about a robot.'
-Category: creative_writing
-
-Now classify this input: " + input;
-
-            // Simple classification logic based on keywords
+            // Simple classification based on keywords in the input.
             var category = input.ToLowerInvariant() switch
             {
                 var s when s.Contains("summarize") || s.Contains("summary") => "summarization",
@@ -127,6 +129,8 @@ Now classify this input: " + input;
                 _ => "general_query"
             };
 
+            // Store the category into the graph arguments/state and return a short
+            // human-readable result for demonstration purposes.
             args["category"] = category;
             return $"Classified as: {category}";
         },
@@ -143,40 +147,32 @@ The answer function generates responses using few-shot guidance patterns.
 ```csharp
 private static KernelFunction CreateFewShotAnswerFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    // Create a simple response generator that uses the previously stored
+    // "category" to produce a concise, human-readable reply. The function
+    // also stores the final answer into the graph state under "final_answer".
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
             var input = args.TryGetValue("input", out var i) ? i?.ToString() ?? string.Empty : string.Empty;
             var category = args.TryGetValue("category", out var c) ? c?.ToString() ?? string.Empty : string.Empty;
-            
-            // Few-shot examples for response generation
-            var examples = @"
-Examples:
+
+            // Few-shot examples are documented for readers; the implementation
+            // uses straightforward category-driven templates below.
+            var examples = @"Examples:
 Input: 'Summarize this article about distributed systems in simple terms.'
 Category: summarization
-Response: 'Distributed systems are networks of computers that work together to solve problems. They're like a team where each member has a specific job, making the whole system more reliable and faster than a single computer.'
+Response: 'Distributed systems are networks of computers that work together to solve problems.'
+";
 
-Input: 'Translate the following text to Portuguese: The system achieved 99.9% uptime.'
-Category: translation
-Response: 'O sistema alcançou 99,9% de tempo de atividade.'
-
-Input: 'Classify the sentiment of: I love how responsive this app is!'
-Category: sentiment_analysis
-Response: 'Positive sentiment. The user expresses strong satisfaction with the app's responsiveness using enthusiastic language like "love" and an exclamation mark.'
-
-Now generate a response for:
-Input: " + input + @"
-Category: " + category;
-
-            // Generate response based on category
+            // Category-driven templated responses suitable for documentation
             var response = category switch
             {
-                "summarization" => $"Here's a simple summary: {input.Replace("summarize", "").Replace("in simple terms", "").Trim()} can be explained as a fundamental concept that helps us understand complex topics more easily.",
-                "translation" => $"Translation: {input.Replace("Translate the following text to Portuguese:", "").Trim()} would be translated to Portuguese as requested.",
-                "sentiment_analysis" => $"Sentiment Analysis: {input.Replace("Classify the sentiment of:", "").Trim()} shows positive sentiment with enthusiastic language.",
-                "explanation" => $"Explanation: {input.Replace("Explain", "").Replace("in simple terms", "").Trim()} is a concept that can be broken down into simple, understandable parts.",
-                "creative_writing" => $"Creative Response: Here's a creative take on {input.Replace("Generate a creative story about", "").Trim()}: A fascinating tale unfolds...",
-                _ => $"General Response: {input} - This is a general query that can be addressed with standard information and guidance."
+                "summarization" => $"Here's a simple summary: {input.Replace("summarize", "").Replace("in simple terms", "").Trim()}.",
+                "translation" => $"Translation: {input.Replace("Translate the following text to Portuguese:", "").Trim()}",
+                "sentiment_analysis" => $"Sentiment Analysis: {input.Replace("Classify the sentiment of:", "").Trim()} shows positive sentiment.",
+                "explanation" => $"Explanation: {input.Replace("Explain", "").Replace("in simple terms", "").Trim()}.",
+                "creative_writing" => $"Creative Response: A creative take on {input.Replace("Generate a creative story about", "").Trim()}.",
+                _ => $"General Response: {input}"
             };
 
             args["final_answer"] = response;
@@ -193,7 +189,9 @@ Category: " + category;
 The example processes multiple sample inputs to demonstrate the workflow.
 
 ```csharp
-// Run a few sample inputs
+// Run a few sample inputs through the executor. Each run demonstrates the
+// classification and answer generation steps and shows how results are
+// stored in the graph state for later retrieval.
 var samples = new[]
 {
     "Summarize this article about distributed systems in simple terms.",
@@ -204,15 +202,16 @@ var samples = new[]
 foreach (var input in samples)
 {
     Console.WriteLine($"🧑‍💻 User: {input}");
-    var args = new KernelArguments
-    {
-        ["input"] = input
-    };
+    var args = new KernelArguments { ["input"] = input };
 
+    // Execute the graph with the kernel and provided arguments
     var result = await executor.ExecuteAsync(kernel, args);
+
+    // Read values from the graph state (category and final_answer)
     var state = args.GetOrCreateGraphState();
     var category = state.GetValue<string>("category") ?? "(unknown)";
     var answer = state.GetValue<string>("final_answer") ?? result.GetValue<string>() ?? "No answer produced";
+
     Console.WriteLine($"📂 Category: {category}");
     Console.WriteLine($"🤖 Answer: {answer}\n");
     await Task.Delay(150);
@@ -224,21 +223,22 @@ foreach (var input in samples)
 The example demonstrates optimization usage with performance metrics.
 
 ```csharp
-// Demonstrate optimizers usage briefly
+// Demonstrate optimizers usage briefly: collect metrics and run a local
+// optimization pass. The example simulates node execution timings to
+// generate basic performance metrics used by the optimizer.
 var metrics = new GraphPerformanceMetrics(new GraphMetricsOptions(), executor.GetService<IGraphLogger>());
 
 // Simulate a few node runs to generate basic metrics
 for (int i = 0; i < 6; i++)
 {
     var tracker = metrics.StartNodeTracking(classify.NodeId, "FewShotClassifier", $"exec_{i}");
-    await Task.Delay(Random.Shared.Next(30, 90));
+    await Task.Delay(new Random(42).Next(30, 90));
     metrics.CompleteNodeTracking(tracker, success: true);
 }
 
 var optimizationResult = await executor.OptimizeAsync(metrics);
 Console.WriteLine($"🔧 Optimizer suggestions: {optimizationResult.TotalOptimizations} " +
-                 $"(paths: {optimizationResult.PathOptimizations.Count}, " +
-                 $"nodes: {optimizationResult.NodeOptimizations.Count})");
+                 $"(paths: {optimizationResult.PathOptimizations.Count}, nodes: {optimizationResult.NodeOptimizations.Count})");
 ```
 
 ### 7. Machine Learning Training and Prediction
@@ -246,7 +246,9 @@ Console.WriteLine($"🔧 Optimizer suggestions: {optimizationResult.TotalOptimiz
 The example demonstrates lightweight ML training and performance prediction.
 
 ```csharp
-// Lightweight ML training + prediction
+// Lightweight ML training + prediction using the generated history. This
+// demonstrates how the executor can be asked to train and predict graph
+// performance using simulated historical data.
 var history = GenerateTinyPerformanceHistory();
 var training = await executor.TrainModelsAsync(history);
 
@@ -260,9 +262,8 @@ if (training.Success)
         LoopNodeCount = 0,
         ParallelNodeCount = 0
     });
-    
-    Console.WriteLine($"🔮 Predicted latency: {prediction.PredictedLatency.TotalMilliseconds:F1}ms | " +
-                     $"Confidence: {prediction.Confidence:P1}");
+
+    Console.WriteLine($"🔮 Predicted latency: {prediction.PredictedLatency.TotalMilliseconds:F1}ms | Confidence: {prediction.Confidence:P1}");
 }
 ```
 
@@ -273,14 +274,17 @@ The example generates simulated performance history for ML training.
 ```csharp
 private static List<GraphPerformanceHistory> GenerateTinyPerformanceHistory()
 {
-    var random = new Random(42); // Fixed seed for consistent results
+    // Fixed seed ensures consistent generated history across runs which is
+    // useful for documentation examples and tests.
+    var random = new Random(42);
     var history = new List<GraphPerformanceHistory>();
 
-    for (int i = 0; i < 10; i++)
+    // Generate a small set of synthetic performance history entries.
+    for (int i = 0; i < 8; i++)
     {
         var entry = new GraphPerformanceHistory
         {
-            Timestamp = DateTimeOffset.UtcNow.AddHours(-i),
+            Timestamp = DateTimeOffset.UtcNow.AddMinutes(-i),
             GraphConfiguration = new GraphConfiguration
             {
                 NodeCount = 2,
@@ -289,11 +293,10 @@ private static List<GraphPerformanceHistory> GenerateTinyPerformanceHistory()
                 LoopNodeCount = 0,
                 ParallelNodeCount = 0
             },
-            AverageLatency = TimeSpan.FromMilliseconds(50 + random.Next(20)),
-            Throughput = 80 + random.Next(40),
-            SuccessRate = 95 + random.Next(5),
-            AppliedOptimizations = random.Next(100) < 30 ? 
-                new[] { "caching", "parallel" } : Array.Empty<string>()
+            AverageLatency = TimeSpan.FromMilliseconds(40 + random.Next(40)),
+            Throughput = 50 + random.Next(50),
+            SuccessRate = 90 + random.Next(10),
+            AppliedOptimizations = random.Next(100) < 30 ? new[] { "caching" } : Array.Empty<string>()
         };
 
         history.Add(entry);
