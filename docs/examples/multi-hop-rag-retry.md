@@ -90,228 +90,263 @@ private static GraphExecutor CreateMultiHopRagExecutor(Kernel kernel, KernelMemo
     executor.AddNode(evaluate);
     executor.AddNode(refine);
     executor.AddNode(answer);
+
+    executor.SetStartNode(analyze.NodeId);
+    executor.AddEdge(ConditionalEdge.CreateUnconditional(analyze, retrieve));
+    executor.AddEdge(ConditionalEdge.CreateUnconditional(retrieve, evaluate));
+
+    // Conditional routing: continue refining vs finalize
+    executor.AddEdge(new ConditionalEdge(
+        evaluate,
+        refine,
+        args => ShouldContinueRetrieval(args),
+        "Retry Retrieval"
+    ));
+
+    executor.AddEdge(new ConditionalEdge(
+        evaluate,
+        answer,
+        args => !ShouldContinueRetrieval(args),
+        "Finalize Answer"
+    ));
+
+    executor.AddEdge(ConditionalEdge.CreateUnconditional(refine, retrieve));
+
+    return executor;
+}
 ```
 
 ### 2. Configuring the Workflow
 
-The workflow is configured with conditional edges to control the retry loop.
+The workflow is configured with conditional edges to control the retry loop. The example uses
+`ConditionalEdge` instances (instead of inline predicates) so routing logic is explicit and testable.
 
 ```csharp
-// Set the start node
+// Note: the executor wiring is performed inside CreateMultiHopRagExecutor in the example
+// Set the start node and connect nodes; conditional edges decide whether to retry or finalize.
 executor.SetStartNode(analyze.NodeId);
+executor.AddEdge(ConditionalEdge.CreateUnconditional(analyze, retrieve));
+executor.AddEdge(ConditionalEdge.CreateUnconditional(retrieve, evaluate));
 
-// Connect the main flow
-executor.Connect(analyze.NodeId, retrieve.NodeId);
-executor.Connect(retrieve.NodeId, evaluate.NodeId);
+executor.AddEdge(new ConditionalEdge(
+    evaluate,
+    refine,
+    args => ShouldContinueRetrieval(args),
+    "Retry Retrieval"
+));
 
-// Conditional edge: retry if context is insufficient
-executor.ConnectWhen(evaluate.NodeId, refine.NodeId, state =>
-{
-    var evaluation = state.TryGetValue("evaluation_message", out var eval) ? eval?.ToString() ?? string.Empty : string.Empty;
-    return evaluation.Contains("insufficient") || evaluation.Contains("retry");
-});
+executor.AddEdge(new ConditionalEdge(
+    evaluate,
+    answer,
+    args => !ShouldContinueRetrieval(args),
+    "Finalize Answer"
+));
 
-// Conditional edge: proceed to answer if context is sufficient
-executor.ConnectWhen(evaluate.NodeId, answer.NodeId, state =>
-{
-    var evaluation = state.TryGetValue("evaluation_message", out var eval) ? eval?.ToString() ?? string.Empty : string.Empty;
-    return evaluation.Contains("sufficient") || evaluation.Contains("proceed");
-});
-
-// Connect refinement back to retrieval
-executor.Connect(refine.NodeId, retrieve.NodeId);
+executor.AddEdge(ConditionalEdge.CreateUnconditional(refine, retrieve));
 
 return executor;
 ```
 
 ### 3. Query Analysis Function
 
-The initial query analysis function prepares the search query.
+The initial query analysis function prepares a compact, normalized search query and initializes
+loop control arguments when missing.
 
 ```csharp
 private static KernelFunction CreateInitialQueryFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
-            var question = args.TryGetValue("user_question", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
-            
-            // Analyze the question and create an optimized search query
-            var searchQuery = question.ToLowerInvariant()
-                .Replace("what does", "")
-                .Replace("tell me about", "")
-                .Replace("summarize", "")
+            var question = args.GetValueOrDefault("user_question")?.ToString() ?? string.Empty;
+
+            // Initialize loop state if missing
+            if (!args.ContainsName("attempt")) args["attempt"] = 0;
+            if (!args.ContainsName("max_attempts")) args["max_attempts"] = 3;
+            if (!args.ContainsName("min_required_chunks")) args["min_required_chunks"] = 2;
+            if (!args.ContainsName("top_k")) args["top_k"] = 4;
+            if (!args.ContainsName("min_score")) args["min_score"] = 0.45;
+
+            // Produce a compact query removing question words and punctuation
+            var query = question
+                .Replace("What", string.Empty, StringComparison.OrdinalIgnoreCase)
+                .Replace("How", string.Empty, StringComparison.OrdinalIgnoreCase)
+                .Replace("Explain", string.Empty, StringComparison.OrdinalIgnoreCase)
+                .Replace("?", string.Empty, StringComparison.OrdinalIgnoreCase)
                 .Trim();
 
-            args["search_query"] = searchQuery;
-            return $"Search query prepared: {searchQuery}";
+            return string.IsNullOrWhiteSpace(query) ? question : query;
         },
         functionName: "analyze_question",
-        description: "Analyzes user question and prepares search query"
+        description: "Analyzes the user question and outputs a compact search query"
     );
 }
 ```
 
 ### 4. Retrieval Function
 
-The retrieval function attempts to fetch relevant context from the knowledge base.
+The retrieval function attempts to fetch relevant context from the knowledge base; it streams
+results from the provider and returns concatenated text snippets.
 
 ```csharp
 private static KernelFunction CreateAttemptRetrievalFunction(Kernel kernel, KernelMemoryGraphProvider provider, string collection)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    return kernel.CreateFunctionFromMethod(
         async (KernelArguments args) =>
         {
-            var query = args.TryGetValue("search_query", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
-            var topK = args.TryGetValue("top_k", out var tk) && tk is int k ? k : 4;
-            var minScore = args.TryGetValue("min_score", out var ms) && ms is double s ? s : 0.45;
+            var query = args.GetValueOrDefault("search_query")?.ToString()
+                ?? args.GetValueOrDefault("user_question")?.ToString()
+                ?? string.Empty;
 
-            // Attempt retrieval with current parameters
-            var results = await provider.SearchAsync(collection, query, topK, minScore);
-            
-            var context = string.Join("\n\n", results.Select(r => r.Text));
-            args["retrieved_context"] = context;
-            args["retrieval_count"] = results.Count;
-            args["retrieval_score"] = results.Any() ? results.Max(r => r.Score) : 0.0;
+            var topK = TryGetInt(args, "top_k", 4);
+            var minScore = TryGetDouble(args, "min_score", 0.45);
 
-            return $"Retrieved {results.Count} chunks with max score {results.Max(r => r.Score):F3}";
+            var enumerator = await provider.SearchAsync(collection, query, Math.Max(1, topK), Math.Clamp(minScore, 0.0, 1.0));
+            var snippets = new List<string>();
+            await foreach (var item in enumerator)
+            {
+                snippets.Add(item.Text);
+            }
+
+            args["retrieved_count"] = snippets.Count;
+
+            if (snippets.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            // Cap accumulated context length to avoid overly long downstream prompts
+            var joined = string.Join(" \n--- \n", snippets);
+            return joined.Length > 4000 ? joined[..4000] + "…" : joined;
         },
         functionName: "attempt_retrieval",
-        description: "Attempts to retrieve relevant context from knowledge base"
+        description: "Retrieves relevant context from the knowledge base for the current query"
     );
 }
 ```
 
 ### 5. Context Evaluation Function
 
-The evaluation function determines if the retrieved context is sufficient.
+The evaluation function inspects retrieved counts and thresholds and returns a human-friendly
+status message used by the conditional edges.
 
 ```csharp
 private static KernelFunction CreateEvaluateContextFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
-            var context = args.TryGetValue("retrieved_context", out var c) ? c?.ToString() ?? string.Empty : string.Empty;
-            var count = args.TryGetValue("retrieval_count", out var cnt) && cnt is int n ? n : 0;
-            var score = args.TryGetValue("retrieval_score", out var s) && s is double sc ? sc : 0.0;
-            var minRequired = args.TryGetValue("min_required_chunks", out var mrc) && mrc is int min ? min : 2;
+            var attempt = TryGetInt(args, "attempt", 0);
+            var maxAttempts = TryGetInt(args, "max_attempts", 3);
+            var retrievedCount = TryGetInt(args, "retrieved_count", 0);
+            var minRequired = TryGetInt(args, "min_required_chunks", 2);
 
-            var evaluation = new
-            {
-                ChunkCount = count,
-                MaxScore = score,
-                MinRequired = minRequired,
-                IsSufficient = count >= minRequired && score >= 0.6,
-                Quality = score >= 0.8 ? "high" : score >= 0.6 ? "medium" : "low"
-            };
+            var status = retrievedCount >= minRequired
+                ? $"✅ Sufficient context collected (chunks={retrievedCount})."
+                : $"ℹ️ Insufficient context (chunks={retrievedCount} < required={minRequired}). Attempt {attempt}/{maxAttempts}.";
 
-            args["evaluation"] = evaluation;
-
-            if (evaluation.IsSufficient)
-            {
-                return "Context is sufficient, proceeding to answer synthesis";
-            }
-            else
-            {
-                return $"Context insufficient: {count}/{minRequired} chunks, score {score:F3}. Need to retry with refined parameters.";
-            }
+            return status;
         },
         functionName: "evaluate_context",
-        description: "Evaluates if retrieved context is sufficient for answer synthesis"
+        description: "Evaluates sufficiency of the retrieved context"
     );
 }
 ```
 
 ### 6. Query Refinement Function
 
-The refinement function adjusts search parameters for better results.
+The refinement function increments the attempt counter, relaxes thresholds and applies simple
+heuristics to broaden the query for subsequent retrieval attempts.
 
 ```csharp
 private static KernelFunction CreateRefineQueryFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
-            var currentQuery = args.TryGetValue("search_query", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
-            var attemptCount = args.TryGetValue("attempt_count", out var ac) && ac is int count ? count : 0;
-            var topK = args.TryGetValue("top_k", out var tk) && tk is int k ? k : 4;
-            var minScore = args.TryGetValue("min_score", out var ms) && ms is double s ? s : 0.45;
+            var attempt = TryGetInt(args, "attempt", 0) + 1;
+            args["attempt"] = attempt;
 
-            // Refine parameters based on attempt count
-            var refinedTopK = Math.Min(topK + 2, 10); // Increase top_k, max 10
-            var refinedMinScore = Math.Max(minScore - 0.1, 0.3); // Decrease min_score, min 0.3
+            var topK = TryGetInt(args, "top_k", 4);
+            var minScore = TryGetDouble(args, "min_score", 0.45);
+            var baseQuery = args.GetValueOrDefault("search_query")?.ToString() ?? string.Empty;
 
-            // Refine query if needed
-            var refinedQuery = currentQuery;
-            if (attemptCount > 1)
-            {
-                // Add broader terms for subsequent attempts
-                refinedQuery = $"{currentQuery} overview general information";
-            }
+            // Widen search window progressively
+            var newTopK = Math.Min(topK + 2, 12);
+            var newMinScore = Math.Max(0.20, minScore - 0.05);
+            args["top_k"] = newTopK;
+            args["min_score"] = newMinScore;
 
-            args["search_query"] = refinedQuery;
-            args["top_k"] = refinedTopK;
-            args["min_score"] = refinedMinScore;
-            args["attempt_count"] = attemptCount + 1;
-
-            return $"Refined query: '{refinedQuery}', top_k: {refinedTopK}, min_score: {refinedMinScore:F3}";
+            var refined = ApplyHeuristicRefinements(baseQuery, args.GetValueOrDefault("user_question")?.ToString() ?? string.Empty, attempt);
+            return refined;
         },
         functionName: "refine_query",
-        description: "Refines search query and parameters for retry attempts"
+        description: "Refines the search query and relaxes thresholds for the next attempt"
     );
 }
 ```
 
 ### 7. Answer Synthesis Function
 
-The synthesis function combines accumulated context into a final answer.
+The synthesis function formats a final answer from whatever context was collected across
+attempts. If no context was retrieved, it returns an informative message.
 
 ```csharp
 private static KernelFunction CreateSynthesizeAnswerFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
-            var context = args.TryGetValue("retrieved_context", out var c) ? c?.ToString() ?? string.Empty : string.Empty;
-            var question = args.TryGetValue("user_question", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
-            var evaluation = args.TryGetValue("evaluation", out var eval) ? eval : null;
+            var question = args.GetValueOrDefault("user_question")?.ToString() ?? string.Empty;
+            var context = args.GetValueOrDefault("retrieved_context")?.ToString() ?? string.Empty;
+            var attempt = TryGetInt(args, "attempt", 0);
+            var retrievedCount = TryGetInt(args, "retrieved_count", 0);
 
-            // Synthesize answer from accumulated context
-            var answer = $"Based on the retrieved information:\n\n{context}\n\n" +
-                        $"This answer was synthesized from {evaluation?.GetType().GetProperty("ChunkCount")?.GetValue(evaluation)} " +
-                        $"context chunks with quality level: {evaluation?.GetType().GetProperty("Quality")?.GetValue(evaluation)}.";
+            if (string.IsNullOrWhiteSpace(context))
+            {
+                return $"I could not retrieve sufficient information to answer: '{question}'. Attempts: {attempt}, retrieved chunks: {retrievedCount}.";
+            }
 
-            args["final_answer"] = answer;
-            return answer;
+            var preview = context.Length > 600 ? context[..600] + "…" : context;
+            return $"Answer to: '{question}'\n\nBased on retrieved context (chunks={retrievedCount}, attempts={attempt}):\n{preview}";
         },
         functionName: "synthesize_answer",
-        description: "Synthesizes final answer from accumulated retrieved context"
+        description: "Formats a final answer using retrieved context"
     );
 }
 ```
 
 ### 8. Knowledge Base Seeding
 
-The example seeds a knowledge base with sample documents for testing.
+The example seeds a small knowledge base with several documents to encourage different
+retrieval behaviors (policy vs report vs customer content).
 
 ```csharp
 private static async Task SeedKnowledgeBaseAsync(KernelMemoryGraphProvider provider, string collection)
 {
-    var documents = new[]
-    {
-        new { Title = "Data Privacy Policy", Content = "Our data privacy policy mandates encryption of all customer data and retention for 7 years..." },
-        new { Title = "Customer Documentation", Content = "Customer documentation must be handled securely with access controls and audit logging..." },
-        new { Title = "Business Reports", Content = "Business reports include performance metrics, revenue analysis, and growth projections..." },
-        new { Title = "Performance Tracking", Content = "Performance tracking systems monitor KPIs, SLA compliance, and operational efficiency..." }
-    };
+    await provider.SaveInformationAsync(collection,
+        "The data privacy policy mandates encryption at rest and in transit, requires multi-factor authentication (MFA), and limits data retention to 24 months.",
+        "mh-001",
+        "Corporate data privacy policy",
+        "category:policy");
 
-    foreach (var doc in documents)
-    {
-        await provider.StoreAsync(collection, doc.Title, doc.Content);
-    }
+    await provider.SaveInformationAsync(collection,
+        "Customer documentation must be handled securely with restricted access controls and audited storage locations.",
+        "mh-002",
+        "Customer documentation handling guidelines",
+        "category:customer");
 
-    Console.WriteLine($"✅ Knowledge base seeded with {documents.Length} documents");
+    await provider.SaveInformationAsync(collection,
+        "Quarterly business reports indicate improved performance metrics due to optimized workflows and better resource allocation.",
+        "mh-003",
+        "Quarterly business report summary",
+        "category:report");
+
+    await provider.SaveInformationAsync(collection,
+        "Performance tracking dashboards show a steady increase in throughput and a reduction in processing latency.",
+        "mh-004",
+        "Performance tracking overview",
+        "category:metrics");
 }
 ```
 
