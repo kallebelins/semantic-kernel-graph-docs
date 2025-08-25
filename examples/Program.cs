@@ -95,6 +95,7 @@ class Program
                 ["metrics-and-observability"] = async () => await GraphMetricsExample.RunBasicMetricsDemoAsync(),
                 ["parallelism-and-fork-join"] = async () => await SimpleForkJoinExample.RunAsync(),
                 ["resource-governance"] = async () => await ResourceGovernanceExample.RunAsync(),
+                ["schema-typing-and-validation"] = async () => await SchemaTypingAndValidationExample.RunAsync()
             };
 
             // Determine which example to run

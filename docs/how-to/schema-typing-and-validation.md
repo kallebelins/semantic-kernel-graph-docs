@@ -419,33 +419,32 @@ public static class StateMigrationManager
 
 **Usage Example:**
 ```csharp
-// Register migrations
+// Example: register a migration and migrate an old serialized state
+StateMigrationManager.ClearMigrations();
 StateMigrationManager.RegisterMigration(new UserProfileMigration_1_0_0_to_1_1_0());
-StateMigrationManager.RegisterMigration(new UserProfileMigration_1_1_0_to_1_2_0());
 
-// Check if migration is needed
 var oldVersion = new StateVersion(1, 0, 0);
+var oldSerializedState = state.Serialize();
+
 if (StateMigrationManager.IsMigrationNeeded(oldVersion))
 {
     Console.WriteLine("Migration required");
-    
-    // Get migration path
     var migrationPath = StateMigrationManager.GetMigrationPath(oldVersion, StateVersion.Current);
     Console.WriteLine($"Migration path: {string.Join(" → ", migrationPath.Select(m => m.ToVersion))}");
-}
 
-// Perform migration
-try
-{
-    var migratedState = StateMigrationManager.MigrateToCurrentVersion(
-        oldSerializedState, 
-        oldVersion
-    );
-    Console.WriteLine("Migration completed successfully");
+    try
+    {
+        var migratedState = StateMigrationManager.MigrateToCurrentVersion(oldSerializedState, oldVersion);
+        Console.WriteLine($"Migration completed. Migrated size: {migratedState.Length}");
+    }
+    catch (InvalidOperationException ex)
+    {
+        Console.WriteLine($"Migration failed: {ex.Message}");
+    }
 }
-catch (InvalidOperationException ex)
+else
 {
-    Console.WriteLine($"Migration failed: {ex.Message}");
+    Console.WriteLine("No migration needed for current example state.");
 }
 ```
 
