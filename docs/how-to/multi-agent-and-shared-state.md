@@ -764,6 +764,12 @@ foreach (var result in workflow.Results)
 * [Metrics and Observability](metrics-and-observability.md) - Monitoring and performance analysis
 * [Examples](../../examples/) - Practical examples of multi-agent coordination
 
+Addendum: A runnable example is available at `semantic-kernel-graph-docs/examples/MultiAgentExample.cs`. To execute it from the examples project use the Program example runner and the `multi-agent` key as follows:
+
+```bash
+dotnet run --project semantic-kernel-graph-docs/examples/Examples.csproj -- "multi-agent"
+```
+
 ## Concepts and Techniques
 
 **MultiAgentCoordinator**: Central orchestrator that manages agent lifecycle, work distribution, and result aggregation across multiple graph executor instances. Provides coordination, failover, and health monitoring capabilities.

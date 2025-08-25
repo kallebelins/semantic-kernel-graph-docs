@@ -104,7 +104,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 92. [x] integration-and-extensions.md
 93. [x] loops.md
 94. [x] metrics-and-observability.md
-95. [ ] multi-agent-and-shared-state.md
+95. [x] multi-agent-and-shared-state.md
 96. [ ] parallelism-and-fork-join.md
 97. [ ] real-time-visualization-and-highlights.md
 98. [ ] resource-governance-and-concurrency.md
