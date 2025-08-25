@@ -475,12 +475,13 @@ try
 {
     var result = await restNode.ExecuteAsync(kernel, arguments, cancellationToken);
     
-    // Check HTTP status
-    var statusCode = result.GetValue<int>("status_code");
+    // Safely read HTTP metadata from the execution result.
+    // The RestToolGraphNode stores HTTP metadata in the FunctionResult.Metadata dictionary.
+    var statusCode = result.Metadata.TryGetValue("status_code", out var scObj) && scObj is int sc ? sc : -1;
     if (statusCode >= 400)
     {
-        // Handle HTTP errors
-        var errorBody = result.GetValue<string>("response_body");
+        // Handle HTTP errors: read the response body safely and log.
+        var errorBody = result.Metadata.TryGetValue("response_body", out var ebObj) ? ebObj?.ToString() ?? string.Empty : string.Empty;
         _logger.LogError("HTTP error {StatusCode}: {ErrorBody}", statusCode, errorBody);
     }
 }
@@ -753,11 +754,14 @@ var logger = LoggerFactory.Create(builder =>
 
 var restNode = new RestToolGraphNode(schema, httpClient, logger: logger);
 
-// Check execution details
+// Check execution details using safe metadata access.
 var result = await restNode.ExecuteAsync(kernel, arguments);
-Console.WriteLine($"Status: {result.GetValue<int>("status_code")}");
-Console.WriteLine($"Response: {result.GetValue<string>("response_body")}");
-Console.WriteLine($"From cache: {result.GetValue<bool>("from_cache")}");
+var status = result.Metadata.TryGetValue("status_code", out var stObj) && stObj is int sti ? sti : -1;
+var responseBody = result.Metadata.TryGetValue("response_body", out var respObj) ? respObj?.ToString() ?? string.Empty : string.Empty;
+var fromCache = result.Metadata.TryGetValue("from_cache", out var fcObj) && fcObj is bool fcb && fcb;
+Console.WriteLine($"Status: {status}");
+Console.WriteLine($"Response: {responseBody}");
+Console.WriteLine($"From cache: {fromCache}");
 ```
 
 ## See Also

@@ -108,7 +108,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 96. [x] parallelism-and-fork-join.md
 97. [x] real-time-visualization-and-highlights.md
 98. [x] resource-governance-and-concurrency.md
-99. [ ] rest-tools-integration.md
+99. [x] rest-tools-integration.md
 100. [ ] schema-typing-and-validation.md
 101. [ ] security-and-data.md
 102. [ ] server-and-apis.md
