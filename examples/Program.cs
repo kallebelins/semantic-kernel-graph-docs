@@ -94,6 +94,7 @@ class Program
                 ["streaming-execution"] = async () => await StreamingQuickstartExample.RunAsync(),
                 ["metrics-and-observability"] = async () => await GraphMetricsExample.RunBasicMetricsDemoAsync(),
                 ["parallelism-and-fork-join"] = async () => await SimpleForkJoinExample.RunAsync(),
+                ["resource-governance"] = async () => await ResourceGovernanceExample.RunAsync(),
             };
 
             // Determine which example to run

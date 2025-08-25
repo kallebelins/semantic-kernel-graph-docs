@@ -39,20 +39,23 @@ Resource governance and concurrency management in SemanticKernel.Graph provide f
 Enable resource governance at the graph level:
 
 ```csharp
+// Example: Create a GraphExecutor and enable basic in-process resource governance.
+// Comments describe the intent of each option in plain English for clarity.
 using SemanticKernel.Graph.Core;
 
+// Create a graph executor instance (name and description are optional metadata).
 var graph = new GraphExecutor("ResourceControlledGraph", "Graph with resource governance");
 
-// Configure basic resource governance
+// Configure resource governance with sensible defaults for development.
 graph.ConfigureResources(new GraphResourceOptions
 {
-    EnableResourceGovernance = true,
-    BasePermitsPerSecond = 50.0,           // Base execution rate
-    MaxBurstSize = 100,                    // Maximum concurrent executions
-    CpuHighWatermarkPercent = 85.0,        // CPU threshold for backpressure
-    CpuSoftLimitPercent = 70.0,            // CPU threshold for rate limiting
-    MinAvailableMemoryMB = 512.0,          // Memory threshold for throttling
-    DefaultPriority = ExecutionPriority.Normal
+    EnableResourceGovernance = true,            // Turn on the governor to enforce permits
+    BasePermitsPerSecond = 50.0,                // Base rate of permits granted per second
+    MaxBurstSize = 100,                         // Maximum tokens allowed in a burst
+    CpuHighWatermarkPercent = 85.0,             // If CPU > this, apply strong backpressure
+    CpuSoftLimitPercent = 70.0,                 // If CPU > this, gradually reduce permits
+    MinAvailableMemoryMB = 512.0,               // Minimum free memory before aggressive throttling
+    DefaultPriority = ExecutionPriority.Normal  // Default execution priority when none supplied
 });
 ```
 
@@ -61,37 +64,38 @@ graph.ConfigureResources(new GraphResourceOptions
 Configure comprehensive resource management:
 
 ```csharp
+// Advanced configuration example: tune governor for mixed workloads.
 var advancedOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    
-    // Rate limiting configuration
+
+    // Rate limiting: higher base permits and larger bursts for throughput.
     BasePermitsPerSecond = 100.0,
     MaxBurstSize = 200,
-    
-    // CPU thresholds
-    CpuHighWatermarkPercent = 90.0,        // Strong backpressure above 90%
-    CpuSoftLimitPercent = 75.0,            // Start throttling above 75%
-    
-    // Memory thresholds
-    MinAvailableMemoryMB = 1024.0,         // 1GB minimum available memory
-    
-    // Priority configuration
+
+    // CPU thresholds: fine-grained control for backpressure behavior.
+    CpuHighWatermarkPercent = 90.0,    // Aggressive backpressure above 90%
+    CpuSoftLimitPercent = 75.0,        // Begin throttling above 75%
+
+    // Memory threshold expressed in megabytes.
+    MinAvailableMemoryMB = 1024.0,     // Require at least 1GB free before heavy workloads
+
+    // Default execution priority to favor higher importance work.
     DefaultPriority = ExecutionPriority.High,
-    
-    // Node-specific cost weights
+
+    // Node-specific cost weights: map node identifiers to relative costs.
     NodeCostWeights = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase)
     {
-        ["heavy_processing"] = 3.0,        // 3x cost for heavy nodes
-        ["light_validation"] = 0.5,        // 0.5x cost for light nodes
-        ["api_call"] = 2.0                 // 2x cost for external API calls
+        ["heavy_processing"] = 3.0,     // Mark heavy nodes as 3x cost
+        ["light_validation"] = 0.5,     // Light validators are cheaper
+        ["api_call"] = 2.0              // External calls consume more budget
     },
-    
-    // Cooperative preemption
-    EnableCooperativePreemption = true,    // Allow higher priority work to preempt
-    
-    // Metrics integration
-    PreferMetricsCollector = true          // Use performance metrics for load detection
+
+    // Allow cooperative preemption so higher-priority tasks can preempt lower ones.
+    EnableCooperativePreemption = true,
+
+    // Prefer an external metrics collector when present for better decisions.
+    PreferMetricsCollector = true
 };
 
 graph.ConfigureResources(advancedOptions);
@@ -102,40 +106,42 @@ graph.ConfigureResources(advancedOptions);
 Use predefined configurations for common scenarios:
 
 ```csharp
-// Development environment (permissive)
+// Preset configurations for common deployment scenarios.
+// Development: permissive quotas to make iteration easy.
 var devOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    BasePermitsPerSecond = 200.0,          // High throughput
-    MaxBurstSize = 500,                    // Large burst allowance
-    CpuHighWatermarkPercent = 95.0,        // High CPU tolerance
-    MinAvailableMemoryMB = 256.0           // Lower memory threshold
+    BasePermitsPerSecond = 200.0,
+    MaxBurstSize = 500,
+    CpuHighWatermarkPercent = 95.0,
+    MinAvailableMemoryMB = 256.0
 };
 
-// Production environment (conservative)
+// Production: conservative defaults for stability under load.
 var prodOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    BasePermitsPerSecond = 50.0,           // Controlled throughput
-    MaxBurstSize = 100,                    // Moderate burst allowance
-    CpuHighWatermarkPercent = 80.0,        // Conservative CPU threshold
-    CpuSoftLimitPercent = 65.0,            // Early throttling
-    MinAvailableMemoryMB = 2048.0,         // Higher memory threshold
+    BasePermitsPerSecond = 50.0,
+    MaxBurstSize = 100,
+    CpuHighWatermarkPercent = 80.0,
+    CpuSoftLimitPercent = 65.0,
+    MinAvailableMemoryMB = 2048.0,
     DefaultPriority = ExecutionPriority.Normal
 };
 
-// High-performance scenario (minimal overhead)
+// High-performance: lean but permissive for latency-sensitive workloads.
 var perfOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    BasePermitsPerSecond = 1000.0,         // Very high throughput
-    MaxBurstSize = 2000,                   // Large burst allowance
-    CpuHighWatermarkPercent = 98.0,        // Very high CPU tolerance
-    MinAvailableMemoryMB = 128.0,          // Minimal memory threshold
-    EnableCooperativePreemption = false    // Disable for performance
+    BasePermitsPerSecond = 1000.0,
+    MaxBurstSize = 2000,
+    CpuHighWatermarkPercent = 98.0,
+    MinAvailableMemoryMB = 128.0,
+    EnableCooperativePreemption = false
 };
 
-graph.ConfigureResources(devOptions);      // Choose appropriate preset
+// Apply the preset that best matches your environment.
+graph.ConfigureResources(devOptions);
 ```
 
 ## Execution Priorities
@@ -145,11 +151,12 @@ graph.ConfigureResources(devOptions);      // Choose appropriate preset
 Configure execution priorities to control resource allocation:
 
 ```csharp
-// Set priority in kernel arguments
+// Example: set an execution priority on KernelArguments before starting the graph.
+// This gives critical work preference when permits are scarce.
 var arguments = new KernelArguments();
-arguments.SetExecutionPriority(ExecutionPriority.Critical);
+arguments.SetExecutionPriority(ExecutionPriority.Critical); // Mark this execution as critical
 
-// Execute with high priority
+// Execute the graph using the kernel and the prioritized arguments.
 var result = await graph.ExecuteAsync(kernel, arguments);
 ```
 
@@ -181,22 +188,26 @@ var normalResult = await graph.ExecuteAsync(kernel, normalArgs);
 Implement custom priority logic:
 
 ```csharp
+// Custom policy example: derive node cost and priority from runtime arguments.
 public class BusinessPriorityPolicy : ICostPolicy
 {
+    // Determine a relative cost weight for the node (higher => more permits consumed).
     public double? GetNodeCostWeight(IGraphNode node, GraphState state)
     {
-        // Determine cost based on business logic
         if (state.KernelArguments.TryGetValue("business_value", out var value))
         {
             var businessValue = Convert.ToDouble(value);
-            return Math.Max(1.0, businessValue / 100.0); // Scale cost by business value
+            // Scale business value into a cost weight with a sensible minimum of 1.0.
+            return Math.Max(1.0, businessValue / 100.0);
         }
-        return null; // Use default
+
+        // Returning null means "use default cost"
+        return null;
     }
 
+    // Optionally map business tiers to execution priorities.
     public ExecutionPriority? GetNodePriority(IGraphNode node, GraphState state)
     {
-        // Determine priority based on business context
         if (state.KernelArguments.TryGetValue("customer_tier", out var tier))
         {
             return tier.ToString() switch
@@ -207,11 +218,12 @@ public class BusinessPriorityPolicy : ICostPolicy
                 _ => ExecutionPriority.Low
             };
         }
-        return null; // Use default
+
+        return null; // Use default priority when no tier is provided
     }
 }
 
-// Register custom policy
+// Register the policy so the executor can consult it at runtime.
 graph.AddMetadata(nameof(ICostPolicy), new BusinessPriorityPolicy());
 ```
 
@@ -222,28 +234,28 @@ graph.AddMetadata(nameof(ICostPolicy), new BusinessPriorityPolicy());
 Configure costs for different types of nodes:
 
 ```csharp
-// Configure node costs in resource options
+// Example: declare static node cost overrides for common node identifiers.
 var resourceOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
     BasePermitsPerSecond = 100.0,
     NodeCostWeights = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase)
     {
-        // Heavy computational nodes
-        ["image_processing"] = 5.0,        // 5x cost
-        ["ml_inference"] = 3.0,            // 3x cost
-        ["data_aggregation"] = 2.5,        // 2.5x cost
-        
-        // Light validation nodes
-        ["input_validation"] = 0.3,        // 0.3x cost
-        ["format_check"] = 0.2,            // 0.2x cost
-        
-        // External API calls
-        ["openai_api"] = 2.0,              // 2x cost
-        ["database_query"] = 1.5,          // 1.5x cost
-        
-        // Default cost for unspecified nodes
-        ["*"] = 1.0                        // 1x cost
+        // Heavy compute: consume substantially more permits.
+        ["image_processing"] = 5.0,
+        ["ml_inference"] = 3.0,
+        ["data_aggregation"] = 2.5,
+
+        // Lightweight checks: cheap to run.
+        ["input_validation"] = 0.3,
+        ["format_check"] = 0.2,
+
+        // External calls and DB queries are costlier than in-memory ops.
+        ["openai_api"] = 2.0,
+        ["database_query"] = 1.5,
+
+        // Fallback default weight for unspecified nodes.
+        ["*"] = 1.0
     }
 };
 
@@ -255,31 +267,33 @@ graph.ConfigureResources(resourceOptions);
 Calculate costs based on runtime state:
 
 ```csharp
+// Adaptive cost policy: compute costs from runtime arguments (data size, complexity).
 public class AdaptiveCostPolicy : ICostPolicy
 {
     public double? GetNodeCostWeight(IGraphNode node, GraphState state)
     {
-        // Calculate cost based on data size
+        // If a data size hint is present, map it to a cost weight.
         if (state.KernelArguments.TryGetValue("data_size_mb", out var sizeObj))
         {
             var sizeMB = Convert.ToDouble(sizeObj);
-            if (sizeMB > 100) return 5.0;      // Large data: 5x cost
-            if (sizeMB > 10) return 2.0;       // Medium data: 2x cost
-            return 0.5;                         // Small data: 0.5x cost
+            if (sizeMB > 100) return 5.0;  // Very large payloads are expensive
+            if (sizeMB > 10) return 2.0;   // Medium payloads have moderate cost
+            return 0.5;                     // Small payloads are cheap
         }
-        
-        // Calculate cost based on complexity
+
+        // Use a separate complexity hint if provided.
         if (state.KernelArguments.TryGetValue("complexity_level", out var complexityObj))
         {
             var complexity = Convert.ToInt32(complexityObj);
             return Math.Max(0.5, complexity * 0.5);
         }
-        
-        return null; // Use default
+
+        // Returning null uses the default cost mapping.
+        return null;
     }
 }
 
-// Register adaptive policy
+// Register the adaptive policy so it is consulted during execution.
 graph.AddMetadata(nameof(ICostPolicy), new AdaptiveCostPolicy());
 ```
 
@@ -303,13 +317,13 @@ var result = await graph.ExecuteAsync(kernel, arguments);
 Enable parallel execution for independent branches:
 
 ```csharp
-// Configure concurrency options
+// Configure concurrency options to safely run independent branches in parallel.
 graph.ConfigureConcurrency(new GraphConcurrencyOptions
 {
-    EnableParallelExecution = true,                    // Enable parallel execution
-    MaxDegreeOfParallelism = 4,                       // Maximum 4 parallel branches
-    MergeConflictPolicy = StateMergeConflictPolicy.PreferSecond, // How to handle conflicts
-    FallbackToSequentialOnCycles = true               // Fallback for complex cycles
+    EnableParallelExecution = true,                         // Allow parallel fork/join execution
+    MaxDegreeOfParallelism = 4,                             // Max concurrent branches to run
+    MergeConflictPolicy = StateMergeConflictPolicy.PreferSecond, // Merge strategy for state joins
+    FallbackToSequentialOnCycles = true                     // Be conservative when cycles are detected
 });
 ```
 
@@ -340,32 +354,40 @@ graph.ConfigureConcurrency(concurrencyOptions);
 Create parallel execution patterns:
 
 ```csharp
-// Create a graph with parallel branches
-var graph = new GraphExecutor("ParallelGraph", "Graph with parallel execution")
-    .AddNode(new FunctionGraphNode(ProcessDataA, "process_a"))
-    .AddNode(new FunctionGraphNode(ProcessDataB, "process_b"))
-    .AddNode(new FunctionGraphNode(ProcessDataC, "process_c"))
-    .AddNode(new FunctionGraphNode(MergeResults, "merge"))
-    .Connect("start", "process_a")
-    .Connect("start", "process_b")
-    .Connect("start", "process_c")
-    .Connect("process_a", "merge")
-    .Connect("process_b", "merge")
-    .Connect("process_c", "merge")
-    .SetStartNode("start")
-    .ConfigureConcurrency(new GraphConcurrencyOptions
-    {
-        EnableParallelExecution = true,
-        MaxDegreeOfParallelism = 3
-    })
-    .ConfigureResources(new GraphResourceOptions
-    {
-        EnableResourceGovernance = true,
-        BasePermitsPerSecond = 100.0,
-        MaxBurstSize = 3
-    });
+// Fork/join example: create parallel branches A,B,C that join into a merge node.
+// Here we construct nodes, connect them and enable both concurrency and resource governance.
+var graph = new GraphExecutor("ParallelGraph", "Graph with parallel execution");
 
-// Execute with parallel processing
+// Add nodes (example delegates or kernel functions are represented by placeholders).
+graph.AddNode(new FunctionGraphNode(ProcessDataA, "process_a"));
+graph.AddNode(new FunctionGraphNode(ProcessDataB, "process_b"));
+graph.AddNode(new FunctionGraphNode(ProcessDataC, "process_c"));
+graph.AddNode(new FunctionGraphNode(MergeResults, "merge"));
+
+// Wire the graph edges: start -> process_a,b,c and each process -> merge
+graph.Connect("start", "process_a");
+graph.Connect("start", "process_b");
+graph.Connect("start", "process_c");
+graph.Connect("process_a", "merge");
+graph.Connect("process_b", "merge");
+graph.Connect("process_c", "merge");
+graph.SetStartNode("start");
+
+// Enable parallel execution and resource governance suitable for this small fork/join.
+graph.ConfigureConcurrency(new GraphConcurrencyOptions
+{
+    EnableParallelExecution = true,
+    MaxDegreeOfParallelism = 3
+});
+
+graph.ConfigureResources(new GraphResourceOptions
+{
+    EnableResourceGovernance = true,
+    BasePermitsPerSecond = 100.0,
+    MaxBurstSize = 3
+});
+
+// Execute the graph (assumes 'kernel' and 'arguments' are prepared in scope).
 var result = await graph.ExecuteAsync(kernel, arguments);
 ```
 
@@ -376,17 +398,17 @@ var result = await graph.ExecuteAsync(kernel, arguments);
 Monitor and adapt to system conditions:
 
 ```csharp
-// Enable metrics for resource monitoring
+// Enable lightweight development metrics to observe resource usage during tests.
 graph.EnableDevelopmentMetrics();
 
-// Resource governor automatically adapts to system load
+// Let the resource governor prefer metrics when available for adaptive decisions.
 var resourceOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    PreferMetricsCollector = true,         // Use metrics for load detection
-    CpuHighWatermarkPercent = 85.0,        // Strong backpressure above 85%
-    CpuSoftLimitPercent = 70.0,            // Start throttling above 70%
-    MinAvailableMemoryMB = 1024.0          // Throttle below 1GB available
+    PreferMetricsCollector = true,
+    CpuHighWatermarkPercent = 85.0,
+    CpuSoftLimitPercent = 70.0,
+    MinAvailableMemoryMB = 1024.0
 };
 
 graph.ConfigureResources(resourceOptions);
@@ -397,14 +419,14 @@ graph.ConfigureResources(resourceOptions);
 Manually update system load information:
 
 ```csharp
-// Get current system metrics
+// Retrieve current performance metrics and optionally feed them into the governor.
 var metrics = graph.GetPerformanceMetrics();
 if (metrics != null)
 {
-    var cpuUsage = metrics.CurrentCpuUsage;
-    var availableMemory = metrics.CurrentAvailableMemoryMB;
-    
-    // Manually update resource governor (if not using automatic metrics)
+    var cpuUsage = metrics.CurrentCpuUsage;                    // Current CPU percent
+    var availableMemory = metrics.CurrentAvailableMemoryMB;    // Available memory in MB
+
+    // If the governor is exposed, allow manual updates when automatic metrics are not used.
     if (graph.GetResourceGovernor() is ResourceGovernor governor)
     {
         governor.UpdateSystemLoad(cpuUsage, availableMemory);
@@ -417,17 +439,19 @@ if (metrics != null)
 Handle resource budget exhaustion:
 
 ```csharp
-// Subscribe to budget exhaustion events
+// Handle budget exhaustion events to implement alerting or graceful degradation.
 if (graph.GetResourceGovernor() is ResourceGovernor governor)
 {
     governor.BudgetExhausted += (sender, args) =>
     {
+        // Log basic information about the exhaustion event.
         Console.WriteLine($"🚨 Resource budget exhausted at {args.Timestamp}");
         Console.WriteLine($"   CPU: {args.CpuUsage:F1}%");
         Console.WriteLine($"   Memory: {args.AvailableMemoryMB:F0} MB");
         Console.WriteLine($"   Exhaustion count: {args.ExhaustionCount}");
-        
-        // Implement alerting, logging, or fallback strategies
+
+        // Placeholder calls for user-defined handling strategies.
+        // Implementers should replace these with real telemetry/alerting code.
         LogResourceExhaustion(args);
         SendResourceAlert(args);
     };
@@ -441,30 +465,30 @@ if (graph.GetResourceGovernor() is ResourceGovernor governor)
 Optimize resource governor for your workload:
 
 ```csharp
-// High-throughput configuration
+// Performance tuning presets for different workload characteristics.
 var highThroughputOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    BasePermitsPerSecond = 500.0,          // High base rate
-    MaxBurstSize = 1000,                   // Large burst allowance
-    CpuHighWatermarkPercent = 95.0,        // High CPU tolerance
-    CpuSoftLimitPercent = 85.0,            // Late throttling
-    MinAvailableMemoryMB = 256.0,          // Low memory threshold
-    EnableCooperativePreemption = false    // Disable for performance
+    BasePermitsPerSecond = 500.0,
+    MaxBurstSize = 1000,
+    CpuHighWatermarkPercent = 95.0,
+    CpuSoftLimitPercent = 85.0,
+    MinAvailableMemoryMB = 256.0,
+    EnableCooperativePreemption = false
 };
 
-// Low-latency configuration
 var lowLatencyOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    BasePermitsPerSecond = 50.0,           // Controlled rate
-    MaxBurstSize = 100,                    // Moderate burst
-    CpuHighWatermarkPercent = 70.0,        // Early backpressure
-    CpuSoftLimitPercent = 50.0,            // Very early throttling
-    MinAvailableMemoryMB = 2048.0,         // High memory threshold
-    EnableCooperativePreemption = true     // Enable for responsiveness
+    BasePermitsPerSecond = 50.0,
+    MaxBurstSize = 100,
+    CpuHighWatermarkPercent = 70.0,
+    CpuSoftLimitPercent = 50.0,
+    MinAvailableMemoryMB = 2048.0,
+    EnableCooperativePreemption = true
 };
 
+// Apply a configuration suitable for your scenario.
 graph.ConfigureResources(highThroughputOptions);
 ```
 
