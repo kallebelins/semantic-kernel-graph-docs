@@ -111,11 +111,11 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 99. [x] rest-tools-integration.md
 100. [x] schema-typing-and-validation.md
 101. [x] security-and-data.md
-102. [ ] server-and-apis.md
-103. [ ] templates-and-memory.md
-104. [ ] tools.md
+102. [x] server-and-apis.md
+103. [x] templates-and-memory.md
+104. [x] tools.md
 
 ## docs/migrations
-105. [ ] index.md
+105. [x] index.md
 
 **Total de tarefas: 105 arquivos .md para revisão**

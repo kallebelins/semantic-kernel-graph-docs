@@ -33,17 +33,26 @@ var restNode = new RestToolGraphNode(new RestToolSchema { /* map inputs/outputs 
 
 ### 3) Connect nodes into a graph
 ```csharp
-var graph = new GraphExecutor("my-graph")
-    .AddNode(myNode)
-    .AddNode(restNode)
-    .Connect(myNode, restNode);
+// Create executor and add nodes
+var graph = new GraphExecutor("my-graph");
+graph.AddNode(myNode);
+graph.AddNode(restNode);
+
+// Connect by node ids (recommended) or use Connect overloads that accept node instances
+graph.Connect(myNode.NodeId, restNode.NodeId);
 ```
 
 ### 4) Add control-flow when needed
 ```csharp
 var decision = new ConditionalGraphNode(state => (bool)state["should_call_api"]);
-graph.Connect(myNode, decision);
-graph.AddConditionalEdge(decision, whenTrue: restNode, whenFalse: myNode);
+graph.AddNode(decision);
+
+// Wire conditional paths explicitly using AddTrueNode/AddFalseNode
+decision.AddTrueNode(restNode);
+decision.AddFalseNode(myNode);
+
+// Connect decision into the main flow
+graph.Connect(myNode.NodeId, decision.NodeId);
 ```
 
 ### 5) Execute with shared state

@@ -325,20 +325,22 @@ public sealed class CustomMemoryProvider : IGraphMemoryProvider
 {
     public bool IsAvailable => true;
 
-    public async Task SaveInformationAsync(string collectionName, string text, string id,
+    public Task SaveInformationAsync(string collectionName, string text, string id,
         string? description = null, string? additionalMetadata = null,
         CancellationToken cancellationToken = default)
     {
         // Implement custom storage logic
         // e.g., save to database, vector store, etc.
+        return Task.CompletedTask;
     }
 
-    public async Task<IAsyncEnumerable<MemorySearchResult>> SearchAsync(
+    public async IAsyncEnumerable<MemorySearchResult> SearchAsync(
         string collectionName, string query, int limit = 10, 
         double minRelevanceScore = 0.7, CancellationToken cancellationToken = default)
     {
         // Implement custom search logic
         // e.g., vector similarity search, semantic search, etc.
+        yield break;
     }
 }
 ```

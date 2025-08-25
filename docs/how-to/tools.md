@@ -397,7 +397,7 @@ var fallbackTool = new RestToolSchema
 graph.AddConditionalEdge("primary_api", "success", 
     condition: state => state.GetBool("primary_succeeded", false))
 .AddConditionalEdge("primary_api", "fallback_api", 
-    condition: state => !state.GetBool("primary_succeeded", true));
+    condition: state => !state.GetBool("primary_succeeded", false));
 ```
 
 ## Monitoring and Observability

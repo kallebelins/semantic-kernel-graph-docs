@@ -168,7 +168,7 @@ private async Task HandleWebSocketStreamingAsync(string graphId, WebSocket webSo
         ProducerBatchSize = 1
     };
     
-    var eventStream = executor.ExecuteStreamAsync(kernel, arguments, options);
+    var eventStream = executor.ExecuteStreamAsync(arguments, options);
     
     try
     {
@@ -220,7 +220,7 @@ app.MapGet("/graphs/{graphId}/stream/sse", async (string graphId, HttpContext ht
         ProducerFlushInterval = TimeSpan.FromMilliseconds(50)
     };
     
-    var eventStream = executor.ExecuteStreamAsync(kernel, arguments, options);
+    var eventStream = executor.ExecuteStreamAsync(arguments, options);
     
     await foreach (var @event in eventStream)
     {
@@ -466,7 +466,7 @@ public class GraphExecutionController : ControllerBase
         Response.Headers.Add("Cache-Control", "no-cache");
         
         var executor = GetExecutor(graphId);
-        var eventStream = executor.ExecuteStreamAsync(kernel, new KernelArguments());
+        var eventStream = executor.ExecuteStreamAsync(new KernelArguments());
         
         await foreach (var @event in eventStream)
         {
