@@ -47,19 +47,31 @@ public sealed class GraphVisualizationEngine : IDisposable
 
 **Usage Example:**
 ```csharp
-var visualizationEngine = new GraphVisualizationEngine(
-    new GraphVisualizationOptions
-    {
-        EnableExecutionPathHighlighting = true,
-        IncludePerformanceMetrics = true,
-        EnableAdvancedStyling = true
-    }
-);
+// Create the engine with explicit options. In docs/examples a full runnable demo is available
+// at `examples/GraphVisualizationExample.cs` which shows end-to-end usage.
+var visualizationOptions = new GraphVisualizationOptions
+{
+    EnableRealtimeUpdates = true,
+    IncludePerformanceMetrics = true,
+    EnableAdvancedStyling = true
+};
 
-// Create visualization data
-var visualizationData = new GraphVisualizationData(nodes, edges, currentNode, executionPath);
+using var visualizationEngine = new GraphVisualizationEngine(visualizationOptions);
 
-// Export to different formats
+// Build a minimal graph: two function nodes connected by an edge
+var fn1 = KernelFunctionFactory.CreateFromMethod(() => "node1-output", "Fn1");
+var fn2 = KernelFunctionFactory.CreateFromMethod(() => "node2-output", "Fn2");
+
+var node1 = new FunctionGraphNode(fn1, "node1", "Start");
+var node2 = new FunctionGraphNode(fn2, "node2", "Process");
+
+var nodes = new List<IGraphNode> { node1, node2 };
+var edges = new List<GraphEdgeInfo> { new GraphEdgeInfo("node1", "node2", "on_success") };
+
+var executionPath = new List<IGraphNode> { node1, node2 };
+var visualizationData = new GraphVisualizationData(nodes, edges, currentNode: node2, executionPath: executionPath);
+
+// Export to different formats (strings can be saved to files or returned from an API)
 var dotGraph = visualizationEngine.SerializeToDot(visualizationData);
 var jsonGraph = visualizationEngine.SerializeToJson(visualizationData);
 var mermaidDiagram = visualizationEngine.GenerateEnhancedMermaidDiagram(visualizationData);
@@ -98,22 +110,34 @@ public sealed class GraphRealtimeHighlighter : IDisposable
 
 **Usage Example:**
 ```csharp
-var highlighter = new GraphRealtimeHighlighter(
-    eventStream: executionEventStream,
-    options: new GraphRealtimeHighlightOptions
-    {
-        UpdateInterval = TimeSpan.FromMilliseconds(100),
-        EnableAnimations = true
-    }
-);
+// Create a highlighter that can accept events from your execution stream or be driven manually.
+var highlightOptions = new GraphRealtimeHighlightOptions
+{
+    UpdateInterval = TimeSpan.FromMilliseconds(100),
+    EnableAnimations = true
+};
 
-// Start highlighting for an execution
+using var highlighter = new GraphRealtimeHighlighter(eventStream: null, options: highlightOptions);
+
+// Start highlighting for a new execution using an existing GraphVisualizationData instance.
 highlighter.StartHighlighting(executionId, visualizationData);
 
-// Update current execution state
+// Subscribe to events (handlers should be lightweight; offload heavy work)
+highlighter.NodeExecutionStarted += (sender, e) =>
+{
+    // Log or push the update to a UI/WebSocket
+    Console.WriteLine($"Node {e.Node.NodeId} started in execution {e.ExecutionId}");
+};
+
+highlighter.NodeExecutionCompleted += (sender, e) =>
+{
+    Console.WriteLine($"Node {e.Node.NodeId} completed in execution {e.ExecutionId} (success={e.Success})");
+};
+
+// Manually update current node and path during execution
 highlighter.UpdateCurrentNode(executionId, currentNode, executionPath);
 
-// Generate highlighted visualization
+// Produce a highlighted Mermaid diagram for embedding in documentation or UI
 var highlightedMermaid = highlighter.GenerateHighlightedVisualization(executionId, HighlightVisualizationFormat.Mermaid);
 ```
 
