@@ -84,6 +84,7 @@ class Program
                 ["execution-guide"] = async () => await ExecutionGuideExample.RunAsync(),
                 ["logging"] = async () => await LoggingExample.RunAllAsync(),
                 ["loop-nodes"] = async () => await LoopNodesExample.RunAsync(),
+                ["loops"] = async () => await LoopNodesExample.Run2Async(),
                 ["memory-agent"] = async () => await MemoryAgentExample.RunAsync(),
                 ["retrieval-agent"] = async () => await RetrievalAgentExample.RunAsync(),
                 ["multi-hop-rag-retry"] = async () => await MultiHopRagRetryExample.RunAsync(),
