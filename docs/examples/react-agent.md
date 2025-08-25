@@ -184,57 +184,47 @@ The reasoning function analyzes user queries and suggests appropriate actions.
 ```csharp
 private static KernelFunction CreateReasoningFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    // Create a deterministic, method-based function to avoid external LLM calls in examples
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
             var query = args.TryGetValue("user_query", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
-            
-            // Analyze the query and determine the appropriate action
+
+            // Simple heuristics to choose the appropriate tool/action
             var action = query.ToLowerInvariant() switch
             {
-                var s when s.Contains("weather") => "get_weather",
-                var s when s.Contains("calculate") || s.Contains("*") || s.Contains("+") || s.Contains("-") => "calculate",
-                var s when s.Contains("search") || s.Contains("best practices") => "search",
-                var s when s.Contains("convert") && s.Contains("currency") => "currency_convert",
-                _ => "search" // Default to search for general queries
+                var s when s.Contains("weather") => "GetWeather",
+                var s when s.Contains("calculate") || s.Contains("*") || s.Contains("+") || s.Contains("-") => "Calculate",
+                var s when s.Contains("search") || s.Contains("best practices") => "Search",
+                var s when s.Contains("convert") && s.Contains("currency") => "ConvertCurrency",
+                _ => "Search"
             };
-            
-            // Extract parameters based on the action
-            var parameters = new Dictionary<string, object>();
-            
-            switch (action)
+
+            var parameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+            // Extract minimal parameters for the selected action (demonstration only)
+            if (action == "GetWeather")
             {
-                case "get_weather":
-                    var cityMatch = System.Text.RegularExpressions.Regex.Match(query, @"weather in (\w+)");
-                    if (cityMatch.Success)
-                        parameters["city"] = cityMatch.Groups[1].Value;
-                    break;
-                    
-                case "calculate":
-                    var calcMatch = System.Text.RegularExpressions.Regex.Match(query, @"(\d+\s*[\*\+\-]\s*\d+)");
-                    if (calcMatch.Success)
-                        parameters["expression"] = calcMatch.Groups[1].Value;
-                    break;
-                    
-                case "search":
-                    parameters["query"] = query.Replace("search:", "").Trim();
-                    break;
-                    
-                case "currency_convert":
-                    var currencyMatch = System.Text.RegularExpressions.Regex.Match(query, @"(\d+)\s+(\w+)\s+to\s+(\w+)");
-                    if (currencyMatch.Success)
-                    {
-                        parameters["amount"] = currencyMatch.Groups[1].Value;
-                        parameters["from"] = currencyMatch.Groups[1].Value;
-                        parameters["to"] = currencyMatch.Groups[2].Value;
-                    }
-                    break;
+                var cityMatch = System.Text.RegularExpressions.Regex.Match(query, @"in ([A-Za-z]+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                if (cityMatch.Success) parameters["city"] = cityMatch.Groups[1].Value;
             }
-            
+
+            if (action == "Calculate")
+            {
+                var calcMatch = System.Text.RegularExpressions.Regex.Match(query, @"(\d+\s*[\*\+\-]\s*\d+)");
+                if (calcMatch.Success) parameters["expression"] = calcMatch.Groups[1].Value;
+            }
+
+            if (action == "Search")
+            {
+                parameters["query"] = query.Replace("Search:", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+            }
+
+            // Store suggested action and parameters for downstream nodes
             args["suggested_action"] = action;
             args["action_parameters"] = parameters;
-            
-            return $"Reasoning: Query '{query}' suggests action '{action}' with parameters: {string.Join(", ", parameters.Select(kvp => $"{kvp.Key}={kvp.Value}"))}";
+
+            return $"Reasoning: suggested action='{action}' parameters=[{string.Join(',', parameters.Select(kv => kv.Key + "=" + kv.Value))}]";
         },
         functionName: "react_reasoning",
         description: "Analyzes user queries and suggests appropriate actions"
@@ -267,23 +257,22 @@ The observation function summarizes action results into final answers.
 ```csharp
 private static KernelFunction CreateObservationFunction(Kernel kernel)
 {
-    return KernelFunctionFactory.CreateFromMethod(
+    // Deterministic observation function that formats action results
+    return kernel.CreateFunctionFromMethod(
         (KernelArguments args) =>
         {
-            var query = args.TryGetValue("user_query", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
             var action = args.TryGetValue("suggested_action", out var a) ? a?.ToString() ?? string.Empty : string.Empty;
             var result = args.TryGetValue("action_result", out var r) ? r?.ToString() ?? string.Empty : string.Empty;
-            
-            // Format the final answer based on the action and result
+
             var answer = action switch
             {
-                "get_weather" => $"Based on your query about weather, I found: {result}",
-                "calculate" => $"I calculated the result for you: {result}",
-                "search" => $"Here's what I found when searching: {result}",
-                "currency_convert" => $"I converted the currency for you: {result}",
-                _ => $"I processed your request '{query}' and here's what I found: {result}"
+                "GetWeather" => $"Based on your query about weather, I found: {result}",
+                "Calculate" => $"I calculated the result for you: {result}",
+                "Search" => $"Here's what I found when searching: {result}",
+                "ConvertCurrency" => $"I converted the currency for you: {result}",
+                _ => $"I processed your request and here's what I found: {result}"
             };
-            
+
             args["final_answer"] = answer;
             return answer;
         },
@@ -344,27 +333,24 @@ private static void AddCurrencyConversionTool(Kernel kernel)
 
 public class CurrencyConversionTool
 {
-    [KernelFunction, Description("Convert currency between different units")]
-    public string ConvertCurrency(
-        [Description("Amount to convert")] double amount,
-        [Description("Source currency code")] string from,
-        [Description("Target currency code")] string to)
+    [KernelFunction]
+    public string ConvertCurrency(double amount, string from, string to)
     {
         // Simulate currency conversion rates
-        var rates = new Dictionary<string, double>
+        var rates = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase)
         {
             ["USD"] = 1.0,
             ["EUR"] = 0.85,
             ["GBP"] = 0.73,
             ["JPY"] = 110.0
         };
-        
-        if (rates.TryGetValue(from.ToUpper(), out var fromRate) && rates.TryGetValue(to.ToUpper(), out var toRate))
+
+        if (rates.TryGetValue(from, out var fromRate) && rates.TryGetValue(to, out var toRate))
         {
             var convertedAmount = amount * (toRate / fromRate);
             return $"{amount} {from.ToUpper()} = {convertedAmount:F2} {to.ToUpper()}";
         }
-        
+
         return $"Unable to convert {amount} {from} to {to} - unsupported currency pair";
     }
 }

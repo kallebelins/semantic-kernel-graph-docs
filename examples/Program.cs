@@ -41,6 +41,7 @@ class Program
                 ["metrics-logging-quickstart"] = async () => await MetricsLoggingQuickstartExample.RunBasicExampleAsync(),
                 ["metrics"] = async () => await MetricsExample.RunAsync(),
                 ["react-cot-quickstart"] = async () => await ReactCotQuickstartExample.RunAllExamplesAsync(),
+                ["react-agent"] = async () => await ReactAgentExample.RunAsync(),
                 ["streaming-quickstart"] = async () => await RunStreamingQuickstartExample(),
                 ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
                 ["core-api"] = async () => await CoreApiExample.RunAsync(),
