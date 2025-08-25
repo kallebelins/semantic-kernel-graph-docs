@@ -80,7 +80,8 @@ class Program
                 ["memory-agent"] = async () => await MemoryAgentExample.RunAsync(),
                 ["multi-hop-rag-retry"] = async () => await MultiHopRagRetryExample.RunAsync(),
                 ["optimizers-and-few-shot"] = async () => await OptimizersAndFewShotExample.RunAsync(),
-                ["plugin-system"] = async () => await PluginSystemExample.RunExampleAsync()
+                ["plugin-system"] = async () => await PluginSystemExample.RunExampleAsync(),
+                ["react-problem-solving"] = async () => await ReActProblemSolvingExample.RunAsync()
             };
 
             // Determine which example to run

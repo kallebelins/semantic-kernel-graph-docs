@@ -51,69 +51,33 @@ This example demonstrates ReAct problem-solving patterns with the Semantic Kerne
 The first example demonstrates fundamental ReAct problem-solving capabilities.
 
 ```csharp
-private static async Task RunBasicProblemSolvingAsync(Kernel kernel)
+public static async Task RunAsync()
 {
-    Console.WriteLine("--- Example 1: Basic ReAct Problem Solving ---");
+    Console.WriteLine("--- ReAct Problem Solving Example ---\n");
 
-    try
+    // Create a minimal kernel with graph support (deterministic, no external LLM required).
+    var kernel = Kernel.CreateBuilder()
+        .AddGraphSupport()
+        .Build();
+
+    // Build a small ReAct executor using mock functions.
+    var executor = CreateBasicReActSolver(kernel);
+
+    var arguments = new KernelArguments
     {
-        // Create template engine
-        var templateEngine = new ReActTemplateEngine();
+        ["problem_title"] = "Budget Planning",
+        ["task_description"] = "Reduce operational costs by 20% while maintaining service quality.",
+        ["max_iterations"] = 3,
+        ["solver_mode"] = "systematic",
+        ["domain"] = "general"
+    };
 
-        // Create basic ReAct problem solver
-        var problemSolver = await CreateBasicReActSolverAsync(kernel, templateEngine);
+    var result = await executor.ExecuteAsync(kernel, arguments);
+    var solution = result?.GetValue<string>() ?? "No solution generated";
 
-        // Problem scenarios
-        var problems = new[]
-        {
-            new {
-                Title = "Budget Planning",
-                Description = "Our team needs to reduce operational costs by 20% while maintaining service quality. Current monthly spending is $50,000 across 5 departments."
-            },
-            new {
-                Title = "System Performance",
-                Description = "Our web application is experiencing slow response times (>3 seconds) during peak hours. The database queries seem to be the bottleneck."
-            },
-            new {
-                Title = "Team Productivity",
-                Description = "Project deadlines are being missed consistently. Team members report feeling overwhelmed with current workload and unclear priorities."
-            }
-        };
-
-        Console.WriteLine("🤔 Solving problems using ReAct pattern...\n");
-
-        foreach (var problem in problems)
-        {
-            Console.WriteLine($"🎯 Problem: {problem.Title}");
-            Console.WriteLine($"📝 Description: {problem.Description}");
-            Console.WriteLine();
-
-            var arguments = new KernelArguments
-            {
-                ["problem_title"] = problem.Title,
-                ["task_description"] = problem.Description,
-                ["max_iterations"] = 3,
-                ["solver_mode"] = "systematic",
-                ["domain"] = "general"
-            };
-
-            var result = await problemSolver.ExecuteAsync(kernel, arguments);
-            var solution = result.GetValue<string>() ?? "No solution generated";
-
-            Console.WriteLine($"💡 ReAct Solution:");
-            Console.WriteLine($"   {solution}");
-            Console.WriteLine();
-            Console.WriteLine("─────────────────────────────────────────");
-
-            await Task.Delay(1000);
-        }
-
-        Console.WriteLine("✅ Basic ReAct problem solving example completed successfully!\n");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"❌ Error in basic ReAct problem solving example: {ex.Message}\n");
-    }
+    Console.WriteLine("💡 ReAct Solution:");
+    Console.WriteLine($"   {solution}\n");
+    Console.WriteLine("✅ ReAct problem solving example completed successfully!\n");
 }
 ```
 
@@ -122,24 +86,22 @@ private static async Task RunBasicProblemSolvingAsync(Kernel kernel)
 The basic solver implements the core ReAct cycle with four main nodes.
 
 ```csharp
-private static async Task<GraphExecutor> CreateBasicReActSolverAsync(
-    Kernel kernel,
-    ReActTemplateEngine templateEngine)
+private static GraphExecutor CreateBasicReActSolver(Kernel kernel)
 {
     var executor = new GraphExecutor("BasicReActSolver", "Basic ReAct problem solving agent");
 
-    // ReAct cycle nodes - using mock functions to avoid LLM dependencies
+    // Reasoning node - deterministic mock function
     var reasoningNode = new FunctionGraphNode(
         CreateMockReasoningFunction(kernel),
         "reasoning_node",
         "Problem Solving Reasoning"
     );
 
+    // Action node - discovers functions from the kernel
     var actionNode = ActionGraphNode.CreateWithActions(
         kernel,
         new ActionSelectionCriteria
         {
-            // Keep broad; examples add a few mock functions into the kernel
             FunctionNamePattern = null,
             MinRequiredParameters = 0,
             MaxRequiredParameters = 5
@@ -147,31 +109,30 @@ private static async Task<GraphExecutor> CreateBasicReActSolverAsync(
         "action_node");
     actionNode.ConfigureExecution(ActionSelectionStrategy.Intelligent, enableParameterValidation: true);
 
+    // Observation node - deterministic mock
     var observationNode = new FunctionGraphNode(
         CreateMockObservationFunction(kernel),
         "observation_node",
         "Problem Solving Observation"
     );
 
+    // Solution synthesis node - deterministic synthesis for the demo
     var solutionNode = new FunctionGraphNode(
         CreateSolutionSynthesisFunction(kernel),
         "solution_synthesis",
         "Solution Synthesis"
     );
 
-    // Add nodes to executor
     executor.AddNode(reasoningNode);
     executor.AddNode(actionNode);
     executor.AddNode(observationNode);
     executor.AddNode(solutionNode);
 
-    // Set up ReAct flow
     executor.SetStartNode(reasoningNode.NodeId);
     executor.AddEdge(ConditionalEdge.CreateUnconditional(reasoningNode, actionNode));
     executor.AddEdge(ConditionalEdge.CreateUnconditional(actionNode, observationNode));
     executor.AddEdge(ConditionalEdge.CreateUnconditional(observationNode, solutionNode));
 
-    // Ensure required inputs for downstream prompts before validation of next node
     observationNode.SetMetadata("AfterExecute",
         new Func<Kernel, KernelArguments, FunctionResult, CancellationToken, Task>((k, args, result, ct) =>
         {
