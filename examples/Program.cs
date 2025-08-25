@@ -1,7 +1,6 @@
 using Example;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
-using SemanticKernel.Graph.DocsExamples;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.State;
 
@@ -93,7 +92,8 @@ class Program
                 ["plugin-system"] = async () => await PluginSystemExample.RunExampleAsync(),
                 ["react-problem-solving"] = async () => await ReActProblemSolvingExample.RunAsync(),
                 ["streaming-execution"] = async () => await StreamingQuickstartExample.RunAsync(),
-                ["metrics-and-observability"] = async () => await GraphMetricsExample.RunBasicMetricsDemoAsync()
+                ["metrics-and-observability"] = async () => await GraphMetricsExample.RunBasicMetricsDemoAsync(),
+                ["parallelism-and-fork-join"] = async () => await SimpleForkJoinExample.RunAsync(),
             };
 
             // Determine which example to run

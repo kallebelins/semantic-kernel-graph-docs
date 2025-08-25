@@ -39,35 +39,42 @@ Parallelism and fork/join in SemanticKernel.Graph provide sophisticated mechanis
 Enable parallel execution when multiple next nodes are available:
 
 ```csharp
+using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
+using SemanticKernel.Graph.Nodes;
 using SemanticKernel.Graph.Extensions;
 
+// Create a lightweight in-memory kernel for examples and initial args
+var kernel = Kernel.CreateBuilder().Build();
+var args = new KernelArguments();
+
 // Create executor with parallel execution enabled
-var executor = new GraphExecutor("ParallelGraph", "Graph with parallel execution")
-    .ConfigureConcurrency(new GraphConcurrencyOptions
-    {
-        EnableParallelExecution = true,
-        MaxDegreeOfParallelism = Environment.ProcessorCount,
-        MergeConflictPolicy = StateMergeConflictPolicy.PreferSecond,
-        FallbackToSequentialOnCycles = true
-    });
+var executor = new GraphExecutor("ParallelGraph", "Graph with parallel execution");
+executor.ConfigureConcurrency(new GraphConcurrencyOptions
+{
+    EnableParallelExecution = true,
+    MaxDegreeOfParallelism = Environment.ProcessorCount,
+    MergeConflictPolicy = StateMergeConflictPolicy.PreferSecond,
+    FallbackToSequentialOnCycles = true
+});
 
-// Add nodes and connections
-var startNode = new FunctionGraphNode("start", "Start");
-var branchA = new FunctionGraphNode("branchA", "Branch A");
-var branchB = new FunctionGraphNode("branchB", "Branch B");
-var joinNode = new FunctionGraphNode("join", "Join");
+// Create nodes using kernel function factory so the snippet is self-contained
+var startNode = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "start", "Start"), nodeId: "start");
+var branchA = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "A", "Branch A"), nodeId: "branchA");
+var branchB = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "B", "Branch B"), nodeId: "branchB");
+var joinNode = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "join", "Join"), nodeId: "join");
 
-// Create fork/join structure
-executor.AddNode(startNode)
-    .AddNode(branchA)
-    .AddNode(branchB)
-    .AddNode(joinNode)
-    .Connect("start", "branchA")
-    .Connect("start", "branchB")
-    .Connect("branchA", "join")
-    .Connect("branchB", "join")
-    .SetStartNode("start");
+// Wire the graph (start -> A,B and A,B -> join)
+startNode.ConnectTo(branchA);
+startNode.ConnectTo(branchB);
+branchA.ConnectTo(joinNode);
+branchB.ConnectTo(joinNode);
+
+executor.AddNode(startNode).AddNode(branchA).AddNode(branchB).AddNode(joinNode);
+executor.SetStartNode("start");
+
+// Execute to validate (optional)
+// var result = await executor.ExecuteAsync(kernel, args);
 ```
 
 ### Advanced Concurrency Options
@@ -235,41 +242,55 @@ var finalState = mergeResult.MergedState;
 Create a basic parallel execution pattern:
 
 ```csharp
-// Create nodes that will execute in parallel
-var startNode = new FunctionGraphNode("start", "Start");
-var parallelA = new FunctionGraphNode("parallelA", "Parallel A");
-var parallelB = new FunctionGraphNode("parallelB", "Parallel B");
-var joinNode = new FunctionGraphNode("join", "Join");
+using Microsoft.SemanticKernel;
+using SemanticKernel.Graph.Core;
+using SemanticKernel.Graph.Nodes;
+using SemanticKernel.Graph.Extensions;
 
-// Configure parallel execution
-parallelA.SetMetadata("AfterExecute", (Action<Kernel, KernelArguments, FunctionResult>)((k, ka, r) => 
+// Lightweight in-memory kernel and initial arguments for examples
+var kernel = Kernel.CreateBuilder().Build();
+var args = new KernelArguments();
+
+// Create nodes using kernel function factory so examples are self-contained
+var start = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "start", "Start"), nodeId: "start");
+var parallelA = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "A", "Parallel A"), nodeId: "parallelA");
+var parallelB = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "B", "Parallel B"), nodeId: "parallelB");
+var joinNode = new FunctionGraphNode(KernelFunctionFactory.CreateFromMethod(() => "join", "Join"), nodeId: "join");
+
+// AfterExecute hooks record branch outputs into the branch-local KernelArguments
+parallelA.SetMetadata("AfterExecute", (Action<Kernel, KernelArguments, FunctionResult>)((k, ka, r) =>
 {
     ka["result_a"] = "Result from A";
     ka["timestamp_a"] = DateTimeOffset.UtcNow;
 }));
 
-parallelB.SetMetadata("AfterExecute", (Action<Kernel, KernelArguments, FunctionResult>)((k, ka, r) => 
+parallelB.SetMetadata("AfterExecute", (Action<Kernel, KernelArguments, FunctionResult>)((k, ka, r) =>
 {
     ka["result_b"] = "Result from B";
     ka["timestamp_b"] = DateTimeOffset.UtcNow;
 }));
 
-// Build graph with parallel execution
-var executor = new GraphExecutor("SimpleForkJoin")
-    .AddNode(startNode)
-    .AddNode(parallelA)
-    .AddNode(parallelB)
-    .AddNode(joinNode)
-    .Connect("start", "parallelA")
-    .Connect("start", "parallelB")
-    .Connect("parallelA", "join")
-    .Connect("parallelB", "join")
-    .SetStartNode("start")
-    .ConfigureConcurrency(new GraphConcurrencyOptions
-    {
-        EnableParallelExecution = true,
-        MaxDegreeOfParallelism = 2
-    });
+// Wire the graph: start -> parallelA, parallelB -> join
+start.ConnectTo(parallelA);
+start.ConnectTo(parallelB);
+parallelA.ConnectTo(joinNode);
+parallelB.ConnectTo(joinNode);
+
+// Build the executor and enable parallel execution
+var executor = new GraphExecutor("SimpleForkJoin");
+executor.AddNode(start).AddNode(parallelA).AddNode(parallelB).AddNode(joinNode);
+executor.SetStartNode("start");
+executor.ConfigureConcurrency(new GraphConcurrencyOptions
+{
+    EnableParallelExecution = true,
+    MaxDegreeOfParallelism = 2
+});
+
+// Execute the graph and print merged results from the root arguments
+var result = await executor.ExecuteAsync(kernel, args);
+Console.WriteLine($"Result node: {result.GetValueAsString()}");
+Console.WriteLine($"result_a: {args.GetValueOrDefault("result_a")} ");
+Console.WriteLine($"result_b: {args.GetValueOrDefault("result_b")} ");
 ```
 
 ### Conditional Parallel Execution
