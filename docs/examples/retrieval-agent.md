@@ -51,13 +51,15 @@ This example demonstrates retrieval-augmented generation (RAG) patterns with the
 The example starts by setting up a knowledge base with sample content.
 
 ```csharp
-var memoryProvider = new KernelMemoryGraphProvider();
+// Create a lightweight in-memory provider and seed the collection with sample docs
+var memoryProvider = new SimpleMemoryProvider();
 var collection = "kb_general";
 
 await SeedKnowledgeBaseAsync(memoryProvider, collection);
 
-private static async Task SeedKnowledgeBaseAsync(KernelMemoryGraphProvider provider, string collection)
+private static async Task SeedKnowledgeBaseAsync(SimpleMemoryProvider provider, string collection)
 {
+    // Add a few short documents to the in-memory knowledge base
     await provider.SaveInformationAsync(collection,
         "The Semantic Kernel Graph is a powerful extension to build complex workflows with graphs, enabling conditional routing, memory integration, and performance metrics.",
         "kb-001",
@@ -85,38 +87,50 @@ private static async Task SeedKnowledgeBaseAsync(KernelMemoryGraphProvider provi
 The agent is built with a linear three-step pipeline: analyze, retrieve, and answer.
 
 ```csharp
-private static GraphExecutor CreateRetrievalAgent(Kernel kernel, KernelMemoryGraphProvider memoryProvider, string collection)
-{
-    var executor = new GraphExecutor("RetrievalAgent", "Retrieval-augmented Q&A agent");
+// Compose a simple linear graph: analyze -> retrieve -> synthesize
+var executor = new GraphExecutor(kernel);
 
-    var analyze = new FunctionGraphNode(
-        CreateAnalyzeQuestionFunction(kernel),
-        "analyze_question",
-        "Analyze the user question and produce a focused search query"
-    ).StoreResultAs("search_query");
+var analyze = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod((KernelArguments args) =>
+    {
+        // Implementation provided below in the Analysis function snippet
+        var question = args.TryGetValue("user_question", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
+        var searchQuery = question.ToLowerInvariant()
+            .Replace("what", string.Empty)
+            .Replace("how", string.Empty)
+            .Replace("benefits", "benefits advantages features")
+            .Trim();
 
-    var retrieve = new FunctionGraphNode(
-        CreateRetrieveContextFunction(kernel, memoryProvider, collection),
-        "retrieve_context",
-        "Retrieve relevant context from the knowledge base"
-    ).StoreResultAs("retrieved_context");
+        args["search_query"] = searchQuery;
+        return $"Search query generated: {searchQuery}";
+    }, functionName: "analyze_question", description: "Analyze the user question"),
+    "analyze_question").StoreResultAs("search_query");
 
-    var answer = new FunctionGraphNode(
-        CreateSynthesizeAnswerFunction(kernel),
-        "synthesize_answer",
-        "Synthesize a final answer using the retrieved context"
-    ).StoreResultAs("final_answer");
+var retrieve = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod(async (KernelArguments args) =>
+    {
+        // Implementation provided below in the Retrieval function snippet
+        return "retrieved";
+    }, functionName: "retrieve_context", description: "Retrieve relevant context"),
+    "retrieve_context").StoreResultAs("retrieved_context");
 
-    executor.AddNode(analyze);
-    executor.AddNode(retrieve);
-    executor.AddNode(answer);
+var synth = new FunctionGraphNode(
+    kernel.CreateFunctionFromMethod((KernelArguments args) =>
+    {
+        // Implementation provided below in the Synthesis snippet
+        return "answer";
+    }, functionName: "synthesize_answer", description: "Synthesize the final answer"),
+    "synthesize_answer").StoreResultAs("final_answer");
 
-    executor.SetStartNode(analyze.NodeId);
-    executor.AddEdge(ConditionalEdge.CreateUnconditional(analyze, retrieve));
-    executor.AddEdge(ConditionalEdge.CreateUnconditional(retrieve, answer));
+executor.AddNode(analyze);
+executor.AddNode(retrieve);
+executor.AddNode(synth);
 
-    return executor;
-}
+executor.SetStartNode(analyze.NodeId);
+executor.AddEdge(ConditionalEdge.CreateUnconditional(analyze, retrieve));
+executor.AddEdge(ConditionalEdge.CreateUnconditional(retrieve, synth));
+
+return executor;
 ```
 
 ### 3. Question Analysis Function
@@ -124,31 +138,32 @@ private static GraphExecutor CreateRetrievalAgent(Kernel kernel, KernelMemoryGra
 The analysis function understands user questions and generates focused search queries.
 
 ```csharp
+// Analysis function: converts a free-form question into a compact search query
 private static KernelFunction CreateAnalyzeQuestionFunction(Kernel kernel)
 {
     return KernelFunctionFactory.CreateFromMethod(
         (KernelArguments args) =>
         {
             var question = args.TryGetValue("user_question", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
-            
-            // Analyze the question and extract key concepts for search
+
+            // Simplify question text and expand some terms to improve retrieval
             var searchQuery = question.ToLowerInvariant()
-                .Replace("what", "")
-                .Replace("how", "")
+                .Replace("what", string.Empty)
+                .Replace("how", string.Empty)
                 .Replace("benefits", "benefits advantages features")
                 .Replace("handled", "handled managed implemented")
                 .Replace("improvements", "improvements enhancements progress")
                 .Trim();
 
-            // Add context-specific terms for better retrieval
-            if (question.Contains("Semantic Kernel Graph"))
+            if (question.Contains("semantic kernel graph", StringComparison.OrdinalIgnoreCase))
+            {
                 searchQuery += " semantic kernel graph workflow";
-            
-            if (question.Contains("data privacy") || question.Contains("encryption"))
+            }
+
+            if (question.Contains("data privacy", StringComparison.OrdinalIgnoreCase) || question.Contains("encryption", StringComparison.OrdinalIgnoreCase))
+            {
                 searchQuery += " data privacy encryption security compliance";
-            
-            if (question.Contains("business report") || question.Contains("quarterly"))
-                searchQuery += " business report quarterly performance metrics";
+            }
 
             args["search_query"] = searchQuery;
             return $"Search query generated: {searchQuery}";
@@ -164,18 +179,19 @@ private static KernelFunction CreateAnalyzeQuestionFunction(Kernel kernel)
 The retrieval function searches the knowledge base for relevant information.
 
 ```csharp
-private static KernelFunction CreateRetrieveContextFunction(Kernel kernel, KernelMemoryGraphProvider memoryProvider, string collection)
+// Retrieval function: queries the knowledge base and formats results for synthesis
+private static KernelFunction CreateRetrieveContextFunction(Kernel kernel, SimpleMemoryProvider memoryProvider, string collection)
 {
     return KernelFunctionFactory.CreateFromMethod(
         async (KernelArguments args) =>
         {
             var query = args.TryGetValue("search_query", out var q) ? q?.ToString() ?? string.Empty : string.Empty;
             var topK = args.TryGetValue("top_k", out var tk) && tk is int k ? k : 5;
-            var minScore = args.TryGetValue("min_score", out var ms) && ms is double s ? s : 0.35;
+            var minScore = args.TryGetValue("min_score", out var ms) && ms is double s ? s : 0.0;
 
-            // Retrieve relevant context from the knowledge base
+            // Retrieve relevant context from the in-memory provider
             var results = await memoryProvider.SearchAsync(collection, query, topK, minScore);
-            
+
             if (!results.Any())
             {
                 args["retrieved_context"] = "No relevant context found for the query.";
@@ -183,9 +199,9 @@ private static KernelFunction CreateRetrieveContextFunction(Kernel kernel, Kerne
             }
 
             // Format retrieved context for answer synthesis
-            var context = string.Join("\n\n", results.Select(r => 
-                $"Source: {r.Metadata?.Source ?? "Unknown"}\nContent: {r.Text}"));
-            
+            var context = string.Join("\n\n", results.Select(r =>
+                $"Source: {r.Metadata.GetValueOrDefault("source", "Unknown")}\nContent: {r.Text}"));
+
             args["retrieved_context"] = context;
             args["retrieval_count"] = results.Count;
             args["retrieval_score"] = results.Max(r => r.Score);
@@ -203,6 +219,7 @@ private static KernelFunction CreateRetrieveContextFunction(Kernel kernel, Kerne
 The synthesis function combines retrieved context into comprehensive answers.
 
 ```csharp
+// Synthesis function: combine retrieved context into a readable answer
 private static KernelFunction CreateSynthesizeAnswerFunction(Kernel kernel)
 {
     return KernelFunctionFactory.CreateFromMethod(
@@ -215,13 +232,12 @@ private static KernelFunction CreateSynthesizeAnswerFunction(Kernel kernel)
 
             if (string.IsNullOrEmpty(context) || context.Contains("No relevant context found"))
             {
-                return "I don't have enough information to answer that question accurately. Please try rephrasing or ask about a different topic.";
+                return "I don't have enough information to answer that question accurately. Please try rephrasing.";
             }
 
-            // Synthesize answer based on retrieved context
+            // Build a concise answer using retrieved context
             var answer = $"Based on the available information:\n\n{context}\n\n" +
-                        $"This answer was synthesized from {retrievalCount} relevant sources " +
-                        $"(confidence: {retrievalScore:F2}).";
+                        $"This answer was synthesized from {retrievalCount} relevant sources (confidence: {retrievalScore:F2}).";
 
             args["final_answer"] = answer;
             return answer;
@@ -237,6 +253,7 @@ private static KernelFunction CreateSynthesizeAnswerFunction(Kernel kernel)
 The example processes multiple questions to demonstrate the retrieval capabilities.
 
 ```csharp
+// Run a few sample questions through the retrieval agent to demonstrate behavior
 var questions = new[]
 {
     "What benefits does the Semantic Kernel Graph provide?",
@@ -251,7 +268,7 @@ foreach (var q in questions)
     {
         ["user_question"] = q,
         ["top_k"] = 5,
-        ["min_score"] = 0.35
+        ["min_score"] = 0.0
     };
 
     var result = await executor.ExecuteAsync(kernel, args);
