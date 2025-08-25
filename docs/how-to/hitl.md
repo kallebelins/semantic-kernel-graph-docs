@@ -15,169 +15,176 @@ Human-in-the-Loop workflows enable you to:
 
 ### Human Approval Node
 
-Use `HumanApprovalGraphNode` to pause execution for human decision:
+Use `HumanApprovalGraphNode` to pause execution for human decision. The node requires an
+`IHumanInteractionChannel` instance (for example `ConsoleHumanInteractionChannel`).
 
 ```csharp
-using SemanticKernel.Graph.Core;
-using SemanticKernel.Graph.Nodes;
+// Create a console channel and an approval node, then set a timeout using the fluent API
+var consoleChannel = new ConsoleHumanInteractionChannel();
 
-// Create a human approval node with timeout
 var approvalNode = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(10),
+    approvalTitle: "Document Approval",
+    approvalMessage: "Please review and approve the generated document",
+    interactionChannel: consoleChannel,
     nodeId: "approve_step"
-);
+)
+// Configure timeout and default behavior (fluent)
+.WithTimeout(TimeSpan.FromMinutes(10), TimeoutAction.Reject);
 
-// Add to your graph
-graph.AddNode(approvalNode)
-     .AddEdge("start", "approve_step")
-     .AddEdge("approve_step", "approved_path")
-     .AddEdge("approve_step", "rejected_path");
+// Register the node in a GraphExecutor and connect outcomes
+executor.AddNode(approvalNode);
+executor.Connect(approvalNode.NodeId, "approved_path");
+executor.Connect(approvalNode.NodeId, "rejected_path");
 ```
 
 ### Confidence Gate Node
 
-Implement confidence-based decision gates:
+Implement confidence-based decision gates. If you want an interaction channel for
+human overrides, use the factory method that accepts a channel.
 
 ```csharp
-var confidenceNode = new ConfidenceGateGraphNode(
-    confidenceThreshold: 0.8f,
-    timeout: TimeSpan.FromMinutes(5),
+// Create a confidence gate node with an interaction channel
+var consoleChannel = new ConsoleHumanInteractionChannel();
+var confidenceNode = ConfidenceGateGraphNode.CreateWithInteraction(
+    confidenceThreshold: 0.8,
+    interactionChannel: consoleChannel,
     nodeId: "confidence_check"
 );
 
-// Route based on confidence level
-graph.AddConditionalEdge("confidence_check", "high_confidence", 
-    condition: state => state.GetFloat("confidence_score", 0f) >= 0.8f)
-.AddConditionalEdge("confidence_check", "human_review", 
-    condition: state => state.GetFloat("confidence_score", 0f) < 0.8f);
+// Add to executor and route using ConnectWhen which evaluates KernelArguments
+executor.AddNode(confidenceNode);
+executor.ConnectWhen("confidence_check", "high_confidence", args =>
+    args.GetOrCreateGraphState().GetFloat("confidence_score", 0f) >= 0.8f);
+executor.ConnectWhen("confidence_check", "human_review", args =>
+    args.GetOrCreateGraphState().GetFloat("confidence_score", 0f) < 0.8f);
 ```
 
 ## Multiple Interaction Channels
 
 ### Console Channel
 
-Use console-based human interaction:
+Use console-based human interaction. Initialize the channel with a simple
+configuration dictionary (the channel exposes `InitializeAsync` for configuration).
 
 ```csharp
 var consoleChannel = new ConsoleHumanInteractionChannel();
+await consoleChannel.InitializeAsync(new Dictionary<string, object>
+{
+    ["prompt_style"] = "detailed",
+    ["enable_colors"] = true,
+    ["show_timestamps"] = true
+});
 
 var approvalNode = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(10),
-    channel: consoleChannel,
+    approvalTitle: "Console Approval",
+    approvalMessage: "Enter 'approve' or 'reject'",
+    interactionChannel: consoleChannel,
     nodeId: "console_approval"
-);
-
-// Configure console interaction
-consoleChannel.Configure(new ConsoleChannelOptions
-{
-    PromptFormat = "APPROVAL REQUIRED: {message}\nEnter 'approve' or 'reject': ",
-    ValidationPattern = @"^(approve|reject)$",
-    RetryCount = 3
-});
+).WithTimeout(TimeSpan.FromMinutes(10));
 ```
 
 ### Web API Channel
 
-Implement web-based approval interfaces:
+Implement web-based approval interfaces. The library provides a Web API-backed
+channel that cooperates with an `IHumanInteractionStore`. Use the provided
+kernel builder extension to register it, or construct the channel with a store.
 
 ```csharp
-var webApiChannel = new WebApiHumanInteractionChannel(
-    baseUrl: "https://approval.example.com",
-    apiKey: "your-api-key"
-);
+// Using the kernel builder extension (recommended)
+kernelBuilder.AddWebApiHumanInteraction();
+
+// Or construct manually if you have a store implementation:
+var store = new InMemoryHumanInteractionStore();
+var webApiChannel = new WebApiHumanInteractionChannel(store);
 
 var webApprovalNode = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(30),
-    channel: webApiChannel,
+    approvalTitle: "Web Approval",
+    approvalMessage: "Approve via the web UI",
+    interactionChannel: webApiChannel,
     nodeId: "web_approval"
-);
-
-// Configure web API options
-webApiChannel.Configure(new WebApiChannelOptions
-{
-    EndpointPath = "/api/approvals",
-    RequestTimeout = TimeSpan.FromSeconds(30),
-    RetryPolicy = RetryPolicy.ExponentialBackoff(3, TimeSpan.FromSeconds(1))
-});
+).WithTimeout(TimeSpan.FromMinutes(30));
 ```
 
 ### CLI Channel
 
-Use command-line interface for approvals:
+CLI interactions can be provided by the console channel. There is no separate
+`CliHumanInteractionChannel` type in this codebase — reuse `ConsoleHumanInteractionChannel`.
 
 ```csharp
-var cliChannel = new CliHumanInteractionChannel();
+var cliChannel = new ConsoleHumanInteractionChannel();
+await cliChannel.InitializeAsync(new Dictionary<string, object>
+{
+    ["prompt_style"] = "compact",
+    ["enable_colors"] = false
+});
 
 var cliApprovalNode = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(15),
-    channel: cliChannel,
+    approvalTitle: "CLI Approval",
+    approvalMessage: "Respond via terminal",
+    interactionChannel: cliChannel,
     nodeId: "cli_approval"
-);
-
-// Configure CLI options
-cliChannel.Configure(new CliChannelOptions
-{
-    CommandPrefix = "approval",
-    InteractiveMode = true,
-    DefaultResponse = "pending"
-});
+).WithTimeout(TimeSpan.FromMinutes(15));
 ```
 
 ## Advanced HITL Patterns
 
 ### Batch Approval Management
 
-Handle multiple pending approvals efficiently:
+Handle multiple pending approvals efficiently with `HumanApprovalBatchManager`.
 
 ```csharp
-var batchManager = new HumanApprovalBatchManager(
-    batchSize: 10,
-    batchTimeout: TimeSpan.FromHours(1)
-);
-
-var batchApprovalNode = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromHours(2),
-    batchManager: batchManager,
-    nodeId: "batch_approval"
-);
-
-// Configure batch processing
-batchManager.Configure(new BatchOptions
+// Create the manager with a default channel and options
+var defaultChannel = new ConsoleHumanInteractionChannel();
+var batchOptions = new BatchApprovalOptions
 {
-    GroupBy = "approver_id",
     MaxBatchSize = 20,
-    NotificationStrategy = NotificationStrategy.Email
-});
+    BatchFormationTimeout = TimeSpan.FromHours(1),
+    AllowPartialApproval = false
+};
+
+var batchManager = new HumanApprovalBatchManager(defaultChannel, batchOptions);
+
+// Create an approval node that can participate in batching by using the manager
+var batchApprovalNode = new HumanApprovalGraphNode(
+    approvalTitle: "Batch Approval",
+    approvalMessage: "This request may be processed in a batch",
+    interactionChannel: defaultChannel,
+    nodeId: "batch_approval"
+).WithTimeout(TimeSpan.FromHours(2));
 ```
 
 ### Conditional Human Review
 
-Implement smart routing for human review:
+Implement smart routing for human review using a conditional node and approval node.
 
 ```csharp
 var conditionalReview = new ConditionalGraphNode(
-    predicate: state => {
+    condition: state => {
         var confidence = state.GetFloat("confidence_score", 0f);
         var riskLevel = state.GetString("risk_level", "low");
         var amount = state.GetDecimal("transaction_amount", 0m);
-        
-        return confidence < 0.7f || 
-               riskLevel == "high" || 
+
+        return confidence < 0.7f ||
+               riskLevel == "high" ||
                amount > 10000m;
     },
     nodeId: "review_decision"
 );
 
 var humanReviewNode = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(20),
+    approvalTitle: "Human Review",
+    approvalMessage: "Please review this transaction",
+    interactionChannel: new ConsoleHumanInteractionChannel(),
     nodeId: "human_review"
 );
 
-// Route to human review when needed
-graph.AddConditionalEdge("review_decision", "human_review", 
-    condition: state => state.GetBool("needs_review", false))
-.AddConditionalEdge("review_decision", "auto_process", 
-    condition: state => !state.GetBool("needs_review", true));
+// Wire nodes
+executor.AddNode(conditionalReview);
+executor.AddNode(humanReviewNode);
+
+// Use node-level routing (conditional node holds true/false branches)
+conditionalReview.AddTrueNode(humanReviewNode);
+// Add alternative auto-processing node as needed
 ```
 
 ### Multi-Stage Approval
@@ -186,25 +193,33 @@ Implement complex approval workflows:
 
 ```csharp
 var firstApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(30),
+    approvalTitle: "First Approval",
+    approvalMessage: "Stage 1 approval",
+    interactionChannel: new ConsoleHumanInteractionChannel(),
     nodeId: "first_approval"
 );
 
 var secondApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(60),
+    approvalTitle: "Second Approval",
+    approvalMessage: "Stage 2 approval",
+    interactionChannel: new ConsoleHumanInteractionChannel(),
     nodeId: "second_approval"
 );
 
 var finalApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(120),
+    approvalTitle: "Final Approval",
+    approvalMessage: "Final stage approval",
+    interactionChannel: new ConsoleHumanInteractionChannel(),
     nodeId: "final_approval"
 );
 
 // Multi-stage approval flow
-graph.AddEdge("start", "first_approval")
-     .AddEdge("first_approval", "second_approval")
-     .AddEdge("second_approval", "final_approval")
-     .AddEdge("final_approval", "approved");
+executor.AddNode(firstApproval);
+executor.AddNode(secondApproval);
+executor.AddNode(finalApproval);
+executor.Connect(firstApproval.NodeId, secondApproval.NodeId);
+executor.Connect(secondApproval.NodeId, finalApproval.NodeId);
+executor.Connect(finalApproval.NodeId, "approved");
 ```
 
 ## Configuration and Options
@@ -215,22 +230,17 @@ Configure approval behavior and appearance:
 
 ```csharp
 var configuredApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(15),
+    approvalTitle: "Document Review Required",
+    approvalMessage: "Please review the generated document for accuracy",
+    interactionChannel: new ConsoleHumanInteractionChannel(),
     nodeId: "configured_approval"
 );
 
-// Configure approval options
-configuredApproval.Configure(new HumanApprovalOptions
-{
-    Title = "Document Review Required",
-    Description = "Please review the generated document for accuracy",
-    Instructions = "Check grammar, content, and formatting",
-    RequiredFields = new[] { "reviewer_name", "approval_notes" },
-    OptionalFields = new[] { "suggestions", "priority_level" },
-    ApprovalThreshold = 1, // Number of approvals required
-    RejectionThreshold = 1, // Number of rejections to fail
-    AllowPartialApproval = false
-});
+// Configure approval options (builder or direct API)
+configuredApproval.AddApprovalOption("approve", "Approve", value: true, isDefault: true)
+                  .AddApprovalOption("reject", "Reject", value: false);
+
+configuredApproval.WithTimeout(TimeSpan.FromMinutes(15), TimeoutAction.Reject);
 ```
 
 ### Channel Configuration
@@ -238,22 +248,13 @@ configuredApproval.Configure(new HumanApprovalOptions
 Configure interaction channels for optimal user experience:
 
 ```csharp
-var webChannel = new WebApiHumanInteractionChannel(
-    baseUrl: "https://approval.example.com"
-);
+// Web API channel is registered via kernel builder or constructed with a store
+kernelBuilder.AddWebApiHumanInteraction();
 
-webChannel.Configure(new WebApiChannelOptions
-{
-    EndpointPath = "/api/approvals",
-    RequestTimeout = TimeSpan.FromSeconds(30),
-    RetryPolicy = RetryPolicy.ExponentialBackoff(3, TimeSpan.FromSeconds(1)),
-    Authentication = new BearerTokenAuth("your-token"),
-    CustomHeaders = new Dictionary<string, string>
-    {
-        ["X-Client-Version"] = "1.0.0",
-        ["X-Environment"] = "production"
-    }
-});
+// Or configure channel/store manually
+var store = new InMemoryHumanInteractionStore();
+var webChannel = new WebApiHumanInteractionChannel(store);
+await webChannel.InitializeAsync();
 ```
 
 ## Integration with External Systems
@@ -263,53 +264,8 @@ webChannel.Configure(new WebApiChannelOptions
 Integrate email notifications for approvals:
 
 ```csharp
-var emailChannel = new EmailHumanInteractionChannel(
-    smtpServer: "smtp.example.com",
-    port: 587,
-    username: "approvals@example.com",
-    password: "your-password"
-);
-
-var emailApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromHours(2),
-    channel: emailChannel,
-    nodeId: "email_approval"
-);
-
-// Configure email options
-emailChannel.Configure(new EmailChannelOptions
-{
-    FromAddress = "approvals@example.com",
-    SubjectTemplate = "Approval Required: {workflow_name}",
-    BodyTemplate = "Please review and approve the following request:\n\n{details}\n\nClick here to approve: {approval_url}",
-    ReplyToAddress = "support@example.com"
-});
-```
-
-### Slack Integration
-
-Integrate with Slack for team approvals:
-
-```csharp
-var slackChannel = new SlackHumanInteractionChannel(
-    webhookUrl: "https://hooks.slack.com/services/your-webhook",
-    channel: "#approvals"
-);
-
-var slackApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(45),
-    channel: slackChannel,
-    nodeId: "slack_approval"
-);
-
-// Configure Slack options
-slackChannel.Configure(new SlackChannelOptions
-{
-    Username = "Approval Bot",
-    IconEmoji = ":white_check_mark:",
-    ThreadReplies = true,
-    MentionUsers = new[] { "@approver1", "@approver2" }
-});
+// Email channel not included by default in the codebase; implement a channel that
+// implements IHumanInteractionChannel and plugs into the approval nodes.
 ```
 
 ## Monitoring and Auditing
@@ -320,53 +276,28 @@ Track approval status and timing:
 
 ```csharp
 var trackedApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(30),
+    approvalTitle: "Tracked Approval",
+    approvalMessage: "Please review and track timing",
+    interactionChannel: new ConsoleHumanInteractionChannel(),
     nodeId: "tracked_approval"
 );
 
-// Add tracking information
-trackedApproval.BeforeExecution = async (context) => {
-    context.GraphState["approval_requested_at"] = DateTimeOffset.UtcNow;
-    context.GraphState["approval_id"] = Guid.NewGuid().ToString();
-    return Task.CompletedTask;
-};
-
-trackedApproval.AfterExecution = async (context, result) => {
-    var requestedAt = context.GraphState.GetValue<DateTimeOffset>("approval_requested_at");
-    var completedAt = DateTimeOffset.UtcNow;
-    var duration = completedAt - requestedAt;
-    
-    context.GraphState["approval_completed_at"] = completedAt;
-    context.GraphState["approval_duration"] = duration;
-    context.GraphState["approval_result"] = result.IsSuccess ? "approved" : "rejected";
-    
-    return Task.CompletedTask;
-};
-```
-
-### Audit Logging
-
-Implement comprehensive audit logging:
-
-```csharp
-var auditLogger = new AuditLogger(new AuditOptions
+// Add tracking using node hooks
+trackedApproval.OnBeforeExecuteAsync = async (kernel, args, ct) =>
 {
-    LogLevel = LogLevel.Information,
-    IncludeState = true,
-    IncludeTiming = true
-});
+    var state = args.GetOrCreateGraphState();
+    state["approval_requested_at"] = DateTimeOffset.UtcNow;
+    return Task.CompletedTask;
+};
 
-var auditedApproval = new HumanApprovalGraphNode(
-    timeout: TimeSpan.FromMinutes(20),
-    auditLogger: auditLogger,
-    nodeId: "audited_approval"
-);
-
-// Audit events are automatically logged
-auditLogger.LogApprovalRequested("audited_approval", new { 
-    workflow_id = "workflow_123", 
-    requestor = "user@example.com" 
-});
+trackedApproval.OnAfterExecuteAsync = async (kernel, args, result, ct) =>
+{
+    var state = args.GetOrCreateGraphState();
+    var requestedAt = state.GetValue<DateTimeOffset>("approval_requested_at");
+    state["approval_completed_at"] = DateTimeOffset.UtcNow;
+    state["approval_result"] = result.IsSuccess ? "approved" : "rejected";
+    return Task.CompletedTask;
+};
 ```
 
 ## Best Practices
