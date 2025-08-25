@@ -61,6 +61,7 @@ class Program
                 ["graph-executor"] = async () => await GraphExecutorExample.RunAsync(),
                 ["build-a-graph"] = async () => await GraphExecutorExample.RunAsync(),
                 ["inspection-visualization"] = async () => await GraphVisualizationExample.RunAsync(),
+                ["debug-inspection"] = async () => await DebugAndInspectionExample.RunAsync(),
                 ["graph-options"] = async () => await GraphOptionsExample.RunAsync(),
                 ["human-in-the-loop"] = async () => await HumanInTheLoopExample.RunAsync(),
                 ["integration"] = async () => await IntegrationExample.RunAsync(),

@@ -37,22 +37,25 @@ Debug sessions provide step-by-step execution control and comprehensive debuggin
 
 ```csharp
 using SemanticKernel.Graph.Debug;
-using SemanticKernel.Graph.Extensions;
+using SemanticKernel.Graph.Core;
 
-// Create a debug session using the fluent builder
-var debugSession = await executor
-    .CreateDebugSession(context)
+// Create a GraphExecutor (associate a Kernel if required by your scenario)
+var graphExecutor = new GraphExecutor(kernel);
+
+// Create the execution context (kernel + initial graph state)
+var graphState = new GraphState(new KernelArguments { ["input"] = "demo" });
+var executionContext = new GraphExecutionContext(kernel, graphState);
+
+// Fluent builder: configure breakpoints and initial mode, then build the session
+var debugSession = await DebugSessionBuilder
+    .ForExecution(graphExecutor, executionContext)
     .WithInitialMode(DebugExecutionMode.StepOver)
     .WithBreakpoint("decision_node", "{{user_score}} > 80", "High score breakpoint")
     .WithBreakpoint("error_handler", state => state.GetValue<bool>("has_error"), "Error condition")
     .BuildAsync();
 
-// Alternative: Create directly with extensions
-var (result, debugSession) = await executor.ExecuteWithDebugAsync(
-    kernel, 
-    arguments, 
-    DebugExecutionMode.StepOver
-);
+// Alternative (convenience): run execution and obtain a debug session via helper
+var (result, session) = await graphExecutor.ExecuteWithDebugAsync(kernel, arguments, DebugExecutionMode.StepOver);
 ```
 
 ### Debug Execution Modes
