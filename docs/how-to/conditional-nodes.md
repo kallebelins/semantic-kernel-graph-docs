@@ -20,17 +20,31 @@ Use predicates to evaluate conditions and route execution:
 using SemanticKernel.Graph.Core;
 using SemanticKernel.Graph.Nodes;
 
-// Create a conditional node with a predicate
+// Create a conditional node with a predicate.
+// The predicate safely checks for the presence of the "ok" key and
+// validates it is a boolean before returning the value.
 var conditionalNode = new ConditionalGraphNode(
-    predicate: state => state.ContainsKey("ok") && (bool)state["ok"],
+    predicate: state =>
+    {
+        if (state.TryGetValue("ok", out var okObj) && okObj is bool ok)
+        {
+            return ok;
+        }
+
+        return false; // default when key is missing or not a boolean
+    },
     nodeId: "decision_point"
 );
 
-// Add conditional edges based on the result
-graph.AddConditionalEdge("decision_point", "success_path", 
-    condition: state => state.ContainsKey("ok") && (bool)state["ok"])
-.AddConditionalEdge("decision_point", "fallback_path", 
-    condition: state => !state.ContainsKey("ok") || !(bool)state["ok"]);
+// Add conditional edges based on the result using safe checks.
+graph.AddConditionalEdge(
+    "decision_point",
+    "success_path",
+    condition: state => state.TryGetValue("ok", out var okObj) && okObj is bool ok && ok)
+.AddConditionalEdge(
+    "decision_point",
+    "fallback_path",
+    condition: state => !(state.TryGetValue("ok", out var okObj2) && okObj2 is bool ok2 && ok2));
 ```
 
 ### Template-Based Conditions
@@ -38,8 +52,11 @@ graph.AddConditionalEdge("decision_point", "success_path",
 Use template expressions for more complex conditional logic:
 
 ```csharp
+// Template-based condition example.
+// Use typed accessors and local variables for clarity and easier debugging.
 var templateCondition = new ConditionalGraphNode(
-    predicate: state => {
+    predicate: state =>
+    {
         var score = state.GetInt("confidence_score", 0);
         var threshold = state.GetInt("threshold", 50);
         return score >= threshold;
@@ -47,16 +64,23 @@ var templateCondition = new ConditionalGraphNode(
     nodeId: "confidence_check"
 );
 
-// Route based on confidence level
-graph.AddConditionalEdge("confidence_check", "high_confidence", 
-    condition: state => state.GetInt("confidence_score", 0) >= 80)
-.AddConditionalEdge("confidence_check", "medium_confidence", 
-    condition: state => {
-        var score = state.GetInt("confidence_score", 0);
-        return score >= 50 && score < 80;
-    })
-.AddConditionalEdge("confidence_check", "low_confidence", 
-    condition: state => state.GetInt("confidence_score", 0) < 50);
+// Route based on confidence level with clear thresholds.
+graph.AddConditionalEdge(
+        "confidence_check",
+        "high_confidence",
+        condition: state => state.GetInt("confidence_score", 0) >= 80)
+    .AddConditionalEdge(
+        "confidence_check",
+        "medium_confidence",
+        condition: state =>
+        {
+            var score = state.GetInt("confidence_score", 0);
+            return score >= 50 && score < 80;
+        })
+    .AddConditionalEdge(
+        "confidence_check",
+        "low_confidence",
+        condition: state => state.GetInt("confidence_score", 0) < 50);
 ```
 
 ## Advanced Conditional Patterns
@@ -66,21 +90,33 @@ graph.AddConditionalEdge("confidence_check", "high_confidence",
 Create complex decision trees with multiple paths:
 
 ```csharp
+// Multi-way branching: ensure predicate returns a boolean and checks for null/empty.
 var priorityNode = new ConditionalGraphNode(
-    predicate: state => state.GetString("priority"),
+    predicate: state => !string.IsNullOrEmpty(state.GetString("priority")),
     nodeId: "priority_router"
 );
 
-// Route to different processing paths based on priority
-graph.AddConditionalEdge("priority_router", "urgent_processing", 
-    condition: state => state.GetString("priority") == "urgent")
-.AddConditionalEdge("priority_router", "normal_processing", 
-    condition: state => state.GetString("priority") == "normal")
-.AddConditionalEdge("priority_router", "low_priority_processing", 
-    condition: state => state.GetString("priority") == "low")
-.AddConditionalEdge("priority_router", "default_processing", 
-    condition: state => !new[] { "urgent", "normal", "low" }
-        .Contains(state.GetString("priority")));
+// Route to different processing paths based on priority value.
+graph.AddConditionalEdge(
+        "priority_router",
+        "urgent_processing",
+        condition: state => string.Equals(state.GetString("priority"), "urgent", StringComparison.OrdinalIgnoreCase))
+    .AddConditionalEdge(
+        "priority_router",
+        "normal_processing",
+        condition: state => string.Equals(state.GetString("priority"), "normal", StringComparison.OrdinalIgnoreCase))
+    .AddConditionalEdge(
+        "priority_router",
+        "low_priority_processing",
+        condition: state => string.Equals(state.GetString("priority"), "low", StringComparison.OrdinalIgnoreCase))
+    .AddConditionalEdge(
+        "priority_router",
+        "default_processing",
+        condition: state =>
+        {
+            var value = state.GetString("priority");
+            return string.IsNullOrEmpty(value) || !(new[] { "urgent", "normal", "low" }.Contains(value, StringComparer.OrdinalIgnoreCase));
+        });
 ```
 
 ### State-Dependent Routing
@@ -88,35 +124,43 @@ graph.AddConditionalEdge("priority_router", "urgent_processing",
 Route execution based on multiple state conditions:
 
 ```csharp
+// State-dependent routing: keep checks explicit and readable.
 var analysisNode = new ConditionalGraphNode(
-    predicate: state => {
+    predicate: state =>
+    {
         var hasData = state.ContainsKey("input_data");
         var dataSize = state.GetInt("data_size", 0);
+        // complexity defaults to "simple" when missing
         var complexity = state.GetString("complexity", "simple");
-        
+
         return hasData && dataSize > 0;
     },
     nodeId: "analysis_decision"
 );
 
-// Complex routing logic
-graph.AddConditionalEdge("analysis_decision", "deep_analysis", 
-    condition: state => {
-        var dataSize = state.GetInt("data_size", 0);
-        var complexity = state.GetString("complexity", "simple");
-        return dataSize > 1000 && complexity == "complex";
-    })
-.AddConditionalEdge("analysis_decision", "standard_analysis", 
-    condition: state => {
-        var dataSize = state.GetInt("data_size", 0);
-        var complexity = state.GetString("complexity", "simple");
-        return dataSize > 100 && complexity != "complex";
-    })
-.AddConditionalEdge("analysis_decision", "quick_analysis", 
-    condition: state => {
-        var dataSize = state.GetInt("data_size", 0);
-        return dataSize <= 100;
-    });
+// Complex routing logic with clear thresholds and explicit comparisons.
+graph.AddConditionalEdge(
+        "analysis_decision",
+        "deep_analysis",
+        condition: state =>
+        {
+            var dataSize = state.GetInt("data_size", 0);
+            var complexity = state.GetString("complexity", "simple");
+            return dataSize > 1000 && string.Equals(complexity, "complex", StringComparison.OrdinalIgnoreCase);
+        })
+    .AddConditionalEdge(
+        "analysis_decision",
+        "standard_analysis",
+        condition: state =>
+        {
+            var dataSize = state.GetInt("data_size", 0);
+            var complexity = state.GetString("complexity", "simple");
+            return dataSize > 100 && !string.Equals(complexity, "complex", StringComparison.OrdinalIgnoreCase);
+        })
+    .AddConditionalEdge(
+        "analysis_decision",
+        "quick_analysis",
+        condition: state => state.GetInt("data_size", 0) <= 100);
 ```
 
 ### Dynamic Thresholds
@@ -124,19 +168,22 @@ graph.AddConditionalEdge("analysis_decision", "deep_analysis",
 Use state values to determine dynamic thresholds:
 
 ```csharp
+// Dynamic thresholds: calculate and use a threshold derived from state.
 var adaptiveNode = new ConditionalGraphNode(
-    predicate: state => {
+    predicate: state =>
+    {
         var baseThreshold = state.GetInt("base_threshold", 50);
         var multiplier = state.GetFloat("threshold_multiplier", 1.0f);
-        var dynamicThreshold = (int)(baseThreshold * multiplier);
-        
+        var dynamicThreshold = (int)Math.Round(baseThreshold * multiplier);
+
         var currentValue = state.GetInt("current_value", 0);
+        // Return true when current value meets or exceeds the dynamic threshold
         return currentValue >= dynamicThreshold;
     },
     nodeId: "adaptive_threshold"
 );
 
-// Store the calculated threshold for later use
+// Store the calculated threshold for later use in the graph state.
 graph.AddEdge("adaptive_threshold", "store_threshold");
 ```
 
@@ -147,10 +194,15 @@ graph.AddEdge("adaptive_threshold", "store_threshold");
 Simple true/false routing:
 
 ```csharp
-graph.AddConditionalEdge("start", "success", 
+// Boolean condition routing: prefer explicit default values and safe access.
+graph.AddConditionalEdge(
+    "start",
+    "success",
     condition: state => state.GetBool("is_valid", false))
-.AddConditionalEdge("start", "failure", 
-    condition: state => !state.GetBool("is_valid", true));
+.AddConditionalEdge(
+    "start",
+    "failure",
+    condition: state => !state.GetBool("is_valid", false));
 ```
 
 ### Numeric Comparisons
@@ -158,14 +210,22 @@ graph.AddConditionalEdge("start", "success",
 Route based on numeric values:
 
 ```csharp
-graph.AddConditionalEdge("start", "high_priority", 
+// Numeric comparisons with clear threshold definitions.
+graph.AddConditionalEdge(
+    "start",
+    "high_priority",
     condition: state => state.GetInt("priority", 0) > 7)
-.AddConditionalEdge("start", "medium_priority", 
-    condition: state => {
+.AddConditionalEdge(
+    "start",
+    "medium_priority",
+    condition: state =>
+    {
         var priority = state.GetInt("priority", 0);
         return priority > 3 && priority <= 7;
     })
-.AddConditionalEdge("start", "low_priority", 
+.AddConditionalEdge(
+    "start",
+    "low_priority",
     condition: state => state.GetInt("priority", 0) <= 3);
 ```
 
@@ -174,12 +234,19 @@ graph.AddConditionalEdge("start", "high_priority",
 Route based on string values and patterns:
 
 ```csharp
-graph.AddConditionalEdge("start", "email_processing", 
-    condition: state => state.GetString("input_type", "").Contains("email"))
-.AddConditionalEdge("start", "document_processing", 
-    condition: state => state.GetString("input_type", "").Contains("document"))
-.AddConditionalEdge("start", "image_processing", 
-    condition: state => state.GetString("input_type", "").Contains("image"));
+// String matching: use StringComparison and guard against nulls.
+graph.AddConditionalEdge(
+    "start",
+    "email_processing",
+    condition: state => state.GetString("input_type", string.Empty).IndexOf("email", StringComparison.OrdinalIgnoreCase) >= 0)
+.AddConditionalEdge(
+    "start",
+    "document_processing",
+    condition: state => state.GetString("input_type", string.Empty).IndexOf("document", StringComparison.OrdinalIgnoreCase) >= 0)
+.AddConditionalEdge(
+    "start",
+    "image_processing",
+    condition: state => state.GetString("input_type", string.Empty).IndexOf("image", StringComparison.OrdinalIgnoreCase) >= 0);
 ```
 
 ### Complex Logical Expressions
@@ -211,14 +278,16 @@ graph.AddConditionalEdge("start", "premium_processing",
 Cache conditional evaluations for better performance:
 
 ```csharp
+// Caching evaluations: store expensive computation results in the state.
 var cachedCondition = new ConditionalGraphNode(
-    predicate: state => {
+    predicate: state =>
+    {
         // Cache the result to avoid repeated calculations
-        if (state.TryGetValue("cached_decision", out var cached))
+        if (state.TryGetValue("cached_decision", out var cached) && cached is bool cachedBool)
         {
-            return (bool)cached;
+            return cachedBool;
         }
-        
+
         var result = ExpensiveCalculation(state);
         state["cached_decision"] = result;
         return result;
@@ -232,15 +301,17 @@ var cachedCondition = new ConditionalGraphNode(
 Use lazy evaluation for expensive conditions:
 
 ```csharp
+// Lazy evaluation: perform expensive checks only when necessary and cache the result.
 var lazyCondition = new ConditionalGraphNode(
-    predicate: state => {
+    predicate: state =>
+    {
         // Only evaluate if we haven't already decided
-        if (state.ContainsKey("route_decided"))
+        if (state.ContainsKey("route_decided") && state.GetBool("route_decided", false))
         {
-            return state.GetBool("route_decided");
+            return state.GetBool("route_decided", false);
         }
-        
-        // Perform expensive evaluation
+
+        // Perform expensive evaluation and cache the result
         var result = EvaluateComplexCondition(state);
         state["route_decided"] = result;
         return result;
@@ -256,23 +327,26 @@ var lazyCondition = new ConditionalGraphNode(
 Add debug information to conditional nodes:
 
 ```csharp
+// Conditional debugging: store structured debug info in graph state for inspection.
 var debugCondition = new ConditionalGraphNode(
-    predicate: state => {
-        var condition = state.GetString("condition", "");
+    predicate: state =>
+    {
+        var condition = state.GetString("condition", string.Empty);
         var value = state.GetInt("value", 0);
         var threshold = state.GetInt("threshold", 50);
-        
+
         var result = value >= threshold;
-        
-        // Log the decision for debugging
-        state["debug_info"] = new {
+
+        // Log the decision for debugging in a structured object
+        state["debug_info"] = new
+        {
             Condition = condition,
             Value = value,
             Threshold = threshold,
             Result = result,
             Timestamp = DateTimeOffset.UtcNow
         };
-        
+
         return result;
     },
     nodeId: "debug_condition"
@@ -284,15 +358,17 @@ var debugCondition = new ConditionalGraphNode(
 Track decision paths through your workflow:
 
 ```csharp
+// Decision tracing: append decision entries to a history list stored in state.
 var traceCondition = new ConditionalGraphNode(
-    predicate: state => {
+    predicate: state =>
+    {
         var decision = EvaluateCondition(state);
-        
-        // Add to decision history
+
+        // Add to decision history (initialize list if missing)
         var history = state.GetValue<List<string>>("decision_history") ?? new List<string>();
-        history.Add($"Node: {NodeId}, Decision: {decision}, Timestamp: {DateTimeOffset.UtcNow}");
+        history.Add($"Node: trace_condition, Decision: {decision}, Timestamp: {DateTimeOffset.UtcNow}");
         state["decision_history"] = history;
-        
+
         return decision;
     },
     nodeId: "trace_condition"

@@ -95,7 +95,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 ## docs/how-to
 84. [x] advanced-routing.md
 85. [x] build-a-graph.md
-86. [ ] conditional-nodes.md
+86. [x] conditional-nodes.md
 87. [ ] debug-and-inspection.md
 88. [ ] error-handling-and-resilience.md
 89. [ ] exposing-rest-apis.md

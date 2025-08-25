@@ -33,6 +33,7 @@ class Program
                 ["conditional-edge"] = async () => await ConditionalEdgeExample.RunAllExamplesAsync(),
                 ["checkpointing-quickstart"] = async () => await CheckpointingQuickstartExample.RunAllExamplesAsync(),
                 ["conditional-nodes-quickstart"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
+                ["conditional-workflow"] = async () => await ConditionalNodesQuickstartExample.RunConditionalWorkflowExample(),
                 ["state-quickstart"] = async () => await StateQuickstartExample.RunAsync(),
                 ["state-tutorial"] = async () => await StateTutorialExample.RunAsync(),
                 ["state-and-serialization"] = async () => await StateAndSerializationExample.RunAsync(),
