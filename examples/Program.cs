@@ -83,7 +83,8 @@ class Program
                 ["multi-hop-rag-retry"] = async () => await MultiHopRagRetryExample.RunAsync(),
                 ["optimizers-and-few-shot"] = async () => await OptimizersAndFewShotExample.RunAsync(),
                 ["plugin-system"] = async () => await PluginSystemExample.RunExampleAsync(),
-                ["react-problem-solving"] = async () => await ReActProblemSolvingExample.RunAsync()
+                ["react-problem-solving"] = async () => await ReActProblemSolvingExample.RunAsync(),
+                ["streaming-execution"] = async () => await StreamingQuickstartExample.RunAsync()
             };
 
             // Determine which example to run
