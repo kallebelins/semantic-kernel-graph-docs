@@ -19,19 +19,24 @@ Use `HumanApprovalGraphNode` to pause execution for human decision. The node req
 `IHumanInteractionChannel` instance (for example `ConsoleHumanInteractionChannel`).
 
 ```csharp
-// Create a console channel and an approval node, then set a timeout using the fluent API
+// Create a console channel that will prompt the approver via the terminal.
 var consoleChannel = new ConsoleHumanInteractionChannel();
 
+// Build a HumanApprovalGraphNode that pauses graph execution and requests
+// human approval. Provide a short, clear title and message so approvers
+// understand the requested action.
 var approvalNode = new HumanApprovalGraphNode(
     approvalTitle: "Document Approval",
-    approvalMessage: "Please review and approve the generated document",
+    approvalMessage: "Please review and approve the generated document (type 'approve' or 'reject')",
     interactionChannel: consoleChannel,
     nodeId: "approve_step"
 )
-// Configure timeout and default behavior (fluent)
-.WithTimeout(TimeSpan.FromMinutes(10), TimeoutAction.Reject);
+    // Configure a reasonable timeout and a default action to avoid
+    // indefinitely blocking automated runs. TimeoutAction.Reject will
+    // choose the rejection path if the approver does not respond.
+    .WithTimeout(TimeSpan.FromMinutes(10), TimeoutAction.Reject);
 
-// Register the node in a GraphExecutor and connect outcomes
+// Register the node in a GraphExecutor and wire the two possible outcomes.
 executor.AddNode(approvalNode);
 executor.Connect(approvalNode.NodeId, "approved_path");
 executor.Connect(approvalNode.NodeId, "rejected_path");
@@ -43,15 +48,19 @@ Implement confidence-based decision gates. If you want an interaction channel fo
 human overrides, use the factory method that accepts a channel.
 
 ```csharp
-// Create a confidence gate node with an interaction channel
+// Create a confidence gate node that can route automatically based on
+// a numeric score. Optionally attach an interaction channel so humans
+// can override or inspect low-confidence cases.
 var consoleChannel = new ConsoleHumanInteractionChannel();
 var confidenceNode = ConfidenceGateGraphNode.CreateWithInteraction(
-    confidenceThreshold: 0.8,
+    confidenceThreshold: 0.8f,
     interactionChannel: consoleChannel,
     nodeId: "confidence_check"
 );
 
-// Add to executor and route using ConnectWhen which evaluates KernelArguments
+// Add the node and route outcomes using ConnectWhen with a predicate
+// that inspects graph state. Use GetOrCreateGraphState() to read
+// values produced earlier in the graph.
 executor.AddNode(confidenceNode);
 executor.ConnectWhen("confidence_check", "high_confidence", args =>
     args.GetOrCreateGraphState().GetFloat("confidence_score", 0f) >= 0.8f);
@@ -67,14 +76,20 @@ Use console-based human interaction. Initialize the channel with a simple
 configuration dictionary (the channel exposes `InitializeAsync` for configuration).
 
 ```csharp
+// Configure and initialize a console-based interaction channel.
 var consoleChannel = new ConsoleHumanInteractionChannel();
 await consoleChannel.InitializeAsync(new Dictionary<string, object>
 {
+    // Choose a prompt style that suits the approval scenario.
     ["prompt_style"] = "detailed",
+    // Enable colors for readability when running in a supporting terminal.
     ["enable_colors"] = true,
+    // Optionally show timestamps to help approvers track requests.
     ["show_timestamps"] = true
 });
 
+// Create an approval node using the initialized console channel and
+// protect against long-running waits with a timeout.
 var approvalNode = new HumanApprovalGraphNode(
     approvalTitle: "Console Approval",
     approvalMessage: "Enter 'approve' or 'reject'",
@@ -90,13 +105,16 @@ channel that cooperates with an `IHumanInteractionStore`. Use the provided
 kernel builder extension to register it, or construct the channel with a store.
 
 ```csharp
-// Using the kernel builder extension (recommended)
+// Register the Web API human interaction support via the kernel builder
+// so the example wiring is handled by DI and the framework.
 kernelBuilder.AddWebApiHumanInteraction();
 
-// Or construct manually if you have a store implementation:
+// Alternatively, construct the channel manually using a backing store.
 var store = new InMemoryHumanInteractionStore();
 var webApiChannel = new WebApiHumanInteractionChannel(store);
 
+// Create an approval node routed to the web channel. Web interactions
+// typically require longer timeouts to allow external approvers to respond.
 var webApprovalNode = new HumanApprovalGraphNode(
     approvalTitle: "Web Approval",
     approvalMessage: "Approve via the web UI",
@@ -111,6 +129,8 @@ CLI interactions can be provided by the console channel. There is no separate
 `CliHumanInteractionChannel` type in this codebase — reuse `ConsoleHumanInteractionChannel`.
 
 ```csharp
+// CLI interactions reuse the console channel. Use a compact prompt
+// style when approvers expect short commands and limited output.
 var cliChannel = new ConsoleHumanInteractionChannel();
 await cliChannel.InitializeAsync(new Dictionary<string, object>
 {
@@ -133,7 +153,8 @@ var cliApprovalNode = new HumanApprovalGraphNode(
 Handle multiple pending approvals efficiently with `HumanApprovalBatchManager`.
 
 ```csharp
-// Create the manager with a default channel and options
+// Create the manager with a default channel and batch options. The
+// batch manager groups multiple requests to reduce notification noise.
 var defaultChannel = new ConsoleHumanInteractionChannel();
 var batchOptions = new BatchApprovalOptions
 {
@@ -144,7 +165,7 @@ var batchOptions = new BatchApprovalOptions
 
 var batchManager = new HumanApprovalBatchManager(defaultChannel, batchOptions);
 
-// Create an approval node that can participate in batching by using the manager
+// Create an approval node that may be routed into a batch by the manager.
 var batchApprovalNode = new HumanApprovalGraphNode(
     approvalTitle: "Batch Approval",
     approvalMessage: "This request may be processed in a batch",
@@ -158,12 +179,18 @@ var batchApprovalNode = new HumanApprovalGraphNode(
 Implement smart routing for human review using a conditional node and approval node.
 
 ```csharp
+// Create a conditional node that evaluates graph state to decide whether
+// a human review is necessary. The predicate reads values stored earlier
+// in the graph state such as confidence, risk level, and transaction amount.
 var conditionalReview = new ConditionalGraphNode(
-    condition: state => {
+    condition: state =>
+    {
         var confidence = state.GetFloat("confidence_score", 0f);
         var riskLevel = state.GetString("risk_level", "low");
         var amount = state.GetDecimal("transaction_amount", 0m);
 
+        // Request human review when confidence is low, risk is high, or
+        // the transaction amount exceeds a business-defined threshold.
         return confidence < 0.7f ||
                riskLevel == "high" ||
                amount > 10000m;
@@ -171,6 +198,8 @@ var conditionalReview = new ConditionalGraphNode(
     nodeId: "review_decision"
 );
 
+// Create a human approval node that will be executed when the conditional
+// node evaluates to true.
 var humanReviewNode = new HumanApprovalGraphNode(
     approvalTitle: "Human Review",
     approvalMessage: "Please review this transaction",
@@ -178,13 +207,11 @@ var humanReviewNode = new HumanApprovalGraphNode(
     nodeId: "human_review"
 );
 
-// Wire nodes
+// Wire nodes into the executor and route the true branch to the human node.
 executor.AddNode(conditionalReview);
 executor.AddNode(humanReviewNode);
-
-// Use node-level routing (conditional node holds true/false branches)
 conditionalReview.AddTrueNode(humanReviewNode);
-// Add alternative auto-processing node as needed
+// Add an auto-processing node on the false branch as appropriate.
 ```
 
 ### Multi-Stage Approval
@@ -192,6 +219,9 @@ conditionalReview.AddTrueNode(humanReviewNode);
 Implement complex approval workflows:
 
 ```csharp
+// Example multi-stage approval flow. Each stage is represented by a
+// HumanApprovalGraphNode. Approvals are chained so that the output of
+// one stage triggers the next.
 var firstApproval = new HumanApprovalGraphNode(
     approvalTitle: "First Approval",
     approvalMessage: "Stage 1 approval",
@@ -213,7 +243,7 @@ var finalApproval = new HumanApprovalGraphNode(
     nodeId: "final_approval"
 );
 
-// Multi-stage approval flow
+// Wire the multi-stage flow into the executor.
 executor.AddNode(firstApproval);
 executor.AddNode(secondApproval);
 executor.AddNode(finalApproval);
@@ -229,6 +259,7 @@ executor.Connect(finalApproval.NodeId, "approved");
 Configure approval behavior and appearance:
 
 ```csharp
+// Configure an approval node with explicit approval options and a timeout.
 var configuredApproval = new HumanApprovalGraphNode(
     approvalTitle: "Document Review Required",
     approvalMessage: "Please review the generated document for accuracy",
@@ -236,10 +267,12 @@ var configuredApproval = new HumanApprovalGraphNode(
     nodeId: "configured_approval"
 );
 
-// Configure approval options (builder or direct API)
+// Add named approval options that the approver can choose from. The
+// API stores the chosen value in the result so graph routing can use it.
 configuredApproval.AddApprovalOption("approve", "Approve", value: true, isDefault: true)
                   .AddApprovalOption("reject", "Reject", value: false);
 
+// Apply a reasonable timeout to avoid indefinite blocking.
 configuredApproval.WithTimeout(TimeSpan.FromMinutes(15), TimeoutAction.Reject);
 ```
 
@@ -248,10 +281,10 @@ configuredApproval.WithTimeout(TimeSpan.FromMinutes(15), TimeoutAction.Reject);
 Configure interaction channels for optimal user experience:
 
 ```csharp
-// Web API channel is registered via kernel builder or constructed with a store
+// Web API channel is registered via kernel builder or constructed with a store.
 kernelBuilder.AddWebApiHumanInteraction();
 
-// Or configure channel/store manually
+// Or construct manually with a backing store and initialize it.
 var store = new InMemoryHumanInteractionStore();
 var webChannel = new WebApiHumanInteractionChannel(store);
 await webChannel.InitializeAsync();
@@ -275,6 +308,8 @@ Integrate email notifications for approvals:
 Track approval status and timing:
 
 ```csharp
+// Create an approval node and attach hooks to record timing and result
+// metadata for monitoring and auditing purposes.
 var trackedApproval = new HumanApprovalGraphNode(
     approvalTitle: "Tracked Approval",
     approvalMessage: "Please review and track timing",
@@ -282,7 +317,7 @@ var trackedApproval = new HumanApprovalGraphNode(
     nodeId: "tracked_approval"
 );
 
-// Add tracking using node hooks
+// Record when the approval was requested.
 trackedApproval.OnBeforeExecuteAsync = async (kernel, args, ct) =>
 {
     var state = args.GetOrCreateGraphState();
@@ -290,6 +325,7 @@ trackedApproval.OnBeforeExecuteAsync = async (kernel, args, ct) =>
     return Task.CompletedTask;
 };
 
+// Record when the approval completed and store the outcome for auditing.
 trackedApproval.OnAfterExecuteAsync = async (kernel, args, result, ct) =>
 {
     var state = args.GetOrCreateGraphState();
