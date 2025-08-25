@@ -101,7 +101,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 89. [x] exposing-rest-apis.md
 90. [x] hitl.md
 91. [x] human-in-the-loop.md
-92. [ ] integration-and-extensions.md
+92. [x] integration-and-extensions.md
 93. [ ] loops.md
 94. [ ] metrics-and-observability.md
 95. [ ] multi-agent-and-shared-state.md

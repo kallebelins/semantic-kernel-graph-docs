@@ -234,7 +234,7 @@ using SemanticKernel.Graph.Integration;
 var sanitizer = new SensitiveDataSanitizer();
 
 // Sanitize dictionary data
-var sensitiveData = new Dictionary<string, object?>
+System.Collections.Generic.IDictionary<string, object?> sensitiveData = new System.Collections.Generic.Dictionary<string, object?>
 {
     ["username"] = "john_doe",
     ["password"] = "secret123",
@@ -281,7 +281,7 @@ var customPolicy = new SensitiveDataPolicy
 var sanitizer = new SensitiveDataSanitizer(customPolicy);
 
 // Test custom policy
-var testData = new Dictionary<string, object?>
+System.Collections.Generic.IDictionary<string, object?> testData = new System.Collections.Generic.Dictionary<string, object?>
 {
     ["user_ssn"] = "123-45-6789",
     ["credit_card_number"] = "4111-1111-1111-1111",
@@ -309,7 +309,7 @@ var loggingOptions = new GraphLoggingOptions
     }
 };
 
-// Apply to kernel
+// Apply to kernel (explicit typing where dictionaries are used prevents ambiguous overloads in C#)
 var kernel = Kernel.CreateBuilder()
     .AddOpenAIChatCompletion("gpt-3.5-turbo", apiKey)
     .AddGraphSupport(options =>
@@ -738,3 +738,14 @@ var perfLoggingOptions = new GraphLoggingOptions
 * [Metrics and Observability](metrics-and-observability.md) - Monitoring and performance analysis
 * [Debug and Inspection](debug-and-inspection.md) - Debugging and inspection capabilities
 * [Examples](../../examples/) - Practical examples of integration and extensions
+
+## Run the documented example
+
+To run the example used in this guide locally, build and run the Examples project and pass the example name `integration-and-extensions`:
+
+```bash
+dotnet build ../semantic-kernel-graph/src/SemanticKernel.Graph.Examples/SemanticKernel.Graph.Examples.csproj
+dotnet run --project ../semantic-kernel-graph/src/SemanticKernel.Graph.Examples/SemanticKernel.Graph.Examples.csproj --example integration-and-extensions
+```
+
+The example prints a sanitized payload demonstrating how `SensitiveDataSanitizer` redacts sensitive fields.

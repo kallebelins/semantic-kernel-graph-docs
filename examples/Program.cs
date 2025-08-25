@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.State;
+using SemanticKernel.Graph.DocsExamples;
 
 
 namespace Examples;
@@ -65,6 +66,7 @@ class Program
                 ["graph-options"] = async () => await GraphOptionsExample.RunAsync(),
                 ["human-in-the-loop"] = async () => await HumanInTheLoopExample.RunAsync(),
                 ["integration"] = async () => await IntegrationExample.RunAsync(),
+                ["integration-and-extensions"] = async () => await IntegrationAndExtensionsExample.RunAsync(),
                 ["document-analysis-pipeline"] = async () => await DocumentAnalysisPipelineDocExample.DemoAsync(),
                 ["all"] = async () => await RunAllAvailableExamples(),
                 ["simple-node"] = async () => await ExampleRunners.RunSimpleNodeExample(),
@@ -187,6 +189,7 @@ class Program
         await RunStreamingQuickstartExample();
         await TroubleshootingExample.RunAsync();
         await DynamicRoutingExample.RunAsync();
+        await IntegrationAndExtensionsExample.RunAsync();
         await ExecutionModelExample.RunAsync();
         await ExecutionConceptsExample.RunAsync();
         AdditionalUtilitiesExample.RunAllDemonstrations();
