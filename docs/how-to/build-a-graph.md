@@ -15,92 +15,72 @@ Building a graph involves several key steps:
 
 ### 1. Create and Configure Kernel
 
-Start by creating a Semantic Kernel instance and adding the required plugins:
+Start by creating a Semantic Kernel instance with graph support enabled. The examples in this repository use a minimal kernel configured for graph scenarios.
 
 ```csharp
 using Microsoft.SemanticKernel;
 using SemanticKernel.Graph.Core;
-using SemanticKernel.Graph.Extensions;
+using SemanticKernel.Graph.Nodes;
 
-var builder = Kernel.CreateBuilder();
-builder.AddOpenAIChatCompletion("gpt-4", "your-api-key");
-builder.AddPluginFromObject(new PlannerPlugin(), "Planner");
-builder.AddPluginFromObject(new AnalyzerPlugin(), "Analyzer");
-builder.AddPluginFromObject(new ExecutorPlugin(), "Executor");
-
-var kernel = builder.Build();
+// Create a kernel and enable graph support for examples
+var kernel = Kernel.CreateBuilder()
+    .AddGraphSupport()
+    .Build();
 ```
 
 ### 2. Define Graph Nodes
 
-Create nodes that represent different steps in your workflow:
+Create nodes that represent different steps in your workflow. For small runnable documentation snippets we provide lightweight kernel functions wrapped into `FunctionGraphNode` instances:
 
 ```csharp
-// Function nodes that execute kernel functions
-var planNode = new FunctionGraphNode(
-    kernel.GetFunction("Planner", "Plan"), 
-    nodeId: "plan"
-);
+// Create lightweight kernel functions for demo purposes
+var fnA = KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+{
+    // Returns a simple greeting message
+    return "Hello from A";
+}, "FnA");
 
-var analyzeNode = new FunctionGraphNode(
-    kernel.GetFunction("Analyzer", "Analyze"), 
-    nodeId: "analyze"
-);
+var fnB = KernelFunctionFactory.CreateFromMethod((KernelArguments args) =>
+{
+    // Echoes previous message from the graph state
+    var prev = args.ContainsName("message") ? args["message"]?.ToString() : string.Empty;
+    return $"B received: {prev}";
+}, "FnB");
 
-var actNode = new FunctionGraphNode(
-    kernel.GetFunction("Executor", "Act"), 
-    nodeId: "act"
-);
-
-// Conditional node for branching logic
-var decisionNode = new ConditionalGraphNode(
-    predicate: state => state.GetString("needs_analysis") == "yes",
-    nodeId: "decision"
-);
+// Wrap functions into graph nodes
+var nodeA = new FunctionGraphNode(fnA, "nodeA", "Start node A");
+var nodeB = new FunctionGraphNode(fnB, "nodeB", "Receiver node B");
 ```
 
 ### 3. Connect Nodes with Edges
 
-Define the flow between nodes using conditional edges:
+Define the flow between nodes using the `GraphExecutor` API. For the minimal example above we connect `nodeA` to `nodeB` and set the start node:
 
 ```csharp
-var graph = new GraphExecutor("workflow-graph", "Complete workflow with analysis");
+var graph = new GraphExecutor("ExampleGraph", "A tiny demo graph for docs");
 
 // Add nodes to the graph
-graph.AddNode(planNode)
-     .AddNode(decisionNode)
-     .AddNode(analyzeNode)
-     .AddNode(actNode);
+graph.AddNode(nodeA).AddNode(nodeB);
 
-// Connect nodes with conditional logic
-graph.AddEdge(planNode, decisionNode)
-     .AddConditionalEdge(decisionNode, analyzeNode, 
-         condition: state => state.GetString("needs_analysis") == "yes")
-     .AddConditionalEdge(decisionNode, actNode, 
-         condition: state => state.GetString("needs_analysis") != "yes")
-     .AddEdge(analyzeNode, actNode);
-
-// Set the starting point
-graph.SetStartNode("plan");
+// Connect A -> B and set start node
+graph.Connect("nodeA", "nodeB");
+graph.SetStartNode("nodeA");
 ```
 
 ### 4. Execute the Graph
 
-Run the complete workflow:
+Run the complete workflow using `ExecuteAsync`. The example uses `KernelArguments` as initial graph state and prints the final result.
 
 ```csharp
-// Prepare execution arguments
-var arguments = new KernelArguments
-{
-    ["input"] = "Process this data",
-    ["needs_analysis"] = "yes"
-};
+// Prepare initial kernel arguments / graph state
+var args = new KernelArguments();
+args["message"] = "Initial message";
 
-// Execute the graph
-var executor = new GraphExecutor(graph);
-var result = await executor.ExecuteAsync(kernel, arguments);
+// Execute graph
+var result = await graph.ExecuteAsync(kernel, args, CancellationToken.None);
 
-Console.WriteLine($"Result: {result.GetValue<string>()}");
+Console.WriteLine("Graph execution completed.");
+Console.WriteLine($"Final result: {result.GetValue<string>()}");
 ```
 
 ## Alternative Builder Pattern
