@@ -258,34 +258,54 @@ Each strategy contributes to the final decision with configurable weights:
 ### Basic Setup
 
 ```csharp
-// 1. Create kernel with embedding service
+// 1. Create kernel and optionally add an embedding service.
+// If you don't have an embedding provider, the advanced semantic
+// strategies will be disabled automatically.
 var kernelBuilder = Kernel.CreateBuilder();
-kernelBuilder.AddTextEmbeddingGeneration("text-embedding-ada-002", "your-api-key");
+// kernelBuilder.AddTextEmbeddingGeneration("text-embedding-ada-002", "your-api-key");
 var kernel = kernelBuilder.Build();
 
-// 2. Create memory service (if available)
-var memoryService = new GraphMemoryService(); // Your implementation
+// 2. Create (or obtain) a memory service. Use GraphMemory only if available.
+IGraphMemoryService? memoryService = null;
+try
+{
+    memoryService = new GraphMemoryService(); // Replace with your implementation
+}
+catch
+{
+    // Memory service is optional for some routing strategies.
+}
 
-// 3. Create advanced routing engine
-var advancedRoutingEngine = new AdvancedRoutingEngine(
-    embeddingService: kernel.GetRequiredService<ITextEmbeddingGenerationService>(),
-    memoryService: memoryService,
-    options: new AdvancedRoutingOptions
-    {
-        EnableSemanticRouting = true,
-        EnableSimilarityRouting = true,
-        EnableProbabilisticRouting = true,
-        EnableContextualRouting = true,
-        EnableFeedbackLearning = true
-    }
-);
+// 3. Create advanced routing engine only when embedding service is available.
+IAdvancedRoutingEngine? advancedRoutingEngine = null;
+if (kernel.Services.GetService(typeof(ITextEmbeddingGenerationService)) is ITextEmbeddingGenerationService embeddingService)
+{
+    advancedRoutingEngine = new AdvancedRoutingEngine(
+        embeddingService: embeddingService,
+        memoryService: memoryService,
+        options: new AdvancedRoutingOptions
+        {
+            EnableSemanticRouting = true,
+            EnableSimilarityRouting = memoryService != null,
+            EnableProbabilisticRouting = true,
+            EnableContextualRouting = true,
+            EnableFeedbackLearning = true
+        }
+    );
+}
 
-// 4. Configure graph with advanced routing
-var graph = new GraphExecutor(kernel);
-graph.RoutingEngine = new DynamicRoutingEngine(
-    embeddingService: kernel.GetRequiredService<ITextEmbeddingGenerationService>(),
-    memoryService: memoryService
-);
+// 4. Configure graph to use dynamic routing engine when available.
+var graph = kernel.CreateGraphWithDynamicRouting("AdvancedRoutingExample", "Advanced routing demo");
+if (advancedRoutingEngine != null)
+{
+    graph.RoutingEngine = new DynamicRoutingEngine(
+        templateEngine: graph.Metadata.TryGetValue("TemplateEngine", out var t) ? t as IGraphTemplateEngine : null,
+        options: new DynamicRoutingOptions { EnableCaching = true, EnableFallback = true },
+        logger: null,
+        embeddingService: kernel.Services.GetService(typeof(ITextEmbeddingGenerationService)) as ITextEmbeddingGenerationService,
+        memoryService: memoryService
+    );
+}
 ```
 
 ### Providing Feedback
