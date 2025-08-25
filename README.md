@@ -2,62 +2,91 @@
 
 A powerful and extensible graph-based execution framework built on top of Microsoft's Semantic Kernel, designed for building sophisticated AI workflows, multi-agent systems, and intelligent applications.
 
+Browse the documentation on the website: [skgraph.dev](https://skgraph.dev/)
+
 ## 🚀 Features
 
-### Core Capabilities
-* **Graph-Based Execution**: Define complex AI workflows as directed graphs with nodes and edges
-* **Multi-Agent Coordination**: Orchestrate multiple AI agents with shared state and communication
-* **Dynamic Routing**: Intelligent routing based on content, confidence scores, and business logic
-* **Checkpointing & Recovery**: Resume execution from any point with full state preservation
-* **Streaming Execution**: Real-time event streaming for interactive applications
-* **Human-in-the-Loop**: Built-in support for human approval and intervention workflows
+### Core capabilities
+- **Graph-based execution**: Define complex AI workflows as directed graphs with nodes and edges
+- **Stateful orchestration**: Shared, typed state across nodes with validation and serialization
+- **Dynamic routing**: Conditional edges and intelligent routing driven by data and model outputs
+- **Checkpointing & recovery**: Resume execution from any point with full state preservation
+- **Streaming execution**: Real-time events and monitoring for interactive apps
+- **Human-in-the-loop**: Built-in approval, intervention, and feedback workflows
 
-### Advanced Patterns
-* **Chain of Thought**: Structured reasoning with validation and confidence scoring
-* **ReAct (Reasoning + Acting)**: Iterative problem-solving with tool usage
-* **Multi-Hop RAG**: Advanced retrieval-augmented generation with retry mechanisms
-* **Conditional Execution**: Dynamic workflow branching based on AI decisions
-* **Parallel Processing**: Fork-join patterns for concurrent task execution
+### Advanced patterns
+- **Chain-of-thought** and **ReAct**: Structured reasoning and tool-use workflows
+- **Multi-hop RAG** with retries and guardrails
+- **Conditional execution** and **parallel fork-join** patterns
 
-### Enterprise Features
-* **Performance Monitoring**: Comprehensive metrics and observability
-* **Error Recovery**: Intelligent error handling with automatic retry strategies
-* **Resource Governance**: Cost controls, rate limiting, and circuit breakers
-* **Security & Auth**: Enterprise-grade authentication and authorization
-* **Visualization**: Real-time graph execution visualization and debugging tools
+### Enterprise features
+- **Observability**: Metrics, logging, and real-time visualization
+- **Error policies**: Retries, backoffs, and compensations
+- **Resource governance**: Concurrency limits, rate limiting, and cost controls
+- **Security**: Data and secret handling, auth and policy integration
 
-## 🏗️ Architecture
+## 🧭 Documentation
 
-The framework is built with a modular architecture that separates concerns and enables extensibility:
+Online docs: [skgraph.dev](https://skgraph.dev/)
 
-* **Core**: Graph execution engine, state management, and fundamental patterns
-* **Nodes**: Reusable workflow components (actions, conditionals, loops, etc.)
-* **Extensions**: Framework extensions for advanced use cases
-* **Integration**: Templates, policies, and enterprise integrations
-* **Streaming**: Real-time event processing and communication
+### Getting started
+- [Overview](docs/getting-started.md)
+- [Installation](docs/installation.md)
+- [First Graph](docs/first-graph.md)
+- Quickstarts:
+  - [First Graph in 5 Minutes](docs/first-graph-5-minutes.md)
+  - [State Management](docs/state-quickstart.md)
+  - [Conditional Nodes](docs/conditional-nodes-quickstart.md)
+  - [Checkpointing](docs/checkpointing-quickstart.md)
+  - [Streaming](docs/streaming-quickstart.md)
+  - [Metrics & Logging](docs/metrics-logging-quickstart.md)
+  - [ReAct & Chain of Thought](docs/react-cot-quickstart.md)
+- Tutorials:
+  - [State Management](docs/state-tutorial.md)
+  - [Conditional Nodes](docs/conditional-nodes-tutorial.md)
 
-## 📚 Documentation
+### Core concepts
+- [Overview](docs/concepts/index.md)
+- [Graph concepts](docs/concepts/graph-concepts.md)
+- [Graphs](docs/concepts/graphs.md)
+- [Nodes](docs/concepts/nodes.md)
+- [Node types](docs/concepts/node-types.md)
+- [State](docs/concepts/state.md)
+- [Edges & routing](docs/concepts/routing.md)
+- [Execution](docs/concepts/execution.md)
+- [Execution model](docs/concepts/execution-model.md)
+- [Checkpointing](docs/concepts/checkpointing.md)
+- [Streaming](docs/concepts/streaming.md)
+- [Visualization](docs/concepts/visualization.md)
 
-### Getting Started
-* [First Graph in 5 Minutes](docs/first-graph-5-minutes.md) - Quick start guide
-* [Building Your First Graph](docs/how-to/build-a-graph.md) - Step-by-step tutorial
-
-### Core Concepts
-* [Graph Concepts](docs/concepts/graph-concepts.md) - Understanding the framework
-* [Execution Model](docs/concepts/execution-model.md) - How graphs execute
-* [State Management](docs/concepts/state.md) - Managing workflow state
-* [Routing & Control Flow](docs/concepts/routing.md) - Dynamic execution paths
-
-### Advanced Topics
-* [Multi-Agent Workflows](docs/patterns/multi-agent.md) - Coordinating multiple AI agents
-* [Error Handling & Resilience](docs/how-to/error-handling-and-resilience.md) - Building robust systems
-* [Performance & Metrics](docs/how-to/metrics-and-observability.md) - Monitoring and optimization
-* [Human-in-the-Loop](docs/how-to/human-in-the-loop.md) - Human approval workflows
-
-### Examples & Tutorials
-* [Chatbot with Memory](docs/tutorials/chatbot-with-memory.md) - Building conversational AI
-* [Document Analysis Pipeline](docs/tutorials/document-analysis-pipeline.md) - Processing documents
-* [Multi-Agent Workflow](docs/tutorials/multi-agent-workflow.md) - Complex agent coordination
+### How-to guides
+- Core:
+  - [Build a graph](docs/how-to/build-a-graph.md)
+  - [Conditional nodes](docs/how-to/conditional-nodes.md)
+  - [Loops](docs/how-to/loops.md)
+- Advanced:
+  - [Advanced routing](docs/how-to/advanced-routing.md)
+  - [Parallelism (fork-join)](docs/how-to/parallelism-and-fork-join.md)
+  - [Error handling & resilience](docs/how-to/error-handling-and-resilience.md)
+- Integration:
+  - [Tools](docs/how-to/tools.md)
+  - [REST tools integration](docs/how-to/rest-tools-integration.md)
+  - [Multi-agent & shared state](docs/how-to/multi-agent-and-shared-state.md)
+  - [Integration & extensions](docs/how-to/integration-and-extensions.md)
+- Observability:
+  - [Metrics](docs/how-to/metrics-and-observability.md)
+  - [Debug & inspection](docs/how-to/debug-and-inspection.md)
+  - [Real-time visualization](docs/how-to/real-time-visualization-and-highlights.md)
+- Security & governance:
+  - [Security & data](docs/how-to/security-and-data.md)
+  - [Resource governance & concurrency](docs/how-to/resource-governance-and-concurrency.md)
+  - [Human-in-the-loop](docs/how-to/human-in-the-loop.md)
+- Server & APIs:
+  - [Server and APIs](docs/how-to/server-and-apis.md)
+  - [Exposing REST APIs](docs/how-to/exposing-rest-apis.md)
+- Templates & types:
+  - [Templates & memory](docs/how-to/templates-and-memory.md)
+  - [Schema typing & validation](docs/how-to/schema-typing-and-validation.md)
 
 ## 🛠️ Installation
 
@@ -105,47 +134,76 @@ var workflow = new MultiAgentWorkflowBuilder()
 
 ## 📊 Examples
 
-Explore the comprehensive examples in the [examples/](examples/) directory:
+There is a full .NET examples project in `examples/` that maps to the docs examples.
 
-* **Basic Patterns**: Simple workflows and node types
-* **Advanced Routing**: Dynamic execution paths and conditional logic
-* **Multi-Agent**: Coordinated AI agent workflows
-* **Enterprise**: Production-ready patterns with monitoring and resilience
-* **Templates**: Pre-built workflow templates for common use cases
+Run prerequisites:
+- .NET 8.0 SDK or later
+- Optional: Set `OPENAI_API_KEY` (or your provider env vars) for LLM-powered demos
 
-## 🧪 Testing
+Run examples from the repository root:
 
-The project includes comprehensive testing infrastructure. For development and testing:
+```powershell
+cd examples
+dotnet run            # runs all examples
+dotnet run -- first-graph
+dotnet run -- conditional-nodes-quickstart
+dotnet run -- streaming-quickstart
+dotnet run -- multi-agent
+```
 
-* **Unit Tests**: Comprehensive test coverage for all components
-* **Integration Tests**: End-to-end workflow testing
-* **Performance Benchmarks**: Performance and scalability testing
-* **Validation**: Graph validation and compilation testing
+Common example names (see `examples/Program.cs` for the full list):
+`first-graph`, `first-graph-5-minutes`, `getting-started`, `state-quickstart`, `state-tutorial`, `conditional-nodes-quickstart`, `conditional-nodes-tutorial`, `checkpointing-quickstart`, `streaming-quickstart`, `metrics-logging-quickstart`, `dynamic-routing`, `advanced-routing`, `graph-executor`, `graph-options`, `executors-and-middlewares`, `inspection-visualization`, `debug-inspection`, `logging`, `graph-metrics`, `graph-visualization`, `multi-agent`, `chain-of-thought`, `react-cot-quickstart`, `react-agent`, `rest-api`, `rest-tools`, `plugin-system`, `document-analysis-pipeline`, `memory-agent`, `retrieval-agent`, `multi-hop-rag-retry`, `optimizers-and-few-shot`, `validation-compilation`, `error-policies`, `schema-typing-and-validation`, `resource-governance`, `parallelism-and-fork-join`.
 
-Refer to the [testing documentation](docs/how-to/debug-and-inspection.md) for detailed testing guidelines.
+Docs for examples: `docs/examples/`
+- Core patterns: [Conditional Nodes](docs/examples/conditional-nodes.md), [Loops](docs/examples/loop-nodes.md), [Checkpointing](docs/examples/checkpointing.md)
+- AI patterns: [Chain-of-Thought](docs/examples/chain-of-thought.md), [ReAct](docs/examples/react-agent.md), [Multi-agent](docs/examples/multi-agent.md)
+- Advanced features: [Advanced Patterns](docs/examples/advanced-patterns.md), [Advanced Routing](docs/examples/advanced-routing.md), [Dynamic Routing](docs/examples/dynamic-routing.md)
+- Integration: [REST API](docs/examples/rest-api.md), [Plugin System](docs/examples/plugin-system.md), [Tools](docs/examples/tools.md)
+- Observability: [Metrics](docs/examples/graph-metrics.md), [Visualization](docs/examples/graph-visualization.md), [Logging](docs/examples/logging.md)
+- Workflows: [Chatbot](docs/examples/chatbot.md), [Document Analysis](docs/examples/document-analysis-pipeline.md), [Retrieval Agent](docs/examples/retrieval-agent.md)
+- Specialized: [Memory Agent](docs/examples/memory-agent.md), [Multi-hop RAG Retry](docs/examples/multi-hop-rag-retry.md), [Optimizers & Few-shot](docs/examples/optimizers-and-few-shot.md), [Assert & Suggest](docs/examples/assert-and-suggest.md), [Subgraphs](docs/examples/subgraph-examples.md), [Streaming Execution](docs/examples/streaming-execution.md)
+- Templates: [Template Standard Sections](docs/examples/template-standard-sections.md), [Execution Guide](docs/examples/execution-guide.md)
+
+## 📖 API reference
+
+Key reference pages (see `docs/api/` for all):
+- Core: [core.md](docs/api/core.md), [nodes.md](docs/api/nodes.md), [extensions.md](docs/api/extensions.md), [extensions-and-options.md](docs/api/extensions-and-options.md)
+- Integration: [integration.md](docs/api/integration.md), [rest-tools.md](docs/api/rest-tools.md), [server-apis.md](docs/api/server-apis.md)
+- Execution & tooling: [graph-executor.md](docs/api/graph-executor.md), [executors-and-middlewares.md](docs/api/executors-and-middlewares.md), [execution-context.md](docs/api/execution-context.md)
+- Options & policies: [graph-options.md](docs/api/graph-options.md), [error-policies.md](docs/api/error-policies.md)
+- Features: [human-in-the-loop.md](docs/api/human-in-the-loop.md), [visualization-realtime.md](docs/api/visualization-realtime.md), [inspection-visualization.md](docs/api/inspection-visualization.md)
+- Patterns: [dynamic-routing.md](docs/api/dynamic-routing.md), [conditional-edge.md](docs/api/conditional-edge.md)
+- Types & state: [state-and-serialization.md](docs/api/state-and-serialization.md), [streaming.md](docs/api/streaming.md)
+- Agents & validation: [multi-agent.md](docs/api/multi-agent.md), [validation-compilation.md](docs/api/validation-compilation.md)
+- Additional: [additional-utilities.md](docs/api/additional-utilities.md), [main-node-types.md](docs/api/main-node-types.md), [igraph-executor.md](docs/api/igraph-executor.md), [igraph-node.md](docs/api/igraph-node.md), [metrics.md](docs/api/metrics.md)
+
+## 📦 Install in your app (NuGet)
+
+Install the packages in a .NET application:
+
+```powershell
+dotnet add package SemanticKernel.Graph
+dotnet add package Microsoft.SemanticKernel
+```
+
+Then follow the guides above to build and run graphs.
+
+## 🔍 Troubleshooting and resources
+- [Glossary](docs/glossary.md)
+- [Migrating](docs/migrations/index.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [FAQ](docs/faq.md)
+- [Changelog](docs/changelog.md)
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our contributing guidelines and check the [backlog](semantic-kernel-graph/backlog/) for current development priorities.
-
-### Development Areas
-* **Core Engine**: Performance improvements and new execution patterns
-* **Node Types**: Additional workflow components and integrations
-* **Documentation**: Examples, tutorials, and API documentation
-* **Testing**: Unit tests, integration tests, and performance benchmarks
-
-## 📈 Roadmap
-
-Check out our [implementation roadmap](docs/roadmap/implementation-roadmap.md) for upcoming features:
-
-* **Q1 2025**: Enhanced visualization and debugging tools
-* **Q2 2025**: Distributed execution and clustering
-* **Q3 2025**: Python bridge and cross-platform support
-* **Q4 2025**: Advanced AI model integration patterns
+Contributions to docs and examples are welcome. Please open an issue or pull request on the repository.
+- Repository: `https://github.com/kallebelins/semantic-kernel-graph-docs`
+- Issues: `https://github.com/kallebelins/semantic-kernel-graph-docs/issues`
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](semantic-kernel-graph/LICENSE) file for details.
+Licensed under the MIT License.
 
 ## 🙏 Acknowledgments
 
@@ -153,13 +211,13 @@ This project is licensed under the MIT License - see the [LICENSE](semantic-kern
 * Inspired by modern workflow orchestration patterns
 * Community contributions and feedback
 
-## 📞 Support
+## 📞 Support & community
 
-* **Documentation**: [docs/](docs/)
-* **Examples**: [examples/](examples/)
-* **Issues**: GitHub Issues
-* **Discussions**: GitHub Discussions
+- Website: [skgraph.dev](https://skgraph.dev/)
+- Documentation: `docs/`
+- Examples: `examples/`
+- LinkedIn: `https://www.linkedin.com/company/skgraph-dev/`
 
 ---
 
-**Ready to build intelligent workflows?** Start with [First Graph in 5 Minutes](docs/first-graph-5-minutes.md) and explore the power of semantic kernel graphs!
+**Ready to build intelligent workflows?** Start with [First Graph in 5 Minutes](docs/first-graph-5-minutes.md) and explore Semantic Kernel Graph!
