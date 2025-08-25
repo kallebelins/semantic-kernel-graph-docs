@@ -84,8 +84,10 @@ var sanitizer = new SensitiveDataSanitizer(customPolicy);
 The sanitizer handles various data structures automatically:
 
 ```csharp
-// Sanitize dictionary data
-var sensitiveData = new Dictionary<string, object?>
+// Create a dictionary with potential sensitive entries. Declare the variable
+// as IDictionary<string, object?> to ensure the sanitizer overload for
+// IDictionary is selected (resolves overload ambiguity).
+IDictionary<string, object?> sensitiveData = new Dictionary<string, object?>
 {
     ["username"] = "john_doe",
     ["password"] = "secret123",
@@ -95,19 +97,31 @@ var sensitiveData = new Dictionary<string, object?>
     ["normal_data"] = "This is not sensitive"
 };
 
+// Sanitize in-place semantics by calling the IDictionary overload.
 var sanitizedData = sanitizer.Sanitize(sensitiveData);
 
-// Output: sensitive values are redacted
+// Example output: sensitive values are redacted according to the policy
 foreach (var kvp in sanitizedData)
 {
     Console.WriteLine($"{kvp.Key}: {kvp.Value}");
 }
-// username: john_doe
-// password: ***REDACTED***
-// api_key: ***REDACTED***
-// authorization: Bearer ***REDACTED***
-// connection_string: ***REDACTED***
-// normal_data: This is not sensitive
+
+// JSON example: sanitize a JsonDocument payload (useful for HTTP bodies)
+using var doc = System.Text.Json.JsonDocument.Parse(
+    "{\"api_key\":\"sk-abcdef\",\"nested\":{\"password\":\"p@ss\"}}"
+);
+
+var sanitizedJson = sanitizer.Sanitize(doc.RootElement);
+
+// If sanitizedJson is a dictionary, iterate and show values
+if (sanitizedJson is IDictionary<string, object?> dict)
+{
+    foreach (var kv in dict)
+    {
+        Console.WriteLine($"JSON - {kv.Key}: {kv.Value}");
+    }
+}
+
 ```
 
 ### Integration with Logging

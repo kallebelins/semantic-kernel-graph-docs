@@ -110,7 +110,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 98. [x] resource-governance-and-concurrency.md
 99. [x] rest-tools-integration.md
 100. [x] schema-typing-and-validation.md
-101. [ ] security-and-data.md
+101. [x] security-and-data.md
 102. [ ] server-and-apis.md
 103. [ ] templates-and-memory.md
 104. [ ] tools.md
