@@ -89,9 +89,14 @@ var kernel = app.Services.GetRequiredService<Kernel>();
 A simple graph is created and registered for demonstration purposes.
 
 ```csharp
-// Create a simple graph and register it
-var echoFunc = KernelFunctionFactory.CreateFromMethod(
-    (string input) => $"echo:{input}",
+// Create a simple graph and register it. Use a Kernel-bound function for correct
+// integration with KernelArguments and the GraphExecutor runtime.
+var echoFunc = kernel.CreateFunctionFromMethod(
+    (KernelArguments args) =>
+    {
+        var input = args["input"]?.ToString() ?? string.Empty;
+        return $"echo:{input}";
+    },
     functionName: "echo",
     description: "Echoes the input string");
 
@@ -246,36 +251,53 @@ app.MapPost("/graphs/{graphName}/cancel", async (string graphName,
 The API can support streaming execution for long-running graphs.
 
 ```csharp
-// Streaming execution endpoint
-app.MapPost("/graphs/{graphName}/stream", async (string graphName, 
-    ExecuteGraphRequest req, HttpContext http) =>
+// Streaming execution endpoint (SSE-style). Note: GraphRestApi does not provide a
+// streaming enumerable. This example demonstrates a simple Server-Sent Events
+// pattern that emits a "started" event, executes the graph, then emits a
+// "completed" event containing the final result. Adaptors may implement
+// richer, incremental streaming if needed.
+app.MapPost("/graphs/{graphName}/stream", async (string graphName, ExecuteGraphRequest req, HttpContext http) =>
 {
     var apiKey = http.Request.Headers["x-api-key"].FirstOrDefault();
-    
     if (string.IsNullOrEmpty(apiKey))
+    {
         return Results.Unauthorized();
+    }
 
-    // Set up streaming response
+    // Configure response for Server-Sent Events (SSE)
     http.Response.Headers.Add("Content-Type", "text/event-stream");
     http.Response.Headers.Add("Cache-Control", "no-cache");
     http.Response.Headers.Add("Connection", "keep-alive");
 
-    var response = http.Response;
-    var writer = new StreamWriter(response.Body);
+    await using var writer = new StreamWriter(http.Response.Body);
+
+    // Emit a short "started" event so clients know execution began.
+    var startEvent = new { type = "started", graph = graphName };
+    await writer.WriteAsync($"data: {JsonSerializer.Serialize(startEvent)}\n\n");
+    await writer.FlushAsync();
 
     try
     {
-        await foreach (var event in graphApi.ExecuteStreamingAsync(req, apiKey, http.RequestAborted))
+        // Execute synchronously (no incremental streaming available in GraphRestApi)
+        var execResp = await graphApi.ExecuteAsync(req, apiKey, http.RequestAborted);
+
+        // Emit completion event with execution outcome
+        var completeEvent = new
         {
-            var eventData = $"data: {JsonSerializer.Serialize(event)}\n\n";
-            await writer.WriteAsync(eventData);
-            await writer.FlushAsync();
-        }
+            type = "completed",
+            success = execResp.Success,
+            executionId = execResp.ExecutionId,
+            result = execResp.ResultText,
+            error = execResp.Error
+        };
+
+        await writer.WriteAsync($"data: {JsonSerializer.Serialize(completeEvent)}\n\n");
+        await writer.FlushAsync();
     }
     catch (Exception ex)
     {
-        var errorEvent = $"data: {JsonSerializer.Serialize(new { error = ex.Message })}\n\n";
-        await writer.WriteAsync(errorEvent);
+        var errorEvent = new { type = "error", message = ex.Message };
+        await writer.WriteAsync($"data: {JsonSerializer.Serialize(errorEvent)}\n\n");
         await writer.FlushAsync();
     }
 

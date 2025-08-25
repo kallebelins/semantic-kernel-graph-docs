@@ -49,6 +49,7 @@ class Program
                 ["additional-utilities"] = () => { AdditionalUtilitiesExample.RunAllDemonstrations(); return Task.CompletedTask; },
                 ["rest-tools"] = async () => await RestToolsExample.RunAsync(),
                 ["server-apis"] = async () => await ServerApisExample.RunAsync(),
+                ["rest-api"] = async () => await RestApiExample.RunAsync(args),
                 ["dynamic-routing"] = async () => await DynamicRoutingExample.RunAsync(),
                 ["advanced-routing"] = async () => await AdvancedRoutingExample.RunAsync(),
                 ["error-policies"] = async () => await ErrorPoliciesExample.RunAsync(),

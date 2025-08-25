@@ -86,7 +86,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 76. [x] plugin-system.md
 77. [x] react-agent.md
 78. [x] react-problem-solving.md
-79. [ ] rest-api.md
+79. [x] rest-api.md  - Example validated: `examples/RestApiExample.cs`
 80. [ ] retrieval-agent.md
 81. [ ] streaming-execution.md
 82. [ ] subgraph-examples.md
