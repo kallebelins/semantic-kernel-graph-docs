@@ -89,7 +89,7 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 79. [x] rest-api.md  - Example validated: `examples/RestApiExample.cs`
 80. [x] retrieval-agent.md
 81. [x] streaming-execution.md
-82. [ ] subgraph-examples.md
+82. [x] subgraph-examples.md
 83. [ ] template-standard-sections.md
 
 ## docs/how-to

@@ -43,6 +43,7 @@ class Program
                 ["react-cot-quickstart"] = async () => await ReactCotQuickstartExample.RunAllExamplesAsync(),
                 ["react-agent"] = async () => await ReactAgentExample.RunAsync(),
                 ["streaming-quickstart"] = async () => await RunStreamingQuickstartExample(),
+                ["subgraph-examples"] = async () => await SubgraphExamples.RunAsync(),
                 ["troubleshooting"] = async () => await TroubleshootingExample.RunAsync(),
                 ["core-api"] = async () => await CoreApiExample.RunAsync(),
                 ["main-node-types"] = async () => await MainNodeTypesExample.RunAsync(),

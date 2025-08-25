@@ -50,19 +50,21 @@ This example demonstrates subgraph composition and isolation with the Semantic K
 The first example demonstrates subgraph execution with complete isolation and explicit mappings.
 
 ```csharp
-public static async Task RunIsolatedCloneSubgraphExampleAsync(Kernel kernel)
+public static async Task RunIsolatedCloneAsync(Kernel kernel)
 {
     ArgumentNullException.ThrowIfNull(kernel);
 
-    // 1) Define subgraph that calculates the sum of x and y
+    // 1) Define a child subgraph that calculates the sum of x and y
     var child = new GraphExecutor("Subgraph_Sum", "Calculates sum of x and y");
 
     var sumFunction = KernelFunctionFactory.CreateFromMethod(
         (KernelArguments args) =>
         {
+            // Safely convert inputs to double
             var x = args.TryGetValue("x", out var xv) && xv is IConvertible ? Convert.ToDouble(xv) : 0.0;
             var y = args.TryGetValue("y", out var yv) && yv is IConvertible ? Convert.ToDouble(yv) : 0.0;
             var sum = x + y;
+            // Store result inside child state
             args["sum"] = sum;
             return sum.ToString("F2");
         },
@@ -71,13 +73,11 @@ public static async Task RunIsolatedCloneSubgraphExampleAsync(Kernel kernel)
     );
 
     var sumNode = new FunctionGraphNode(sumFunction, nodeId: "sum_node", description: "Calculates sum");
-    // Optionally store the result using supported metadata
     sumNode.SetMetadata("StoreResultAs", "sum");
 
-    child.AddNode(sumNode)
-         .SetStartNode(sumNode.NodeId);
+    child.AddNode(sumNode).SetStartNode(sumNode.NodeId);
 
-    // 2) Subgraph node in parent graph with isolation and mappings
+    // 2) Configure the subgraph node in the parent, including mappings and isolation
     var config = new SubgraphConfiguration
     {
         IsolationMode = SubgraphIsolationMode.IsolatedClone,
@@ -96,7 +96,7 @@ public static async Task RunIsolatedCloneSubgraphExampleAsync(Kernel kernel)
     var parent = new GraphExecutor("Parent_IsolatedClone", "Uses subgraph for summation");
     var subgraphNode = new SubgraphGraphNode(child, name: "Subgraph(Sum)", description: "Executes sum subgraph", config: config);
 
-    // Final node to demonstrate continuation after subgraph
+    // Final node to continue after subgraph execution
     var finalizeFunction = KernelFunctionFactory.CreateFromMethod(
         (KernelArguments args) =>
         {
@@ -113,7 +113,7 @@ public static async Task RunIsolatedCloneSubgraphExampleAsync(Kernel kernel)
           .SetStartNode(subgraphNode.NodeId)
           .Connect(subgraphNode.NodeId, finalizeNode.NodeId);
 
-    // 3) Execute with initial state (a, b)
+    // 3) Execute with initial state (a,b)
     var args = new KernelArguments
     {
         ["a"] = 3,
@@ -134,84 +134,71 @@ public static async Task RunIsolatedCloneSubgraphExampleAsync(Kernel kernel)
 The second example demonstrates subgraph execution with scoped prefix isolation.
 
 ```csharp
-public static async Task RunScopedPrefixSubgraphExampleAsync(Kernel kernel)
+public static async Task RunScopedPrefixAsync(Kernel kernel)
 {
     ArgumentNullException.ThrowIfNull(kernel);
 
-    // 1) Define subgraph that processes data with internal state
-    var child = new GraphExecutor("Subgraph_Processor", "Processes data with internal state");
+    // 1) Define a child subgraph that applies a discount to a total under a prefix
+    var child = new GraphExecutor("Subgraph_Discount", "Applies a discount to a total under a prefix");
 
-    var processFunction = KernelFunctionFactory.CreateFromMethod(
+    var applyDiscountFunction = KernelFunctionFactory.CreateFromMethod(
         (KernelArguments args) =>
         {
-            var input = args.TryGetValue("input", out var inv) ? inv?.ToString() ?? string.Empty : string.Empty;
-            var processed = $"Processed: {input.ToUpperInvariant()}";
-            
-            // Store internal state with prefix
-            args["internal_result"] = processed;
-            args["internal_count"] = input.Length;
-            
-            return processed;
+            var total = args.TryGetValue("total", out var tv) && tv is IConvertible ? Convert.ToDouble(tv) : 0.0;
+            var discount = args.TryGetValue("discount", out var dv) && dv is IConvertible ? Convert.ToDouble(dv) : 0.0;
+            var final = Math.Max(0.0, total - discount);
+            args["final"] = final;
+            return final.ToString("F2");
         },
-        functionName: "process_data",
-        description: "Processes input data and stores internal state"
+        functionName: "apply_discount",
+        description: "Applies discount and stores in 'final'"
     );
 
-    var processNode = new FunctionGraphNode(processFunction, nodeId: "process_node", description: "Processes data");
-    child.AddNode(processNode).SetStartNode(processNode.NodeId);
+    var discountNode = new FunctionGraphNode(applyDiscountFunction, nodeId: "discount_node", description: "Apply discount");
+    discountNode.SetMetadata("StoreResultAs", "final");
+    child.AddNode(discountNode).SetStartNode(discountNode.NodeId);
 
     // 2) Subgraph node with scoped prefix isolation
     var config = new SubgraphConfiguration
     {
         IsolationMode = SubgraphIsolationMode.ScopedPrefix,
-        Prefix = "subgraph_",
-        MergeConflictPolicy = SemanticKernel.Graph.State.StateMergeConflictPolicy.PreferFirst,
-        InputMappings =
-        {
-            ["data"] = "input"
-        },
-        OutputMappings =
-        {
-            ["internal_result"] = "result",
-            ["internal_count"] = "count"
-        }
+        ScopedPrefix = "invoice."
     };
 
     var parent = new GraphExecutor("Parent_ScopedPrefix", "Uses subgraph with scoped prefix");
-    var subgraphNode = new SubgraphGraphNode(child, name: "Subgraph(Processor)", description: "Executes processing subgraph", config: config);
+    var subgraphNode = new SubgraphGraphNode(child, name: "Subgraph(Discount)", description: "Executes discount subgraph", config: config);
 
-    // Node to demonstrate state merging
-    var mergeFunction = KernelFunctionFactory.CreateFromMethod(
+    var echoFunction = KernelFunctionFactory.CreateFromMethod(
         (KernelArguments args) =>
         {
-            var result = args.TryGetValue("result", out var rv) ? rv : "No result";
-            var count = args.TryGetValue("count", out var cv) ? cv : 0;
-            var originalData = args.TryGetValue("data", out var dv) ? dv : "No data";
-            
-            return $"Merged state: {result} (count: {count}, original: {originalData})";
+            var total = args.TryGetValue("invoice.total", out var t) ? t : 0;
+            var discount = args.TryGetValue("invoice.discount", out var d) ? d : 0;
+            var final = args.TryGetValue("invoice.final", out var f) ? f : 0;
+            return $"Total: {total} | Discount: {discount} | Final: {final}";
         },
-        functionName: "merge_state",
-        description: "Demonstrates state merging"
+        functionName: "echo_invoice",
+        description: "Echoes invoice values"
     );
-    var mergeNode = new FunctionGraphNode(mergeFunction, nodeId: "merge_node", description: "Merges state");
+    var echoNode = new FunctionGraphNode(echoFunction, nodeId: "echo_node", description: "Echo node");
 
     parent.AddNode(subgraphNode)
-          .AddNode(mergeNode)
+          .AddNode(echoNode)
           .SetStartNode(subgraphNode.NodeId)
-          .Connect(subgraphNode.NodeId, mergeNode.NodeId);
+          .Connect(subgraphNode.NodeId, echoNode.NodeId);
 
-    // 3) Execute with data input
+    // 3) Execute with initial prefixed state
     var args = new KernelArguments
     {
-        ["data"] = "Hello World"
+        ["invoice.total"] = 125.0,
+        ["invoice.discount"] = 20.0
     };
 
     var result = await parent.ExecuteAsync(kernel, args, CancellationToken.None);
 
-    Console.WriteLine("[ScopedPrefix] Processing 'Hello World'");
-    Console.WriteLine($"[ScopedPrefix] Result: {args.TryGetValue("result", out var r) ? r : "Not found"}");
-    Console.WriteLine($"[ScopedPrefix] Count: {args.TryGetValue("count", out var c) ? c : "Not found"}");
-    Console.WriteLine($"[ScopedPrefix] Final message: {result.GetValue<object>()}");
+    Console.WriteLine("[ScopedPrefix] final expected = 105.00");
+    var finalOk = args.TryGetValue("invoice.final", out var finalVal);
+    Console.WriteLine($"[ScopedPrefix] invoice.final = {(finalOk ? finalVal : "(not mapped)")}");
+    Console.WriteLine($"[ScopedPrefix] final message = {result.GetValue<object>()}");
 }
 ```
 
@@ -225,27 +212,27 @@ var advancedConfig = new SubgraphConfiguration
 {
     // Isolation mode determines how the subgraph context is managed
     IsolationMode = SubgraphIsolationMode.IsolatedClone, // or ScopedPrefix
-    
-    // Prefix for scoped isolation (only used with ScopedPrefix mode)
-    Prefix = "my_subgraph_",
-    
+
+    // ScopedPrefix for scoped isolation (only used with ScopedPrefix mode)
+    ScopedPrefix = "my_subgraph_",
+
     // How to handle state conflicts during merging
     MergeConflictPolicy = StateMergeConflictPolicy.PreferSecond, // or PreferFirst, Merge
-    
+
     // Input mappings: parent state -> subgraph state
     InputMappings = new Dictionary<string, string>
     {
         ["parent_input"] = "subgraph_input",
         ["parent_config"] = "subgraph_config"
     },
-    
+
     // Output mappings: subgraph state -> parent state
     OutputMappings = new Dictionary<string, string>
     {
         ["subgraph_result"] = "parent_result",
         ["subgraph_metadata"] = "parent_metadata"
     },
-    
+
     // Additional configuration options
     EnableStateValidation = true,
     MaxExecutionTime = TimeSpan.FromMinutes(5),
