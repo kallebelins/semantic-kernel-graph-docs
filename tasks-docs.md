@@ -97,8 +97,8 @@ Listei abaixo todos os arquivos `.md` da pasta `docs` e subpastas para revisão 
 85. [x] build-a-graph.md
 86. [x] conditional-nodes.md
 87. [x] debug-and-inspection.md
-88. [ ] error-handling-and-resilience.md
-89. [ ] exposing-rest-apis.md
+88. [x] error-handling-and-resilience.md
+89. [x] exposing-rest-apis.md
 90. [ ] hitl.md
 91. [ ] human-in-the-loop.md
 92. [ ] integration-and-extensions.md

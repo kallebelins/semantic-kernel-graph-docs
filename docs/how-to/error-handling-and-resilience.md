@@ -42,21 +42,22 @@ Error handling and resilience in SemanticKernel.Graph provide robust mechanisms 
 SemanticKernel.Graph categorizes errors into 13 distinct types for precise handling:
 
 ```csharp
+// GraphErrorType: classification of errors used by error handling components.
 public enum GraphErrorType
 {
     Unknown = 0,           // Unspecified error type
-    Validation = 1,        // Validation errors
-    NodeExecution = 2,     // Node logic errors
+    Validation = 1,        // Input or schema validation errors
+    NodeExecution = 2,     // Errors thrown during node execution
     Timeout = 3,           // Execution timeouts
-    Network = 4,           // Network-related (retryable)
-    ServiceUnavailable = 5, // External service unavailable
-    RateLimit = 6,         // Rate limiting exceeded
-    Authentication = 7,     // Auth/authorization failures
-    ResourceExhaustion = 8, // Memory/disk exhaustion
-    GraphStructure = 9,    // Graph navigation errors
-    Cancellation = 10,     // Cancellation requested
-    CircuitBreakerOpen = 11, // Circuit breaker state
-    BudgetExhausted = 12   // Resource budget limits
+    Network = 4,           // Network-related issues (commonly retryable)
+    ServiceUnavailable = 5,// External service unavailable
+    RateLimit = 6,         // Rate limiting exceeded by upstream services
+    Authentication = 7,    // Authentication/authorization failures
+    ResourceExhaustion = 8,// Memory/disk or quota exhaustion
+    GraphStructure = 9,    // Graph traversal or configuration issues
+    Cancellation = 10,     // Operation was cancelled via token
+    CircuitBreakerOpen = 11,// Circuit breaker is currently open
+    BudgetExhausted = 12   // Resource or budget limits reached
 }
 ```
 
@@ -65,16 +66,17 @@ public enum GraphErrorType
 Eight recovery strategies are available for different error scenarios:
 
 ```csharp
+// ErrorRecoveryAction: recommended recovery strategies when an error occurs.
 public enum ErrorRecoveryAction
 {
-    Retry = 0,           // Retry with backoff
-    Skip = 1,            // Skip to next node
-    Fallback = 2,        // Execute fallback logic
-    Rollback = 3,        // Rollback state changes
-    Halt = 4,            // Stop execution
-    Escalate = 5,        // Human intervention
-    CircuitBreaker = 6,  // Open circuit breaker
-    Continue = 7         // Continue execution
+    Retry = 0,           // Retry the failed operation using configured policy
+    Skip = 1,            // Skip the failing node and continue
+    Fallback = 2,        // Execute fallback logic or alternative node
+    Rollback = 3,        // Rollback state changes performed so far
+    Halt = 4,            // Stop the entire execution
+    Escalate = 5,        // Escalate to human operator or alerting system
+    CircuitBreaker = 6,  // Trigger circuit breaker behavior
+    Continue = 7         // Continue despite the error (best-effort)
 }
 ```
 
@@ -87,6 +89,7 @@ Configure retry policies with exponential backoff and jitter:
 ```csharp
 using SemanticKernel.Graph.Core;
 
+// Configure a robust retry policy with exponential backoff and jitter.
 var retryConfig = new RetryPolicyConfig
 {
     MaxRetries = 3,
@@ -95,6 +98,7 @@ var retryConfig = new RetryPolicyConfig
     Strategy = RetryStrategy.ExponentialBackoff,
     BackoffMultiplier = 2.0,
     UseJitter = true,
+    // Only attempt retries for error types that are typically transient.
     RetryableErrorTypes = new HashSet<GraphErrorType>
     {
         GraphErrorType.Network,
@@ -110,13 +114,14 @@ var retryConfig = new RetryPolicyConfig
 Multiple retry strategies are supported:
 
 ```csharp
+// RetryStrategy controls how retry delays are calculated between attempts.
 public enum RetryStrategy
 {
-    NoRetry = 0,              // No retry attempts
+    NoRetry = 0,              // Do not perform retries
     FixedDelay = 1,           // Constant delay between attempts
-    LinearBackoff = 2,        // Linear increase in delay
-    ExponentialBackoff = 3,   // Exponential increase (default)
-    Custom = 4                // Custom delay calculation
+    LinearBackoff = 2,        // Delay increases linearly per attempt
+    ExponentialBackoff = 3,   // Delay grows exponentially (recommended)
+    Custom = 4                // User-provided custom backoff calculation
 }
 ```
 
@@ -127,13 +132,14 @@ Wrap any node with automatic retry capabilities:
 ```csharp
 using SemanticKernel.Graph.Nodes;
 
-// Create a function node
+// Example: create a simple function node and wrap it with retry behavior.
+// 'kernelFunction' represents an existing KernelFunction instance.
 var functionNode = new FunctionGraphNode("api-call", kernelFunction);
 
-// Wrap with retry policy
+// Wrap with configured retry policy to make the call resilient.
 var retryNode = new RetryPolicyGraphNode(functionNode, retryConfig);
 
-// Add to graph
+// Add the retry node into the graph and connect it from the start node.
 graph.AddNode(retryNode);
 graph.AddEdge(startNode, retryNode);
 ```
@@ -151,14 +157,15 @@ The retry node automatically:
 Configure circuit breakers to prevent cascading failures:
 
 ```csharp
+// Configure a circuit breaker to prevent cascading failures.
 var circuitBreakerConfig = new CircuitBreakerPolicyConfig
 {
     Enabled = true,
-    FailureThreshold = 5,           // Failures to open circuit
-    OpenTimeout = TimeSpan.FromSeconds(30), // Time before half-open
-    HalfOpenRetryCount = 3,         // Probe attempts in half-open
-    FailureWindow = TimeSpan.FromMinutes(1), // Failure counting window
-    TriggerOnBudgetExhaustion = true // Open on resource exhaustion
+    FailureThreshold = 5,               // Number of failures to open the circuit
+    OpenTimeout = TimeSpan.FromSeconds(30), // Time to wait before moving to half-open
+    HalfOpenRetryCount = 3,             // Number of probe attempts in half-open state
+    FailureWindow = TimeSpan.FromMinutes(1), // Window for failure counting
+    TriggerOnBudgetExhaustion = true    // Open when resource budgets are exhausted
 };
 ```
 
@@ -177,6 +184,7 @@ Manage circuit breakers at the node level:
 ```csharp
 using SemanticKernel.Graph.Core;
 
+// Create a manager responsible for per-node circuit breaker state.
 var circuitBreakerManager = new NodeCircuitBreakerManager(
     graphLogger,
     errorMetricsCollector,
@@ -184,10 +192,11 @@ var circuitBreakerManager = new NodeCircuitBreakerManager(
     resourceGovernor,
     performanceMetrics);
 
-// Configure circuit breaker for a node
+// Apply the circuit breaker policy to a specific node id.
 circuitBreakerManager.ConfigureNode("api-node", circuitBreakerConfig);
 
-// Execute through circuit breaker
+// Execute a protected operation via the circuit breaker manager. Provide
+// an optional fallback to run when the circuit is open or the operation fails.
 var result = await circuitBreakerManager.ExecuteAsync<string>(
     "api-node",
     executionId,
@@ -202,17 +211,19 @@ var result = await circuitBreakerManager.ExecuteAsync<string>(
 Configure resource limits and adaptive rate limiting:
 
 ```csharp
+// Configure resource governance to control concurrency and resource usage.
 var resourceOptions = new GraphResourceOptions
 {
     EnableResourceGovernance = true,
-    BasePermitsPerSecond = 50.0,      // Base execution rate
-    MaxBurstSize = 100,               // Maximum burst capacity
-    CpuHighWatermarkPercent = 85.0,   // CPU threshold for backpressure
-    CpuSoftLimitPercent = 70.0,       // Soft CPU limit
-    MinAvailableMemoryMB = 512.0,     // Memory threshold
+    BasePermitsPerSecond = 50.0,      // Base execution rate per second
+    MaxBurstSize = 100,               // Allowed burst capacity
+    CpuHighWatermarkPercent = 85.0,   // CPU usage threshold for strong backpressure
+    CpuSoftLimitPercent = 70.0,       // Soft CPU threshold before throttling
+    MinAvailableMemoryMB = 512.0,     // Minimum free memory for allocations
     DefaultPriority = ExecutionPriority.Normal
 };
 
+// Create the governor that enforces the configured resource limits.
 var resourceGovernor = new ResourceGovernor(resourceOptions);
 ```
 
@@ -221,12 +232,13 @@ var resourceGovernor = new ResourceGovernor(resourceOptions);
 Four priority levels affect resource allocation:
 
 ```csharp
+// ExecutionPriority influences how the resource governor allocates permits.
 public enum ExecutionPriority
 {
-    Low = 0,      // 1.5x resource cost
-    Normal = 1,   // 1.0x resource cost (default)
-    High = 2,     // 0.6x resource cost
-    Critical = 3  // 0.5x resource cost
+    Low = 0,      // Low priority (higher relative cost)
+    Normal = 1,   // Default priority
+    High = 2,     // High priority for latency-sensitive work
+    Critical = 3  // Highest priority for essential operations
 }
 ```
 
@@ -235,16 +247,16 @@ public enum ExecutionPriority
 Acquire resource permits before execution:
 
 ```csharp
-// Acquire resource lease
+// Acquire a resource lease before performing work. The lease is released when disposed.
 using var lease = await resourceGovernor.AcquireAsync(
-    workCostWeight: 2.0,           // Relative cost
+    workCostWeight: 2.0,                  // Cost weight for this unit of work
     priority: ExecutionPriority.High,
     cancellationToken);
 
-// Execute work
+// Perform the protected work while the lease is held.
 await performWork();
 
-// Lease automatically released on dispose
+// Lease is automatically released when 'lease' is disposed (end of using block).
 ```
 
 ## Error Policy Registry
@@ -254,21 +266,24 @@ await performWork();
 The `ErrorPolicyRegistry` provides centralized error handling policies:
 
 ```csharp
+// Create a central registry to hold error handling rules used by the registry-backed policy.
 var registry = new ErrorPolicyRegistry(new ErrorPolicyRegistryOptions());
 
-// Register retry policy for specific error types
-registry.RegisterRetryPolicy(
-    GraphErrorType.Network,
-    new PolicyRule
-    {
-        RecoveryAction = ErrorRecoveryAction.Retry,
-        MaxRetries = 3,
-        RetryDelay = TimeSpan.FromSeconds(1),
-        BackoffMultiplier = 2.0,
-        Priority = 100
-    });
+// Register a retry rule for network errors. The registry will be consulted by
+// the error handling policy during execution to determine recovery actions.
+registry.RegisterPolicyRule(new PolicyRule
+{
+    ContextId = "Examples",
+    ErrorType = GraphErrorType.Network,
+    RecoveryAction = ErrorRecoveryAction.Retry,
+    MaxRetries = 3,
+    RetryDelay = TimeSpan.FromSeconds(1),
+    BackoffMultiplier = 2.0,
+    Priority = 100,
+    Description = "Retry network errors"
+});
 
-// Register circuit breaker policy for a node
+// Register node-level circuit breaker configuration for 'api-node'.
 registry.RegisterNodeCircuitBreakerPolicy("api-node", circuitBreakerConfig);
 ```
 
@@ -277,6 +292,7 @@ registry.RegisterNodeCircuitBreakerPolicy("api-node", circuitBreakerConfig);
 Policies are resolved based on error context and node information:
 
 ```csharp
+// Construct an error handling context that represents a captured exception.
 var errorContext = new ErrorHandlingContext
 {
     Exception = exception,
@@ -286,10 +302,12 @@ var errorContext = new ErrorHandlingContext
     IsTransient = true
 };
 
+// Resolve the appropriate policy for this error and execution context.
 var policy = registry.ResolvePolicy(errorContext, executionContext);
 if (policy?.RecoveryAction == ErrorRecoveryAction.Retry)
 {
-    // Apply retry logic
+    // The resolved policy indicates this error should be retried.
+    // Retry orchestration should respect policy.MaxRetries and timing values.
 }
 ```
 
@@ -300,23 +318,24 @@ if (policy?.RecoveryAction == ErrorRecoveryAction.Retry)
 Specialized node for complex error handling scenarios:
 
 ```csharp
+// Create a specialized node that inspects errors and routes execution accordingly.
 var errorHandler = new ErrorHandlerGraphNode(
     "error-handler",
     "ErrorHandler",
     "Handles errors and routes execution");
 
-// Configure error handlers
+// Map specific error types to recovery actions.
 errorHandler.ConfigureErrorHandler(GraphErrorType.Network, ErrorRecoveryAction.Retry);
 errorHandler.ConfigureErrorHandler(GraphErrorType.Authentication, ErrorRecoveryAction.Escalate);
 errorHandler.ConfigureErrorHandler(GraphErrorType.BudgetExhausted, ErrorRecoveryAction.CircuitBreaker);
 
-// Add fallback nodes
+// Define fallback nodes to execute when specific recovery actions are selected.
 errorHandler.AddFallbackNode(GraphErrorType.Network, fallbackNode);
 errorHandler.AddFallbackNode(GraphErrorType.Authentication, escalationNode);
 
-// Add to graph with conditional routing
+// Add the error handler into the graph and wire conditional routing based on an error flag.
 graph.AddNode(errorHandler);
-graph.AddConditionalEdge(startNode, errorHandler, 
+graph.AddConditionalEdge(startNode, errorHandler,
     edge => edge.Condition = "HasError");
 ```
 
@@ -325,15 +344,16 @@ graph.AddConditionalEdge(startNode, errorHandler,
 Route execution based on error types and recovery actions:
 
 ```csharp
-// Route based on error type
+// Examples of conditional routing from the error handler based on resolved conditions.
+// Route to retry node for network errors.
 graph.AddConditionalEdge(errorHandler, retryNode,
     edge => edge.Condition = "ErrorType == 'Network'");
 
-// Route based on recovery action
+// Route to fallback node when recovery action indicates a fallback should run.
 graph.AddConditionalEdge(errorHandler, fallbackNode,
     edge => edge.Condition = "RecoveryAction == 'Fallback'");
 
-// Route based on severity
+// Route to escalation flow for high severity issues.
 graph.AddConditionalEdge(errorHandler, escalationNode,
     edge => edge.Condition = "ErrorSeverity >= 'High'");
 ```
@@ -345,6 +365,7 @@ graph.AddConditionalEdge(errorHandler, escalationNode,
 Collect comprehensive error metrics for analysis:
 
 ```csharp
+// Configure error metrics collection and initialize the collector.
 var errorMetricsOptions = new ErrorMetricsOptions
 {
     AggregationInterval = TimeSpan.FromMinutes(1),
@@ -355,7 +376,7 @@ var errorMetricsOptions = new ErrorMetricsOptions
 
 var errorMetricsCollector = new ErrorMetricsCollector(errorMetricsOptions, graphLogger);
 
-// Record error events
+// Record a sample error event to validate metrics plumbing.
 errorMetricsCollector.RecordError(
     executionId,
     nodeId,
@@ -369,21 +390,22 @@ errorMetricsCollector.RecordError(
 Error events capture comprehensive information:
 
 ```csharp
+// ErrorEvent: immutable-like DTO describing a single captured error occurrence.
 public sealed class ErrorEvent
 {
-    public string EventId { get; set; }           // Unique identifier
-    public string ExecutionId { get; set; }       // Execution context
-    public string NodeId { get; set; }            // Node where error occurred
-    public GraphErrorType ErrorType { get; set; } // Error classification
-    public ErrorSeverity Severity { get; set; }   // Error severity
-    public bool IsTransient { get; set; }         // Transient vs permanent
-    public int AttemptNumber { get; set; }        // Retry attempt
-    public DateTimeOffset Timestamp { get; set; } // When error occurred
-    public string ExceptionType { get; set; }     // Exception type name
-    public string ErrorMessage { get; set; }      // Error message
-    public ErrorRecoveryAction? RecoveryAction { get; set; } // Action taken
-    public bool? RecoverySuccess { get; set; }   // Recovery outcome
-    public TimeSpan Duration { get; set; }        // Execution duration
+    public string EventId { get; set; }           // Unique identifier for the event
+    public string ExecutionId { get; set; }       // Execution context id
+    public string NodeId { get; set; }            // Node where the error occurred
+    public GraphErrorType ErrorType { get; set; } // Classified error type
+    public ErrorSeverity Severity { get; set; }   // Severity level for alerting/escalation
+    public bool IsTransient { get; set; }         // Indicates if the error is transient
+    public int AttemptNumber { get; set; }        // The attempt number when the error happened
+    public DateTimeOffset Timestamp { get; set; } // When the error was recorded
+    public string ExceptionType { get; set; }     // CLR exception type name
+    public string ErrorMessage { get; set; }      // The exception message or error description
+    public ErrorRecoveryAction? RecoveryAction { get; set; } // Suggested recovery action
+    public bool? RecoverySuccess { get; set; }    // Whether the recovery succeeded
+    public TimeSpan Duration { get; set; }        // Duration of the failing operation
 }
 ```
 
@@ -392,7 +414,7 @@ public sealed class ErrorEvent
 Query error metrics for analysis and monitoring:
 
 ```csharp
-// Get execution-specific metrics
+// Query and display execution-specific metrics from the collector.
 var executionMetrics = errorMetricsCollector.GetExecutionMetrics(executionId);
 if (executionMetrics != null)
 {
@@ -401,7 +423,7 @@ if (executionMetrics != null)
     Console.WriteLine($"Most Common Error: {executionMetrics.MostCommonErrorType}");
 }
 
-// Get node-specific metrics
+// Query node-specific metrics for targeted troubleshooting.
 var nodeMetrics = errorMetricsCollector.GetNodeMetrics(nodeId);
 if (nodeMetrics != null)
 {
@@ -409,7 +431,7 @@ if (nodeMetrics != null)
     Console.WriteLine($"Recovery Success Rate: {nodeMetrics.RecoverySuccessRate:F1}%");
 }
 
-// Get overall statistics
+// Read overall aggregated statistics exposed by the collector.
 var overallStats = errorMetricsCollector.OverallStatistics;
 Console.WriteLine($"Current Error Rate: {overallStats.CurrentErrorRate:F2} errors/min");
 Console.WriteLine($"Total Errors Recorded: {overallStats.TotalErrorsRecorded}");
@@ -422,15 +444,15 @@ Console.WriteLine($"Total Errors Recorded: {overallStats.TotalErrorsRecorded}");
 Integrate error handling with graph execution:
 
 ```csharp
-// Configure error handling policy
+// Use a registry-backed error handling policy to centralize decisions.
 var errorHandlingPolicy = new RegistryBackedErrorHandlingPolicy(errorPolicyRegistry);
 
-// Configure graph executor with error handling
+// Create a graph executor configured with error handling and resource governance.
 var executor = new GraphExecutor("ResilientGraph", "Graph with error handling")
     .ConfigureErrorHandling(errorHandlingPolicy)
     .ConfigureResources(resourceOptions);
 
-// Add error metrics collection
+// Attach the error metrics collector to the executor for telemetry.
 executor.ConfigureMetrics(new GraphMetricsOptions
 {
     EnableErrorMetrics = true,
@@ -443,21 +465,22 @@ executor.ConfigureMetrics(new GraphMetricsOptions
 Error events are emitted to the execution stream:
 
 ```csharp
+// Create a streaming executor and subscribe to runtime events, including error events.
 using var eventStream = executor.CreateStreamingExecutor()
     .CreateEventStream();
 
-// Subscribe to error events
-eventStream.SubscribeToEvents<GraphExecutionEvent>(event =>
+// Subscribe to execution events and handle node error events for observability.
+eventStream.SubscribeToEvents<GraphExecutionEvent>(evt =>
 {
-    if (event.EventType == GraphExecutionEventType.NodeError)
+    if (evt.EventType == GraphExecutionEventType.NodeError)
     {
-        var errorEvent = event as NodeErrorEvent;
+        var errorEvent = evt as NodeErrorEvent;
         Console.WriteLine($"Error in {errorEvent.NodeId}: {errorEvent.ErrorType}");
         Console.WriteLine($"Recovery Action: {errorEvent.RecoveryAction}");
     }
 });
 
-// Execute with streaming
+// Start execution with an attached event stream for real-time inspection.
 await executor.ExecuteAsync(arguments, eventStream);
 ```
 
@@ -514,13 +537,14 @@ await executor.ExecuteAsync(arguments, eventStream);
 Enable debug logging to trace error handling decisions:
 
 ```csharp
-// Configure detailed logging
+// Configure detailed graph logging to trace error handling decisions.
 var graphOptions = new GraphOptions
 {
     LogLevel = LogLevel.Debug,
     EnableErrorHandlingLogging = true
 };
 
+// Create a logger adapter used across graph components.
 var graphLogger = new SemanticKernelGraphLogger(logger, graphOptions);
 ```
 

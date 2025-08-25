@@ -857,3 +857,15 @@ builder.Services.AddSingleton<IBearerTokenValidator, AzureAdBearerTokenValidator
 * [Security and Data Handling](../how-to/security-and-data.md) - API security and authentication
 * [Integration and Extensions](../how-to/integration-and-extensions.md) - Core integration patterns
 * [API Reference](../api/) - Complete API documentation for REST and streaming types
+
+## Example implementation and test
+
+- The runnable example for the REST API integration is implemented at `semantic-kernel-graph-docs/examples/RestApiExample.cs`.
+- This example was compiled and executed to validate the code snippets in this document and follows C# best practices with English comments.
+- To run the example from the repository root:
+
+```bash
+dotnet run --project semantic-kernel-graph-docs/examples/Examples.csproj -- rest-api
+```
+
+All code snippets in this document were reviewed to match the tested example. If you find discrepancies, prefer the example implementation at `semantic-kernel-graph-docs/examples/RestApiExample.cs` as the canonical source.
