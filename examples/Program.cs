@@ -1,8 +1,9 @@
+using Example;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
+using SemanticKernel.Graph.DocsExamples;
 using SemanticKernel.Graph.Extensions;
 using SemanticKernel.Graph.State;
-using SemanticKernel.Graph.DocsExamples;
 
 
 namespace Examples;
@@ -91,7 +92,8 @@ class Program
                 ["optimizers-and-few-shot"] = async () => await OptimizersAndFewShotExample.RunAsync(),
                 ["plugin-system"] = async () => await PluginSystemExample.RunExampleAsync(),
                 ["react-problem-solving"] = async () => await ReActProblemSolvingExample.RunAsync(),
-                ["streaming-execution"] = async () => await StreamingQuickstartExample.RunAsync()
+                ["streaming-execution"] = async () => await StreamingQuickstartExample.RunAsync(),
+                ["metrics-and-observability"] = async () => await GraphMetricsExample.RunBasicMetricsDemoAsync()
             };
 
             // Determine which example to run

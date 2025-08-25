@@ -39,6 +39,8 @@ Metrics and observability in SemanticKernel.Graph provide comprehensive insights
 Enable metrics collection at the kernel level:
 
 ```csharp
+// Create and configure a Kernel with graph support and metrics enabled.
+// Note: when calling network or long-running operations use async methods on the kernel.
 using SemanticKernel.Graph.Extensions;
 
 var kernel = Kernel.CreateBuilder()
@@ -56,6 +58,8 @@ var kernel = Kernel.CreateBuilder()
 Configure detailed metrics collection for specific graphs:
 
 ```csharp
+// Create a GraphExecutor and configure metrics collection. Use development metrics
+// for detailed sampling during debugging; use production options to reduce overhead.
 using SemanticKernel.Graph.Core;
 
 // Create graph with metrics enabled
@@ -158,6 +162,9 @@ foreach (var path in pathMetrics.OrderByDescending(p => p.Value.ExecutionCount))
 Get comprehensive performance overview:
 
 ```csharp
+// Retrieve a performance summary (synchronous accessor). This call is typically
+// fast because it reads in-memory collected metrics; guard against null when
+// metrics are not yet available (e.g., immediately after startup).
 // Get performance summary for the last hour
 var summary = graph.GetPerformanceSummary(TimeSpan.FromHours(1));
 if (summary != null)
